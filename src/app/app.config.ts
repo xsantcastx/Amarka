@@ -53,8 +53,8 @@ export const appConfig: ApplicationConfig = {
       const storage = getStorage();
       return storage;
     }),
-    // App Check for security (browser only, production only or when not using emulators)
-    ...(!environment.useEmulators && typeof window !== 'undefined' ? [
+    // App Check for security (browser only, only when enabled)
+    ...(environment.recaptcha?.enabled && typeof window !== 'undefined' ? [
       provideAppCheck(() => {
         console.log('[AppCheck] Initializing App Check with reCAPTCHA v3');
         
