@@ -13,7 +13,7 @@ export interface SitemapUrl {
   providedIn: 'root'
 })
 export class SitemapService {
-  private baseUrl = 'https://creadevents.com';
+  private baseUrl = 'https://amarka.com';
 
   constructor(private productsService: ProductsService) {}
 

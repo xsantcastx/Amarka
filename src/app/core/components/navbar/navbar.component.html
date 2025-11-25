@@ -23,13 +23,27 @@
       <!-- Desktop Navigation (hidden on mobile) -->
       <nav class="app-navbar__links">
         @for (link of headerLinks; track link.href) {
-          <a
-            [routerLink]="link.href"
-            routerLinkActive="active"
-            [routerLinkActiveOptions]="link.exact ? exactMatchOption : partialMatchOption"
-            class="app-navbar__link">
-            {{ link.label | translate }}
-          </a>
+          @let children = link.children?.length ? link.children : (link.href === '/collections' ? collectionLinks : []);
+          <div class="relative group">
+            <a
+              [routerLink]="link.href"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="link.exact ? exactMatchOption : partialMatchOption"
+              class="app-navbar__link">
+              {{ link.label | translate }}
+            </a>
+            @if (children?.length) {
+              <div class="pointer-events-none absolute left-0 top-full mt-2 opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-200">
+                <div class="min-w-[220px] rounded-xl border border-ts-line bg-white shadow-lg ring-1 ring-black/5 p-3">
+                  @for (child of children; track child.href) {
+                    <a [routerLink]="child.href" class="flex items-start gap-2 rounded-lg px-3 py-2 text-sm text-ts-ink hover:bg-ts-bg-soft">
+                      <span>{{ child.label }}</span>
+                    </a>
+                  }
+                </div>
+              </div>
+            }
+          </div>
         }
       </nav>
     </div>
@@ -171,27 +185,28 @@
 
   <!-- Mobile navigation -->
   <nav class="mobile-drawer__nav">
-    <div class="mobile-drawer__links">
-      @for (link of headerLinks; track link.href) {
-        <div class="mobile-drawer__link-block">
-          <a [routerLink]="link.href" (click)="closeMobile()" class="mobile-drawer__link">
-            {{ link.label | translate }}
-          </a>
-          @if (link.children?.length) {
-            <div class="mobile-drawer__sublinks">
-              @for (child of link.children; track child.href) {
-                <a [routerLink]="child.href" (click)="closeMobile()" class="mobile-drawer__sublink">
-                  <div class="mobile-drawer__sublink-title">{{ child.label }}</div>
-                  @if (child.description) {
-                    <p class="mobile-drawer__sublink-desc">{{ child.description }}</p>
+        <div class="mobile-drawer__links">
+          @for (link of headerLinks; track link.href) {
+            @let children = link.children?.length ? link.children : (link.href === '/collections' ? collectionLinks : []);
+            <div class="mobile-drawer__link-block">
+              <a [routerLink]="link.href" (click)="closeMobile()" class="mobile-drawer__link">
+                {{ link.label | translate }}
+              </a>
+              @if (children?.length) {
+                <div class="mobile-drawer__sublinks">
+                  @for (child of children; track child.href) {
+                    <a [routerLink]="child.href" (click)="closeMobile()" class="mobile-drawer__sublink">
+                      <div class="mobile-drawer__sublink-title">{{ child.label }}</div>
+                      @if (child.description) {
+                        <p class="mobile-drawer__sublink-desc">{{ child.description }}</p>
+                      }
+                    </a>
                   }
-                </a>
+                </div>
               }
             </div>
           }
         </div>
-      }
-    </div>
 
     <!-- Social Media Links (Mobile) -->
     @if (linkedinUrl || instagramUrl) {

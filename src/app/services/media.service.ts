@@ -210,7 +210,20 @@ export class MediaService {
     }
 
     try {
-      const mediaPromises = ids.map((id) => this.getMediaById(id));
+      // Filter out invalid IDs (data URLs, full URLs, excessively long IDs)
+      const validIds = ids.filter(id => 
+        id && 
+        !id.startsWith('data:') && 
+        !id.startsWith('http://') && 
+        !id.startsWith('https://') &&
+        id.length < 1500 // Firestore doc ID max length
+      );
+      
+      if (validIds.length === 0) {
+        return [];
+      }
+      
+      const mediaPromises = validIds.map((id) => this.getMediaById(id));
       const mediaResults = await Promise.all(mediaPromises);
       return mediaResults.filter((media) => media !== null) as Media[];
     } catch (error) {

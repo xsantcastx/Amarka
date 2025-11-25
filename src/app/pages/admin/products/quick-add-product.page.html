@@ -1,679 +1,320 @@
-<div class="section-stack min-h-screen bg-gradient-to-b from-[#0a0b0d] to-[#13151a]">
-  <!-- Admin Header -->
-  <div class="bg-gradient-to-r from-bitcoin-dark via-[#13151a] to-bitcoin-dark border-b border-bitcoin-orange/20 shadow-bitcoin">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-      <div class="flex items-center justify-between">
+<div class="min-h-screen bg-ts-bg md:flex">
+  <app-admin-sidebar class="hidden md:block"></app-admin-sidebar>
+
+  <div class="flex-1 md:pl-64">
+    <!-- Admin Header -->
+    <div class="bg-ts-paper border-b border-ts-line shadow-sm">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
         <div class="flex items-center gap-4">
-          <a routerLink="/admin/products" class="hover:text-bitcoin-orange transition-colors">
-            <svg class="w-6 h-6 text-bitcoin-gray hover:text-bitcoin-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <a routerLink="/admin/products" class="hover:text-ts-accent transition-colors text-ts-ink">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
             </svg>
           </a>
-          <h1 class="text-xl font-bold bitcoin-gradient-text">
+          <h1 class="text-xl font-bold text-ts-ink">
             {{ isEditMode ? 'Edit Product' : 'Quick Add Product' }}
           </h1>
         </div>
-        <button (click)="logout()" class="px-4 py-2 text-sm bg-red-500/20 hover:bg-red-500/30 border border-red-500/30 text-red-100 rounded-xl transition-all">
+        <button (click)="logout()" class="px-4 py-2 text-sm bg-red-50 hover:bg-red-100 border border-red-200 text-red-700 rounded-xl transition-colors">
           {{ 'client.logout' | translate }}
         </button>
       </div>
     </div>
-  </div>
 
-  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    
-    @if (successMessage) {
-      <div class="mb-6 p-4 bg-bitcoin-gold/20 border border-bitcoin-gold/30 rounded-xl flex items-start gap-3">
-        <svg class="w-5 h-5 text-bitcoin-gold mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-        </svg>
-        <p class="text-sm text-bitcoin-gold">{{ successMessage | translate }}</p>
-      </div>
-    }
-
-    @if (errorMessage) {
-      <div class="mb-6 p-4 bg-red-500/20 border border-red-500/30 rounded-xl flex items-start gap-3">
-        <svg class="w-5 h-5 text-red-400 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-        </svg>
-        <p class="text-sm text-red-400">{{ errorMessage | translate }}</p>
-      </div>
-    }
-
-    @if ((categories.length === 0 || models.length === 0) && !isLoading) {
-      <div class="mb-6 p-4 bg-bitcoin-orange/20 border border-bitcoin-orange/30 rounded-xl">
-        <div class="flex items-start gap-3">
-          <svg class="w-6 h-6 text-bitcoin-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      @if (successMessage) {
+        <div class="mb-6 p-4 bg-green-50 border border-green-200 rounded-xl flex items-start gap-3">
+          <svg class="w-5 h-5 text-green-600 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
           </svg>
-          <div>
-            <h4 class="font-semibold text-bitcoin-orange">Setup Required</h4>
-            <p class="text-sm text-bitcoin-gray mt-1">Please create categories and models first.</p>
-            <a routerLink="/admin/catalog" class="inline-flex items-center gap-2 mt-3 px-4 py-2 bg-bitcoin-orange/30 hover:bg-bitcoin-orange/40 text-bitcoin-orange border border-bitcoin-orange/30 rounded-lg transition-colors">
-              Go to Catalog
-            </a>
-          </div>
+          <p class="text-sm text-green-700">{{ successMessage | translate }}</p>
         </div>
-      </div>
-    }
+      }
 
-    <form [formGroup]="productForm" (ngSubmit)="saveProduct()" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      
-      <!-- Main Column -->
-      <div class="lg:col-span-2 space-y-6">
-        
-        <!-- Title & Description -->
-        <div class="bg-bitcoin-dark/40 border border-bitcoin-gray/20 rounded-xl p-6">
-          <div class="space-y-4">
-            <div>
-              <label class="block text-sm font-medium text-bitcoin-gray mb-2">Title *</label>
-              <input 
-                type="text" 
-                formControlName="title" 
-                class="w-full px-4 py-2 bg-bitcoin-dark/60 border border-bitcoin-gray/30 rounded-lg focus:ring-2 focus:ring-bitcoin-orange focus:border-bitcoin-orange text-bitcoin-gray placeholder-bitcoin-gray/50"
-                placeholder="Product title">
-              @if (productForm.get('title')?.invalid && productForm.get('title')?.touched) {
-                <p class="mt-1 text-xs text-red-400">Title is required (min 3 characters)</p>
-              }
-            </div>
-
-            <div>
-              <label class="block text-sm font-medium text-bitcoin-gray mb-2">Description</label>
-              <textarea 
-                formControlName="description" 
-                rows="5"
-                class="w-full px-4 py-2 bg-bitcoin-dark/60 border border-bitcoin-gray/30 rounded-lg focus:ring-2 focus:ring-bitcoin-orange focus:border-bitcoin-orange text-bitcoin-gray placeholder-bitcoin-gray/50 resize-none"
-                placeholder="Enter product description..."></textarea>
-            </div>
-          </div>
+      @if (errorMessage) {
+        <div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl flex items-start gap-3">
+          <svg class="w-5 h-5 text-red-600 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          <p class="text-sm text-red-700">{{ errorMessage | translate }}</p>
         </div>
+      }
 
-        <!-- Media -->
-        <div class="bg-bitcoin-dark/40 border border-bitcoin-gray/20 rounded-xl p-6">
-          <h3 class="text-lg font-semibold text-white mb-4">Media</h3>
-          
-          <!-- Cover Image -->
-          <div class="mb-6">
-            <label class="block text-sm font-medium text-bitcoin-gray mb-2">Cover Image</label>
-            @if (coverPreview) {
-              <div class="relative inline-block">
-                <img [src]="coverPreview" alt="Cover preview" class="w-32 h-32 object-cover rounded-lg border-2 border-bitcoin-orange">
-                <button 
-                  type="button"
-                  (click)="removeCoverImage()"
-                  class="absolute -top-2 -right-2 w-6 h-6 bg-red-500 hover:bg-red-600 rounded-full flex items-center justify-center text-white">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                  </svg>
-                </button>
-              </div>
-            } @else {
-              <label class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-bitcoin-gray/30 rounded-lg cursor-pointer hover:border-bitcoin-orange/50 transition-colors">
-                <svg class="w-8 h-8 text-bitcoin-gray/50 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                </svg>
-                <span class="text-sm text-bitcoin-gray/70">Click to upload cover image</span>
-                <input 
-                  type="file" 
-                  accept="image/*" 
-                  (change)="onCoverImageSelected($event)" 
-                  class="hidden">
-              </label>
-            }
-          </div>
-
-          <!-- Gallery Images -->
-          <div>
-            <label class="block text-sm font-medium text-bitcoin-gray mb-2">Gallery Images</label>
-            <div class="grid grid-cols-4 gap-3 mb-3">
-              @for (preview of galleryPreviews; track $index) {
-                <div class="relative">
-                  <img [src]="preview" alt="Gallery preview" class="w-full h-24 object-cover rounded-lg border border-bitcoin-gray/30">
-                  <button 
-                    type="button"
-                    (click)="removeGalleryImage($index)"
-                    class="absolute -top-2 -right-2 w-5 h-5 bg-red-500 hover:bg-red-600 rounded-full flex items-center justify-center text-white">
-                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                  </button>
-                </div>
-              }
-            </div>
-            <label class="flex flex-col items-center justify-center w-full h-24 border-2 border-dashed border-bitcoin-gray/30 rounded-lg cursor-pointer hover:border-bitcoin-orange/50 transition-colors">
-              <svg class="w-6 h-6 text-bitcoin-gray/50 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-              </svg>
-              <span class="text-xs text-bitcoin-gray/70">Add more images</span>
-              <input 
-                type="file" 
-                accept="image/*" 
-                multiple
-                (change)="onGalleryImagesSelected($event)" 
-                class="hidden">
-            </label>
-          </div>
-        </div>
-
-        <!-- Pricing & Inventory -->
-        <div class="bg-bitcoin-dark/40 border border-bitcoin-gray/20 rounded-xl p-6">
-          <h3 class="text-lg font-semibold text-white mb-4">Price</h3>
-          <div class="grid grid-cols-2 gap-4">
-            <div>
-              <label class="block text-sm font-medium text-bitcoin-gray mb-2">Price *</label>
-              <div class="relative">
-                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-bitcoin-gray">$</span>
-                <input 
-                  type="number" 
-                  formControlName="price" 
-                  step="0.01"
-                  class="w-full pl-8 pr-4 py-2 bg-bitcoin-dark/60 border border-bitcoin-gray/30 rounded-lg focus:ring-2 focus:ring-bitcoin-orange focus:border-bitcoin-orange text-bitcoin-gray"
-                  placeholder="0.00">
-              </div>
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-bitcoin-gray mb-2">Cost per item</label>
-              <div class="relative">
-                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-bitcoin-gray">$</span>
-                <input 
-                  type="number" 
-                  step="0.01"
-                  class="w-full pl-8 pr-4 py-2 bg-bitcoin-dark/60 border border-bitcoin-gray/30 rounded-lg focus:ring-2 focus:ring-bitcoin-orange focus:border-bitcoin-orange text-bitcoin-gray"
-                  placeholder="0.00">
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Inventory -->
-        <div class="bg-bitcoin-dark/40 border border-bitcoin-gray/20 rounded-xl p-6">
-          <h3 class="text-lg font-semibold text-white mb-4">Inventory</h3>
-          <div class="grid grid-cols-2 gap-4">
-            <div>
-              <label class="block text-sm font-medium text-bitcoin-gray mb-2">SKU</label>
-              <input 
-                type="text" 
-                formControlName="sku" 
-                class="w-full px-4 py-2 bg-bitcoin-dark/60 border border-bitcoin-gray/30 rounded-lg focus:ring-2 focus:ring-bitcoin-orange focus:border-bitcoin-orange text-bitcoin-gray"
-                placeholder="Auto-generated">
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-bitcoin-gray mb-2">Stock *</label>
-              <input 
-                type="number" 
-                formControlName="stock" 
-                class="w-full px-4 py-2 bg-bitcoin-dark/60 border border-bitcoin-gray/30 rounded-lg focus:ring-2 focus:ring-bitcoin-orange focus:border-bitcoin-orange text-bitcoin-gray"
-                placeholder="0">
-            </div>
-          </div>
-        </div>
-
-        <!-- Product Benefits -->
-        <div class="bg-bitcoin-dark/40 border border-bitcoin-gray/20 rounded-xl p-6">
-          <div class="flex justify-between items-center mb-4">
-            <h3 class="text-lg font-semibold text-white">Product Benefits</h3>
-            <span class="text-xs text-bitcoin-gray">{{ currentBenefits.length }}/4</span>
-          </div>
-          
-          <!-- Current Benefits -->
-          @if (currentBenefits.length > 0) {
-            <div class="space-y-3 mb-4">
-              @for (benefit of currentBenefits; track $index) {
-                <div class="flex items-start gap-3 p-3 bg-bitcoin-dark/60 border border-bitcoin-gray/20 rounded-lg">
-                  <!-- Icon -->
-                  <div class="flex-shrink-0 w-10 h-10 rounded-lg bg-{{ benefit.iconColor }}/10 flex items-center justify-center">
-                    <svg class="w-5 h-5 text-{{ benefit.iconColor }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="getBenefitIconPath(benefit.icon)" />
-                    </svg>
-                  </div>
-                  
-                  <!-- Content -->
-                  <div class="flex-1 min-w-0">
-                    <p class="text-sm font-medium text-white">{{ benefit.title }}</p>
-                    <p class="text-xs text-bitcoin-gray/70 mt-0.5">{{ benefit.description }}</p>
-                  </div>
-                  
-                  <!-- Remove -->
-                  <button 
-                    type="button"
-                    (click)="removeBenefit($index)"
-                    class="flex-shrink-0 text-red-400 hover:text-red-300 transition-colors">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  </button>
-                </div>
-              }
-            </div>
-          } @else {
-            <p class="text-sm text-bitcoin-gray/60 italic mb-4">No benefits added yet. Select from templates below.</p>
-          }
-          
-          <!-- Add Benefits -->
-          @if (currentBenefits.length < 4) {
-            <div class="space-y-2">
-              <label class="block text-sm font-medium text-bitcoin-gray">Add Benefit (max 4)</label>
-              <div class="space-y-2 max-h-64 overflow-y-auto pr-2">
-                @for (template of availableBenefitTemplates; track template.id) {
-                  <button 
-                    type="button"
-                    (click)="addBenefit(template)"
-                    [disabled]="currentBenefits.length >= 4"
-                    class="w-full flex items-start gap-3 p-3 bg-bitcoin-dark/40 border border-bitcoin-gray/20 rounded-lg hover:border-bitcoin-orange/50 transition-all text-left disabled:opacity-50 disabled:cursor-not-allowed">
-                    <div class="flex-shrink-0 w-8 h-8 rounded-lg bg-{{ template.iconColor }}/10 flex items-center justify-center">
-                      <svg class="w-4 h-4 text-{{ template.iconColor }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="getBenefitIconPath(template.icon)" />
-                      </svg>
-                    </div>
-                    <div class="flex-1 min-w-0">
-                      <p class="text-sm font-medium text-white">{{ template.title }}</p>
-                      <p class="text-xs text-bitcoin-gray/60 mt-0.5">{{ template.description }}</p>
-                    </div>
-                    <svg class="w-5 h-5 text-bitcoin-orange flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                    </svg>
-                  </button>
-                }
-                @if (availableBenefitTemplates.length === 0) {
-                  <p class="text-sm text-bitcoin-gray/60 italic p-3">Select a category first to see available benefit templates.</p>
-                }
-              </div>
-            </div>
-          } @else {
-            <div class="p-3 bg-yellow-500/10 border border-yellow-500/30 rounded-lg">
-              <p class="text-sm text-yellow-500">⚠️ Maximum 4 benefits reached. Remove a benefit to add a different one.</p>
-            </div>
-          }
-        </div>
-
-        <!-- Shipping -->
-        <div class="bg-bitcoin-dark/40 border border-bitcoin-gray/20 rounded-xl p-6">
-          <h3 class="text-lg font-semibold text-white mb-4">Shipping</h3>
-          <div>
-            <label class="block text-sm font-medium text-bitcoin-gray mb-2">Product weight (lb)</label>
-            <input 
-              type="number" 
-              formControlName="weight" 
-              step="0.01"
-              class="w-full px-4 py-2 bg-bitcoin-dark/60 border border-bitcoin-gray/30 rounded-lg focus:ring-2 focus:ring-bitcoin-orange focus:border-bitcoin-orange text-bitcoin-gray"
-              placeholder="0.0">
-          </div>
-        </div>
-
-        <!-- Technical Specifications -->
-        <div class="bg-bitcoin-dark/40 border border-bitcoin-gray/20 rounded-xl p-6">
-          <h3 class="text-lg font-semibold text-white mb-4">Technical Specifications</h3>
-          
-          <!-- Current Specs Display -->
-          @if (getCurrentSpecs().length > 0) {
-            <div class="space-y-2 mb-4">
-              @for (spec of getCurrentSpecs(); track spec.key) {
-                <div class="flex items-center justify-between p-3 bg-bitcoin-dark/60 border border-bitcoin-gray/30 rounded-lg hover:bg-bitcoin-dark/80 transition-all group">
-                  <div class="flex-1 grid grid-cols-2 gap-3">
-                    <div>
-                      <p class="text-xs text-bitcoin-gray/70 mb-1">Spec Name</p>
-                      <p class="text-sm font-medium text-bitcoin-orange">{{ formatSpecLabel(spec.key) }}</p>
-                    </div>
-                    <div>
-                      <p class="text-xs text-bitcoin-gray/70 mb-1">Value</p>
-                      <p class="text-sm text-bitcoin-gray">{{ spec.value }}</p>
-                    </div>
-                  </div>
-                  <button
-                    type="button"
-                    (click)="removeSpec(spec.key)"
-                    class="ml-3 opacity-0 group-hover:opacity-100 text-red-500 hover:text-red-400 transition-all">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                    </svg>
-                  </button>
-                </div>
-              }
-            </div>
-          } @else {
-            <p class="text-sm text-bitcoin-gray/70 italic mb-4 p-4 bg-bitcoin-dark/20 rounded-lg border border-bitcoin-gray/10">
-              No specifications added yet. Add specs below or use quick templates.
-            </p>
-          }
-
-          <!-- Add New Spec -->
-          <div class="border-t border-bitcoin-gray/10 pt-4">
-            <p class="text-xs font-semibold text-bitcoin-gray mb-3">Add New Specification:</p>
-            
-            <div class="grid grid-cols-2 gap-3 mb-3">
-              <input
-                type="text"
-                [(ngModel)]="newSpecKey"
-                [ngModelOptions]="{standalone: true}"
-                (keyup.enter)="addSpec()"
-                placeholder="Spec name (e.g., hashRate)"
-                class="px-3 py-2 bg-bitcoin-dark/60 border border-bitcoin-gray/30 rounded-lg focus:ring-2 focus:ring-bitcoin-orange focus:border-bitcoin-orange text-bitcoin-gray text-sm">
-              <input
-                type="text"
-                [(ngModel)]="newSpecValue"
-                [ngModelOptions]="{standalone: true}"
-                (keyup.enter)="addSpec()"
-                placeholder="Value (e.g., 110 TH/s)"
-                class="px-3 py-2 bg-bitcoin-dark/60 border border-bitcoin-gray/30 rounded-lg focus:ring-2 focus:ring-bitcoin-orange focus:border-bitcoin-orange text-bitcoin-gray text-sm">
-            </div>
-            
-            <button
-              type="button"
-              (click)="addSpec()"
-              [disabled]="!newSpecKey || !newSpecValue"
-              class="w-full px-4 py-2 bg-bitcoin-orange/10 border border-bitcoin-orange/30 rounded-lg text-bitcoin-orange text-sm font-medium hover:bg-bitcoin-orange/20 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-              </svg>
-              Add Specification
-            </button>
-
-            <!-- Quick Spec Templates -->
-            <details class="mt-4">
-              <summary class="cursor-pointer text-xs font-semibold text-bitcoin-orange hover:text-bitcoin-gold transition-colors">
-                💡 Quick Templates (click to see examples)
-              </summary>
-              <div class="mt-3 space-y-3 pl-2">
-                <div>
-                  <p class="text-xs font-bold text-cyan-400 mb-2">⛏️ Mining Hardware:</p>
-                  <div class="flex flex-wrap gap-2">
-                    @for (template of getMiningSpecTemplates(); track template.key) {
-                      <button
-                        type="button"
-                        (click)="applySpecTemplate(template)"
-                        class="px-3 py-1.5 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 text-xs rounded-lg border border-cyan-500/30 transition-all hover:scale-105">
-                        {{ template.label }}
-                      </button>
-                    }
-                  </div>
-                </div>
-                <div>
-                  <p class="text-xs font-bold text-purple-400 mb-2">🔑 Accessories (Keychains, Merch):</p>
-                  <div class="flex flex-wrap gap-2">
-                    @for (template of getAccessorySpecTemplates(); track template.key) {
-                      <button
-                        type="button"
-                        (click)="applySpecTemplate(template)"
-                        class="px-3 py-1.5 bg-purple-500/10 hover:bg-purple-500/20 text-purple-300 text-xs rounded-lg border border-purple-500/30 transition-all hover:scale-105">
-                        {{ template.label }}
-                      </button>
-                    }
-                  </div>
-                </div>
-                <div>
-                  <p class="text-xs font-bold text-green-400 mb-2">💳 Hardware Wallets (Ledger, Trezor):</p>
-                  <div class="flex flex-wrap gap-2">
-                    @for (template of getWalletSpecTemplates(); track template.key) {
-                      <button
-                        type="button"
-                        (click)="applySpecTemplate(template)"
-                        class="px-3 py-1.5 bg-green-500/10 hover:bg-green-500/20 text-green-300 text-xs rounded-lg border border-green-500/30 transition-all hover:scale-105">
-                        {{ template.label }}
-                      </button>
-                    }
-                  </div>
-                </div>
-              </div>
-            </details>
-          </div>
-        </div>
-
-        <!-- Search Engine Listing Preview -->
-        <div class="bg-bitcoin-dark/40 border border-bitcoin-gray/20 rounded-xl p-6">
-          <h3 class="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+      @if ((categories.length === 0 || models.length === 0) && !isLoading) {
+        <div class="mb-6 p-4 bg-ts-accent/15 border border-ts-accent/30 rounded-xl">
+          <div class="flex items-start gap-3">
+            <svg class="w-6 h-6 text-ts-ink" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
             </svg>
-            Search Engine Preview
-          </h3>
-          
-          <!-- Preview Box -->
-          <div class="mb-6 p-5 bg-white rounded-lg border border-gray-300 shadow-sm" style="background-color: white !important;">
-            <p class="text-xs font-medium mb-1.5 flex items-center gap-1" style="color: #15803d !important;">
-              <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
-              </svg>
-              {{ seoPreviewUrl }}
-            </p>
-            <h4 class="text-lg font-normal hover:underline cursor-pointer mb-1.5 leading-snug" style="color: #1d4ed8 !important;">
-              {{ seoPreviewTitle }}
-            </h4>
-            <p class="text-sm leading-relaxed line-clamp-2" style="color: #1f2937 !important;">
-              {{ seoPreviewDescription }}
-            </p>
-          </div>
-
-          <!-- SEO Fields -->
-          <div class="space-y-5">
             <div>
-              <label class="block text-sm font-medium text-bitcoin-gray mb-2">
-                Meta Title
-                <span class="text-xs font-normal text-bitcoin-gray/60 ml-2">(Optional)</span>
-              </label>
-              <input 
-                type="text" 
-                formControlName="metaTitle" 
-                class="w-full px-4 py-2.5 bg-bitcoin-dark/60 border border-bitcoin-gray/30 rounded-lg focus:ring-2 focus:ring-bitcoin-orange focus:border-bitcoin-orange text-white placeholder-bitcoin-gray/50"
-                placeholder="Defaults to product title">
-              <p class="mt-1.5 text-xs text-bitcoin-gray/60">How your product appears in search results</p>
-            </div>
-            
-            <div>
-              <label class="block text-sm font-medium text-bitcoin-gray mb-2">
-                Meta Description
-                <span class="text-xs font-normal text-bitcoin-gray/60 ml-2">(Optional)</span>
-              </label>
-              <textarea 
-                formControlName="metaDescription" 
-                rows="3"
-                class="w-full px-4 py-2.5 bg-bitcoin-dark/60 border border-bitcoin-gray/30 rounded-lg focus:ring-2 focus:ring-bitcoin-orange focus:border-bitcoin-orange text-white placeholder-bitcoin-gray/50 resize-none"
-                placeholder="Defaults to product description"></textarea>
-              <p class="mt-1.5 text-xs text-bitcoin-gray/60">A brief summary to appear in search engines (150-160 characters recommended)</p>
-            </div>
-
-            <!-- Auto-generated URL slug info -->
-            <div class="p-4 bg-bitcoin-orange/5 border border-bitcoin-orange/20 rounded-lg">
-              <div class="flex items-start gap-3">
-                <svg class="w-5 h-5 text-bitcoin-orange flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
-                </svg>
-                <div class="flex-1">
-                  <p class="text-sm font-medium text-bitcoin-orange mb-1">URL automatically generated</p>
-                  <p class="text-xs text-bitcoin-gray/80">The product URL is created from your title: <span class="font-mono text-white">{{ productForm.get('slug')?.value || 'auto-generated-from-title' }}</span></p>
-                </div>
-              </div>
+              <h4 class="font-semibold text-ts-ink">Setup Required</h4>
+              <p class="text-sm text-ts-ink-soft mt-1">Please create categories and models first.</p>
+              <a routerLink="/admin/catalog" class="inline-flex items-center gap-2 mt-3 px-4 py-2 bg-ts-accent/20 hover:bg-ts-accent/30 text-ts-ink border border-ts-accent/30 rounded-lg transition-colors">
+                Go to Catalog
+              </a>
             </div>
           </div>
         </div>
+      }
 
-      </div>
-
-      <!-- Sidebar Column -->
-      <div class="lg:col-span-1 space-y-6">
-        
-        <!-- Status & Publishing -->
-        <div class="bg-bitcoin-dark/40 border border-bitcoin-gray/20 rounded-xl p-6">
-          <h3 class="text-lg font-semibold text-white mb-4">Status</h3>
-          <select 
-            formControlName="status" 
-            class="w-full px-4 py-2 bg-bitcoin-dark/60 border border-bitcoin-gray/30 rounded-lg focus:ring-2 focus:ring-bitcoin-orange focus:border-bitcoin-orange text-bitcoin-gray">
-            @for (option of statusOptions; track option.value) {
-              <option [value]="option.value">{{ option.label }}</option>
-            }
-          </select>
-        </div>
-
-        <!-- Product Organization -->
-        <div class="bg-bitcoin-dark/40 border border-bitcoin-gray/20 rounded-xl p-6">
-          <h3 class="text-lg font-semibold text-white mb-4">Product Organization</h3>
-          
-          <div class="space-y-4">
-            <!-- Category -->
-            <div>
-              <label class="block text-sm font-medium text-bitcoin-gray mb-2">Category *</label>
-              <select 
-                formControlName="categoryId" 
-                (change)="onCategorySelectChange($event)"
-                class="w-full px-4 py-2 bg-bitcoin-dark/60 border border-bitcoin-gray/30 rounded-lg focus:ring-2 focus:ring-bitcoin-orange focus:border-bitcoin-orange text-bitcoin-gray">
-                <option value="">Select category</option>
-                @for (category of categories; track category.id) {
-                  <option [value]="category.id">{{ category.name }}</option>
+      <form [formGroup]="productForm" (ngSubmit)="saveProduct()" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Main Column -->
+        <div class="lg:col-span-2 space-y-6">
+          <!-- Title & Description -->
+          <div class="bg-ts-paper border border-ts-line rounded-xl p-6 shadow-sm">
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-ts-ink mb-2">Title *</label>
+                <input 
+                  type="text" 
+                  formControlName="title" 
+                  class="w-full px-4 py-2 bg-ts-bg-soft border border-ts-line rounded-lg focus:ring-2 focus:ring-ts-accent focus:border-ts-accent text-ts-ink placeholder-ts-ink-soft"
+                  placeholder="Product title">
+                @if (productForm.get('title')?.invalid && productForm.get('title')?.touched) {
+                  <p class="mt-1 text-xs text-red-600">Title is required (min 3 characters)</p>
                 }
-                <option value="__new__">+ Create New Category</option>
-              </select>
-              @if (showNewCategoryInput) {
-                <div class="mt-2">
-                  <input 
-                    type="text" 
-                    [(ngModel)]="newCategoryName"
-                    [ngModelOptions]="{standalone: true}"
-                    (keyup.enter)="createNewCategory()"
-                    class="w-full px-4 py-2 bg-bitcoin-dark/60 border border-bitcoin-orange/50 rounded-lg focus:ring-2 focus:ring-bitcoin-orange focus:border-bitcoin-orange text-bitcoin-gray"
-                    placeholder="Enter new category name">
-                  <div class="flex gap-2 mt-2">
-                    <button 
-                      type="button"
-                      (click)="createNewCategory()"
-                      class="flex-1 px-3 py-1.5 bg-bitcoin-orange/30 hover:bg-bitcoin-orange/40 text-bitcoin-orange border border-bitcoin-orange/30 rounded-lg text-sm transition-colors">
-                      Add
-                    </button>
-                    <button 
-                      type="button"
-                      (click)="cancelNewCategory()"
-                      class="flex-1 px-3 py-1.5 bg-bitcoin-dark/60 hover:bg-bitcoin-dark/80 text-bitcoin-gray border border-bitcoin-gray/30 rounded-lg text-sm transition-colors">
-                      Cancel
-                    </button>
-                  </div>
-                </div>
-              }
-              @if (productForm.get('categoryId')?.invalid && productForm.get('categoryId')?.touched) {
-                <p class="mt-1 text-xs text-red-400">Category is required</p>
-              }
-            </div>
+              </div>
 
-            <!-- Model -->
-            <div>
-              <label class="block text-sm font-medium text-bitcoin-gray mb-2">Model *</label>
-              <select 
-                formControlName="modelId" 
-                (change)="onModelSelectChange($event)"
-                class="w-full px-4 py-2 bg-bitcoin-dark/60 border border-bitcoin-gray/30 rounded-lg focus:ring-2 focus:ring-bitcoin-orange focus:border-bitcoin-orange text-bitcoin-gray">
-                <option value="">Select model</option>
-                @for (model of filteredModels; track model.id) {
-                  <option [value]="model.id">{{ model.name }}</option>
+              <div>
+                <label class="block text-sm font-medium text-ts-ink mb-2">Description *</label>
+                <textarea 
+                  formControlName="description"
+                  rows="4"
+                  class="w-full px-4 py-3 bg-ts-bg-soft border border-ts-line rounded-lg focus:ring-2 focus:ring-ts-accent focus:border-ts-accent text-ts-ink placeholder-ts-ink-soft resize-none"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- Specs -->
+          <div class="bg-ts-paper border border-ts-line rounded-xl p-6 shadow-sm">
+            <h2 class="text-lg font-semibold text-ts-ink mb-4">Details</h2>
+            <div class="grid sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-ts-ink mb-2">Price (USD)</label>
+                <input type="number" formControlName="price" class="w-full px-3 py-2 bg-ts-bg-soft border border-ts-line rounded-lg focus:ring-2 focus:ring-ts-accent focus:border-ts-accent text-ts-ink" placeholder="e.g. 59.00">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-ts-ink mb-2">Stock</label>
+                <input type="number" formControlName="stock" class="w-full px-3 py-2 bg-ts-bg-soft border border-ts-line rounded-lg focus:ring-2 focus:ring-ts-accent focus:border-ts-accent text-ts-ink" placeholder="e.g. 100">
+              </div>
+            </div>
+            <div class="grid sm:grid-cols-2 gap-4 mt-4">
+              <div>
+                <label class="block text-sm font-medium text-ts-ink mb-2">Category</label>
+                <select formControlName="categoryId" (change)="onCategoryChange(); selectedCatalogOption = null" class="w-full px-4 py-2 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink focus:ring-2 focus:ring-ts-accent focus:border-ts-accent">
+                  <option value="">Select category</option>
+                  @for (category of categories; track category.id) {
+                    <option [value]="category.id">{{ category.name }}</option>
+                  }
+                </select>
+                <div class="mt-2 flex items-center gap-2">
+                  <button type="button" class="text-sm text-ts-accent underline" (click)="showNewCategoryInput = !showNewCategoryInput">
+                    + New category
+                  </button>
+                  @if (showNewCategoryInput) {
+                    <div class="flex items-center gap-2 w-full">
+                      <input type="text" [(ngModel)]="newCategoryName" [ngModelOptions]="{standalone: true}" placeholder="Category name" class="flex-1 px-3 py-2 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink focus:ring-2 focus:ring-ts-accent focus:border-ts-accent" />
+                      <button type="button" class="px-3 py-2 bg-ts-accent text-ts-ink rounded-lg border border-ts-accent/60 hover:bg-ts-accent/90" (click)="createCategoryInline()">Add</button>
+                    </div>
+                  }
+                </div>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-ts-ink mb-2">Model</label>
+                <select formControlName="modelId" (change)="onModelChange()" class="w-full px-4 py-2 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink focus:ring-2 focus:ring-ts-accent focus:border-ts-accent" [attr.disabled]="!productForm.get('categoryId')?.value ? true : null">
+                  <option value="">Select model</option>
+                  @for (model of filteredModels.length ? filteredModels : models; track model.id) {
+                    <option [value]="model.id">{{ model.name }}</option>
+                  }
+                </select>
+                <div class="mt-2 flex items-center gap-2">
+                  <button type="button" class="text-sm text-ts-accent underline" (click)="showNewModelInput = !showNewModelInput">
+                    + New model
+                  </button>
+                  @if (showNewModelInput) {
+                    <div class="flex items-center gap-2 w-full">
+                      <input type="text" [(ngModel)]="newModelName" [ngModelOptions]="{standalone: true}" placeholder="Model name" class="flex-1 px-3 py-2 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink focus:ring-2 focus:ring-ts-accent focus:border-ts-accent" />
+                      <button type="button" class="px-3 py-2 bg-ts-accent text-ts-ink rounded-lg border border-ts-accent/60 hover:bg-ts-accent/90" (click)="createModelInline()">Add</button>
+                    </div>
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Media -->
+          <div class="bg-ts-paper border border-ts-line rounded-xl p-6 shadow-sm">
+            <h2 class="text-lg font-semibold text-ts-ink mb-4">Media</h2>
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-ts-ink mb-2">Cover Image *</label>
+                <input type="file" accept="image/*" (change)="onCoverSelected($event)" class="block w-full text-sm text-ts-ink file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-ts-accent/30 file:text-ts-ink hover:file:bg-ts-accent/50">
+                @if (coverPreview || productForm.get('imageUrl')?.value) {
+                  <div class="mt-3 w-full md:w-56 aspect-video bg-ts-bg-soft border border-ts-line rounded-xl overflow-hidden flex items-center justify-center">
+                    <img [src]="coverPreview || productForm.get('imageUrl')?.value" alt="Cover preview" class="w-full h-full object-cover">
+                  </div>
                 }
-                <option value="__new__">+ Create New Model</option>
-              </select>
-              @if (showNewModelInput) {
-                <div class="mt-2">
-                  <input 
-                    type="text" 
-                    [(ngModel)]="newModelName"
-                    [ngModelOptions]="{standalone: true}"
-                    (keyup.enter)="createNewModel()"
-                    class="w-full px-4 py-2 bg-bitcoin-dark/60 border border-bitcoin-orange/50 rounded-lg focus:ring-2 focus:ring-bitcoin-orange focus:border-bitcoin-orange text-bitcoin-gray"
-                    placeholder="Enter new model name">
-                  <div class="flex gap-2 mt-2">
-                    <button 
-                      type="button"
-                      (click)="createNewModel()"
-                      class="flex-1 px-3 py-1.5 bg-bitcoin-orange/30 hover:bg-bitcoin-orange/40 text-bitcoin-orange border border-bitcoin-orange/30 rounded-lg text-sm transition-colors">
-                      Add
-                    </button>
-                    <button 
-                      type="button"
-                      (click)="cancelNewModel()"
-                      class="flex-1 px-3 py-1.5 bg-bitcoin-dark/60 hover:bg-bitcoin-dark/80 text-bitcoin-gray border border-bitcoin-gray/30 rounded-lg text-sm transition-colors">
-                      Cancel
-                    </button>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-ts-ink mb-2">Gallery Images</label>
+                <input type="file" accept="image/*" multiple (change)="onGallerySelected($event)" class="block w-full text-sm text-ts-ink file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-ts-accent/30 file:text-ts-ink hover:file:bg-ts-accent/50">
+                @if (galleryPreviews.length) {
+                  <div class="mt-3 grid grid-cols-2 sm:grid-cols-3 gap-3">
+                    @for (preview of galleryPreviews; track preview) {
+                      <div class="aspect-video bg-ts-bg-soft border border-ts-line rounded-lg overflow-hidden">
+                        <img [src]="preview" class="w-full h-full object-cover">
+                      </div>
+                    }
                   </div>
-                </div>
-              }
-              @if (productForm.get('modelId')?.invalid && productForm.get('modelId')?.touched) {
-                <p class="mt-1 text-xs text-red-400">Model is required</p>
-              }
+                }
+              </div>
             </div>
+          </div>
 
-            <!-- Vendor -->
-            <div>
-              <label class="block text-sm font-medium text-bitcoin-gray mb-2">Vendor</label>
-              <input 
-                type="text" 
-                formControlName="vendor" 
-                class="w-full px-4 py-2 bg-bitcoin-dark/60 border border-bitcoin-gray/30 rounded-lg focus:ring-2 focus:ring-bitcoin-orange focus:border-bitcoin-orange text-bitcoin-gray"
-                [attr.placeholder]="brandName">
-            </div>
-
-            <!-- Collections -->
-            <div>
-              <label class="block text-sm font-medium text-bitcoin-gray mb-2">Collections</label>
-              <input 
-                type="text" 
-                formControlName="collections" 
-                class="w-full px-4 py-2 bg-bitcoin-dark/60 border border-bitcoin-gray/30 rounded-lg focus:ring-2 focus:ring-bitcoin-orange focus:border-bitcoin-orange text-bitcoin-gray"
-                placeholder="wheels, miners">
-              <p class="mt-1 text-xs text-bitcoin-gray/60">Comma-separated</p>
-            </div>
-
-            <!-- Tags -->
-            <div>
-              <label class="block text-sm font-medium text-bitcoin-gray mb-2">Tags</label>
-              <input 
-                type="text" 
-                formControlName="tags" 
-                class="w-full px-4 py-2 bg-bitcoin-dark/60 border border-bitcoin-gray/30 rounded-lg focus:ring-2 focus:ring-bitcoin-orange focus:border-bitcoin-orange text-bitcoin-gray"
-                placeholder="tag1, tag2">
-              <p class="mt-1 text-xs text-bitcoin-gray/60">Comma-separated</p>
+          <!-- SEO -->
+          <div class="bg-ts-paper border border-ts-line rounded-xl p-6 shadow-sm">
+            <h2 class="text-lg font-semibold text-ts-ink mb-4">SEO</h2>
+            <div class="space-y-3">
+              <div>
+                <label class="block text-sm font-medium text-ts-ink mb-2">SEO Title</label>
+                <input type="text" formControlName="metaTitle" class="w-full px-3 py-2 bg-ts-bg-soft border border-ts-line rounded-lg focus:ring-2 focus:ring-ts-accent focus:border-ts-accent text-ts-ink">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-ts-ink mb-2">SEO Description</label>
+                <textarea formControlName="metaDescription" rows="3" class="w-full px-3 py-2 bg-ts-bg-soft border border-ts-line rounded-lg focus:ring-2 focus:ring-ts-accent focus:border-ts-accent text-ts-ink"></textarea>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-ts-ink mb-2">Slug</label>
+                <input type="text" formControlName="slug" class="w-full px-3 py-2 bg-ts-bg-soft border border-ts-line rounded-lg focus:ring-2 focus:ring-ts-accent focus:border-ts-accent text-ts-ink">
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- Action Buttons -->
-        <div class="sticky top-6 space-y-3">
-          @if (isUploading) {
-            <div class="p-4 bg-bitcoin-dark/40 border border-bitcoin-gray/20 rounded-xl">
-              <div class="flex items-center gap-3">
-                <div class="app-spinner" style="--spinner-size: 24px; --spinner-logo-scale: 90%;" aria-hidden="true">
-                  <img src="/Logo Clear.png" alt="" width="28" height="28">
-                </div>
-                <div class="flex-1">
-                  <p class="text-sm text-bitcoin-gray">Uploading images...</p>
-                  <div class="mt-2 w-full bg-bitcoin-dark/60 rounded-full h-2">
-                    <div class="bg-bitcoin-orange h-2 rounded-full transition-all duration-300" [style.width.%]="uploadProgress"></div>
-                  </div>
-                </div>
-              </div>
+        <!-- Side Column -->
+        <div class="space-y-6">
+          <div class="bg-ts-paper border border-ts-line rounded-xl p-6 shadow-sm">
+            <h2 class="text-lg font-semibold text-ts-ink mb-4">Status</h2>
+            <div class="space-y-3">
+              <label class="inline-flex items-center gap-3 text-ts-ink">
+                <input type="radio" formControlName="status" value="draft" class="w-4 h-4 text-ts-accent border-ts-line focus:ring-ts-accent">
+                Draft
+              </label>
+              <label class="inline-flex items-center gap-3 text-ts-ink">
+                <input type="radio" formControlName="status" value="published" class="w-4 h-4 text-ts-accent border-ts-line focus:ring-ts-accent">
+                Published
+              </label>
             </div>
-          }
+          </div>
 
-          <button 
-            type="submit" 
-            [disabled]="isSaving || productForm.invalid"
-            class="w-full px-6 py-3 bg-bitcoin-orange/30 hover:bg-bitcoin-orange/40 disabled:bg-bitcoin-dark/40 text-bitcoin-orange disabled:text-bitcoin-gray border border-bitcoin-orange/30 disabled:border-bitcoin-gray/20 rounded-xl transition-all duration-300 font-semibold flex items-center justify-center gap-2">
-            @if (isSaving) {
-              <div class="app-spinner" style="--spinner-size: 22px; --spinner-logo-scale: 92%;" aria-hidden="true">
-                <img src="/Logo Clear.png" alt="" width="26" height="26">
+          <div class="bg-ts-paper border border-ts-line rounded-xl p-6 shadow-sm">
+            <h2 class="text-lg font-semibold text-ts-ink mb-4">Collections</h2>
+            @if (collections.length) {
+              <div class="flex flex-col gap-2">
+                @for (collection of collections; track collection.slug) {
+                  <label class="inline-flex items-center gap-3 text-sm text-ts-ink cursor-pointer">
+                    <input
+                      type="checkbox"
+                      class="w-4 h-4 text-ts-accent border-ts-line focus:ring-ts-accent rounded"
+                      [checked]="isCollectionSelected(collection.slug)"
+                      (change)="toggleCollection(collection)">
+                    <div>
+                      <div class="font-semibold">{{ collection.name }}</div>
+                      @if (collection.description) {
+                        <p class="text-xs text-ts-ink-soft line-clamp-2">{{ collection.description }}</p>
+                      }
+                    </div>
+                  </label>
+                }
               </div>
-              <span>{{ isEditMode ? 'Updating...' : 'Saving...' }}</span>
             } @else {
-              <span>{{ isEditMode ? 'Update Product' : 'Save Product' }}</span>
+              <p class="text-sm text-ts-ink-soft">Create a collection in Admin → Collections to tag this product.</p>
             }
-          </button>
-          
-          <button 
-            type="button" 
-            (click)="cancel()"
-            [disabled]="isSaving"
-            class="w-full px-6 py-3 bg-bitcoin-dark/40 hover:bg-bitcoin-dark/60 disabled:opacity-50 text-bitcoin-gray hover:text-white border border-bitcoin-gray/20 rounded-xl transition-all duration-300">
-            Cancel
-          </button>
+
+            <div class="mt-4 border-t border-ts-line pt-4">
+              <button type="button"
+                      class="text-sm text-ts-accent underline font-semibold"
+                      (click)="showNewCollectionInput = !showNewCollectionInput">
+                {{ showNewCollectionInput ? 'Cancel new collection' : '+ New collection' }}
+              </button>
+
+              @if (showNewCollectionInput) {
+                <div class="mt-4 space-y-3">
+                  <div>
+                    <label class="block text-sm font-medium text-ts-ink mb-1">Collection name</label>
+                    <input type="text"
+                           [(ngModel)]="newCollectionName"
+                           (input)="onCollectionNameChange()"
+                           [ngModelOptions]="{standalone: true}"
+                           class="w-full px-3 py-2 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink focus:ring-2 focus:ring-ts-accent focus:border-ts-accent">
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium text-ts-ink mb-1">Slug</label>
+                    <input type="text"
+                           [(ngModel)]="newCollectionSlug"
+                           (input)="onCollectionSlugChange()"
+                           [ngModelOptions]="{standalone: true}"
+                           class="w-full px-3 py-2 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink focus:ring-2 focus:ring-ts-accent focus:border-ts-accent"
+                           placeholder="gifts-for-men">
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium text-ts-ink mb-1">Description</label>
+                    <textarea rows="2"
+                              [(ngModel)]="newCollectionDescription"
+                              [ngModelOptions]="{standalone: true}"
+                              class="w-full px-3 py-2 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink focus:ring-2 focus:ring-ts-accent focus:border-ts-accent"></textarea>
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium text-ts-ink mb-1">Hero image</label>
+                    <input type="file"
+                           accept="image/*"
+                           (change)="onCollectionHeroSelected($event)"
+                           class="block w-full text-sm text-ts-ink file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-ts-accent/30 file:text-ts-ink hover:file:bg-ts-accent/50">
+                    @if (newCollectionHeroPreview) {
+                      <div class="mt-2 w-40 aspect-video rounded-lg overflow-hidden border border-ts-line bg-ts-bg-soft">
+                        <img [src]="newCollectionHeroPreview" alt="Collection hero preview" class="w-full h-full object-cover">
+                      </div>
+                    }
+                  </div>
+
+                  <button type="button"
+                          class="w-full inline-flex items-center justify-center px-4 py-2 bg-ts-accent text-ts-ink font-semibold rounded-lg border border-ts-accent/60 hover:bg-ts-accent/90 transition-colors"
+                          (click)="createCollectionInline()">
+                    Save collection
+                  </button>
+                </div>
+              }
+            </div>
+          </div>
+
+          <div class="bg-ts-paper border border-ts-line rounded-xl p-6 shadow-sm">
+            <h2 class="text-lg font-semibold text-ts-ink mb-4">Tags</h2>
+            <div class="flex flex-wrap gap-2">
+              @for (tag of tags; track tag.id) {
+                <label class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-ts-line text-sm text-ts-ink cursor-pointer">
+                  <input type="checkbox" [checked]="isTagSelected(tag)" (change)="toggleTag(tag)" class="w-4 h-4 text-ts-accent border-ts-line focus:ring-ts-accent">
+                  {{ tag.name }}
+                </label>
+              }
+            </div>
+          </div>
+
+          <div class="bg-ts-paper border border-ts-line rounded-xl p-6 shadow-sm">
+            <div class="flex flex-col gap-3">
+              <button type="submit" [disabled]="isSaving || isUploading" class="w-full inline-flex items-center justify-center px-4 py-3 bg-ts-accent text-ts-ink font-semibold rounded-lg border border-ts-accent/60 hover:bg-ts-accent/90 transition-colors disabled:opacity-60 disabled:cursor-not-allowed">
+                {{ isEditMode ? 'Save Changes' : 'Create Product' }}
+              </button>
+              <button type="button" (click)="cancel()" class="w-full inline-flex items-center justify-center px-4 py-3 bg-ts-bg-soft text-ts-ink font-semibold rounded-lg border border-ts-line hover:bg-ts-paper transition-colors">
+                Cancel
+              </button>
+            </div>
+          </div>
         </div>
-
-      </div>
-
-    </form>
-
+      </form>
+    </div>
   </div>
 </div>
-
-

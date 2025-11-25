@@ -153,8 +153,22 @@ export class AuthService {
       const userCredential = await signInWithEmailAndPassword(this.auth, email, password);
       const user = userCredential.user;
       
-      // Reset login attempts on successful login
+      // Ensure profile exists (covers cases where creation previously failed)
       const userDoc = doc(this.firestore, `users/${user.uid}`);
+      const existingProfile = await getDoc(userDoc);
+      if (!existingProfile.exists()) {
+        await setDoc(userDoc, {
+          uid: user.uid,
+          email: user.email || email,
+          displayName: user.displayName || '',
+          role: 'client',
+          createdAt: new Date(),
+          loginAttempts: 0,
+          updatedAt: new Date()
+        });
+      }
+      
+      // Reset login attempts on successful login
       await updateDoc(userDoc, {
         lastLogin: new Date(),
         loginAttempts: 0,

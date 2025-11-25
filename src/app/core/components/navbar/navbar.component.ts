@@ -9,6 +9,7 @@ import { SettingsService, AppSettings } from '../../../services/settings.service
 import { LanguageSelectorComponent } from '../../../shared/components/language-selector/language-selector.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { BrandConfigService } from '../../services/brand-config.service';
+import { CollectionsService } from '../../../services/collections.service';
 
 type NavChild = { label: string; href: string; description?: string };
 type NavLink = { label: string; href: string; exact?: boolean; children?: NavChild[]; ctaLabel?: string; ctaHref?: string };
@@ -28,6 +29,7 @@ export class NavbarComponent implements OnInit {
   private readonly authService = inject(AuthService);
   private readonly settingsService = inject(SettingsService);
   private readonly brandConfig = inject(BrandConfigService);
+  private readonly collectionsService = inject(CollectionsService);
   
   scrolled = signal(false);
   mobileOpen = false;
@@ -48,6 +50,7 @@ export class NavbarComponent implements OnInit {
   readonly logoSrc = this.brandConfig.site.brand.logo;
   readonly logoAlt = this.brandConfig.site.brand.logoAlt || this.brandName;
   readonly headerLinks = this.brandConfig.nav.header as NavLink[];
+  collectionLinks: NavChild[] = [];
   readonly exactMatchOption = { exact: true };
   readonly partialMatchOption = { exact: false };
   private readonly socialLinks = this.brandConfig.nav.social as Array<{ platform: string; href: string }>;
@@ -72,6 +75,9 @@ export class NavbarComponent implements OnInit {
     
     // Load settings
     this.settingsService.getSettings().then(settings => this.applySettings(settings));
+
+    // Load dynamic collections for dropdown
+    void this.loadCollections();
   }
 
   private applySettings(settings: AppSettings): void {
@@ -80,6 +86,20 @@ export class NavbarComponent implements OnInit {
     this.instagramUrl = settings.instagramUrl || this.getSocialUrl('instagram');
     this.linkedinUrl = settings.linkedinUrl || this.getSocialUrl('linkedin');
     this.youtubeUrl = settings.youtubeUrl || this.getSocialUrl('youtube');
+  }
+
+  private async loadCollections() {
+    try {
+      const all = await this.collectionsService.getAllCollections();
+      this.collectionLinks = all
+        .filter(c => c.active !== false)
+        .sort((a, b) => a.name.localeCompare(b.name))
+        .slice(0, 6)
+        .map(c => ({ label: c.name, href: `/collections/${c.slug}` }));
+    } catch (error) {
+      console.error('Error loading collections for navbar:', error);
+      this.collectionLinks = [];
+    }
   }
 
   @HostListener('window:scroll')

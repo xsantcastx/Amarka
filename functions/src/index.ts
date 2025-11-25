@@ -453,7 +453,7 @@ export const createPaymentIntent = functions.https.onCall(
       automatic_payment_methods: {
         enabled: true,
       },
-      description: `TheLuxMining Order - ${cart.items.length} item(s)`,
+      description: `Amarka Order - ${cart.items.length} item(s)`,
       shipping: shipping,
       receipt_email: shippingAddress?.email || undefined,
     });

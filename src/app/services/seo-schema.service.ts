@@ -60,8 +60,8 @@ export class SeoSchemaService {
       offers: {
         '@type': 'Offer',
         url: product.slug 
-          ? `https://creadevents.com/productos/${product.slug}` 
-          : 'https://creadevents.com/productos',
+          ? `https://amarka.com/productos/${product.slug}` 
+          : 'https://amarka.com/productos',
         priceCurrency: product.currency || 'USD',
         price: product.price.toFixed(2),
         availability: product.availability 
@@ -150,8 +150,8 @@ export class SeoSchemaService {
           '@type': 'Product',
           name: product.name,
           url: product.slug 
-            ? `https://creadevents.com/productos/${product.slug}` 
-            : 'https://creadevents.com/productos',
+            ? `https://amarka.com/productos/${product.slug}` 
+            : 'https://amarka.com/productos',
           image: product.imageUrl,
           offers: {
             '@type': 'Offer',
@@ -196,12 +196,12 @@ export class SeoSchemaService {
         name: this.brandConfig.siteName,
         logo: {
           '@type': 'ImageObject',
-          url: 'https://creadevents.com/Logo Clear.png'
+          url: 'https://amarka.com/assets/brand/amarka-logo.svg'
         }
       },
       mainEntityOfPage: {
         '@type': 'WebPage',
-        '@id': `https://creadevents.com/blog/${article.slug}`
+        '@id': `https://amarka.com/blog/${article.slug}`
       }
     };
 
@@ -328,7 +328,7 @@ export class SeoSchemaService {
     
     // Set canonical URL
     if (product.slug) {
-      this.setCanonicalUrl(`https://creadevents.com/productos/${product.slug}`);
+      this.setCanonicalUrl(`https://amarka.com/productos/${product.slug}`);
     }
     
     // Generate product schema

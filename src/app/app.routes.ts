@@ -14,6 +14,21 @@ export const routes: Routes = [
     title: routeTitle('page_titles.home')
   },
   {
+    path: 'products',
+    redirectTo: 'productos',
+    pathMatch: 'full'
+  },
+  {
+    path: 'products/:slug',
+    redirectTo: 'productos/:slug',
+    pathMatch: 'full'
+  },
+  {
+    path: 'productos/:slug',
+    loadComponent: () => import('./pages/productos/detalle/detalle.component').then(m => m.DetalleComponent),
+    title: routeTitle('page_titles.product_details')
+  },
+  {
     path: 'home',
     redirectTo: '',
     pathMatch: 'full'
@@ -24,9 +39,14 @@ export const routes: Routes = [
     title: routeTitle('page_titles.products')
   },
   {
-    path: 'products/:slug',
-    loadComponent: () => import('./pages/productos/detalle/detalle.component').then(m => m.DetalleComponent),
-    title: routeTitle('page_titles.product_details')
+    path: 'collections/:slug',
+    loadComponent: () => import('./pages/collections/collection.page').then(m => m.CollectionPageComponent),
+    title: routeTitle('Collections')
+  },
+  {
+    path: 'collections',
+    loadComponent: () => import('./pages/collections/collections-index.page').then(m => m.CollectionsIndexPageComponent),
+    title: routeTitle('Collections')
   },
   {
     path: 'galeria',
@@ -126,6 +146,12 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/admin/orders/orders-admin.page').then(m => m.OrdersAdminComponent),
     canActivate: [adminGuard],
     title: routeTitle('page_titles.order_management')
+  },
+  {
+    path: 'admin/collections',
+    loadComponent: () => import('./pages/admin/collections/collections-admin.page').then(m => m.CollectionsAdminPageComponent),
+    canActivate: [adminGuard],
+    title: routeTitle('Collections')
   },
   {
     path: 'admin/users',

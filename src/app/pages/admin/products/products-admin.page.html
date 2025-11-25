@@ -1,1088 +1,276 @@
+<div class="min-h-screen bg-ts-bg md:flex">
+  <app-admin-sidebar class="hidden md:block"></app-admin-sidebar>
 
-<div class="section-stack min-h-screen bg-gradient-to-b from-[#0a0b0d] to-[#13151a]">
-  <!-- Admin Header -->
-  <div class="bg-gradient-to-r from-bitcoin-dark via-[#13151a] to-bitcoin-dark border-b border-bitcoin-orange/20 shadow-bitcoin">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-      <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-        <div class="flex items-center gap-4 w-full md:w-auto">
-          <a routerLink="/admin" class="hover:text-bitcoin-orange transition-colors flex-shrink-0">
-            <svg class="w-6 h-6 text-bitcoin-gray hover:text-bitcoin-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+  <div class="flex-1 md:pl-64">
+    <!-- Header -->
+    <div class="bg-ts-paper border-b border-ts-line shadow-sm">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div class="flex items-center gap-3 w-full md:w-auto">
+          <a routerLink="/admin" class="text-ts-ink hover:text-ts-accent transition-colors">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
             </svg>
           </a>
-          <h1 class="text-lg md:text-xl font-bold bitcoin-gradient-text truncate">{{ 'admin.products.title' | translate }}</h1>
+          <div>
+            <h1 class="text-lg md:text-xl font-bold text-ts-ink">{{ 'admin.products.title' | translate }}</h1>
+            <p class="text-sm text-ts-ink-soft">Manage catalog, pricing, and visibility</p>
+          </div>
         </div>
         <div class="flex items-center gap-2 w-full md:w-auto">
-          <a routerLink="/admin" class="flex-1 md:flex-initial text-xs md:text-sm text-bitcoin-gray hover:text-bitcoin-orange transition-colors text-center">{{ 'admin.title' | translate }}</a>
-          <button (click)="logout()" class="flex-1 md:flex-initial px-3 md:px-4 py-2 text-xs md:text-sm bg-red-500/20 hover:bg-red-500/30 border border-red-500/30 text-red-100 rounded-xl transition-all duration-300">
+          <a routerLink="/admin" class="flex-1 md:flex-initial text-xs md:text-sm text-ts-ink-soft hover:text-ts-ink transition-colors text-center">{{ 'admin.title' | translate }}</a>
+          <button (click)="logout()" class="flex-1 md:flex-initial px-3 md:px-4 py-2 text-xs md:text-sm bg-red-50 hover:bg-red-100 border border-red-200 text-red-700 rounded-xl transition-all duration-300">
             {{ 'client.logout' | translate }}
           </button>
         </div>
       </div>
     </div>
-  </div>
 
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    
-    <!-- Quick Actions -->
-    <app-admin-quick-actions currentPage="/admin/products"></app-admin-quick-actions>
-    
-    @if (successMessage) {
-      <div class="mb-6 p-4 bg-bitcoin-gold/20 border border-bitcoin-gold/30 rounded-xl flex items-start gap-3">
-        <svg class="w-5 h-5 text-bitcoin-gold mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-        </svg>
-        <p class="text-sm text-bitcoin-gold">{{ successMessage | translate }}</p>
-      </div>
-    }
-
-    @if (errorMessage) {
-      <div class="mb-6 p-4 bg-red-500/20 border border-red-500/30 rounded-xl flex items-start gap-3">
-        <svg class="w-5 h-5 text-red-400 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-        </svg>
-        <p class="text-sm text-red-400">{{ errorMessage | translate }}</p>
-      </div>
-    }
-
-    @if ((categories.length === 0 || models.length === 0) && !isLoading) {
-      <div class="mb-6 p-4 bg-bitcoin-orange/20 border border-bitcoin-orange/30 rounded-xl">
-        <div class="flex items-start gap-3">
-          <svg class="w-6 h-6 text-bitcoin-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <!-- Alerts -->
+      @if (successMessage) {
+        <div class="mb-6 p-4 bg-green-50 border border-green-200 rounded-xl flex items-start gap-3">
+          <svg class="w-5 h-5 text-green-600 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
           </svg>
-          <div>
-            <h4 class="font-semibold text-bitcoin-orange">{{ 'admin.setup_required' | translate }}</h4>
-            <p class="text-sm text-bitcoin-gray mt-1">
-              @if (categories.length === 0 && models.length === 0) {
-                {{ 'admin.need_categories_and_models' | translate }}
-              } @else if (categories.length === 0) {
-                {{ 'admin.need_category' | translate }}
-              } @else {
-                {{ 'admin.need_model' | translate }}
-              }
-            </p>
-            <a routerLink="/admin/catalog" class="inline-flex items-center gap-2 mt-3 px-4 py-2 bg-bitcoin-orange/30 hover:bg-bitcoin-orange/40 text-bitcoin-orange border border-bitcoin-orange/30 rounded-lg transition-colors">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
-              </svg>
-              {{ 'admin.goto_catalog' | translate }}
-            </a>
+          <p class="text-sm text-green-700">{{ successMessage | translate }}</p>
+        </div>
+      }
+
+      @if (errorMessage) {
+        <div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl flex items-start gap-3">
+          <svg class="w-5 h-5 text-red-600 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          <p class="text-sm text-red-700">{{ errorMessage | translate }}</p>
+        </div>
+      }
+
+      @if ((categories.length === 0 || models.length === 0) && !isLoading) {
+        <div class="mb-6 p-4 bg-ts-accent/15 border border-ts-accent/30 rounded-xl">
+          <div class="flex items-start gap-3">
+            <svg class="w-6 h-6 text-ts-ink" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+            </svg>
+            <div>
+              <h4 class="font-semibold text-ts-ink">{{ 'admin.setup_required' | translate }}</h4>
+              <p class="text-sm text-ts-ink-soft mt-1">
+                @if (categories.length === 0 && models.length === 0) {
+                  {{ 'admin.need_categories_and_models' | translate }}
+                } @else if (categories.length === 0) {
+                  {{ 'admin.need_category' | translate }}
+                } @else {
+                  {{ 'admin.need_model' | translate }}
+                }
+              </p>
+              <a routerLink="/admin/catalog" class="inline-flex items-center gap-2 mt-3 px-4 py-2 bg-ts-accent/20 hover:bg-ts-accent/30 text-ts-ink border border-ts-accent/30 rounded-lg transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                </svg>
+                {{ 'admin.goto_catalog' | translate }}
+              </a>
+            </div>
           </div>
         </div>
-      </div>
-    }
+      }
 
-    <div class="mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-      <div class="flex-1 w-full sm:w-auto">
-        <div class="relative">
-          <input type="text" [(ngModel)]="searchTerm" [placeholder]="'common.search' | translate" class="w-full pl-10 pr-4 py-2 bg-bitcoin-dark/40 border border-bitcoin-gray/20 rounded-xl focus:ring-2 focus:ring-bitcoin-orange focus:border-bitcoin-orange text-bitcoin-gray placeholder-bitcoin-gray/50">
-          <svg class="w-5 h-5 text-bitcoin-gray/50 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-          </svg>
+      <!-- Toolbar -->
+      <div class="mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div class="flex-1 w-full sm:w-auto">
+          <div class="relative">
+            <input type="text" [(ngModel)]="searchTerm" [placeholder]="'common.search' | translate" class="w-full pl-10 pr-4 py-2 bg-ts-bg-soft border border-ts-line rounded-xl focus:ring-2 focus:ring-ts-accent focus:border-ts-accent text-ts-ink placeholder-ts-ink-soft">
+            <svg class="w-5 h-5 text-ts-ink-soft absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M4 11a7 7 0 1114 0 7 7 0 01-14 0z"></path>
+            </svg>
+          </div>
+        </div>
+        <div class="flex items-center gap-3 w-full sm:w-auto">
+          <a routerLink="/admin/products/quick-add" class="px-4 py-2 bg-ts-accent text-ts-ink border border-ts-accent/50 rounded-xl transition-all duration-300 flex items-center gap-2 whitespace-nowrap hover:bg-ts-accent/90">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+            </svg>
+            {{ 'admin.add_product' | translate }}
+          </a>
         </div>
       </div>
-      <div class="flex items-center gap-3 w-full sm:w-auto">
-        <a routerLink="/admin/products/quick-add" class="px-4 py-2 bg-bitcoin-orange/30 hover:bg-bitcoin-orange/40 text-bitcoin-orange border border-bitcoin-orange/30 rounded-xl transition-all duration-300 flex items-center gap-2 whitespace-nowrap">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-          </svg>
-          {{ 'admin.add_product' | translate }}
-        </a>
-      </div>
-    </div>
 
-    @if (isLoading) {
-      <div class="bg-bitcoin-dark/40 backdrop-blur-sm rounded-2xl shadow-bitcoin p-12 border border-bitcoin-gray/20">
-        <div class="flex flex-col items-center justify-center gap-4">
-          <div class="app-spinner" style="--spinner-size: 72px;"><img src="/Logo Clear.png" alt="Loading" width="96" height="96"></div>
-          <p class="text-bitcoin-gray">{{ 'common.loading' | translate }}</p>
+      <!-- Table / States -->
+      @if (isLoading) {
+        <div class="bg-ts-paper border border-ts-line rounded-2xl shadow-sm p-12">
+          <div class="flex flex-col items-center justify-center gap-4">
+            <div class="app-spinner" style="--spinner-size: 72px;"><img src="/Logo Clear.png" alt="Loading" width="96" height="96"></div>
+            <p class="text-ts-ink-soft">{{ 'common.loading' | translate }}</p>
+          </div>
         </div>
-      </div>
-    } @else {
-      <div class="bg-bitcoin-dark/40 backdrop-blur-sm rounded-2xl shadow-bitcoin border border-bitcoin-gray/20 overflow-hidden">
-        <div class="overflow-x-auto">
-          <table class="w-full">
-            <thead class="bg-bitcoin-dark/60 border-b border-bitcoin-orange/20">
-              <tr>
-                <th class="px-6 py-3 text-left text-xs font-medium text-bitcoin-orange uppercase tracking-wider">{{ 'admin.product_image' | translate }}</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-bitcoin-orange uppercase tracking-wider">{{ 'admin.product_name' | translate }}</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-bitcoin-orange uppercase tracking-wider">
-                  <div class="flex flex-col gap-1">
-                    <span>{{ 'admin.product_category' | translate }}</span>
-                    <select [(ngModel)]="selectedCategoryFilter" class="text-xs px-2 py-1 bg-bitcoin-dark/60 border border-bitcoin-gray/30 rounded text-bitcoin-gray focus:ring-1 focus:ring-bitcoin-orange focus:border-bitcoin-orange">
-                      <option value="">All Categories</option>
-                      @for (cat of categories; track cat.id) {
-                        <option [value]="cat.id">{{ cat.name }}</option>
-                      }
-                    </select>
-                  </div>
-                </th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-bitcoin-orange uppercase tracking-wider">
-                  <div class="flex flex-col gap-1">
-                    <span>{{ 'admin.product_model' | translate }}</span>
-                    <select [(ngModel)]="selectedModelFilter" class="text-xs px-2 py-1 bg-bitcoin-dark/60 border border-bitcoin-gray/30 rounded text-bitcoin-gray focus:ring-1 focus:ring-bitcoin-orange focus:border-bitcoin-orange">
-                      <option value="">All Models</option>
-                      @for (model of models; track model.id) {
-                        <option [value]="model.id">{{ model.name }}</option>
-                      }
-                    </select>
-                  </div>
-                </th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-bitcoin-orange uppercase tracking-wider">
-                  <div class="flex flex-col gap-1">
-                    <span>Status</span>
-                    <select [(ngModel)]="selectedStatusFilter" class="text-xs px-2 py-1 bg-bitcoin-dark/60 border border-bitcoin-gray/30 rounded text-bitcoin-gray focus:ring-1 focus:ring-bitcoin-orange focus:border-bitcoin-orange">
-                      <option value="">All Status</option>
-                      <option value="published">Published</option>
-                      <option value="draft">Draft</option>
-                      <option value="archived">Archived</option>
-                    </select>
-                  </div>
-                </th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-bitcoin-orange uppercase tracking-wider">{{ 'admin.product_price' | translate }}</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-bitcoin-orange uppercase tracking-wider">Stock</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-bitcoin-orange uppercase tracking-wider">
-                  <div class="flex flex-col gap-0.5">
-                    <span>Last Modified</span>
-                    <span class="text-[10px] text-bitcoin-orange/80 font-normal normal-case">Created</span>
-                  </div>
-                </th>
-                <th class="px-6 py-3 text-right text-xs font-medium text-bitcoin-orange uppercase tracking-wider">{{ 'admin.actions' | translate }}</th>
-              </tr>
-            </thead>
-            <tbody class="bg-bitcoin-dark/20 divide-y divide-bitcoin-gray/20">
-              @if (filteredProducts.length === 0) {
+      } @else {
+        <div class="bg-ts-paper border border-ts-line rounded-2xl shadow-sm overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full">
+              <thead class="bg-ts-bg-soft border-b border-ts-line">
                 <tr>
-                  <td colspan="9" class="px-6 py-12 text-center">
-                    <div class="flex flex-col items-center justify-center gap-4">
-                      <svg class="w-16 h-16 text-bitcoin-gray/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
-                      </svg>
-                      <p class="text-bitcoin-gray/70">{{ 'admin.no_products' | translate }}</p>
+                  <th class="px-6 py-3 text-left text-xs font-semibold text-ts-ink-soft uppercase tracking-wider">{{ 'admin.product_image' | translate }}</th>
+                  <th class="px-6 py-3 text-left text-xs font-semibold text-ts-ink-soft uppercase tracking-wider">{{ 'admin.product_name' | translate }}</th>
+                  <th class="px-6 py-3 text-left text-xs font-semibold text-ts-ink-soft uppercase tracking-wider">
+                    <div class="flex flex-col gap-1">
+                      <span>{{ 'admin.product_category' | translate }}</span>
+                      <select [(ngModel)]="selectedCategoryFilter" class="text-xs px-2 py-1 bg-ts-bg-soft border border-ts-line rounded text-ts-ink focus:ring-1 focus:ring-ts-accent focus:border-ts-accent">
+                        <option value="">All Categories</option>
+                        @for (cat of categories; track cat.id) {
+                          <option [value]="cat.id">{{ cat.name }}</option>
+                        }
+                      </select>
                     </div>
-                  </td>
+                  </th>
+                  <th class="px-6 py-3 text-left text-xs font-semibold text-ts-ink-soft uppercase tracking-wider">
+                    <div class="flex flex-col gap-1">
+                      <span>{{ 'admin.product_model' | translate }}</span>
+                      <select [(ngModel)]="selectedModelFilter" class="text-xs px-2 py-1 bg-ts-bg-soft border border-ts-line rounded text-ts-ink focus:ring-1 focus:ring-ts-accent focus:border-ts-accent">
+                        <option value="">All Models</option>
+                        @for (model of models; track model.id) {
+                          <option [value]="model.id">{{ model.name }}</option>
+                        }
+                      </select>
+                    </div>
+                  </th>
+                  <th class="px-6 py-3 text-left text-xs font-semibold text-ts-ink-soft uppercase tracking-wider">
+                    <div class="flex flex-col gap-1">
+                      <span>Status</span>
+                      <select [(ngModel)]="selectedStatusFilter" class="text-xs px-2 py-1 bg-ts-bg-soft border border-ts-line rounded text-ts-ink focus:ring-1 focus:ring-ts-accent focus:border-ts-accent">
+                        <option value="">All Status</option>
+                        <option value="published">Published</option>
+                        <option value="draft">Draft</option>
+                        <option value="archived">Archived</option>
+                      </select>
+                    </div>
+                  </th>
+                  <th class="px-6 py-3 text-left text-xs font-semibold text-ts-ink-soft uppercase tracking-wider">{{ 'admin.product_price' | translate }}</th>
+                  <th class="px-6 py-3 text-left text-xs font-semibold text-ts-ink-soft uppercase tracking-wider">Stock</th>
+                  <th class="px-6 py-3 text-left text-xs font-semibold text-ts-ink-soft uppercase tracking-wider">
+                    <div class="flex flex-col gap-0.5">
+                      <span>Last Modified</span>
+                      <span class="text-[10px] text-ts-ink-soft font-normal normal-case">Created</span>
+                    </div>
+                  </th>
+                  <th class="px-6 py-3 text-right text-xs font-semibold text-ts-ink-soft uppercase tracking-wider">{{ 'admin.actions' | translate }}</th>
                 </tr>
-              } @else {
-                @for (product of filteredProducts; track product.id) {
-                  <tr class="hover:bg-bitcoin-dark/40 transition-colors">
-                    <td class="px-6 py-4 whitespace-nowrap">
-                      @if (product.imageUrl) {
-                        <img [src]="product.imageUrl" [alt]="product.name" class="w-16 h-16 object-cover rounded-lg border border-bitcoin-gray/20">
-                      } @else {
-                        <div class="w-16 h-16 bg-bitcoin-dark/60 border border-bitcoin-gray/20 rounded-lg flex items-center justify-center">
-                          <svg class="w-8 h-8 text-bitcoin-gray/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                          </svg>
-                        </div>
-                      }
-                    </td>
-                    <td class="px-6 py-4">
-                      <div class="text-sm font-medium text-bitcoin-gray">{{ product.name }}</div>
-                      <div class="text-sm text-bitcoin-gray/70 line-clamp-1">{{ product.description }}</div>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                      <span class="px-2 py-1 text-xs font-medium bg-bitcoin-orange/20 text-bitcoin-orange border border-bitcoin-orange/30 rounded-full">
-                        {{ getCategoryName(product.categoryId) }}
-                      </span>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-bitcoin-gray">
-                      {{ getModelName(product.modelId) }}
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                      <span class="text-xs px-2 py-0.5 rounded-full"
-                            [class.bg-bitcoin-gold/20]="product.status === 'published'"
-                            [class.text-bitcoin-gold]="product.status === 'published'"
-                            [class.border]="product.status === 'published'"
-                            [class.border-bitcoin-gold/30]="product.status === 'published'"
-                            [class.bg-bitcoin-orange/20]="product.status === 'draft'"
-                            [class.text-bitcoin-orange]="product.status === 'draft'"
-                            [class.border]="product.status === 'draft'"
-                            [class.border-bitcoin-orange/30]="product.status === 'draft'"
-                            [class.bg-bitcoin-gray/20]="product.status === 'archived'"
-                            [class.text-bitcoin-gray]="product.status === 'archived'"
-                            [class.border]="product.status === 'archived'"
-                            [class.border-bitcoin-gray/30]="product.status === 'archived'">
-                        {{ ('admin.status_' + (product.status || 'draft')) | translate }}
-                      </span>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-bitcoin-gray">
-                      @if (product.price) {
-                        <span class="text-bitcoin-gold">EUR {{ product.price.toFixed(2) }}</span>
-                      } @else {
-                        <span class="text-bitcoin-gray/50">n/a</span>
-                      }
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-bitcoin-gray">
-                      @if (product.stock !== undefined && product.stock !== null) {
-                        <div class="flex items-center gap-2">
-                          <span class="font-medium"
-                                [class.text-bitcoin-gold]="product.stock > 10"
-                                [class.text-bitcoin-orange]="product.stock > 0 && product.stock <= 10"
-                                [class.text-red-400]="product.stock === 0">
-                            {{ product.stock }}
-                          </span>
-                          @if (product.stock === 0) {
-                            <span class="text-xs text-red-400/70">Out of stock</span>
-                          } @else if (product.stock <= 5) {
-                            <span class="text-xs text-bitcoin-orange/70">Low</span>
-                          }
-                        </div>
-                      } @else {
-                        <span class="text-bitcoin-gray/50">—</span>
-                      }
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-bitcoin-gray">
-                      <div class="flex flex-col gap-0.5">
-                        <div class="text-xs text-white">
-                          @if (product.updatedAt) {
-                            {{ formatTimestamp(product.updatedAt) }}
-                          } @else {
-                            <span class="text-bitcoin-gray/50">—</span>
-                          }
-                        </div>
-                        <div class="text-[10px] text-bitcoin-orange/70">
-                          @if (product.createdAt) {
-                            {{ formatTimestamp(product.createdAt) }}
-                          } @else {
-                            <span>—</span>
-                          }
-                        </div>
-                      </div>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <div class="flex items-center justify-end gap-2">
-                        <button (click)="openEditModal(product)" class="p-2 bg-bitcoin-orange/20 hover:bg-bitcoin-orange/30 text-bitcoin-orange border border-bitcoin-orange/30 rounded-lg transition-colors" [title]="'admin.edit' | translate">
-                          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                          </svg>
-                        </button>
-                        <button (click)="openDeleteConfirm(product)" class="p-2 bg-red-500/20 hover:bg-red-500/30 text-red-400 border border-red-500/30 rounded-lg transition-colors" [title]="'admin.delete' | translate">
-                          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                          </svg>
-                        </button>
+              </thead>
+              <tbody class="bg-ts-paper divide-y divide-ts-line/60">
+                @if (filteredProducts.length === 0) {
+                  <tr>
+                    <td colspan="9" class="px-6 py-12 text-center">
+                      <div class="flex flex-col items-center justify-center gap-4">
+                        <svg class="w-16 h-16 text-ts-ink-soft" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
+                        </svg>
+                        <p class="text-ts-ink-soft">{{ 'admin.no_products' | translate }}</p>
                       </div>
                     </td>
                   </tr>
-                }
-              }
-            </tbody>
-          </table>
-        </div>
-      </div>
-    }
-  </div>
-
-  @if (showModal) {
-    <div class="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50" (click)="closeModal()">
-      <div class="bg-gradient-to-b from-bitcoin-dark to-[#13151a] border border-bitcoin-orange/30 rounded-2xl shadow-bitcoin-lg max-w-5xl w-full max-h-[90vh] overflow-hidden" (click)="$event.stopPropagation()">
-        <div class="bg-gradient-to-r from-bitcoin-dark via-[#13151a] to-bitcoin-dark border-b border-bitcoin-orange/20 p-6 flex items-start justify-between gap-4">
-            <div>
-              <h2 class="text-2xl font-bold bitcoin-gradient-text">{{ isEditMode ? ('admin.edit_product' | translate) : ('admin.add_product' | translate) }}</h2>
-              <p class="text-sm text-bitcoin-gray mt-1">{{ 'admin.product_wizard_hint' | translate }}</p>
-            </div>
-            <button type="button" (click)="closeModal()" class="w-10 h-10 bg-bitcoin-dark/50 hover:bg-bitcoin-dark/70 border border-bitcoin-orange/30 rounded-xl transition-all duration-300 flex items-center justify-center text-bitcoin-gray hover:text-bitcoin-orange">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-              </svg>
-            </button>
-          </div>
-          <div class="flex items-center gap-4 px-6 mt-6">
-            @for (label of stepLabels; track $index; let idx = $index) {
-              <div class="flex items-center gap-3 flex-1">
-                <button type="button" 
-                        (click)="goToStep(idx + 1)"
-                        class="flex items-center gap-2 transition-all duration-200 hover:opacity-80 cursor-pointer">
-                  <div class="w-8 h-8 rounded-full flex items-center justify-center font-semibold transition-all duration-300"
-                       [class.bg-gradient-to-br]="idx + 1 <= currentStep"
-                       [class.from-bitcoin-orange]="idx + 1 <= currentStep"
-                       [class.to-bitcoin-gold]="idx + 1 <= currentStep"
-                       [class.text-white]="idx + 1 <= currentStep"
-                       [class.shadow-lg]="idx + 1 <= currentStep"
-                       [class.bg-bitcoin-dark/50]="idx + 1 > currentStep"
-                       [class.border]="idx + 1 > currentStep"
-                       [class.border-bitcoin-gray/30]="idx + 1 > currentStep"
-                       [class.text-bitcoin-gray]="idx + 1 > currentStep">
-                    {{ idx + 1 }}
-                  </div>
-                  <span class="text-sm font-medium"
-                        [class.text-bitcoin-orange]="idx + 1 === currentStep"
-                        [class.text-bitcoin-gray]="idx + 1 !== currentStep">
-                    {{ label | translate }}
-                  </span>
-                </button>
-                @if (idx < stepLabels.length - 1) {
-                  <div class="flex-1 h-px bg-gradient-to-r from-bitcoin-gray/20 to-transparent"></div>
-                }
-              </div>
-            }
-          </div>
-        <form [formGroup]="productForm" class="p-6 space-y-8 overflow-y-auto max-h-[65vh]">
-          @if (currentStep === 1) {
-            <section class="space-y-6">
-              <div class="bg-bitcoin-dark/40 backdrop-blur-sm border border-bitcoin-gray/20 rounded-2xl p-6">
-                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
-                  <div>
-                    <h3 class="text-lg font-semibold bitcoin-gradient-text">{{ 'admin.catalog_title' | translate }}</h3>
-                    <p class="text-sm text-bitcoin-gray">{{ 'admin.catalog_hint' | translate }}</p>
-                  </div>
-                  <div class="relative w-full sm:w-72">
-                    <input type="text" [ngModel]="catalogSearchTerm" (ngModelChange)="onCatalogSearch($event)" [ngModelOptions]="{standalone: true}" [placeholder]="'admin.catalog_search_placeholder' | translate" class="w-full pl-10 pr-4 py-2 bg-bitcoin-dark/50 border border-bitcoin-gray/30 rounded-xl focus:ring-2 focus:ring-bitcoin-orange/50 focus:border-bitcoin-orange text-white placeholder-bitcoin-gray/50">
-                    <svg class="w-5 h-5 text-bitcoin-gray absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                    </svg>
-                  </div>
-                </div>
-                <div class="max-h-64 overflow-y-auto pr-1 space-y-2">
-                  @if (catalogOptions.length === 0) {
-                    <div class="p-4 bg-bitcoin-orange/20 border border-bitcoin-orange/30 rounded-xl">
-                      <p class="text-sm text-bitcoin-orange font-semibold">⚠️ No Catalog Data Available</p>
-                      <p class="text-xs text-bitcoin-gray mt-1">
-                        @if (categories.length === 0 && models.length === 0) {
-                          You need to create categories and models first.
-                        } @else if (categories.length === 0) {
-                          You need to create at least one category.
-                        } @else {
-                          You need to create at least one model.
-                        }
-                      </p>
-                      <a routerLink="/admin/catalog" class="inline-flex items-center gap-2 mt-2 px-3 py-1.5 bg-bitcoin-orange/30 hover:bg-bitcoin-orange/40 text-bitcoin-orange text-xs rounded-lg border border-bitcoin-orange/30 transition-colors">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
-                        </svg>
-                        Go to Catalog →
-                      </a>
-                    </div>
-                  } @else if (filteredCatalogOptions.length === 0) {
-                    <p class="text-sm text-bitcoin-gray">{{ 'admin.catalog_empty' | translate }}</p>
-                  } @else {
-                    @for (option of filteredCatalogOptions; track option.id) {
-                      <button 
-                        type="button" 
-                        (click)="selectCatalogOption(option)" 
-                        class="w-full text-left px-4 py-3 rounded-xl transition-all duration-300 flex items-center justify-between gap-3"
-                        [class]="option.isSuggestion 
-                          ? 'bg-bitcoin-gold/10 hover:bg-bitcoin-gold/20 border border-bitcoin-gold/30' 
-                          : 'bg-bitcoin-dark/30 hover:bg-bitcoin-dark/50 border border-bitcoin-gray/30'"
-                        [class.border-bitcoin-orange]="!option.isSuggestion && selectedCatalogOption?.id === option.id" 
-                        [class.bg-bitcoin-orange/10]="!option.isSuggestion && selectedCatalogOption?.id === option.id">
-                        <div class="flex-1">
-                          <span class="font-medium" [class.text-bitcoin-gold]="option.isSuggestion" [class.text-white]="!option.isSuggestion">
-                            {{ option.label }}
-                          </span>
-                          @if (option.sizeHint) {
-                            <p class="text-xs text-bitcoin-gray mt-1">{{ option.sizeHint }}</p>
-                          }
-                          @if (option.isSuggestion) {
-                            <p class="text-xs text-bitcoin-gray/70 mt-1">Click to go to Catalog and create a new model</p>
-                          }
-                        </div>
-                        @if (!option.isSuggestion && selectedCatalogOption?.id === option.id) {
-                          <svg class="w-5 h-5 text-bitcoin-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                          </svg>
-                        }
-                        @if (option.isSuggestion) {
-                          <svg class="w-5 h-5 text-bitcoin-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                          </svg>
-                        }
-                      </button>
-                    }
-                  }
-                </div>
-              </div>
-              <div class="bg-bitcoin-dark/40 backdrop-blur-sm border border-bitcoin-gray/20 rounded-2xl p-6">
-                <h3 class="text-lg font-semibold bitcoin-gradient-text mb-2">{{ 'admin.manual_selection' | translate }}</h3>
-                <p class="text-sm text-bitcoin-gray mb-4">{{ 'admin.manual_selection_hint' | translate }}</p>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <!-- Category First -->
-                  <div>
-                    <label class="block text-base font-semibold text-bitcoin-gray mb-3">{{ 'admin.product_category' | translate }} *</label>
-                    <select formControlName="categoryId" (change)="onCategoryChange(); selectedCatalogOption = null" class="w-full px-4 py-3 bg-bitcoin-dark/60 border-2 border-bitcoin-orange/30 rounded-xl focus:ring-2 focus:ring-bitcoin-orange focus:border-bitcoin-orange text-white text-base cursor-pointer">
-                      <option value="" class="bg-bitcoin-dark text-bitcoin-gray">{{ 'admin.select_category' | translate }}</option>
-                      @for (category of categories; track category.id) {
-                        <option [value]="category.id" class="bg-bitcoin-dark text-white">{{ category.name }}</option>
-                      }
-                    </select>
-                  </div>
-                  
-                  <!-- Model Second - Filtered by Category -->
-                  <div>
-                    <label class="block text-base font-semibold text-bitcoin-gray mb-3">{{ 'admin.product_model' | translate }} *</label>
-                    <select formControlName="modelId" (change)="onModelChange()" class="w-full px-4 py-3 bg-bitcoin-dark/60 border-2 border-bitcoin-orange/30 rounded-xl focus:ring-2 focus:ring-bitcoin-orange focus:border-bitcoin-orange text-white text-base cursor-pointer" [disabled]="!productForm.get('categoryId')?.value">
-                      <option value="" class="bg-bitcoin-dark text-bitcoin-gray">
-                        @if (!productForm.get('categoryId')?.value) {
-                          Select category first
-                        } @else {
-                          {{ 'admin.select_model' | translate }}
-                        }
-                      </option>
-                      @for (model of filteredModelsByCategory; track model.id) {
-                        <option [value]="model.id" class="bg-bitcoin-dark text-white">{{ model.name }}</option>
-                      }
-                    </select>
-                    @if (productForm.get('categoryId')?.value && filteredModelsByCategory.length === 0) {
-                      <p class="mt-2 text-sm text-bitcoin-orange flex items-center gap-2">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                        </svg>
-                        No models in this category yet. Create one in Catalog.
-                      </p>
-                    }
-                  </div>
-                </div>
-                
-                <!-- Suggestions -->
-                @if (productForm.get('categoryId')?.value && productForm.get('modelId')?.value) {
-                  <div class="mt-4 p-4 bg-bitcoin-gold/10 border border-bitcoin-gold/30 rounded-xl">
-                    <h4 class="text-sm font-semibold text-bitcoin-gold mb-2 flex items-center gap-2">
-                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
-                      </svg>
-                      Suggested Product Names
-                    </h4>
-                    <p class="text-xs text-bitcoin-gray mb-3">Based on {{ getCategoryName(productForm.get('categoryId')?.value) }} → {{ getModelName(productForm.get('modelId')?.value) }}</p>
-                    <div class="flex flex-wrap gap-2">
-                      @for (suggestion of getProductSuggestions(); track suggestion) {
-                        <button
-                          type="button"
-                          (click)="applySuggestion(suggestion)"
-                          class="px-3 py-1.5 bg-bitcoin-gold/20 hover:bg-bitcoin-gold/30 text-bitcoin-gold text-xs rounded-lg border border-bitcoin-gold/30 transition-colors">
-                          {{ suggestion }}
-                        </button>
-                      }
-                    </div>
-                  </div>
-                }
-              </div>
-            </section>
-          }
-          @if (currentStep === 2) {
-            <section class="space-y-6">
-              <!-- Product Name Builder -->
-              <div class="bg-gradient-to-br from-bitcoin-dark/60 to-bitcoin-dark/40 backdrop-blur-sm border border-bitcoin-orange/30 rounded-2xl p-6 shadow-lg">
-                <div class="flex items-center gap-3 mb-4">
-                  <div class="p-2 bg-bitcoin-gold/20 rounded-lg">
-                    <svg class="w-5 h-5 text-bitcoin-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 class="text-lg font-semibold bitcoin-gradient-text">Product Name</h3>
-                    <p class="text-xs text-bitcoin-gray/70">Category - Model - Variant</p>
-                  </div>
-                </div>
-                
-                <!-- Name Formula Display -->
-                <div class="mb-4 p-4 bg-black/40 border border-bitcoin-orange/20 rounded-xl">
-                  <div class="flex items-center flex-wrap gap-2 mb-3">
-                    <span class="px-3 py-1.5 bg-bitcoin-gold/20 border border-bitcoin-gold/30 rounded-lg text-sm font-medium text-bitcoin-gold">
-                      {{ getCategoryName(productForm.get('categoryId')?.value) }}
-                    </span>
-                    <span class="text-bitcoin-gray/50">-</span>
-                    <span class="px-3 py-1.5 bg-bitcoin-orange/20 border border-bitcoin-orange/30 rounded-lg text-sm font-medium text-bitcoin-orange">
-                      {{ getModelName(productForm.get('modelId')?.value) }}
-                    </span>
-                    <span class="text-bitcoin-gray/50">-</span>
-                    <span class="px-3 py-1.5 bg-bitcoin-dark/80 border border-bitcoin-gray/30 rounded-lg text-sm font-medium" [class.text-bitcoin-gray]="productForm.get('name')?.value" [class.text-bitcoin-gray/40]="!productForm.get('name')?.value" [class.italic]="!productForm.get('name')?.value">
-                      {{ productForm.get('name')?.value || 'Enter variant name' }}
-                    </span>
-                  </div>
-                  @if (getFullProductName()) {
-                    <div class="pt-3 border-t border-bitcoin-gray/10">
-                      <p class="text-sm text-bitcoin-gray/70">
-                        <span class="text-bitcoin-gray">Final Name:</span> 
-                        <span class="font-semibold text-white ml-1">{{ getFullProductName() }}</span>
-                      </p>
-                    </div>
-                  }
-                </div>
-
-                <!-- Custom Name Input -->
-                <div class="space-y-3">
-                  <label class="block text-sm font-semibold text-bitcoin-gray/90">Custom Variant Name</label>
-                  <input
-                    type="text"
-                    formControlName="name"
-                    placeholder="e.g., 110TH/s Pro, Standard Edition, v2..."
-                    class="w-full px-4 py-3 bg-bitcoin-dark/60 border-2 border-bitcoin-gray/30 rounded-xl focus:ring-2 focus:ring-bitcoin-orange focus:border-bitcoin-orange text-white text-base placeholder-bitcoin-gray/40 transition-all">
-                  
-                  <!-- Quick Suggestions -->
-                  @if (productForm.get('categoryId')?.value && productForm.get('modelId')?.value) {
-                    <div class="flex flex-wrap gap-2 pt-1">
-                      @for (suggestion of getProductSuggestions(); track suggestion) {
-                        <button
-                          type="button"
-                          (click)="applySuggestion(suggestion)"
-                          class="px-3 py-1.5 bg-bitcoin-gold/10 hover:bg-bitcoin-gold/20 text-bitcoin-gold text-xs rounded-lg border border-bitcoin-gold/30 transition-all hover:scale-105">
-                          {{ suggestion }}
-                        </button>
-                      }
-                    </div>
-                  }
-                </div>
-              </div>
-
-              <!-- Auto-Generated Content -->
-              <div class="bg-gradient-to-br from-bitcoin-dark/60 to-bitcoin-dark/40 backdrop-blur-sm border border-bitcoin-gray/20 rounded-2xl p-6 shadow-lg">
-                <div class="flex items-center justify-between mb-4">
-                  <div class="flex items-center gap-3">
-                    <div class="p-2 bg-bitcoin-orange/20 rounded-lg">
-                      <svg class="w-5 h-5 text-bitcoin-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                      </svg>
-                    </div>
-                    <div>
-                      <h3 class="text-lg font-semibold bitcoin-gradient-text">Product Details</h3>
-                      <p class="text-xs text-bitcoin-gray/70">Auto-loaded from templates • Click to customize</p>
-                    </div>
-                  </div>
-                  @if (isGenerating) {
-                    <div class="flex items-center gap-2 text-bitcoin-orange text-sm">
-                      <div class="app-spinner" style="--spinner-size: 72px;"><img src="/Logo Clear.png" alt="Loading" width="96" height="96"></div>
-                      <span>Loading...</span>
-                    </div>
-                  }
-                </div>
-
-                <div class="space-y-4">
-                  <!-- Description -->
-                  <div class="group">
-                    <div class="flex items-center justify-between mb-2">
-                      <label class="text-sm font-semibold text-bitcoin-gray/90">Description</label>
-                      <button 
-                        type="button" 
-                        (click)="toggleDescriptionLock()" 
-                        class="text-xs font-medium px-3 py-1 rounded-lg transition-all"
-                        [class.bg-bitcoin-orange/20]="!descriptionLocked"
-                        [class.text-bitcoin-orange]="!descriptionLocked"
-                        [class.bg-bitcoin-gray/20]="descriptionLocked"
-                        [class.text-bitcoin-gray]="descriptionLocked">
-                        @if (descriptionLocked) {
-                          🔒 Locked
-                        } @else {
-                          🔓 Unlocked
-                        }
-                      </button>
-                    </div>
-                    <textarea 
-                      formControlName="description" 
-                      rows="4" 
-                      placeholder="Product description will auto-load from templates..."
-                      [readonly]="descriptionLocked"
-                      [class.opacity-60]="descriptionLocked"
-                      [class.cursor-not-allowed]="descriptionLocked"
-                      class="w-full px-4 py-3 bg-bitcoin-dark/40 border-2 border-bitcoin-gray/20 rounded-xl focus:ring-2 focus:ring-bitcoin-orange focus:border-bitcoin-orange text-white placeholder:text-bitcoin-gray/40 text-sm resize-none transition-all"></textarea>
-                    @if (descriptionLocked) {
-                      <p class="text-xs text-bitcoin-gray mt-1">🔒 Auto-updates enabled. Unlock to edit manually.</p>
-                    }
-                  </div>
-
-                  <!-- SEO Section -->
-                  <details class="group/seo">
-                    <summary class="cursor-pointer list-none">
-                      <div class="flex items-center justify-between p-3 bg-black/20 rounded-lg hover:bg-black/30 transition-all">
-                        <div class="flex items-center gap-2">
-                          <svg class="w-4 h-4 text-bitcoin-gray transition-transform group-open/seo:rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                          </svg>
-                          <span class="text-sm font-semibold text-bitcoin-gray">SEO Settings</span>
-                        </div>
-                        <button 
-                          type="button" 
-                          (click)="toggleSeoLock(); $event.stopPropagation()" 
-                          class="text-xs font-medium px-3 py-1 rounded-lg transition-all"
-                          [class.bg-bitcoin-orange/20]="!seoLocked"
-                          [class.text-bitcoin-orange]="!seoLocked"
-                          [class.bg-bitcoin-gray/20]="seoLocked"
-                          [class.text-bitcoin-gray]="seoLocked">
-                          @if (seoLocked) {
-                            🔒 Locked
-                          } @else {
-                            🔓 Unlocked
-                          }
-                        </button>
-                      </div>
-                    </summary>
-                    <div class="mt-3 space-y-3 pl-4">
-                      <div>
-                        <label class="block text-xs font-semibold text-bitcoin-gray mb-2">SEO Title</label>
-                        <input
-                          type="text"
-                          formControlName="seoTitle"
-                          placeholder="Auto-generated SEO title..."
-                          [readonly]="seoLocked"
-                          [class.opacity-60]="seoLocked"
-                          [class.cursor-not-allowed]="seoLocked"
-                          class="w-full px-3 py-2 bg-bitcoin-dark/40 border border-bitcoin-gray/20 rounded-lg focus:ring-2 focus:ring-bitcoin-orange focus:border-bitcoin-orange text-white text-sm placeholder:text-bitcoin-gray/40 transition-all">
-                      </div>
-                      <div>
-                        <label class="block text-xs font-semibold text-bitcoin-gray mb-2">SEO Meta Description</label>
-                        <textarea
-                          formControlName="seoMeta"
-                          rows="2"
-                          placeholder="Auto-generated meta description..."
-                          [readonly]="seoLocked"
-                          [class.opacity-60]="seoLocked"
-                          [class.cursor-not-allowed]="seoLocked"
-                          class="w-full px-3 py-2 bg-bitcoin-dark/40 border border-bitcoin-gray/20 rounded-lg focus:ring-2 focus:ring-bitcoin-orange focus:border-bitcoin-orange text-white text-sm placeholder:text-bitcoin-gray/40 resize-none transition-all"></textarea>
-                      </div>
-                      @if (seoLocked) {
-                        <p class="text-xs text-bitcoin-gray">🔒 Auto-updates enabled. Unlock to edit manually.</p>
-                      }
-                    </div>
-                  </details>
-                </div>
-              </div>
-
-              <!-- Tags Section -->
-              <div class="bg-gradient-to-br from-bitcoin-dark/60 to-bitcoin-dark/40 backdrop-blur-sm border border-bitcoin-gray/20 rounded-2xl p-6 shadow-lg">
-                <div class="flex items-center gap-3 mb-4">
-                  <div class="p-2 bg-purple-500/20 rounded-lg">
-                    <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
-                    </svg>
-                  </div>
-                  <div class="flex-1">
-                    <h3 class="text-lg font-semibold bitcoin-gradient-text">Product Tags</h3>
-                    <p class="text-xs text-bitcoin-gray/70">Select tags to categorize this product</p>
-                  </div>
-                </div>
-
-                <!-- Current Selected Tags -->
-                @if (currentTags.length > 0) {
-                  <div class="flex flex-wrap gap-2 mb-4">
-                    @for (tagSlug of currentTags; track tagSlug) {
-                      <span 
-                        class="inline-flex items-center gap-2 px-3 py-1.5 border rounded-full text-sm font-medium"
-                        [style.background-color]="getTagColor(tagSlug) + '20'"
-                        [style.border-color]="getTagColor(tagSlug) + '50'"
-                        [style.color]="getTagColor(tagSlug)">
-                        {{ getTagName(tagSlug) }}
-                        <button
-                          type="button"
-                          (click)="toggleTag(tagSlug)"
-                          class="hover:opacity-70 transition-opacity">
-                          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                          </svg>
-                        </button>
-                      </span>
-                    }
-                  </div>
-                }
-
-                <!-- Available Tags -->
-                @if (activeTags.length > 0) {
-                  <div>
-                    <p class="text-xs font-semibold text-bitcoin-gray mb-3">💡 Available Tags:</p>
-                    <div class="flex flex-wrap gap-2">
-                      @for (tag of activeTags; track tag.id) {
-                        <button
-                          type="button"
-                          (click)="toggleTag(tag.slug)"
-                          [disabled]="isTagSelected(tag.slug)"
-                          [style.background-color]="isTagSelected(tag.slug) ? (tag.color + '40') : 'transparent'"
-                          [style.border-color]="tag.color + '50'"
-                          [style.color]="isTagSelected(tag.slug) ? tag.color : '#9CA3AF'"
-                          [class.opacity-50]="isTagSelected(tag.slug)"
-                          [class.cursor-not-allowed]="isTagSelected(tag.slug)"
-                          class="px-3 py-1.5 border rounded-full text-xs font-medium transition-all hover:scale-105">
-                          @if (isTagSelected(tag.slug)) {
-                            ✓
-                          } @else {
-                            +
-                          }
-                          {{ tag.name }}
-                        </button>
-                      }
-                    </div>
-                  </div>
                 } @else {
-                  <p class="text-sm text-bitcoin-gray/70 italic">No tags available. Please create tags in the Catalog section.</p>
-                }
-              </div>
-
-              <!-- Technical Specifications -->
-              <div class="bg-gradient-to-br from-bitcoin-dark/60 to-bitcoin-dark/40 backdrop-blur-sm border border-bitcoin-gray/20 rounded-2xl p-6 shadow-lg">
-                <div class="flex items-center gap-3 mb-4">
-                  <div class="p-2 bg-cyan-500/20 rounded-lg">
-                    <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
-                    </svg>
-                  </div>
-                  <div class="flex-1">
-                    <h3 class="text-lg font-semibold bitcoin-gradient-text">Technical Specifications</h3>
-                    <p class="text-xs text-bitcoin-gray">Add product specifications (e.g., hash rate, dimensions, material, etc.)</p>
-                  </div>
-                </div>
-
-                <!-- Current Specs Display -->
-                @if (getCurrentSpecs().length > 0) {
-                  <div class="space-y-2 mb-4">
-                    @for (spec of getCurrentSpecs(); track spec.key) {
-                      <div class="flex items-center gap-3 p-3 bg-black/30 rounded-lg group hover:bg-black/40 transition-all">
-                        <div class="flex-1 grid grid-cols-2 gap-3">
-                          <div>
-                            <p class="text-xs text-bitcoin-gray mb-1">Spec Name</p>
-                            <p class="text-sm font-medium text-white">{{ formatSpecLabel(spec.key) }}</p>
-                          </div>
-                          <div>
-                            <p class="text-xs text-bitcoin-gray mb-1">Value</p>
-                            <p class="text-sm text-bitcoin-gray">{{ spec.value }}</p>
-                          </div>
-                        </div>
-                        <button
-                          type="button"
-                          (click)="removeSpec(spec.key)"
-                          class="opacity-0 group-hover:opacity-100 p-1.5 hover:bg-red-500/20 text-red-400 rounded transition-all">
-                          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                          </svg>
-                        </button>
-                      </div>
-                    }
-                  </div>
-                } @else {
-                  <p class="text-sm text-bitcoin-gray italic mb-4 p-4 bg-black/20 rounded-lg border border-bitcoin-gray/10">
-                    No specifications added yet. Add specs below based on your product type.
-                  </p>
-                }
-
-                <!-- Add New Spec -->
-                <div class="border-t border-bitcoin-gray/10 pt-4">
-                  <p class="text-xs font-semibold text-bitcoin-gray mb-3">Add New Specification:</p>
-                  
-                  <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
-                    <input
-                      type="text"
-                      [(ngModel)]="newSpecKey"
-                      [ngModelOptions]="{standalone: true}"
-                      placeholder="Spec name (e.g., hashRate, material, screenSize)"
-                      class="px-4 py-2.5 bg-bitcoin-dark/60 border-2 border-bitcoin-gray/30 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 text-white text-sm placeholder-bitcoin-gray/40 transition-all">
-                    <input
-                      type="text"
-                      [(ngModel)]="newSpecValue"
-                      [ngModelOptions]="{standalone: true}"
-                      placeholder="Value (e.g., 110 TH/s, Stainless Steel, 2.4 inch)"
-                      class="px-4 py-2.5 bg-bitcoin-dark/60 border-2 border-bitcoin-gray/30 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 text-white text-sm placeholder-bitcoin-gray/40 transition-all">
-                  </div>
-
-                  <button
-                    type="button"
-                    (click)="addSpec()"
-                    [disabled]="!newSpecKey || !newSpecValue"
-                    class="w-full px-4 py-2.5 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-400 border-2 border-cyan-500/30 rounded-xl font-medium text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                    </svg>
-                    Add Specification
-                  </button>
-
-                  <!-- Quick Spec Templates -->
-                  <details class="mt-4">
-                    <summary class="cursor-pointer text-xs font-semibold text-bitcoin-orange hover:text-bitcoin-gold transition-colors">
-                      💡 Quick Templates (click to see examples)
-                    </summary>
-                    <div class="mt-3 space-y-3 pl-2">
-                      <div>
-                        <p class="text-xs font-bold text-cyan-400 mb-2">⛏️ Mining Hardware:</p>
-                        <div class="flex flex-wrap gap-2">
-                          @for (template of getMiningSpecTemplates(); track template.key) {
-                            <button
-                              type="button"
-                              (click)="applySpecTemplate(template)"
-                              class="px-3 py-1.5 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 text-xs rounded-lg border border-cyan-500/30 transition-all hover:scale-105">
-                              {{ template.label }}
-                            </button>
-                          }
-                        </div>
-                      </div>
-                      <div>
-                        <p class="text-xs font-bold text-purple-400 mb-2">🔑 Accessories (Keychains, Merch):</p>
-                        <div class="flex flex-wrap gap-2">
-                          @for (template of getAccessorySpecTemplates(); track template.key) {
-                            <button
-                              type="button"
-                              (click)="applySpecTemplate(template)"
-                              class="px-3 py-1.5 bg-purple-500/10 hover:bg-purple-500/20 text-purple-300 text-xs rounded-lg border border-purple-500/30 transition-all hover:scale-105">
-                              {{ template.label }}
-                            </button>
-                          }
-                        </div>
-                      </div>
-                      <div>
-                        <p class="text-xs font-bold text-green-400 mb-2">💳 Hardware Wallets (Ledger, Trezor):</p>
-                        <div class="flex flex-wrap gap-2">
-                          @for (template of getWalletSpecTemplates(); track template.key) {
-                            <button
-                              type="button"
-                              (click)="applySpecTemplate(template)"
-                              class="px-3 py-1.5 bg-green-500/10 hover:bg-green-500/20 text-green-300 text-xs rounded-lg border border-green-500/30 transition-all hover:scale-105">
-                              {{ template.label }}
-                            </button>
-                          }
-                        </div>
-                      </div>
-                    </div>
-                  </details>
-                </div>
-              </div>
-
-              <!-- Why Choose This Product - Benefits -->
-              <div class="bg-gradient-to-br from-bitcoin-dark/60 to-bitcoin-dark/40 backdrop-blur-sm border border-bitcoin-gray/20 rounded-2xl p-6 shadow-lg">
-                <div class="flex items-center gap-3 mb-4">
-                  <div class="p-2 bg-yellow-500/20 rounded-lg">
-                    <svg class="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path>
-                    </svg>
-                  </div>
-                  <div class="flex-1">
-                    <h3 class="text-lg font-semibold bitcoin-gradient-text">Why Choose This Product</h3>
-                    <p class="text-xs text-bitcoin-gray/70">Add up to 4 key benefits that highlight why customers should choose this product</p>
-                  </div>
-                </div>
-
-                <!-- Current Benefits Display -->
-                @if (currentBenefits.length > 0) {
-                  <div class="space-y-3 mb-4">
-                    @for (benefit of currentBenefits; track $index; let idx = $index) {
-                      <div class="bg-black/30 rounded-lg p-4 group hover:bg-black/40 transition-all border border-bitcoin-gray/10">
-                        <div class="flex items-start gap-4">
-                          <div class="flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center"
-                               [ngClass]="'bg-' + benefit.iconColor + '/20'">
-                            <svg class="w-5 h-5" [ngClass]="'text-' + benefit.iconColor" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="getBenefitIconPath(benefit.icon)"></path>
+                  @for (product of filteredProducts; track product.id) {
+                    <tr class="hover:bg-ts-bg-soft transition-colors">
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        @if (product.imageUrl) {
+                          <img [src]="product.imageUrl" [alt]="product.name" class="w-16 h-16 object-cover rounded-lg border border-ts-line/60">
+                        } @else {
+                          <div class="w-16 h-16 bg-ts-bg-soft border border-ts-line rounded-lg flex items-center justify-center text-ts-ink-soft">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                             </svg>
                           </div>
-                          <div class="flex-1">
-                            <h4 class="text-sm font-semibold text-white mb-1">{{benefit.title}}</h4>
-                            <p class="text-xs text-bitcoin-gray">{{benefit.description}}</p>
+                        }
+                      </td>
+                      <td class="px-6 py-4">
+                        <div class="text-sm font-medium text-ts-ink">{{ product.name }}</div>
+                        <div class="text-sm text-ts-ink-soft line-clamp-1">{{ product.description }}</div>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 py-1 text-xs font-medium bg-ts-accent/15 text-ts-ink border border-ts-accent/30 rounded-full">
+                          {{ getCategoryName(product.categoryId) }}
+                        </span>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-ts-ink">
+                        {{ getModelName(product.modelId) }}
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-xs px-2 py-0.5 rounded-full border"
+                              [class.bg-green-50]="product.status === 'published'"
+                              [class.text-green-700]="product.status === 'published'"
+                              [class.border-green-200]="product.status === 'published'"
+                              [class.bg-amber-50]="product.status === 'draft'"
+                              [class.text-amber-700]="product.status === 'draft'"
+                              [class.border-amber-200]="product.status === 'draft'"
+                              [class.bg-gray-100]="product.status === 'archived'"
+                              [class.text-gray-600]="product.status === 'archived'"
+                              [class.border-gray-200]="product.status === 'archived'">
+                          {{ ('admin.status_' + (product.status || 'draft')) | translate }}
+                        </span>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-ts-ink">
+                        @if (product.price) {
+                          <span>{{ product.price | currency:'USD':'symbol':'1.2-2' }}</span>
+                        } @else {
+                          <span class="text-ts-ink-soft">n/a</span>
+                        }
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-ts-ink">
+                        @if (product.stock !== undefined && product.stock !== null) {
+                          <div class="flex items-center gap-2">
+                            <span class="font-medium"
+                                  [class.text-green-700]="product.stock > 10"
+                                  [class.text-amber-700]="product.stock > 0 && product.stock <= 10"
+                                  [class.text-red-600]="product.stock === 0">
+                              {{ product.stock }}
+                            </span>
+                            @if (product.stock === 0) {
+                              <span class="text-xs text-red-500">Out of stock</span>
+                            } @else if (product.stock <= 5) {
+                              <span class="text-xs text-amber-600">Low</span>
+                            }
                           </div>
-                          <button
-                            type="button"
-                            (click)="removeBenefit(idx)"
-                            class="opacity-0 group-hover:opacity-100 p-1.5 hover:bg-red-500/20 text-red-400 rounded transition-all">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        } @else {
+                          <span class="text-ts-ink-soft">—</span>
+                        }
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-ts-ink">
+                        <div class="flex flex-col gap-0.5">
+                          <div class="text-xs text-ts-ink">
+                            @if (product.updatedAt) {
+                              {{ formatTimestamp(product.updatedAt) }}
+                            } @else {
+                              <span class="text-ts-ink-soft">—</span>
+                            }
+                          </div>
+                          <div class="text-[10px] text-ts-ink-soft">
+                            @if (product.createdAt) {
+                              {{ formatTimestamp(product.createdAt) }}
+                            } @else {
+                              <span>—</span>
+                            }
+                          </div>
+                        </div>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <div class="flex items-center justify-end gap-2">
+                          <button (click)="openEditModal(product)" class="p-2 bg-ts-bg-soft hover:bg-ts-accent/20 text-ts-ink border border-ts-line rounded-lg transition-colors" [title]="'admin.edit' | translate">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                            </svg>
+                          </button>
+                          <button (click)="openDeleteConfirm(product)" class="p-2 bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 rounded-lg transition-colors" [title]="'admin.delete' | translate">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                             </svg>
                           </button>
                         </div>
-                      </div>
-                    }
-                  </div>
-                } @else {
-                  <p class="text-sm text-bitcoin-gray italic mb-4 p-4 bg-black/20 rounded-lg border border-bitcoin-gray/10">
-                    No benefits added yet. Add up to 4 benefits using the templates below.
-                  </p>
+                      </td>
+                    </tr>
+                  }
                 }
-
-                <!-- Add New Benefit -->
-                @if (currentBenefits.length < 4) {
-                  <div class="border-t border-bitcoin-gray/10 pt-4">
-                    <p class="text-xs font-semibold text-bitcoin-gray mb-3">💡 Quick Benefit Templates (based on selected category):</p>
-                    
-                    <div class="flex flex-wrap gap-2">
-                      @for (template of getBenefitTemplatesForProduct(); track template.title) {
-                        <button
-                          type="button"
-                          (click)="addBenefit(template)"
-                          [disabled]="currentBenefits.length >= 4"
-                          class="px-3 py-1.5 bg-bitcoin-orange/10 hover:bg-bitcoin-orange/20 text-bitcoin-orange text-xs rounded-lg border border-bitcoin-orange/30 transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed">
-                          + {{template.title}}
-                        </button>
-                      }
-                      @if (getBenefitTemplatesForProduct().length === 0) {
-                        <p class="text-xs text-bitcoin-gray/60 italic">
-                          No templates available. Select a category or create templates in <a routerLink="/admin/benefit-templates" class="text-bitcoin-orange hover:underline">Benefit Templates</a>.
-                        </p>
-                      }
-                    </div>
-                  </div>
-                } @else {
-                  <p class="text-xs text-yellow-400 p-3 bg-yellow-500/10 rounded-lg border border-yellow-500/20">
-                    ⚠️ Maximum 4 benefits reached. Remove a benefit to add a different one.
-                  </p>
-                }
-              </div>
-
-              <!-- Pricing & Stock -->
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="bg-gradient-to-br from-bitcoin-dark/60 to-bitcoin-dark/40 backdrop-blur-sm border border-bitcoin-gray/20 rounded-2xl p-6 shadow-lg">
-                  <div class="flex items-center gap-3 mb-4">
-                    <div class="p-2 bg-green-500/20 rounded-lg">
-                      <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                      </svg>
-                    </div>
-                    <h3 class="text-lg font-semibold bitcoin-gradient-text">Price</h3>
-                  </div>
-                  <input
-                    type="number"
-                    formControlName="price"
-                    placeholder="0.00"
-                    class="w-full px-4 py-3 bg-bitcoin-dark/60 border-2 border-bitcoin-gray/30 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 text-white text-lg placeholder-bitcoin-gray/40 transition-all">
-                  <p class="text-xs text-bitcoin-gray/70 mt-2">USD pricing</p>
-                </div>
-
-                <div class="bg-gradient-to-br from-bitcoin-dark/60 to-bitcoin-dark/40 backdrop-blur-sm border border-bitcoin-gray/20 rounded-2xl p-6 shadow-lg">
-                  <div class="flex items-center gap-3 mb-4">
-                    <div class="p-2 bg-blue-500/20 rounded-lg">
-                      <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
-                      </svg>
-                    </div>
-                    <h3 class="text-lg font-semibold bitcoin-gradient-text">Stock</h3>
-                  </div>
-                  <input
-                    type="number"
-                    formControlName="stock"
-                    placeholder="0"
-                    class="w-full px-4 py-3 bg-bitcoin-dark/60 border-2 border-bitcoin-gray/30 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white text-lg placeholder-bitcoin-gray/40 transition-all">
-                  <p class="text-xs text-bitcoin-gray/70 mt-2">Available units</p>
-                </div>
-              </div>
-            </section>
-          }
-          @if (currentStep === 3) {
-            <section class="space-y-6">
-              <div class="border border-dashed border-bitcoin-orange/30 rounded-2xl p-6 bg-bitcoin-dark/20">
-                <div class="flex flex-col md:flex-row items-start gap-6">
-                  <div class="flex-1 space-y-2">
-                    <h3 class="text-lg font-semibold bitcoin-gradient-text">{{ 'admin.cover_image' | translate }}</h3>
-                    <p class="text-sm text-bitcoin-gray">{{ 'admin.cover_required_notice' | translate }}</p>
-                    <input type="file" accept="image/*" (change)="onCoverSelected($event)" class="mt-2 text-bitcoin-gray text-base file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-bitcoin-orange/30 file:text-bitcoin-orange hover:file:bg-bitcoin-orange/40 file:cursor-pointer">
-                    @if (!hasCoverImage) {
-                      <p class="text-sm text-red-400 flex items-center gap-2">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        {{ 'admin.cover_required' | translate }}
-                      </p>
-                    }
-                  </div>
-                  <div class="w-full md:w-56 aspect-video bg-bitcoin-dark/40 border-2 border-bitcoin-gray/20 rounded-xl overflow-hidden flex items-center justify-center">
-                    @if (coverPreview) {
-                      <img [src]="coverPreview" alt="Cover preview" class="w-full h-full object-cover">
-                    } @else if (selectedProduct?.coverImage) {
-                      <img [src]="selectedProduct!.coverImage" alt="Current cover" class="w-full h-full object-cover">
-                    } @else if (selectedProduct?.imageUrl) {
-                      <img [src]="selectedProduct!.imageUrl" alt="Current cover" class="w-full h-full object-cover">
-                    } @else {
-                      <div class="text-center text-bitcoin-gray text-sm px-4">{{ 'admin.cover_placeholder' | translate }}</div>
-                    }
-                  </div>
-                </div>
-              </div>
-              <div class="border border-bitcoin-gray/20 rounded-2xl p-6 bg-bitcoin-dark/20">
-                <h3 class="text-lg font-semibold bitcoin-gradient-text mb-4">{{ 'admin.gallery_images' | translate }}</h3>
-                <app-gallery-uploader
-                  [existingMediaIds]="galleryMediaIds"
-                  [productSlug]="currentProductSlug"
-                  [productCategorySlug]="currentProductCategorySlug"
-                  [availableTags]="availableTagNames"
-                  (mediaIdsChange)="onGalleryMediaIdsChange($event)"
-                ></app-gallery-uploader>
-              </div>
-            </section>
-          }
-        </form>
-        <div class="bg-gradient-to-r from-bitcoin-dark via-[#13151a] to-bitcoin-dark border-t border-bitcoin-orange/20 p-6 flex flex-wrap gap-3 justify-between">
-          <div class="flex gap-3">
-            <button type="button" class="px-6 py-4 bg-bitcoin-dark/40 hover:bg-bitcoin-dark/60 border-2 border-bitcoin-gray/20 text-bitcoin-gray font-bold text-base rounded-xl transition-all duration-300" (click)="closeModal()">
-              {{ 'admin.cancel' | translate }}
-            </button>
-            @if (currentStep > 1) {
-              <button type="button" class="px-6 py-4 bg-bitcoin-dark/40 hover:bg-bitcoin-dark/60 border-2 border-bitcoin-gray/20 text-bitcoin-gray font-bold text-base rounded-xl transition-all duration-300" (click)="previousStep()">
-                {{ 'admin.back' | translate }}
-              </button>
-            }
-          </div>
-          <div class="flex gap-3 flex-1 justify-end">
-            @if (currentStep < maxStep) {
-              <button type="button" class="px-6 py-4 bg-bitcoin-orange/30 hover:bg-bitcoin-orange/40 text-bitcoin-orange border-2 border-bitcoin-orange/30 rounded-xl font-bold text-base transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed" (click)="nextStep()" [disabled]="!canAdvance()">
-                {{ 'admin.next' | translate }}
-              </button>
-            } @else {
-              @if (!canPublish) {
-                <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-4 w-full">
-                  <div class="flex items-start gap-3">
-                    <svg class="w-5 h-5 text-yellow-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                      <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
-                    </svg>
-                    <div class="flex-1">
-                      <h4 class="text-sm font-semibold text-yellow-500 mb-2">Cannot Publish - Missing Requirements</h4>
-                      <ul class="text-sm text-yellow-400 space-y-1">
-                        @for (blocker of getPublishBlockers(); track blocker) {
-                          <li class="flex items-center gap-2">
-                            <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                            </svg>
-                            <span>{{ blocker }}</span>
-                          </li>
-                        }
-                      </ul>
-                      <p class="text-xs text-yellow-400 mt-2">Complete the requirements above to publish this product.</p>
-                    </div>
-                  </div>
-                </div>
-              }
-
-              <button type="button" class="px-6 py-4 bg-bitcoin-dark/40 hover:bg-bitcoin-dark/60 border-2 border-bitcoin-orange/30 text-bitcoin-orange font-bold text-base rounded-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed" (click)="saveDraft()" [disabled]="isSaving || isUploading">
-                {{ 'admin.save_draft' | translate }}
-              </button>
-              <button
-                type="button"
-                class="px-6 py-4 bg-bitcoin-orange/30 hover:bg-bitcoin-orange/40 text-bitcoin-orange border-2 border-bitcoin-orange/30 rounded-xl font-bold text-base transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                (click)="publishProduct()"
-                [disabled]="isSaving || isUploading || !canPublish"
-                [title]="!canPublish ? 'Complete all required fields to publish' : 'Publish product'"
-              >
-                {{ 'admin.publish' | translate }}
-              </button>
-            }
+              </tbody>
+            </table>
           </div>
         </div>
-      </div>
+      }
     </div>
-  }
-
-  @if (showDeleteConfirm) {
-    <div class="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50" (click)="closeDeleteConfirm()">
-      <div class="bg-gradient-to-b from-bitcoin-dark to-[#13151a] border border-red-500/30 rounded-2xl shadow-bitcoin-lg max-w-md w-full p-6" (click)="$event.stopPropagation()">
-        <div class="flex items-center gap-4 mb-4">
-          <div class="w-12 h-12 bg-red-500/20 rounded-full flex items-center justify-center">
-            <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-            </svg>
-          </div>
-          <div>
-            <h3 class="text-lg font-semibold text-white">{{ 'admin.delete_product' | translate }}</h3>
-            <p class="text-sm text-bitcoin-gray mt-1">{{ 'admin.confirm_delete' | translate }}</p>
-          </div>
-        </div>
-        @if (productToDelete) {
-          <div class="mb-6 p-4 bg-bitcoin-dark/40 border border-bitcoin-gray/20 rounded-xl">
-            <p class="text-sm font-medium text-white">{{ productToDelete.name }}</p>
-            <p class="text-xs text-bitcoin-gray mt-1">{{ productToDelete.size }}</p>
-          </div>
-        }
-        <div class="flex gap-3">
-          <button (click)="confirmDelete()" class="flex-1 px-4 py-2 bg-red-500/20 hover:bg-red-500/30 border border-red-500/30 text-red-400 hover:text-red-300 rounded-xl transition-all duration-300 font-semibold">
-            {{ 'admin.delete' | translate }}
-          </button>
-          <button (click)="closeDeleteConfirm()" class="flex-1 px-4 py-2 bg-bitcoin-dark/50 hover:bg-bitcoin-dark/70 border border-bitcoin-gray/30 text-bitcoin-gray hover:text-white rounded-xl transition-all duration-300">
-            {{ 'admin.cancel' | translate }}
-          </button>
-        </div>
-      </div>
-    </div>
-  }
+  </div>
 </div>
-
-
-
-
-

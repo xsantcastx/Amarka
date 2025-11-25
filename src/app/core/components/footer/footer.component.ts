@@ -107,17 +107,18 @@ export class FooterComponent implements OnInit {
   categories: Category[] = [];
   currentYear = new Date().getFullYear();
 
-  siteName = this.brandConfig.siteName;
-  brandLogo = this.brandConfig.site.brand.logo;
-  contactEmail = this.brandConfig.site.contact.email;
-  contactPhone = this.brandConfig.site.contact.phone || '';
-  contactAddress = this.brandConfig.site.contact.address || '';
+  // Brand defaults; overwritten by brand config + settings
+  siteName = '';
+  brandLogo = '';
+  contactEmail = '';
+  contactPhone = '';
+  contactAddress = '';
 
-  facebookUrl = this.getSocialUrl('facebook');
-  twitterUrl = this.getSocialUrl('twitter') || this.getSocialUrl('x');
-  instagramUrl = this.getSocialUrl('instagram');
-  linkedinUrl = this.getSocialUrl('linkedin');
-  youtubeUrl = this.getSocialUrl('youtube');
+  facebookUrl = '';
+  twitterUrl = '';
+  instagramUrl = '';
+  linkedinUrl = '';
+  youtubeUrl = '';
   whatsappNumber = '';
 
   businessName = '';
@@ -127,6 +128,19 @@ export class FooterComponent implements OnInit {
   termsOfServiceUrl = '';
 
   constructor() {
+    // Initialize from brand config before any template binding runs
+    this.siteName = this.brandConfig.siteName;
+    this.brandLogo = this.brandConfig.site.brand.logo;
+    this.contactEmail = this.brandConfig.site.contact.email;
+    this.contactPhone = this.brandConfig.site.contact.phone || '';
+    this.contactAddress = this.brandConfig.site.contact.address || '';
+
+    this.facebookUrl = this.getSocialUrl('facebook');
+    this.twitterUrl = this.getSocialUrl('twitter') || this.getSocialUrl('x');
+    this.instagramUrl = this.getSocialUrl('instagram');
+    this.linkedinUrl = this.getSocialUrl('linkedin');
+    this.youtubeUrl = this.getSocialUrl('youtube');
+
     this.settingsService.settings$
       .pipe(takeUntilDestroyed())
       .subscribe(settings => this.applySettings(settings));

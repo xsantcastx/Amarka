@@ -1,0 +1,25 @@
+{
+  "products": [
+    {
+      "sku": "ASIC-001",
+      "name": "Signature Solo Miner S19 XP",
+      "description": "Factory-binned ASIC miner with immersion-ready mods and serialized certificate.",
+      "price": 11900,
+      "currency": "USD",
+      "badge": "Ships in 5 days",
+      "category": "solo-miners",
+      "attributes": {
+        "hashrate": "141 TH/s",
+        "power": "3010 W",
+        "efficiency": "21.3 J/TH"
+      },
+      "images": [
+        "/assets/productos/solo/signature-s19xp.jpg"
+      ],
+      "seo": {
+        "title": "Signature Solo Miner S19 XP | The Lux Mining",
+        "metaDescription": "Premium S19 XP ASIC for solo miners. Prepped for immersion, serialized, and backed by concierge support."
+      }
+    }
+  ]
+}

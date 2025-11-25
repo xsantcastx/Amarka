@@ -1,4 +1,4 @@
-import { Component, DestroyRef, computed, inject, signal } from '@angular/core';
+import { Component, DestroyRef, ChangeDetectorRef, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -48,11 +48,14 @@ export class HomeReviewsComponent {
 
   displayedReviews = computed(() => this.reviews().slice(0, 8));
 
+  private cdr = inject(ChangeDetectorRef);
+
   constructor() {
     this.reviewService.getLatestReviews(16)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(reviews => {
         this.reviews.set(reviews);
+        this.cdr.detectChanges();
       });
 
     this.authService.userProfile$

@@ -1,0 +1,56 @@
+<section class="bg-ts-bg min-h-screen">
+  <app-page-header
+    title="Collections"
+    subtitle="Curated drops like Gifts for Men, Wedding Keepsakes, and bespoke engraved sets."
+    [breadcrumbs]="breadcrumbs"
+    icon="collections">
+  </app-page-header>
+
+  <div class="page-container py-10 space-y-8">
+    @if (isLoading) {
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        @for (i of [1,2,3,4,5,6]; track i) {
+          <div class="h-72 rounded-2xl bg-ts-paper border border-ts-line animate-pulse"></div>
+        }
+      </div>
+    } @else if (!collections.length) {
+      <div class="rounded-2xl bg-ts-paper border border-ts-line p-10 text-center">
+        <h3 class="text-xl font-semibold text-ts-ink mb-2">No collections yet</h3>
+        <p class="text-ts-ink-soft">Create a collection in Admin → Collections and it will appear here automatically.</p>
+      </div>
+    } @else {
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        @for (collection of collections; track collection.slug) {
+          <a
+            [routerLink]="['/collections', collection.slug]"
+            class="block group rounded-2xl bg-ts-paper border border-ts-line shadow-sm overflow-hidden hover:border-ts-accent/50 hover:shadow-lg transition-all duration-300">
+            <div class="aspect-[4/3] bg-ts-bg-soft overflow-hidden">
+              @if (collection.heroImageUrl) {
+                <img [src]="collection.heroImageUrl" [alt]="collection.name" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
+              } @else {
+                <div class="w-full h-full flex items-center justify-center text-ts-ink-soft">
+                  <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                  </svg>
+                </div>
+              }
+            </div>
+            <div class="p-5 space-y-2">
+              <div class="text-sm uppercase tracking-wide text-ts-ink-soft">Collection</div>
+              <h3 class="text-xl font-semibold text-ts-ink">{{ collection.name }}</h3>
+              @if (collection.description) {
+                <p class="text-sm text-ts-ink-soft line-clamp-2">{{ collection.description }}</p>
+              }
+              <div class="flex items-center gap-2 text-sm font-semibold text-ts-accent group-hover:text-ts-ink">
+                <span>Shop now</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                </svg>
+              </div>
+            </div>
+          </a>
+        }
+      </div>
+    }
+  </div>
+</section>

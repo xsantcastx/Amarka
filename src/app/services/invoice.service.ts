@@ -195,7 +195,7 @@ export class InvoiceService {
     doc.setFontSize(9);
     doc.setTextColor(100, 100, 100);
     doc.text('Thank you for your business!', 105, footerY, { align: 'center' });
-    doc.text('For questions about this invoice, please contact support@creadevents.com', 105, footerY + 5, { align: 'center' });
+    doc.text('For questions about this invoice, please contact support@amarka.com', 105, footerY + 5, { align: 'center' });
     
     // Add border
     doc.setDrawColor(147, 51, 234);

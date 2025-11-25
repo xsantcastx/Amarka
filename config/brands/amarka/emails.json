@@ -1,0 +1,21 @@
+{
+  "notifications": {
+    "newUser": {
+      "subject": "🎉 New Inquiry - Creation Design & Events",
+      "preheader": "A new contact request was submitted on the website."
+    },
+    "cartShare": {
+      "subject": "Creation Design & Events · Service Inquiry"
+    },
+    "contact": {
+      "subject": "Creation Design & Events · Contact Message"
+    },
+    "inventoryAlert": {
+      "subject": "Booking Alert - Creation Design & Events"
+    },
+    "eventInquiry": {
+      "subject": "New Event Consultation Request",
+      "preheader": "Someone is interested in your event design services."
+    }
+  }
+}

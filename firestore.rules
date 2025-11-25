@@ -98,6 +98,12 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
+    // Collections - Public read, Admin write
+    match /collections/{collectionId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
     // Size Groups - Public read, Admin write
     match /sizes/{sizeId} {
       allow read: if true;
@@ -256,8 +262,8 @@ service cloud.firestore {
     match /settings/{settingId} {
       // Allow admins to read and write all settings documents
       allow read, write: if isAdmin();
-      // Allow public read for the 'public' document
-      allow read: if settingId == 'public';
+      // Allow public read for public-facing settings
+      allow read: if settingId in ['public', 'app'];
     }
 
     // Mail collection for contact form (Brevo integration)
@@ -269,7 +275,7 @@ service cloud.firestore {
         && request.resource.data.message.keys().hasAll(['subject', 'html'])
         && (
           // Allow hardcoded safe emails
-          request.resource.data.to[0] in ['support@theluxmining.com', 'contact@theluxmining.com', 'xsantcastx@xsantcastx.com']
+          request.resource.data.to[0] in ['support@amarka.com', 'hello@amarka.com', 'xsantcastx@xsantcastx.com']
           // OR allow email from settings (admins can configure it)
           || request.resource.data.to[0] == get(/databases/$(database)/documents/settings/app-settings).data.contactEmail
         );

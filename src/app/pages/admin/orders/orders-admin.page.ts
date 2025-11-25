@@ -4,7 +4,7 @@ import { RouterLink, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { AuthService } from '../../../services/auth.service';
-import { AdminQuickActionsComponent } from '../../../shared/components/admin-quick-actions/admin-quick-actions.component';
+import { AdminSidebarComponent } from '../../../shared/components/admin-sidebar/admin-sidebar.component';
 import { Firestore, collection, query, orderBy, onSnapshot, doc, updateDoc, Timestamp } from '@angular/fire/firestore';
 
 interface OrderItem {
@@ -68,7 +68,7 @@ interface Order {
 @Component({
   selector: 'app-orders-admin',
   standalone: true,
-  imports: [CommonModule, RouterLink, FormsModule, TranslateModule, AdminQuickActionsComponent],
+  imports: [CommonModule, RouterLink, FormsModule, TranslateModule, AdminSidebarComponent],
   templateUrl: './orders-admin.page.html',
   styleUrl: './orders-admin.page.scss'
 })
@@ -78,9 +78,19 @@ export class OrdersAdminComponent implements OnInit {
   orders = signal<Order[]>([]);
   selectedStatus: 'all' | 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled' = 'all';
   searchQuery = '';
+  searchTerm = '';
   isLoading = signal(false);
   successMessage = signal('');
   errorMessage = signal('');
+
+  statusOptions: Array<{ value: 'all' | 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled'; label: string }> = [
+    { value: 'all', label: 'admin.all_orders' },
+    { value: 'pending', label: 'admin.pending' },
+    { value: 'processing', label: 'admin.processing' },
+    { value: 'shipped', label: 'admin.shipped' },
+    { value: 'delivered', label: 'admin.delivered' },
+    { value: 'cancelled', label: 'admin.cancelled' }
+  ];
 
   // Detail modal
   showDetailModal = false;
@@ -105,13 +115,22 @@ export class OrdersAdminComponent implements OnInit {
   ngOnInit(): void {
     // Check if user is admin
     this.authService.userProfile$.subscribe(profile => {
-      if (!profile || profile.role !== 'admin') {
+      if (!profile) {
+        // Not loaded yet, wait
+        return;
+      }
+      
+      if (profile.role !== 'admin') {
         console.log('Access denied: User is not admin');
         this.router.navigate(['/']);
+        return;
+      }
+
+      // Only load orders once we've verified admin status
+      if (this.orders().length === 0 && !this.isLoading()) {
+        this.loadOrders();
       }
     });
-
-    this.loadOrders();
   }
 
   loadOrders(): void {
@@ -169,8 +188,8 @@ export class OrdersAdminComponent implements OnInit {
     }
 
     // Filter by search query
-    if (this.searchQuery.trim()) {
-      const query = this.searchQuery.toLowerCase();
+    if (this.searchTerm.trim()) {
+      const query = this.searchTerm.toLowerCase();
       filtered = filtered.filter(order => {
         const orderNum = order.orderNumber?.toLowerCase() || '';
         const customerName = order.customer?.name?.toLowerCase() || '';
@@ -288,6 +307,23 @@ export class OrdersAdminComponent implements OnInit {
       this.errorMessage.set('Failed to update tracking number');
       setTimeout(() => this.errorMessage.set(''), 3000);
     }
+  }
+
+  refreshOrders(): void {
+    this.loadOrders();
+  }
+
+  selectStatus(status: 'all' | 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled'): void {
+    this.selectedStatus = status;
+  }
+
+  applyFilters(): void {
+    // Filters are applied through the filteredOrders getter
+    // This method is called to trigger change detection
+  }
+
+  viewOrder(order: Order): void {
+    this.openDetailModal(order);
   }
 
   async logout(): Promise<void> {

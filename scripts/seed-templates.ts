@@ -1,15 +1,15 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, addDoc, Timestamp } from 'firebase/firestore';
 
-// Firebase configuration
+// Firebase configuration (set your Amarka project before running)
 const firebaseConfig = {
-  apiKey: "AIzaSyBn0N8EE0zzTp0CXNcmLj2G4rNVqJ_w2GY",
-  authDomain: "theluxmining-91ab1.firebaseapp.com",
-  projectId: "theluxmining-91ab1",
-  storageBucket: "theluxmining-91ab1.firebasestorage.app",
-  messagingSenderId: "633634027863",
-  appId: "1:633634027863:web:a5c0a94fc9c6e3d8da1d8b",
-  measurementId: "G-XZH0BR1KL7"
+  apiKey: 'YOUR_FIREBASE_API_KEY',
+  authDomain: 'your-amarka-project.firebaseapp.com',
+  projectId: 'your-amarka-project',
+  storageBucket: 'your-amarka-project.firebasestorage.app',
+  messagingSenderId: '000000000000',
+  appId: '1:000000000000:web:placeholder',
+  measurementId: 'G-XXXXXXXXXX'
 };
 
 // Initialize Firebase
@@ -35,18 +35,14 @@ const defaultTemplates: Omit<Template, 'createdAt' | 'updatedAt'>[] = [
     type: 'description',
     scope: 'global',
     language: 'en',
-    content: `Introducing the {name} - a cutting-edge Bitcoin mining solution designed for maximum efficiency and performance.
+    content: `Meet the {name}: a personalised {category} crafted in {material} and finished for gifting.
 
-Key Features:
-• Hash Rate: {size}
-• Model: {material}
-• Power Efficiency: Industry-leading performance
-• Cooling System: Advanced thermal management
-• Build Quality: Enterprise-grade components
+Highlights:
+- Size: {size}
+- Personalisation: Custom text or monogram
+- Finish: Premium gift-ready packaging
 
-This {material} miner is engineered to deliver exceptional mining performance while maintaining optimal energy efficiency. Perfect for professional mining operations and data centers looking to maximize their Bitcoin mining profitability.
-
-Whether you're scaling your mining farm or starting fresh, the {name} provides the reliability and performance you need to stay competitive in the Bitcoin mining industry.`,
+Designed for milestones and memorable moments, the {name} feels intentional, warm, and lasting.`,
     fields: ['name', 'material', 'size', 'category'],
     active: true
   },
@@ -54,18 +50,14 @@ Whether you're scaling your mining farm or starting fresh, the {name} provides t
     type: 'description',
     scope: 'global',
     language: 'es',
-    content: `Presentamos el {name} - una solución de minería Bitcoin de vanguardia diseñada para máxima eficiencia y rendimiento.
+    content: `Conoce el {name}: un {category} personalizado en {material}, listo para regalar.
 
-Características Principales:
-• Tasa de Hash: {size}
-• Modelo: {material}
-• Eficiencia Energética: Rendimiento líder en la industria
-• Sistema de Enfriamiento: Gestión térmica avanzada
-• Calidad de Construcción: Componentes de grado empresarial
+Destacados:
+- Tamaño: {size}
+- Personalizacion: Texto o iniciales
+- Acabado: Empaque premium para regalo
 
-Este minero {material} está diseñado para ofrecer un rendimiento de minería excepcional mientras mantiene una eficiencia energética óptima. Perfecto para operaciones de minería profesionales y centros de datos que buscan maximizar su rentabilidad en minería Bitcoin.
-
-Ya sea que esté escalando su granja minera o comenzando de cero, el {name} proporciona la confiabilidad y el rendimiento que necesita para mantenerse competitivo en la industria de minería Bitcoin.`,
+Pensado para momentos especiales, el {name} se siente intencional, cercano y duradero.`,
     fields: ['name', 'material', 'size', 'category'],
     active: true
   },
@@ -75,16 +67,16 @@ Ya sea que esté escalando su granja minera o comenzando de cero, el {name} prop
     type: 'seoTitle',
     scope: 'global',
     language: 'en',
-    content: '{name} - {size} Bitcoin Miner | TheLuxMining',
-    fields: ['name', 'size'],
+    content: '{name} personalised {category} gift | Amarka',
+    fields: ['name', 'category'],
     active: true
   },
   {
     type: 'seoTitle',
     scope: 'global',
     language: 'es',
-    content: '{name} - Minero Bitcoin {size} | TheLuxMining',
-    fields: ['name', 'size'],
+    content: '{name} regalo personalizado {category} | Amarka',
+    fields: ['name', 'category'],
     active: true
   },
 
@@ -93,102 +85,48 @@ Ya sea que esté escalando su granja minera o comenzando de cero, el {name} prop
     type: 'seoMeta',
     scope: 'global',
     language: 'en',
-    content: 'Buy {name} Bitcoin miner with {size} hash rate. {material} model featuring enterprise-grade components, advanced cooling, and industry-leading power efficiency. Professional mining solutions at TheLuxMining.',
-    fields: ['name', 'material', 'size'],
+    content: 'Shop the {name} personalised {category} in {material}. Custom engraving, premium finishes, and gift-ready packaging by Amarka.',
+    fields: ['name', 'material', 'category'],
     active: true
   },
   {
     type: 'seoMeta',
     scope: 'global',
     language: 'es',
-    content: 'Compra el minero Bitcoin {name} con tasa de hash de {size}. Modelo {material} con componentes de grado empresarial, enfriamiento avanzado y eficiencia energética líder en la industria. Soluciones de minería profesional en TheLuxMining.',
-    fields: ['name', 'material', 'size'],
-    active: true
-  },
-
-  // ===== CATEGORY-SPECIFIC: ASIC MINERS =====
-  {
-    type: 'description',
-    scope: 'category',
-    language: 'en',
-    content: `The {name} is a professional-grade ASIC miner delivering {size} of pure mining power.
-
-Performance Specifications:
-• Hash Rate: {size}
-• Algorithm: SHA-256 (Bitcoin)
-• Model: {material}
-• Power Consumption: Optimized for profitability
-• Noise Level: Designed for data center deployment
-
-Built for Professionals:
-This ASIC miner combines cutting-edge semiconductor technology with robust thermal management to ensure consistent, reliable performance 24/7. The {material} series represents the pinnacle of Bitcoin mining efficiency.
-
-Ideal Applications:
-• Large-scale mining farms
-• Professional mining operations
-• Data center deployments
-• Commercial Bitcoin mining
-
-Get maximum ROI with TheLuxMining's premium ASIC mining solutions.`,
-    fields: ['name', 'material', 'size'],
-    active: true
-  },
-  {
-    type: 'description',
-    scope: 'category',
-    language: 'es',
-    content: `El {name} es un minero ASIC de grado profesional que ofrece {size} de poder de minería puro.
-
-Especificaciones de Rendimiento:
-• Tasa de Hash: {size}
-• Algoritmo: SHA-256 (Bitcoin)
-• Modelo: {material}
-• Consumo de Energía: Optimizado para rentabilidad
-• Nivel de Ruido: Diseñado para implementación en centros de datos
-
-Construido para Profesionales:
-Este minero ASIC combina tecnología de semiconductores de vanguardia con gestión térmica robusta para garantizar un rendimiento consistente y confiable 24/7. La serie {material} representa el pináculo de la eficiencia de minería Bitcoin.
-
-Aplicaciones Ideales:
-• Granjas mineras a gran escala
-• Operaciones de minería profesionales
-• Implementaciones en centros de datos
-• Minería comercial de Bitcoin
-
-Obtenga el máximo ROI con las soluciones premium de minería ASIC de TheLuxMining.`,
-    fields: ['name', 'material', 'size'],
+    content: 'Compra el {name} personalizado de {category} en {material}. Grabado personalizado, acabados premium y empaque listo para regalo con Amarka.',
+    fields: ['name', 'material', 'category'],
     active: true
   }
 ];
 
 async function seedTemplates() {
-  console.log('🚀 Starting template seeding...\n');
-  
+  console.log('Starting template seeding...\n');
+
   try {
     const templatesCollection = collection(firestore, 'templates');
     const now = Timestamp.now();
-    
+
     for (const template of defaultTemplates) {
       const data = {
         ...template,
         createdAt: now,
         updatedAt: now
       };
-      
+
       const docRef = await addDoc(templatesCollection, data);
-      console.log(`✅ Created ${template.type} template (${template.scope}, ${template.language}): ${docRef.id}`);
+      console.log(`Created ${template.type} template (${template.scope}, ${template.language}): ${docRef.id}`);
     }
-    
-    console.log(`\n🎉 Successfully created ${defaultTemplates.length} templates!`);
-    console.log('\n📝 Template Summary:');
-    console.log('   - Description templates: 4 (2 global + 2 category)');
+
+    console.log(`\nSuccessfully created ${defaultTemplates.length} templates!`);
+    console.log('\nTemplate Summary:');
+    console.log('   - Description templates: 2 (global)');
     console.log('   - SEO Title templates: 2 (global)');
     console.log('   - SEO Meta templates: 2 (global)');
     console.log('   - Languages: English & Spanish');
-    console.log('\n✨ Auto-fill is now ready to use!');
-    
+    console.log('\nAuto-fill is now ready to use!');
+
   } catch (error) {
-    console.error('❌ Error seeding templates:', error);
+    console.error('Error seeding templates:', error);
     throw error;
   }
 }
@@ -196,10 +134,10 @@ async function seedTemplates() {
 // Run the seeder
 seedTemplates()
   .then(() => {
-    console.log('\n✅ Template seeding complete!');
+    console.log('\nTemplate seeding complete!');
     process.exit(0);
   })
   .catch((error) => {
-    console.error('\n❌ Template seeding failed:', error);
+    console.error('\nTemplate seeding failed:', error);
     process.exit(1);
   });

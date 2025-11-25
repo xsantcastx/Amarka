@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, collection, doc, addDoc, updateDoc, deleteDoc, getDocs, getDoc, query, where, orderBy, Timestamp } from '@angular/fire/firestore';
+import { Firestore, collection, doc, addDoc, updateDoc, deleteDoc, getDocs, getDoc, query, where, orderBy, Timestamp, limit } from '@angular/fire/firestore';
 import { Observable, from, map, firstValueFrom } from 'rxjs';
 import { Product } from '../models/product';
 import { Product as CatalogProduct, TemplateComposition, ProductFormData } from '../models/catalog';
@@ -87,6 +87,30 @@ export class ProductsService {
   getAllProducts(): Observable<Product[]> {
     const productsCol = collection(this.firestore, 'products');
     const q = query(productsCol, orderBy('name', 'asc'));
+    return from(getDocs(q)).pipe(
+      map(snapshot => snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      } as Product)))
+    );
+  }
+
+  /**
+   * One-time load of all products
+   */
+  async getAllProductsOnce(): Promise<Product[]> {
+    const productsCol = collection(this.firestore, 'products');
+    const q = query(productsCol);
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Product));
+  }
+
+  /**
+   * Get featured or latest products (defaults to latest by createdAt desc)
+   */
+  getFeaturedProducts(count: number = 8): Observable<Product[]> {
+    const productsCol = collection(this.firestore, 'products');
+    const q = query(productsCol, orderBy('createdAt', 'desc'), limit(count));
     return from(getDocs(q)).pipe(
       map(snapshot => snapshot.docs.map(doc => ({
         id: doc.id,

@@ -1,4 +1,4 @@
-# robots.txt for TheLuxMining
+# robots.txt for Amarka
 # Allow all crawlers by default
 
 User-agent: *

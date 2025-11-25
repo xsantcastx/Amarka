@@ -4,6 +4,7 @@ export interface Product {
   id?: string;             // Firestore document ID
   name: string;            // "Saint Laurent"
   slug: string;            // "saint-laurent" (URL-friendly)
+  collectionIds?: string[]; // Collection slugs/IDs
   size: string;            // e.g., "160×320cm"
   imageUrl: string;        // Main product image URL (legacy or computed from coverImage)
   description?: string;    // Product description

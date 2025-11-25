@@ -18,7 +18,11 @@ import { Category } from '../models/catalog';
 
 @Injectable({ providedIn: 'root' })
 export class CategoryService {
-  private firestore = inject(Firestore);
+  private firestore: Firestore;
+
+  constructor() {
+    this.firestore = inject(Firestore);
+  }
 
   /**
    * Get all categories

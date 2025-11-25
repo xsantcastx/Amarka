@@ -14,7 +14,7 @@
           {{ 'client.login_subtitle' | translate }}
         </h1>
         <p class="text-lg leading-relaxed text-ts-ink/70 sm:text-xl">
-          Power up your Lux Mining experience with a secure console crafted for serious miners, investors, and enthusiasts.
+          Sign in to manage your orders, saved gifts, and personalised settings for Amarka.
         </p>
       </div>
       <div class="grid gap-6 sm:grid-cols-2">
@@ -97,9 +97,10 @@
               type="email"
               id="email"
               formControlName="email"
+              autocomplete="email"
               class="w-full rounded-xl border border-ts-line bg-ts-bg px-4 py-3 text-ts-ink placeholder-ts-ink/30 shadow-soft transition-all focus:border-ts-accent focus:outline-none focus:ring-2 focus:ring-ts-accent/60"
               [class.border-red-500/60]="email?.invalid && email?.touched"
-              placeholder="you@creadevents.com">
+              placeholder="you@amarka.com">
             @if (email?.invalid && email?.touched) {
               <p class="text-sm text-red-500">
                 @if (email?.errors?.['required']) {
@@ -158,7 +159,7 @@
             [disabled]="isLoading"
             class="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed">
             @if (isLoading) {
-              <div class="app-spinner h-6 w-6" style="--spinner-size: 48px;"><img src="/Logo Clear.png" alt="Loading" width="96" height="96"></div>
+              <div class="app-spinner h-6 w-6" style="--spinner-size: 48px;"><img src="/Logo.jpg" alt="Loading" width="96" height="96"></div>
               <span class="text-xs tracking-[0.38em] text-white/70">{{ 'common.loading' | translate }}</span>
             } @else {
               <span>{{ 'client.login' | translate }}</span>

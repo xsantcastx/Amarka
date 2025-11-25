@@ -62,6 +62,13 @@ service firebase.storage {
       allow write: if isAdmin() && isValidImage();
       allow delete: if isAdmin();
     }
+
+    // Collection hero images - Admin can write, everyone can read
+    match /collections/{allPaths=**} {
+      allow read: if true;
+      allow write: if isAdmin() && isValidImage();
+      allow delete: if isAdmin();
+    }
     
     // User profile images - Users can manage their own
     match /users/{userId}/{imageName} {

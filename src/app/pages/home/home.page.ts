@@ -5,17 +5,19 @@ import { TranslateModule } from '@ngx-translate/core';
 import { Firestore, collection, query, where, limit, getDocs } from '@angular/fire/firestore';
 import { GalleryService, GalleryImage } from '../../services/gallery.service';
 import { ServiceService, ServiceItem } from '../../services/service.service';
-import { HomeHeroComponent } from '../../features/home/home-hero/home-hero.component';
-import { HomeStatsComponent } from '../../features/home/home-stats/home-stats.component';
+import { ProductsService } from '../../services/products.service';
+import { Product } from '../../models/product';
+import { CollectionsService, CollectionDoc } from '../../services/collections.service';
 import { HomeReviewsComponent } from '../../features/home/home-reviews/home-reviews.component';
 import { LoadingComponentBase } from '../../core/classes/loading-component.base';
 import { MetaService } from '../../services/meta.service';
 import { take } from 'rxjs/operators';
+import { ProductCardComponent } from '../../shared/components/product-card/product-card.component';
 
 @Component({
   selector: 'app-home-page',
   standalone: true,
-  imports: [CommonModule, RouterModule, HomeHeroComponent, HomeReviewsComponent],
+  imports: [CommonModule, RouterModule, HomeReviewsComponent, ProductCardComponent],
   templateUrl: './home.page.html',
   styleUrl: './home.page.scss'
 })
@@ -24,9 +26,13 @@ export class HomePageComponent extends LoadingComponentBase implements OnInit {
   private firestore = inject(Firestore);
   private galleryService = inject(GalleryService);
   private serviceService = inject(ServiceService);
+  private productsService = inject(ProductsService);
+  private collectionsService = inject(CollectionsService);
   private metaService = inject(MetaService);
   
   services: ServiceItem[] = [];
+  featuredProducts: Product[] = [];
+  collections: CollectionDoc[] = [];
   
   galleryImages: GalleryImage[] = [];
   currentImageIndex = 0;
@@ -43,6 +49,8 @@ export class HomePageComponent extends LoadingComponentBase implements OnInit {
     if (isPlatformBrowser(this.platformId)) {
       this.loadGalleryPreview();
       this.loadServices();
+      this.loadFeaturedProducts();
+      this.loadCollections();
     } else {
       // During SSR, set loading to false to show empty state
       this.setLoading(false);
@@ -59,6 +67,29 @@ export class HomePageComponent extends LoadingComponentBase implements OnInit {
         },
         error: (error: any) => {
           console.error('Error loading services:', error);
+        }
+      });
+  }
+
+  private async loadCollections() {
+    try {
+      this.collections = await this.collectionsService.getAllCollections();
+    } catch (error) {
+      console.error('Error loading collections:', error);
+      this.collections = [];
+    }
+  }
+
+  private loadFeaturedProducts() {
+    this.productsService
+      .getFeaturedProducts(8)
+      .pipe(take(1))
+      .subscribe({
+        next: products => {
+          this.featuredProducts = products;
+        },
+        error: error => {
+          console.error('Error loading featured products:', error);
         }
       });
   }

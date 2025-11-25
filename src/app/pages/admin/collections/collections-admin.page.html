@@ -1,0 +1,103 @@
+<div class="min-h-screen bg-ts-bg md:flex">
+  <app-admin-sidebar class="hidden md:block"></app-admin-sidebar>
+
+  <div class="flex-1 md:pl-64">
+    <div class="bg-ts-paper border-b border-ts-line shadow-sm">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+        <div>
+          <div class="flex items-center gap-3 mb-1">
+            <a routerLink="/admin" class="text-ts-ink hover:text-ts-accent transition-colors">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+              </svg>
+            </a>
+            <h1 class="text-xl font-bold text-ts-ink">Collections</h1>
+          </div>
+          <a routerLink="/admin" class="text-sm text-ts-ink-soft hover:text-ts-ink transition-colors">Admin</a>
+        </div>
+        <button (click)="openCreate()" class="px-4 py-2 bg-ts-accent text-ts-ink border border-ts-accent/60 rounded-lg hover:bg-ts-accent/90 transition-colors">
+          + New Collection
+        </button>
+      </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+      <div *ngIf="isLoading" class="bg-ts-paper border border-ts-line rounded-2xl shadow-sm p-12 text-center text-ts-ink-soft">
+        <div class="app-spinner" style="--spinner-size: 72px;"><img src="/Logo Clear.png" alt="Loading" width="96" height="96"></div>
+        <p class="mt-4">Loading collections...</p>
+      </div>
+
+      <div *ngIf="!isLoading" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div *ngFor="let col of collections" class="bg-ts-paper border border-ts-line rounded-xl p-4 shadow-sm flex flex-col gap-3">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="text-lg font-semibold text-ts-ink">{{ col.name }}</h3>
+              <p class="text-sm text-ts-ink-soft">{{ col.slug }}</p>
+            </div>
+            <span class="text-xs px-2 py-1 rounded-full border" [class.bg-green-50]="col.active" [class.text-green-700]="col.active" [class.border-green-200]="col.active" [class.bg-ts-bg-soft]="!col.active" [class.text-ts-ink]="!col.active" [class.border-ts-line]="!col.active">
+              {{ col.active ? 'Active' : 'Inactive' }}
+            </span>
+          </div>
+          <p class="text-sm text-ts-ink-soft line-clamp-3">{{ col.description }}</p>
+          <div class="flex gap-2 mt-auto">
+            <button (click)="editCollection(col)" class="px-3 py-2 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink hover:bg-ts-accent/15">Edit</button>
+            <button (click)="deleteCollection(col)" class="px-3 py-2 bg-red-50 border border-red-200 rounded-lg text-red-700 hover:bg-red-100">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="showModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50" (click)="closeModal()">
+      <div class="bg-ts-paper border border-ts-line rounded-2xl shadow-lg max-w-2xl w-full p-6" (click)="$event.stopPropagation()">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-lg font-semibold text-ts-ink">{{ editing ? 'Edit Collection' : 'New Collection' }}</h2>
+          <button (click)="closeModal()" class="text-ts-ink hover:text-ts-accent">&times;</button>
+        </div>
+
+        <form [formGroup]="form" class="space-y-4">
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-ts-ink mb-1">Name</label>
+              <input type="text" formControlName="name" class="w-full px-3 py-2 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink focus:ring-2 focus:ring-ts-accent focus:border-ts-accent" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-ts-ink mb-1">Slug</label>
+              <input type="text" formControlName="slug" class="w-full px-3 py-2 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink focus:ring-2 focus:ring-ts-accent focus:border-ts-accent" />
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-ts-ink mb-1">Description</label>
+            <textarea rows="3" formControlName="description" class="w-full px-3 py-2 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink focus:ring-2 focus:ring-ts-accent focus:border-ts-accent"></textarea>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-ts-ink mb-1">Hero Image URL</label>
+            <input type="text" formControlName="heroImageUrl" class="w-full px-3 py-2 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink focus:ring-2 focus:ring-ts-accent focus:border-ts-accent" />
+          </div>
+          <div class="grid sm:grid-cols-3 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-ts-ink mb-1">SEO Title</label>
+              <input type="text" formControlName="seoTitle" class="w-full px-3 py-2 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink focus:ring-2 focus:ring-ts-accent focus:border-ts-accent" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-ts-ink mb-1">SEO Description</label>
+              <input type="text" formControlName="seoDescription" class="w-full px-3 py-2 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink focus:ring-2 focus:ring-ts-accent focus:border-ts-accent" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-ts-ink mb-1">SEO Image URL</label>
+              <input type="text" formControlName="seoImage" class="w-full px-3 py-2 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink focus:ring-2 focus:ring-ts-accent focus:border-ts-accent" />
+            </div>
+          </div>
+          <label class="inline-flex items-center gap-2 text-ts-ink">
+            <input type="checkbox" formControlName="active" class="w-4 h-4 text-ts-accent border-ts-line focus:ring-ts-accent">
+            Active
+          </label>
+        </form>
+
+        <div class="flex justify-end gap-3 mt-6">
+          <button (click)="closeModal()" class="px-4 py-2 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink hover:bg-ts-paper">Cancel</button>
+          <button (click)="save()" class="px-4 py-2 bg-ts-accent text-ts-ink border border-ts-accent/60 rounded-lg hover:bg-ts-accent/90">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

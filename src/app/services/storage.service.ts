@@ -215,6 +215,16 @@ export class StorageService {
   }
 
   /**
+   * Get download URL from storage path
+   * @param path - The storage path (e.g., 'products/covers/image.jpg')
+   * @returns Promise with download URL
+   */
+  async getDownloadUrl(path: string): Promise<string> {
+    const storageRef = ref(this.storage, path);
+    return await getDownloadURL(storageRef);
+  }
+
+  /**
    * Delete a file from Firebase Storage
    * @param downloadURL - The download URL of the file to delete
    * @returns Promise that resolves when the file is deleted

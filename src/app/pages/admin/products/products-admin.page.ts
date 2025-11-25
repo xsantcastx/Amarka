@@ -1,6 +1,6 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterLink, ActivatedRoute } from '@angular/router';
+import { Router, RouterLink, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { AuthService } from '../../../services/auth.service';
@@ -15,8 +15,7 @@ import { Product } from '../../../models/product';
 import { Category, Model, Tag, TemplateComposition } from '../../../models/catalog';
 import { MediaCreateInput, MEDIA_VALIDATION } from '../../../models/media';
 import { BenefitTemplate } from '../../../models/benefit-template';
-import { GalleryUploaderComponent } from '../../../shared/components/gallery-uploader/gallery-uploader.component';
-import { AdminQuickActionsComponent } from '../../../shared/components/admin-quick-actions/admin-quick-actions.component';
+import { AdminSidebarComponent } from '../../../shared/components/admin-sidebar/admin-sidebar.component';
 import { LoadingComponentBase } from '../../../core/classes/loading-component.base';
 
 interface CatalogOption {
@@ -32,11 +31,11 @@ interface CatalogOption {
 @Component({
   selector: 'app-products-admin',
   standalone: true,
-  imports: [CommonModule, RouterLink, ReactiveFormsModule, FormsModule, TranslateModule, GalleryUploaderComponent, AdminQuickActionsComponent],
+  imports: [CommonModule, RouterLink, ReactiveFormsModule, FormsModule, TranslateModule, AdminSidebarComponent],
   templateUrl: './products-admin.page.html',
   styleUrl: './products-admin.page.scss'
 })
-export class ProductsAdminComponent extends LoadingComponentBase implements OnInit {
+export class ProductsAdminComponent extends LoadingComponentBase implements OnInit, OnDestroy {
   private authService = inject(AuthService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
@@ -55,6 +54,8 @@ export class ProductsAdminComponent extends LoadingComponentBase implements OnIn
   tags: Tag[] = [];
   benefitTemplates: BenefitTemplate[] = [];
   availableTagNames: string[] = []; // Tag names for gallery uploader
+
+  private navigationSubscription: any;
 
   catalogOptions: CatalogOption[] = [];
   filteredCatalogOptions: CatalogOption[] = [];
@@ -130,9 +131,25 @@ export class ProductsAdminComponent extends LoadingComponentBase implements OnIn
 
   async ngOnInit() {
     await this.checkAdminAccess();
+    
+    // Only proceed if admin check passed
+    if (!this.authService.getCurrentUser()) {
+      return;
+    }
+    
     await this.loadMasterData();
     await this.loadProducts();
     this.setupAutoFillListeners();
+    
+    // Subscribe to navigation events to reload data when returning to this page
+    this.navigationSubscription = this.router.events.subscribe(async (event) => {
+      if (event instanceof NavigationEnd && event.url.includes('/admin/products')) {
+        // Reload master data and products when navigating back to this page
+        console.log('📍 Navigated to products admin, reloading data...');
+        await this.loadMasterData();
+        await this.loadProducts();
+      }
+    });
     
     // Check if we should auto-open create modal
     this.route.queryParams.subscribe(params => {
@@ -145,18 +162,31 @@ export class ProductsAdminComponent extends LoadingComponentBase implements OnIn
     });
   }
 
-  private async checkAdminAccess() {
-    const user = this.authService.getCurrentUser();
-    if (!user) {
-      this.router.navigate(['/client/login']);
-      return;
+  ngOnDestroy() {
+    if (this.navigationSubscription) {
+      this.navigationSubscription.unsubscribe();
     }
+  }
 
-    const isAdmin = await this.authService.isAdmin(user.uid);
-    if (!isAdmin) {
-      this.router.navigate(['/']);
-      return;
-    }
+  private async checkAdminAccess() {
+    return new Promise<void>((resolve) => {
+      this.authService.userProfile$.subscribe(async profile => {
+        if (!profile) {
+          // Not loaded yet, wait
+          return;
+        }
+        
+        if (profile.role !== 'admin') {
+          console.log('Access denied: User is not admin');
+          this.router.navigate(['/']);
+          resolve();
+          return;
+        }
+        
+        // Admin verified, proceed
+        resolve();
+      });
+    });
   }
 
   private async loadMasterData() {
@@ -164,7 +194,7 @@ export class ProductsAdminComponent extends LoadingComponentBase implements OnIn
       // Load categories, models, tags, and benefit templates in parallel
       const [categories, models, tags, templates] = await Promise.all([
         new Promise<Category[]>((resolve) => {
-          this.categoryService.getActiveCategories().subscribe({
+          this.categoryService.getAllCategories().subscribe({
             next: (data) => {
               console.log('✅ Categories loaded:', data.length, data);
               resolve(data);
@@ -176,7 +206,7 @@ export class ProductsAdminComponent extends LoadingComponentBase implements OnIn
           });
         }),
         new Promise<Model[]>((resolve) => {
-          this.modelService.getActiveModels().subscribe({
+          this.modelService.getAllModels().subscribe({
             next: (data) => {
               console.log('✅ Models loaded:', data.length, data);
               resolve(data);

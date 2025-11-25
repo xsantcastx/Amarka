@@ -1,255 +1,152 @@
-<!-- Hero Section with Animation -->
-<app-home-hero />
-
-<!-- About Us Section -->
-<section class="section-gap relative overflow-hidden bg-ts-bg-soft">
-  <div class="luxury-overlay"></div>
-  <div class="page-container relative z-10">
-    <div class="grid lg:grid-cols-2 gap-12 items-center">
-      <!-- Photo on left -->
-      <a routerLink="/galeria" class="relative rounded-2xl overflow-hidden shadow-xl block cursor-pointer group h-[500px]">
-        <!-- Gallery has {{galleryImages.length}} images -->
-        @if (galleryImages.length > 0) {
-          <img [src]="galleryImages[currentImageIndex].imageUrl" [alt]="galleryImages[currentImageIndex].title || 'Creation Design & Events Team'" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
-        } @else {
-          <img src="/assets/about-us.jpg" alt="Creation Design & Events Team" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
-        }
-        <div class="absolute inset-0 bg-gradient-to-t from-ts-ink/20 to-transparent pointer-events-none"></div>
-        <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-ts-ink/30 pointer-events-none">
-          <div class="bg-ts-paper px-6 py-3 rounded-full shadow-lg pointer-events-auto">
-            <span class="text-ts-ink font-semibold">View Gallery</span>
-          </div>
+<!-- Hero -->
+<section class="bg-gradient-to-br from-[#f7f0e7] to-white">
+  <div class="page-container grid lg:grid-cols-2 gap-10 py-16 lg:py-20 items-center">
+    <div class="space-y-4 lg:space-y-6">
+      <p class="text-sm uppercase tracking-wide text-ts-accent-soft">Engraved gifts, made personal</p>
+      <h1 class="text-4xl lg:text-5xl font-serif text-ts-ink leading-tight">
+        Premium personalised gifts crafted to keep
+      </h1>
+      <p class="text-lg text-ts-ink-soft max-w-2xl">
+        Thoughtful engraving, warm materials, and gift-ready packaging for milestones, weddings, and every celebration.
+      </p>
+      <div class="flex flex-wrap gap-3">
+        <a routerLink="/collections" class="btn-primary">Shop collections</a>
+        <a routerLink="/collections/gifts-for-men" class="btn-outline">Gift inspiration</a>
+      </div>
+      <div class="flex items-center gap-6 text-sm text-ts-ink-soft pt-2">
+        <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-green-500"></span>Fast engraving & dispatch</div>
+        <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-ts-accent"></span>Gift-ready packaging</div>
+      </div>
+    </div>
+    <div class="grid grid-cols-2 gap-4">
+      <div class="rounded-2xl overflow-hidden border border-ts-line shadow-lg bg-white">
+        <img src="/Logo.jpg" alt="Featured gift" class="w-full h-full object-cover" loading="lazy">
+      </div>
+      <div class="space-y-4">
+        <div class="rounded-2xl overflow-hidden border border-ts-line bg-white shadow-lg">
+          <img src="/Logo.jpg" alt="Gift set" class="w-full h-full object-cover" loading="lazy">
         </div>
-      </a>
-      
-      <!-- Text on right -->
-      <div>
-        <span class="badge">
-          Our Story
-        </span>
-        <h2 class="heading-display text-4xl lg:text-5xl mb-6 text-ts-ink">
-          Family-Owned. Passion-Driven.
-        </h2>
-        <p class="text-lg text-ts-ink-soft leading-relaxed mb-6">
-          For more than 15 years we've been transforming private and corporate events in Miami with unique floral designs, elegant decor, and a deep passion for crafting unforgettable moments.
-        </p>
-        <p class="text-lg text-ts-ink-soft leading-relaxed mb-8">
-          As a family-owned business, every detail we deliver comes from the heart.
-        </p>
-        <a routerLink="/contacto" class="btn-primary">
-          Learn More
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-          </svg>
-        </a>
+        <div class="rounded-2xl overflow-hidden border border-ts-line bg-white shadow-lg">
+          <img src="/Logo.jpg" alt="Engraved detail" class="w-full h-full object-cover" loading="lazy">
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Our Services Section -->
-<section class="section-gap relative overflow-hidden">
-  <div class="luxury-overlay"></div>
-  <div class="page-container relative z-10">
-    <div class="text-center mb-16">
-      <span class="badge">
-        What We Offer
-      </span>
-      <h2 class="heading-display text-4xl lg:text-5xl mb-4">
-        Our Services
-      </h2>
-      <p class="text-xl text-ts-ink-soft max-w-2xl mx-auto">
-        From event planning to bespoke floral arrangements, we bring creativity and elegance to every project
-      </p>
-    </div>
+<!-- Collections Strip -->
+<section class="page-container py-8">
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="text-xl font-semibold text-ts-ink">Shop by collection</h2>
+    <a routerLink="/collections" class="text-sm text-ts-accent hover:underline">View all</a>
+  </div>
+  <div class="flex gap-3 overflow-x-auto pb-2 snap-x">
+    @for (col of collections; track col.slug) {
+      <a [routerLink]="['/collections', col.slug]"
+         class="snap-start whitespace-nowrap px-4 py-2 rounded-full border border-ts-line bg-white text-ts-ink shadow-sm hover:border-ts-accent hover:text-ts-accent transition">
+        {{ col.name }}
+      </a>
+    }
+    @if (!collections.length) {
+      <span class="text-ts-ink-soft text-sm">Create collections to feature them here.</span>
+    }
+  </div>
+</section>
 
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-      @for (service of services; track service.id) {
-        <article class="group relative overflow-hidden rounded-2xl border border-ts-line bg-white shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
-          <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-ts-accent to-ts-accent-soft opacity-70"></div>
-          
-          @if (service.image) {
-            <div class="relative h-48 overflow-hidden">
-              <img [src]="service.image" [alt]="service.title" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy" />
-              <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-            </div>
-          }
-          
-          <div class="p-6 space-y-3">
-            <h3 class="heading-display text-xl text-ts-ink">{{service.title}}</h3>
-            <p class="text-ts-ink-soft leading-relaxed">{{service.description}}</p>
-            <a [routerLink]="'/servicios'" [fragment]="service.anchor || service.id"
-               class="btn-outline !px-4 !py-2 !text-sm">
-              View Service
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-              </svg>
-            </a>
-          </div>
-        </article>
+<!-- Featured Products -->
+<section class="section-gap bg-ts-bg-soft">
+  <div class="page-container">
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-8">
+      <div>
+        <p class="badge">Curated picks</p>
+        <h2 class="heading-display text-4xl lg:text-5xl text-ts-ink">Featured personalised gifts</h2>
+        <p class="text-ts-ink-soft">Best sellers and new arrivals, ready to engrave.</p>
+      </div>
+      <div class="flex gap-2">
+        <button class="btn-outline" routerLink="/productos">Browse all</button>
+        <button class="btn-secondary" routerLink="/collections/gifts-for-men">Gifts for men</button>
+      </div>
+    </div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      @if (featuredProducts.length === 0) {
+        <div class="sm:col-span-2 lg:col-span-4 text-center text-ts-ink-soft">
+          No products yet. Add products in the admin to showcase them here.
+        </div>
+      } @else {
+        @for (product of featuredProducts; track product.id) {
+          <ts-product-card [product]="product" />
+        }
       }
     </div>
+  </div>
+</section>
 
-    <!-- CTA to Contact -->
-    <div class="text-center">
-      <div class="inline-block bg-ts-paper border border-ts-line rounded-2xl p-8 max-w-3xl shadow-lg">
-        <h3 class="heading-display text-2xl mb-4">
-          Ready to Plan Your Perfect Event?
-        </h3>
-        <p class="text-ts-ink-soft mb-6">
-          Let's discuss your vision and create an unforgettable experience together.
-        </p>
-        <a routerLink="/contacto" class="btn-primary">
-          Get in Touch
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-          </svg>
-        </a>
+<!-- Story + Trust -->
+<section class="section-gap">
+  <div class="page-container grid lg:grid-cols-3 gap-8 items-center">
+    <div class="lg:col-span-1 space-y-4">
+      <p class="badge">Why Amarka</p>
+      <h3 class="text-3xl font-serif text-ts-ink leading-tight">Gift-ready quality with thoughtful engraving</h3>
+      <p class="text-ts-ink-soft">We personalize fast, package beautifully, and ship with care so your gifts arrive ready to impress.</p>
+    </div>
+    <div class="lg:col-span-2 grid sm:grid-cols-2 gap-4">
+      <div class="rounded-2xl border border-ts-line bg-white p-5 shadow-sm">
+        <div class="font-semibold text-ts-ink mb-2">Fast engraving & dispatch</div>
+        <p class="text-sm text-ts-ink-soft">Personalized and out the door quickly, even for last-minute gifting.</p>
+      </div>
+      <div class="rounded-2xl border border-ts-line bg-white p-5 shadow-sm">
+        <div class="font-semibold text-ts-ink mb-2">Premium materials</div>
+        <p class="text-sm text-ts-ink-soft">Quality woods, metals, and finishes that feel premium in hand.</p>
+      </div>
+      <div class="rounded-2xl border border-ts-line bg-white p-5 shadow-sm">
+        <div class="font-semibold text-ts-ink mb-2">Gift-ready packaging</div>
+        <p class="text-sm text-ts-ink-soft">Arrives beautifully boxed with care instructions and notes.</p>
+      </div>
+      <div class="rounded-2xl border border-ts-line bg-white p-5 shadow-sm">
+        <div class="font-semibold text-ts-ink mb-2">Trusted by customers</div>
+        <p class="text-sm text-ts-ink-soft">Reviews from real recipients; see what people love most.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Gallery Preview Section -->
+<!-- Gallery Preview -->
 @if (galleryImages.length > 0) {
-  <section class="section-gap relative overflow-hidden bg-ts-bg-soft">
-    <div class="luxury-overlay"></div>
-    <div class="page-container relative z-10">
-      <div class="text-center mb-16">
-        <h2 class="heading-display text-4xl lg:text-5xl mb-4">
-          Our Work Speaks for Itself
-        </h2>
-        <p class="text-xl text-ts-ink-soft max-w-2xl mx-auto">
-          Explore past events brought to life with intention and artistry
-        </p>
+  <section class="section-gap bg-ts-bg-soft">
+    <div class="page-container">
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <p class="badge">Detail & craft</p>
+          <h3 class="heading-display text-3xl text-ts-ink">A closer look</h3>
+          <p class="text-ts-ink-soft">Snapshots from recent personalised pieces.</p>
+        </div>
+        <a routerLink="/galeria" class="btn-outline">View full gallery</a>
       </div>
-
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
         @for (image of galleryImages; track image.id) {
-          <div class="group relative rounded-2xl overflow-hidden bg-ts-paper border border-ts-line shadow-lg hover:shadow-xl hover:border-ts-accent/50 transition-all duration-300 aspect-[4/3]">
-            <img [src]="image.thumbnailUrl || image.imageUrl" 
-                 [alt]="image.title || 'Event design'"
-                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                 loading="lazy"/>
-            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              <div class="absolute bottom-0 left-0 right-0 p-6">
-                @if (image.title) {
-                  <h4 class="heading-display text-xl mb-2 text-white">{{image.title}}</h4>
-                }
-                @if (image.description) {
-                  <p class="text-sm text-gray-200">{{image.description}}</p>
-                }
-              </div>
-            </div>
+          <div class="rounded-2xl overflow-hidden border border-ts-line bg-white shadow-sm aspect-[4/3]">
+            <img [src]="image.thumbnailUrl || image.imageUrl" [alt]="image.title || 'Gallery'" class="w-full h-full object-cover" loading="lazy">
           </div>
         }
-      </div>
-
-      <div class="text-center">
-        <a routerLink="/galeria" class="btn-primary">
-          View Full Gallery
-        </a>
       </div>
     </div>
   </section>
 }
 
-<!-- Why Choose Us -->
-<section class="section-gap relative overflow-hidden">
-  <div class="luxury-overlay"></div>
-  <div class="page-container relative z-10">
-    <div class="text-center mb-16">
-      <h2 class="heading-display text-4xl lg:text-5xl mb-4">
-        Why Choose Creation Design & Events
-      </h2>
-    </div>
-    
-    <div class="grid md:grid-cols-3 gap-12">
-      <!-- Family-Owned -->
-      <div class="text-center">
-        <div class="w-16 h-16 mx-auto mb-6 rounded-full bg-ts-accent flex items-center justify-center shadow-soft">
-          <svg class="w-8 h-8 text-ts-ink" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-          </svg>
-        </div>
-        <h3 class="heading-display text-2xl mb-4 text-ts-ink">Family-Owned Business</h3>
-        <p class="text-ts-ink-soft leading-relaxed">
-          Personalized service with a warm, family touch. We treat every event like it's our own.
-        </p>
-      </div>
-      
-      <!-- Experience -->
-      <div class="text-center">
-        <div class="w-16 h-16 mx-auto mb-6 rounded-full bg-ts-accent flex items-center justify-center shadow-soft">
-          <svg class="w-8 h-8 text-ts-ink" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-          </svg>
-        </div>
-        <h3 class="heading-display text-2xl mb-4 text-ts-ink">15+ Years Experience</h3>
-        <p class="text-ts-ink-soft leading-relaxed">
-          Over a decade of expertise in creating memorable events across Miami.
-        </p>
-      </div>
-      
-      <!-- Custom Design -->
-      <div class="text-center">
-        <div class="w-16 h-16 mx-auto mb-6 rounded-full bg-ts-accent flex items-center justify-center shadow-soft">
-          <svg class="w-8 h-8 text-ts-ink" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path>
-          </svg>
-        </div>
-        <h3 class="heading-display text-2xl mb-4 text-ts-ink">Custom Designs</h3>
-        <p class="text-ts-ink-soft leading-relaxed">
-          Every event is unique. We create bespoke designs tailored to your vision and style.
-        </p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Client Reviews -->
+<!-- Reviews -->
 <app-home-reviews />
 
-<!-- CTA Sections -->
-<section class="section-gap relative overflow-hidden bg-ts-bg-soft">
-  <div class="luxury-overlay"></div>
-  <div class="page-container relative z-10">
-    <div class="grid lg:grid-cols-2 gap-12 items-center">
-      <!-- CTA Gallery -->
-      <div class="relative rounded-2xl overflow-hidden group border border-ts-line shadow-lg hover:shadow-xl transition-all duration-300 h-80 bg-gradient-to-br from-ts-accent/10 via-ts-bg to-ts-accent/5">
-        <div class="absolute inset-0 luxury-overlay"></div>
-        <div class="absolute inset-0 flex items-center justify-center">
-          <div class="text-center relative z-10">
-            <div class="mb-6">
-              <svg class="w-20 h-20 mx-auto text-ts-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-              </svg>
-            </div>
-            <h3 class="heading-display text-3xl mb-4 text-ts-ink">View Our Portfolio</h3>
-            <a routerLink="/galeria" class="btn-primary">
-              Browse Gallery
-            </a>
-          </div>
-        </div>
-      </div>
-      
-      <!-- CTA Contact -->
-      <div class="relative rounded-2xl overflow-hidden group border border-ts-line shadow-lg hover:shadow-xl transition-all duration-300 h-80 bg-gradient-to-br from-ts-accent/10 via-ts-bg to-ts-accent/5">
-        <div class="absolute inset-0 luxury-overlay"></div>
-        <div class="absolute inset-0 flex items-center justify-center">
-          <div class="text-center relative z-10">
-            <div class="mb-6">
-              <svg class="w-20 h-20 mx-auto text-ts-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
-              </svg>
-            </div>
-            <h3 class="heading-display text-3xl mb-4 text-ts-ink">Let's Talk</h3>
-            <a routerLink="/contacto" class="btn-primary">
-              Contact Us
-            </a>
-          </div>
-        </div>
-      </div>
+<!-- CTA band -->
+<section class="section-gap">
+  <div class="page-container rounded-3xl border border-ts-line bg-white shadow-lg p-10 flex flex-col lg:flex-row items-center justify-between gap-6">
+    <div>
+      <p class="badge">Ready to personalise?</p>
+      <h3 class="text-3xl font-serif text-ts-ink">Let’s craft the perfect gift together</h3>
+      <p class="text-ts-ink-soft">Need advice on sets, engraving, or shipping times? We’re here.</p>
+    </div>
+    <div class="flex gap-3">
+      <a routerLink="/collections" class="btn-primary">Shop collections</a>
+      <a routerLink="/contacto" class="btn-outline">Talk to us</a>
     </div>
   </div>
 </section>

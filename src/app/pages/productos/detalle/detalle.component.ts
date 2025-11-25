@@ -149,8 +149,20 @@ export class DetalleComponent implements OnInit, AfterViewInit {
       }
 
       if (this.producto.galleryImageIds && this.producto.galleryImageIds.length > 0) {
-        const images = await this.mediaService.getMediaByIds(this.producto.galleryImageIds);
-        this.galleryImages = images.filter((image): image is Media => !!image);
+        // Filter out data URLs and full storage URLs - only use valid Firestore document IDs
+        const validIds = this.producto.galleryImageIds.filter(id => 
+          id && 
+          !id.startsWith('data:') && 
+          !id.startsWith('http://') && 
+          !id.startsWith('https://') &&
+          id.length < 1500 // Firestore doc ID max length
+        );
+        if (validIds.length > 0) {
+          const images = await this.mediaService.getMediaByIds(validIds);
+          this.galleryImages = images.filter((image): image is Media => !!image);
+        } else {
+          this.galleryImages = [];
+        }
       } else {
         this.galleryImages = [];
       }
@@ -262,20 +274,20 @@ export class DetalleComponent implements OnInit, AfterViewInit {
 
     // 🎯 Generate Breadcrumb Schema
     const breadcrumbs = [
-      { name: 'Home', url: 'https://creadevents.com/' },
-      { name: 'Products', url: 'https://creadevents.com/productos' }
+      { name: 'Home', url: 'https://amarka.com/' },
+      { name: 'Products', url: 'https://amarka.com/productos' }
     ];
     
     if (this.category) {
       breadcrumbs.push({
         name: this.category.name,
-        url: `https://creadevents.com/productos?category=${this.category.slug}`
+        url: `https://amarka.com/productos?category=${this.category.slug}`
       });
     }
     
     breadcrumbs.push({
       name: this.producto.name,
-      url: `https://creadevents.com/products/${this.producto.slug}`
+      url: `https://amarka.com/products/${this.producto.slug}`
     });
 
     this.seoSchemaService.generateBreadcrumbSchema(breadcrumbs);
