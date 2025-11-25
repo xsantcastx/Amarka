@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { RenderMode } from '@angular/ssr';
 import { authGuard } from './guards/auth.guard';
 import { adminGuard } from './guards/admin.guard';
 import { siteConfig } from '@config/site-config';
@@ -27,8 +26,7 @@ export const routes: Routes = [
   {
     path: 'productos/:slug',
     loadComponent: () => import('./pages/productos/detalle/detalle.component').then(m => m.DetalleComponent),
-    title: routeTitle('page_titles.product_details'),
-    renderMode: RenderMode.Client
+    title: routeTitle('page_titles.product_details')
   },
   {
     path: 'home',
@@ -43,8 +41,7 @@ export const routes: Routes = [
   {
     path: 'collections/:slug',
     loadComponent: () => import('./pages/collections/collection.page').then(m => m.CollectionPageComponent),
-    title: routeTitle('Collections'),
-    renderMode: RenderMode.Client
+    title: routeTitle('Collections')
   },
   {
     path: 'collections',
