@@ -3,16 +3,14 @@ import { sharedEnvironment } from './environment.base';
 export const environment = {
   ...sharedEnvironment,
   production: false,
-  // Force emulator-friendly settings locally to avoid App Check 403s
-  useEmulators: true,
+  // Use real Firebase for development, disable App Check
+  useEmulators: false,
   recaptcha: {
     ...sharedEnvironment.recaptcha,
-    enabled: false,
-    siteKey: ''
+    enabled: false
   },
   appCheck: {
     ...sharedEnvironment.appCheck,
-    siteKey: '',
-    provider: 'recaptcha'
+    enabled: false
   }
 };
