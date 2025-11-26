@@ -10,6 +10,21 @@ permissions:
 jobs:
   build_and_preview:
     if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
+    env:
+      FIREBASE_API_KEY: AIzaSyCl3TgLs0cO6JcTE1GUxA80ESlCv8nmvF4
+      FIREBASE_AUTH_DOMAIN: amarka-d237b.firebaseapp.com
+      FIREBASE_PROJECT_ID: amarka-d237b
+      FIREBASE_STORAGE_BUCKET: amarka-d237b.firebasestorage.app
+      FIREBASE_MESSAGING_SENDER_ID: "412030988588"
+      FIREBASE_APP_ID: "1:412030988588:web:08e2611df9b0c846377c89"
+      FIREBASE_MEASUREMENT_ID: "G-XQHZR0DS09"
+      RECAPTCHA_SITE_KEY: 6Le35RcsAAAAABDNwAmZ1UDWoBi-C0gz_8VFF93r
+      APPCHECK_PROVIDER: recaptcha
+      APPCHECK_SITE_KEY: 6Le35RcsAAAAABDNwAmZ1UDWoBi-C0gz_8VFF93r
+      USE_FIREBASE_EMULATORS: "false"
+      APP_NAME: Amarka
+      APP_URL: "https://amarka.com"
+      APP_BRAND_KEY: amarka
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
