@@ -1,0 +1,306 @@
+<section class="bg-ts-paper border border-ts-line rounded-2xl shadow-soft p-6 space-y-6">
+  <div class="flex flex-wrap items-start justify-between gap-4">
+    <div>
+      <p class="text-sm text-ts-ink/60">Live preview writes CSS variables; saving persists to Firestore.</p>
+      <p class="text-xs text-ts-ink/50">Paths: themes/global and users/&lt;uid&gt;/themes/custom.</p>
+    </div>
+    <div class="flex flex-wrap gap-3 items-center justify-end">
+      <label class="inline-flex items-center gap-2 text-sm text-ts-ink/70 cursor-pointer">
+        <input type="checkbox" class="h-4 w-4 rounded border-ts-line" [(ngModel)]="autoSave">
+        Auto-save
+      </label>
+      <button
+        type="button"
+        (click)="scope = 'global'"
+        class="px-3 py-2 text-sm rounded-lg border transition-colors"
+        [class.bg-primary]="scope === 'global'"
+        [class.text-white]="scope === 'global'"
+        [class.border-primary]="scope === 'global'"
+        [class.bg-ts-bg]="scope !== 'global'"
+        [class.text-ts-ink]="scope !== 'global'"
+        [class.border-ts-line]="scope !== 'global'">
+        Global (everyone)
+      </button>
+      <button
+        type="button"
+        (click)="scope = 'user'"
+        class="px-3 py-2 text-sm rounded-lg border transition-colors"
+        [class.bg-accent]="scope === 'user'"
+        [class.text-white]="scope === 'user'"
+        [class.border-accent]="scope === 'user'"
+        [class.bg-ts-bg]="scope !== 'user'"
+        [class.text-ts-ink]="scope !== 'user'"
+        [class.border-ts-line]="scope !== 'user'">
+        My account
+      </button>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    @for (palette of paletteKeys; track palette.key) {
+      <div class="p-4 border border-ts-line rounded-xl bg-ts-bg-soft/60">
+        <div class="flex items-center justify-between mb-3">
+          <div>
+            <p class="text-sm font-semibold text-ts-ink">{{ palette.label }}</p>
+            <p class="text-xs text-ts-ink/60">Token: --color-{{ palette.key }}</p>
+          </div>
+          <span class="w-10 h-10 rounded-lg border border-ts-line shadow-lvl1"
+                [style.background]="displayColor(draft.palette[palette.key])"></span>
+        </div>
+        <div class="flex gap-2 items-center">
+          <input
+            type="color"
+            class="h-10 w-16 rounded border border-ts-line cursor-pointer"
+            [value]="toHex(draft.palette[palette.key])"
+            (input)="updatePalette(palette.key, $any($event.target).value)">
+          <input
+            type="text"
+            class="flex-1 px-3 py-2 border border-ts-line rounded-lg text-sm font-mono bg-ts-paper focus:border-primary focus:ring-2 focus:ring-primary/30"
+            [value]="draft.palette[palette.key]"
+            (input)="updatePalette(palette.key, $any($event.target).value)"
+            placeholder="168 197 164">
+        </div>
+      </div>
+    }
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+    <div class="p-4 border border-ts-line rounded-xl bg-ts-bg-soft/60 space-y-2">
+      <label class="text-sm font-semibold text-ts-ink">Radius</label>
+      <select
+        class="w-full px-3 py-2 border border-ts-line rounded-lg bg-ts-paper"
+        [(ngModel)]="draft.radiusLevel"
+        (ngModelChange)="updateRadius($any($event))">
+        @for (radius of radiusLevels; track radius) {
+          <option [ngValue]="radius"> {{ radius | titlecase }} </option>
+        }
+      </select>
+    </div>
+
+    <div class="p-4 border border-ts-line rounded-xl bg-ts-bg-soft/60 space-y-2">
+      <label class="text-sm font-semibold text-ts-ink">Shadow level</label>
+      <input
+        type="range"
+        min="0"
+        max="4"
+        class="w-full"
+        [ngModel]="draft.shadowLevel"
+        (ngModelChange)="updateShadow($any($event))">
+      <div class="text-xs text-ts-ink/60">lvl{{ draft.shadowLevel }} (0 = flat, 4 = deep)</div>
+    </div>
+
+    <div class="p-4 border border-ts-line rounded-xl bg-ts-bg-soft/60 space-y-2">
+      <label class="text-sm font-semibold text-ts-ink">Typography scale</label>
+      <select
+        class="w-full px-3 py-2 border border-ts-line rounded-lg bg-ts-paper"
+        [(ngModel)]="draft.fontScale"
+        (ngModelChange)="updateFontScale($any($event))">
+        @for (scale of fontScales; track scale) {
+          <option [ngValue]="scale">{{ scale | titlecase }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="p-4 border border-ts-line rounded-xl bg-ts-bg-soft/60 space-y-2">
+      <label class="text-sm font-semibold text-ts-ink">Button style</label>
+      <select
+        class="w-full px-3 py-2 border border-ts-line rounded-lg bg-ts-paper"
+        [(ngModel)]="draft.buttonStyle"
+        (ngModelChange)="updateButtonStyle($any($event))">
+        @for (style of buttonStyles; track style) {
+          <option [ngValue]="style">{{ style | titlecase }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="p-4 border border-ts-line rounded-xl bg-ts-bg-soft/60 space-y-2">
+      <label class="text-sm font-semibold text-ts-ink">Page spacing</label>
+      <select
+        class="w-full px-3 py-2 border border-ts-line rounded-lg bg-ts-paper"
+        [(ngModel)]="draft.spacing"
+        (ngModelChange)="updateSpacing($any($event))">
+        @for (spacing of spacingOptions; track spacing) {
+          <option [ngValue]="spacing">{{ spacing | titlecase }}</option>
+        }
+      </select>
+    </div>
+  </div>
+
+  <!-- Mini preview -->
+  <div class="grid md:grid-cols-2 gap-4">
+    <div class="p-5 rounded-2xl border border-ts-line bg-background shadow-lvl1 space-y-3">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-xs uppercase tracking-wide text-ts-ink/50">Navbar</p>
+          <p class="font-semibold text-ts-ink">Theme-aware header</p>
+        </div>
+        <span class="px-3 py-1 rounded-full text-xs font-medium"
+              [style.background]=" 'rgb(' + 'var(--component-navbar-accent, var(--color-primary))' + ' / 0.12)' "
+              [style.color]="'rgb(var(--component-navbar-neutral, var(--color-neutral)))'">
+          Brand
+        </span>
+      </div>
+      <div class="flex gap-2">
+        <button class="px-3 py-2 rounded-md text-xs font-semibold bg-primary text-neutral shadow-lvl1">Primary</button>
+        <button class="px-3 py-2 rounded-md text-xs font-semibold ring-1 ring-primary text-accent">Ghost</button>
+        <button class="px-3 py-2 rounded-md text-xs font-semibold bg-surface border border-ts-line text-ts-ink shadow-lvl0">Surface</button>
+      </div>
+      <div class="h-20 rounded-xl bg-surface border border-ts-line shadow-lvl1 flex items-center justify-between px-4">
+        <div class="space-y-1">
+          <p class="text-sm font-semibold text-ts-ink">Product card</p>
+          <p class="text-xs text-ts-ink/60">Uses component override for accent</p>
+        </div>
+        <div class="w-16 h-10 rounded-lg"
+             [style.background]="'rgb(var(--component-productCard-accent, var(--color-primary)))'"></div>
+      </div>
+    </div>
+    <div class="p-5 rounded-2xl border border-ts-line bg-surface shadow-lvl1 space-y-4">
+      <div class="flex items-center justify-between">
+        <p class="text-sm font-semibold text-ts-ink">Typography & spacing</p>
+        <span class="text-xs text-ts-ink/60">Radius {{ draft.radiusLevel }}, Shadow {{ draft.shadowLevel }}</span>
+      </div>
+      <div class="space-y-2">
+        <p class="text-lg font-serif text-ts-ink">Heading preview</p>
+        <p class="text-sm text-ts-ink/70 leading-relaxed">Body text scales with font scale. Spacing adjusts via section/page padding tokens.</p>
+      </div>
+      <div class="grid grid-cols-2 gap-2 text-xs">
+        <span class="px-3 py-2 rounded-lg bg-success/10 text-success border border-success/30 text-center">Success</span>
+        <span class="px-3 py-2 rounded-lg bg-warning/10 text-warning border border-warning/30 text-center">Warning</span>
+        <span class="px-3 py-2 rounded-lg bg-error/10 text-error border border-error/30 text-center">Error</span>
+        <span class="px-3 py-2 rounded-lg bg-primary/15 text-accent border border-primary/30 text-center">Accent</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="space-y-3">
+    <div class="flex items-center justify-between">
+      <div>
+        <h3 class="text-lg font-semibold text-ts-ink">Component overrides</h3>
+        <p class="text-xs text-ts-ink/60">Optional accent/neutral per component.</p>
+      </div>
+      <span class="text-xs text-ts-ink/60">Product cards, navbar, footer</span>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+      @for (override of componentOverrides; track override.key) {
+        <div class="p-4 border border-ts-line rounded-xl bg-ts-bg-soft/60 space-y-3">
+          <p class="font-semibold text-ts-ink">{{ override.label }}</p>
+
+          <div class="flex items-center gap-2">
+            <span class="text-xs text-ts-ink/60 w-16">Accent</span>
+            <input
+              type="color"
+              class="h-9 w-12 rounded border border-ts-line"
+              [value]="toHex(draft.overrides?.[override.key]?.palette?.accent || draft.palette.accent)"
+              (input)="updateOverride(override.key, 'accent', $any($event.target).value)">
+            <input
+              type="text"
+              class="flex-1 px-2 py-1 border border-ts-line rounded text-xs font-mono bg-ts-paper"
+              [value]="draft.overrides?.[override.key]?.palette?.accent || draft.palette.accent"
+              (input)="updateOverride(override.key, 'accent', $any($event.target).value)">
+          </div>
+
+          <div class="flex items-center gap-2">
+            <span class="text-xs text-ts-ink/60 w-16">Neutral</span>
+            <input
+              type="color"
+              class="h-9 w-12 rounded border border-ts-line"
+              [value]="toHex(draft.overrides?.[override.key]?.palette?.neutral || draft.palette.neutral)"
+              (input)="updateOverride(override.key, 'neutral', $any($event.target).value)">
+            <input
+              type="text"
+              class="flex-1 px-2 py-1 border border-ts-line rounded text-xs font-mono bg-ts-paper"
+              [value]="draft.overrides?.[override.key]?.palette?.neutral || draft.palette.neutral"
+              (input)="updateOverride(override.key, 'neutral', $any($event.target).value)">
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+
+  <div class="flex flex-wrap items-center justify-between gap-3">
+    <div class="flex gap-2">
+      <button
+        type="button"
+        class="px-3 py-2 text-sm rounded-lg border border-ts-line bg-ts-bg hover:border-primary transition-colors"
+        (click)="clearPreview()">
+        Clear preview
+      </button>
+      <button
+        type="button"
+        class="px-3 py-2 text-sm rounded-lg border border-ts-line bg-ts-bg hover:border-primary transition-colors disabled:opacity-60"
+        [disabled]="isSaving"
+        (click)="reset(scope)">
+        Reset {{ scopeLabel(scope) }}
+      </button>
+    </div>
+
+    <div class="flex gap-2">
+      <button
+        type="button"
+        class="px-4 py-2 text-sm rounded-lg border border-accent text-accent bg-accent/10 hover:bg-accent/20 transition-colors disabled:opacity-60"
+        [disabled]="isSaving"
+        (click)="save('user')">
+        Save to my account
+      </button>
+      <button
+        type="button"
+        class="px-4 py-2 text-sm rounded-lg bg-primary text-white shadow-lvl2 hover:shadow-lvl3 transition disabled:opacity-60"
+        [disabled]="isSaving"
+        (click)="save('global')">
+        Save for everyone
+      </button>
+    </div>
+  </div>
+
+  <!-- Presets -->
+  <div class="rounded-2xl border border-ts-line bg-ts-bg-soft/60 shadow-lvl1 p-5 space-y-4">
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <div>
+        <p class="text-sm font-semibold text-ts-ink">Custom palettes</p>
+        <p class="text-xs text-ts-ink/60">Save and re-apply palettes; stored in Firestore.</p>
+      </div>
+      <div class="flex gap-2">
+        <input
+          type="text"
+          class="px-3 py-2 text-sm border border-ts-line rounded-lg bg-ts-paper"
+          placeholder="Preset name"
+          [(ngModel)]="presetName">
+        <button
+          type="button"
+          class="px-3 py-2 text-sm rounded-lg bg-primary text-white shadow-lvl1 disabled:opacity-60"
+          [disabled]="isSaving || !presetName.trim()"
+          (click)="savePreset(scope)">
+          Save preset ({{ scope }})
+        </button>
+      </div>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3" *ngIf="draft.presets?.length; else noPresets">
+      @for (preset of draft.presets; track preset.id) {
+        <div class="p-4 rounded-xl border border-ts-line bg-surface shadow-lvl1 space-y-3">
+          <div class="flex items-center justify-between gap-2">
+            <p class="font-semibold text-ts-ink text-sm truncate">{{ preset.name }}</p>
+            <div class="flex gap-1">
+              <button class="p-1 text-accent hover:bg-accent/10 rounded" (click)="applyPreset(preset)" title="Apply">
+                Apply
+              </button>
+              <button class="p-1 text-red-500 hover:bg-red-500/10 rounded" (click)="deletePreset(preset, preset.scope === 'global' ? 'global' : 'user')" title="Delete">
+                ✕
+              </button>
+            </div>
+          </div>
+          <div class="flex gap-1.5">
+            <span class="w-6 h-6 rounded border border-ts-line" [style.background]="displayColor(preset.palette.primary)"></span>
+            <span class="w-6 h-6 rounded border border-ts-line" [style.background]="displayColor(preset.palette.accent)"></span>
+            <span class="w-6 h-6 rounded border border-ts-line" [style.background]="displayColor(preset.palette.background)"></span>
+            <span class="w-6 h-6 rounded border border-ts-line" [style.background]="displayColor(preset.palette.surface)"></span>
+          </div>
+        </div>
+      }
+    </div>
+    <ng-template #noPresets>
+      <p class="text-sm text-ts-ink/60">No presets yet. Save one using the input above.</p>
+    </ng-template>
+  </div>
+</section>

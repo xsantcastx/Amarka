@@ -71,7 +71,7 @@ $desktop: 1024px;
               &:before {
                 content: attr(data-label);
                 font-weight: 600;
-                color: #f7931a;
+                color: var(--ts-accent);
                 margin-right: 1rem;
                 min-width: 100px;
               }

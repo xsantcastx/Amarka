@@ -500,8 +500,8 @@ export class SettingsService {
 
       // Page Hero Settings
       serviciosHeroImage: '/assets/services/hero-services.jpg',
-      serviciosHeroTitle: 'Tailored event design and floral artistry',
-      serviciosHeroSubtitle: 'Full-service planning, luxury florals, and seasonal decor crafted for weddings, brands, private celebrations, and interiors.',
+      serviciosHeroTitle: 'Precision engraving, elevated gifts',
+      serviciosHeroSubtitle: 'Custom engraving on metal, glass, wood, and leather with fast turnaround and gift-ready packaging.',
       galeriaHeroImage: '/assets/gallery/hero-gallery.jpg',
       galeriaHeroTitle: 'Event design, florals, and seasonal installs we love',
       galeriaHeroSubtitle: 'Explore weddings, brand activations, private celebrations, and botanical styling crafted with our ivory and gold aesthetic.',

@@ -11,3 +11,15 @@
 button:disabled.animate-pulse {
   animation: addedFeedback 0.3s ease-in-out;
 }
+
+.product-card-grid {
+  --card-accent: var(--component-productCard-accent, var(--color-primary));
+  --card-neutral: var(--component-productCard-neutral, var(--color-neutral));
+  border-radius: var(--radius-md);
+}
+
+.product-card-list {
+  --card-accent: var(--component-productCard-accent, var(--color-primary));
+  --card-neutral: var(--component-productCard-neutral, var(--color-neutral));
+  border-radius: var(--radius-lg);
+}

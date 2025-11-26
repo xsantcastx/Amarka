@@ -1,34 +1,111 @@
-<!-- Hero -->
-<section class="bg-gradient-to-br from-[#f7f0e7] to-white">
-  <div class="page-container grid lg:grid-cols-2 gap-10 py-16 lg:py-20 items-center">
-    <div class="space-y-4 lg:space-y-6">
-      <p class="text-sm uppercase tracking-wide text-ts-accent-soft">Engraved gifts, made personal</p>
-      <h1 class="text-4xl lg:text-5xl font-serif text-ts-ink leading-tight">
-        Premium personalised gifts crafted to keep
-      </h1>
-      <p class="text-lg text-ts-ink-soft max-w-2xl">
-        Thoughtful engraving, warm materials, and gift-ready packaging for milestones, weddings, and every celebration.
-      </p>
-      <div class="flex flex-wrap gap-3">
-        <a routerLink="/collections" class="btn-primary">Shop collections</a>
-        <a routerLink="/collections/gifts-for-men" class="btn-outline">Gift inspiration</a>
+<!-- Hero with left rail + search -->
+<section class="bg-gradient-to-br from-background to-surface">
+  <div class="page-container grid lg:grid-cols-[280px,1fr] gap-8 py-12 lg:py-16 items-start">
+    <!-- Left rail (departments) -->
+    <aside class="hidden lg:block bg-surface border border-ts-line rounded-2xl shadow-lvl1 p-4 space-y-3 sticky top-[calc(var(--nav-height)+1rem)]">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="w-2.5 h-2.5 rounded-full bg-accent"></span>
+        <p class="text-sm font-semibold text-ts-ink">Departments</p>
       </div>
-      <div class="flex items-center gap-6 text-sm text-ts-ink-soft pt-2">
-        <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-green-500"></span>Fast engraving & dispatch</div>
-        <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-ts-accent"></span>Gift-ready packaging</div>
+      <div class="space-y-1.5 max-h-[420px] overflow-y-auto pr-1">
+        @for (col of collections; track col.slug) {
+          <a [routerLink]="['/collections', col.slug]"
+             class="flex items-center justify-between px-3 py-2 rounded-lg border border-transparent hover:border-ts-line hover:bg-ts-bg-soft text-sm text-ts-ink transition-colors">
+            <span>{{ col.name }}</span>
+            <svg class="w-4 h-4 text-ts-ink/50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          </a>
+        }
+        @if (!collections.length) {
+          <p class="text-xs text-ts-ink-soft">Create collections to feature departments.</p>
+        }
       </div>
-    </div>
-    <div class="grid grid-cols-2 gap-4">
-      <div class="rounded-2xl overflow-hidden border border-ts-line shadow-lg bg-white">
-        <img src="/Logo.jpg" alt="Featured gift" class="w-full h-full object-cover" loading="lazy">
+      <div class="pt-3 border-t border-ts-line text-xs text-ts-ink-soft">
+        Discover best sellers, gift guides, and new arrivals.
       </div>
-      <div class="space-y-4">
-        <div class="rounded-2xl overflow-hidden border border-ts-line bg-white shadow-lg">
-          <img src="/Logo.jpg" alt="Gift set" class="w-full h-full object-cover" loading="lazy">
+    </aside>
+
+    <!-- Hero content -->
+    <div class="grid lg:grid-cols-2 gap-8 items-center">
+      <div class="space-y-5">
+        <div class="flex items-center gap-2 text-xs uppercase tracking-[0.08em] text-ts-ink-soft">
+          <span class="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-ts-accent font-semibold">★</span>
+          Most-loved engraved gifts
         </div>
-        <div class="rounded-2xl overflow-hidden border border-ts-line bg-white shadow-lg">
-          <img src="/Logo.jpg" alt="Engraved detail" class="w-full h-full object-cover" loading="lazy">
+        <h1 class="text-4xl lg:text-5xl font-serif text-ts-ink leading-tight">
+          Premium engraved gifts crafted to keep
+        </h1>
+        <p class="text-lg text-ts-ink-soft max-w-2xl">
+          Laser-sharp engraving on glass, wood, metal, and leather with gift-ready packaging. Fast turnaround for milestones, corporate gifts, and everyday wins.
+        </p>
+
+        <div class="grid grid-cols-2 gap-3">
+          <a routerLink="/collections/gifts-for-men" class="flex items-center gap-2 p-4 rounded-xl border border-ts-line bg-surface shadow-lvl1 hover:shadow-lvl2 transition">
+            <div class="w-10 h-10 rounded-lg bg-primary/15 flex items-center justify-center text-ts-ink font-semibold">Men</div>
+            <div>
+              <div class="font-semibold text-ts-ink">Gifts for him</div>
+              <div class="text-xs text-ts-ink-soft">Flasks, decanters, pens</div>
+            </div>
+          </a>
+          <a routerLink="/collections" class="flex items-center gap-2 p-4 rounded-xl border border-ts-line bg-surface shadow-lvl1 hover:shadow-lvl2 transition">
+            <div class="w-10 h-10 rounded-lg bg-primary/15 flex items-center justify-center text-ts-ink font-semibold">Corp</div>
+            <div>
+              <div class="font-semibold text-ts-ink">Corporate & awards</div>
+              <div class="text-xs text-ts-ink-soft">Plaques, trophies, signage</div>
+            </div>
+          </a>
+          <a routerLink="/collections" class="flex items-center gap-2 p-4 rounded-xl border border-ts-line bg-surface shadow-lvl1 hover:shadow-lvl2 transition">
+            <div class="w-10 h-10 rounded-lg bg-primary/15 flex items-center justify-center text-ts-ink font-semibold">Weds</div>
+            <div>
+              <div class="font-semibold text-ts-ink">Wedding & milestone</div>
+              <div class="text-xs text-ts-ink-soft">Keepsakes, gifts, decor</div>
+            </div>
+          </a>
+          <a routerLink="/productos" class="flex items-center gap-2 p-4 rounded-xl border border-ts-line bg-surface shadow-lvl1 hover:shadow-lvl2 transition">
+            <div class="w-10 h-10 rounded-lg bg-primary/15 flex items-center justify-center text-ts-ink font-semibold">Rush</div>
+            <div>
+              <div class="font-semibold text-ts-ink">Rush engraving</div>
+              <div class="text-xs text-ts-ink-soft">Priority production & ship</div>
+            </div>
+          </a>
         </div>
+
+        <div class="flex flex-wrap gap-3">
+          <a routerLink="/collections" class="btn-primary">Shop collections</a>
+          <a routerLink="/productos" class="btn-outline">Browse all products</a>
+        </div>
+        <div class="flex items-center gap-6 text-sm text-ts-ink-soft pt-2">
+          <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-success"></span>Fast engraving & dispatch</div>
+          <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-primary"></span>Gift-ready packaging</div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        @if (heroProducts.length) {
+          @for (product of heroProducts; track product.id) {
+            <div class="rounded-2xl overflow-hidden border border-ts-line shadow-lvl2 bg-surface aspect-[4/3] relative">
+              <img [src]="product.imageUrl || product.coverImage || 'assets/placeholder-product.jpg'"
+                   [alt]="product.name"
+                   class="w-full h-full object-cover"
+                   loading="lazy">
+              <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/60 to-transparent p-3 text-white">
+                <div class="text-sm font-semibold truncate">{{ product.name }}</div>
+                <a [routerLink]="['/productos', product.slug || product.id]" class="text-xs underline">View product</a>
+              </div>
+            </div>
+          }
+        } @else {
+          <div class="rounded-2xl overflow-hidden border border-ts-line shadow-lvl2 bg-surface aspect-[4/5]">
+            <img src="/Logo.jpg" alt="Featured gift" class="w-full h-full object-cover" loading="lazy">
+          </div>
+          <div class="space-y-4">
+            <div class="rounded-2xl overflow-hidden border border-ts-line bg-surface shadow-lvl2 aspect-[4/3]">
+              <img src="/Logo.jpg" alt="Gift set" class="w-full h-full object-cover" loading="lazy">
+            </div>
+            <div class="rounded-2xl overflow-hidden border border-ts-line bg-surface shadow-lvl2 aspect-[4/3]">
+              <img src="/Logo.jpg" alt="Engraved detail" class="w-full h-full object-cover" loading="lazy">
+            </div>
+          </div>
+        }
       </div>
     </div>
   </div>
@@ -40,14 +117,20 @@
     <h2 class="text-xl font-semibold text-ts-ink">Shop by collection</h2>
     <a routerLink="/collections" class="text-sm text-ts-accent hover:underline">View all</a>
   </div>
-  <div class="flex gap-3 overflow-x-auto pb-2 snap-x">
-    @for (col of collections; track col.slug) {
+  <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+    @for (col of categoryShowcase; track col.slug) {
       <a [routerLink]="['/collections', col.slug]"
-         class="snap-start whitespace-nowrap px-4 py-2 rounded-full border border-ts-line bg-white text-ts-ink shadow-sm hover:border-ts-accent hover:text-ts-accent transition">
-        {{ col.name }}
+         class="group relative rounded-xl border border-ts-line bg-surface shadow-lvl1 overflow-hidden hover:shadow-lvl2 transition">
+        <div class="aspect-[4/3] bg-ts-bg-soft">
+          <img [src]="collectionImages[col.slug] || 'assets/placeholder-product.jpg'" [alt]="col.name" class="w-full h-full object-cover" loading="lazy">
+        </div>
+        <div class="p-3 flex items-center justify-between gap-2">
+          <div class="text-sm font-semibold text-ts-ink">{{ col.name }}</div>
+          <svg class="w-4 h-4 text-ts-ink/60 group-hover:text-ts-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </div>
       </a>
     }
-    @if (!collections.length) {
+    @if (!categoryShowcase.length) {
       <span class="text-ts-ink-soft text-sm">Create collections to feature them here.</span>
     }
   </div>
@@ -80,6 +163,69 @@
     </div>
   </div>
 </section>
+
+<!-- Best sellers -->
+@if (bestSellerProducts.length) {
+  <section class="section-gap">
+    <div class="page-container">
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <p class="badge">Top sellers</p>
+          <h3 class="heading-display text-3xl text-ts-ink">Most popular right now</h3>
+          <p class="text-ts-ink-soft">Customer favorites and repeat best-sellers.</p>
+        </div>
+        <a routerLink="/productos" class="btn-outline">View all products</a>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        @for (product of bestSellerProducts; track product.id) {
+          <ts-product-card [product]="product" />
+        }
+      </div>
+    </div>
+  </section>
+}
+
+<!-- New arrivals -->
+@if (newArrivalProducts.length) {
+  <section class="section-gap bg-ts-bg-soft">
+    <div class="page-container">
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <p class="badge">Fresh drops</p>
+          <h3 class="heading-display text-3xl text-ts-ink">New arrivals</h3>
+          <p class="text-ts-ink-soft">Latest personalised pieces just added.</p>
+        </div>
+        <a routerLink="/productos" class="btn-outline">Shop new</a>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        @for (product of newArrivalProducts; track product.id) {
+          <ts-product-card [product]="product" />
+        }
+      </div>
+    </div>
+  </section>
+}
+
+<!-- Deals & bundles -->
+@if (featuredProducts.length) {
+  <section class="section-gap">
+    <div class="page-container">
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <p class="badge">Bundles & gift sets</p>
+          <h3 class="heading-display text-3xl text-ts-ink">Value bundles & engraving sets</h3>
+          <p class="text-ts-ink-soft">Curated combos ready to engrave and gift.</p>
+        </div>
+        <a routerLink="/productos" class="btn-outline">Shop bundles</a>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        @for (product of featuredProducts.slice(0,4); track product.id) {
+          <ts-product-card [product]="product" />
+        }
+      </div>
+    </div>
+  </section>
+}
 
 <!-- Story + Trust -->
 <section class="section-gap">

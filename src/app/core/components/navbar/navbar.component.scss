@@ -1,7 +1,16 @@
+:host {
+  --nav-accent: rgb(var(--component-navbar-accent, var(--color-primary)));
+  --nav-ink: rgb(var(--component-navbar-neutral, var(--color-neutral)));
+}
+
 // Navbar specific styles
 .app-navbar {
   width: 100%;
-  background: linear-gradient(180deg, rgba(250, 246, 240, 0.94) 0%, rgba(255, 255, 255, 0.94) 100%);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--ts-bg) 94%, transparent) 0%,
+    color-mix(in srgb, var(--ts-paper) 94%, transparent) 100%
+  );
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
   border-bottom: 1px solid var(--ts-line);
@@ -52,12 +61,12 @@
   gap: 0.75rem;
   padding: 0.35rem 0.55rem;
   border-radius: 999px;
-  color: var(--ts-ink);
+  color: var(--nav-ink);
   font-weight: 600;
   transition: transform 0.2s ease, background-color 0.2s ease;
 
   &:hover {
-    background-color: color-mix(in srgb, var(--ts-accent) 18%, transparent);
+    background-color: color-mix(in srgb, var(--nav-accent) 18%, transparent);
     transform: translateY(-1px);
   }
 
@@ -94,14 +103,14 @@
   transition: color 0.25s ease, background-color 0.25s ease;
 
   &:hover {
-    color: var(--ts-ink);
-    background: color-mix(in srgb, var(--ts-accent) 20%, transparent);
+    color: var(--nav-ink);
+    background: color-mix(in srgb, var(--nav-accent) 20%, transparent);
   }
 
   &.active {
-    color: var(--ts-ink);
-    background: color-mix(in srgb, var(--ts-accent) 32%, transparent);
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ts-accent) 40%, transparent);
+    color: var(--nav-ink);
+    background: color-mix(in srgb, var(--nav-accent) 32%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--nav-accent) 40%, transparent);
   }
 }
 
@@ -114,12 +123,12 @@
   gap: 0.4rem;
   padding: 0.2rem 0.6rem;
   border-radius: 999px;
-  background: color-mix(in srgb, var(--ts-accent) 12%, transparent);
+  background: color-mix(in srgb, var(--nav-accent) 12%, transparent);
   border: 1px solid color-mix(in srgb, var(--ts-line) 60%, transparent);
   transition: background-color 0.2s ease;
 
   &:hover {
-    background: color-mix(in srgb, var(--ts-accent) 22%, transparent);
+    background: color-mix(in srgb, var(--nav-accent) 22%, transparent);
   }
 }
 
@@ -130,12 +139,12 @@
   width: 1.85rem;
   height: 1.85rem;
   border-radius: 999px;
-  color: var(--ts-ink);
+  color: var(--nav-ink);
   transition: color 0.2s ease, background-color 0.2s ease;
 
   &:hover {
-    color: var(--ts-ink);
-    background: color-mix(in srgb, var(--ts-accent) 26%, transparent);
+    color: var(--nav-ink);
+    background: color-mix(in srgb, var(--nav-accent) 26%, transparent);
   }
 }
 
@@ -144,15 +153,15 @@
   font-size: 0.78rem;
   font-weight: 600;
   text-transform: uppercase;
-  color: var(--ts-ink);
+  color: var(--nav-ink);
   border-radius: 999px;
   border: 1px solid color-mix(in srgb, var(--ts-line) 60%, transparent);
-  background: color-mix(in srgb, var(--ts-accent) 12%, transparent);
+  background: color-mix(in srgb, var(--nav-accent) 12%, transparent);
   transition: background-color 0.2s ease, color 0.2s ease;
 
   &:hover {
-    background: color-mix(in srgb, var(--ts-accent) 22%, transparent);
-    color: var(--ts-ink);
+    background: color-mix(in srgb, var(--nav-accent) 22%, transparent);
+    color: var(--nav-ink);
   }
 }
 

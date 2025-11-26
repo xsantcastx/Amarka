@@ -17,6 +17,7 @@ import { Media } from '../../models/media';
 import { PageHeaderComponent, Breadcrumb } from '../../shared/components/page-header/page-header.component';
 import { LoadingComponentBase } from '../../core/classes/loading-component.base';
 import { firstValueFrom } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-productos-page',
@@ -36,6 +37,7 @@ export class ProductosPageComponent extends LoadingComponentBase implements OnIn
   private settingsService = inject(SettingsService);
   private metaService = inject(MetaService);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
   
   // Breadcrumbs for navigation
   breadcrumbs: Breadcrumb[] = [
@@ -63,6 +65,14 @@ export class ProductosPageComponent extends LoadingComponentBase implements OnIn
   searchTerm = '';
 
   async ngOnInit() {
+    // Seed search from query param if provided
+    this.route.queryParamMap.subscribe(params => {
+      const search = params.get('search');
+      if (search) {
+        this.searchTerm = search;
+      }
+    });
+
     // Load filter options
     await this.loadFilterOptions();
     

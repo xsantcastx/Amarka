@@ -18,28 +18,63 @@
 }
 
 :root {
-  --bitcoin-orange: #a8c5a4; /* repurpose token as sage green */
-  --bitcoin-gold: #a8c5a4;
-  --luxury-gold: #a8c5a4;
-  --accent-warm: #e8b8c8; /* rose blush accent */
-  --forest-green: #3f5f47;
   --font-sans: "Inter", "Source Sans 3", ui-sans-serif, system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
   --font-display: "Playfair Display", "Cormorant Garamond", "Inter", "Times New Roman", serif;
   --font-mono: "JetBrains Mono", "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-}
 
-:root {
-  --ts-bg: #faf6f0; /* ivory */
-  --ts-bg-soft: #f3ede4;
-  --ts-ink: #1d2a39; /* midnight blue */
-  --ts-ink-soft: #3f5f47; /* forest green as secondary text */
-  --ts-accent: #a8c5a4; /* sage green */
-  --ts-accent-soft: #c1d5be;
-  --ts-accent-dark: #8aab85; /* darker sage for gradients */
-  --ts-line: color-mix(in srgb, #a8c5a4 45%, transparent);
-  --ts-paper: #ffffff;
+  /* Core Colors (space-separated RGB for Tailwind variable support) */
+  --color-primary: 168 197 164; /* sage */
+  --color-secondary: 232 184 200; /* blush */
+  --color-accent: 63 95 71; /* forest */
+  --color-neutral: 29 42 57; /* ink */
+  --color-surface: 255 255 255;
+  --color-background: 250 246 240; /* ivory */
+
+  /* Semantic */
+  --color-success: 46 204 113;
+  --color-warning: 241 196 15;
+  --color-error: 231 76 60;
+
+  /* Radii */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-full: 999px;
+
+  /* Shadow levels */
+  --shadow-0: 0 0 0 0 rgba(0, 0, 0, 0);
+  --shadow-1: 0 1px 3px rgba(0, 0, 0, 0.12);
+  --shadow-2: 0 4px 6px rgba(0, 0, 0, 0.15);
+  --shadow-3: 0 10px 15px rgba(0, 0, 0, 0.2);
+  --shadow-4: 0 20px 25px rgba(0, 0, 0, 0.22);
+
+  /* Typography scale */
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+
+  /* Legacy + surface tokens derived from palette */
+  --ts-bg: rgb(var(--color-background));
+  --ts-bg-soft: color-mix(in srgb, rgb(var(--color-background)) 85%, rgb(var(--color-surface)) 15%);
+  --ts-ink: rgb(var(--color-neutral));
+  --ts-ink-soft: color-mix(in srgb, rgb(var(--color-neutral)) 70%, rgb(var(--color-accent)) 30%);
+  --ts-accent: rgb(var(--color-primary));
+  --ts-accent-soft: color-mix(in srgb, rgb(var(--color-primary)) 70%, rgb(var(--color-surface)) 30%);
+  --ts-accent-dark: color-mix(in srgb, rgb(var(--color-primary)) 75%, rgb(var(--color-accent)) 25%);
+  --ts-line: color-mix(in srgb, rgb(var(--color-primary)) 35%, transparent);
+  --ts-paper: rgb(var(--color-surface));
+
+  /* Brand aliases */
+  --bitcoin-orange: var(--ts-accent); /* compatibility with legacy styles */
+  --bitcoin-gold: color-mix(in srgb, rgb(var(--color-primary)) 80%, rgb(var(--color-surface)) 20%);
+  --luxury-gold: color-mix(in srgb, rgb(var(--color-primary)) 75%, rgb(var(--color-accent)) 25%);
+  --accent-warm: rgb(var(--color-secondary)); /* rose blush accent */
+  --forest-green: rgb(var(--color-accent));
+
   --surface-glass: color-mix(in srgb, var(--ts-paper) 92%, rgba(0, 0, 0, 0.02));
-  --surface-border: color-mix(in srgb, #a8c5a4 35%, transparent);
+  --surface-border: color-mix(in srgb, rgb(var(--color-primary)) 35%, transparent);
   --shadow-soft: 0 28px 60px -35px rgba(29, 42, 57, 0.25);
   --shadow-hover: 0 18px 40px -30px rgba(29, 42, 57, 0.28);
   --shadow-focus: 0 0 0 1px color-mix(in srgb, var(--ts-accent) 45%, transparent), 0 18px 42px -30px rgba(29, 42, 57, 0.32);
@@ -138,7 +173,7 @@
 .page-hero {
   position: relative;
   overflow: hidden;
-  border-bottom: 1px solid rgba(247, 147, 26, 0.12);
+  border-bottom: 1px solid color-mix(in srgb, var(--ts-accent) 12%, transparent);
 }
 
 .page-hero__inner {
@@ -178,14 +213,14 @@
 }
 
 .page-hero__breadcrumb-link:hover {
-  color: #f7931a;
+  color: var(--ts-accent);
 }
 
 .page-hero__breadcrumb-current {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  color: #f7931a;
+  color: var(--ts-accent);
   font-weight: 600;
 }
 
@@ -1055,31 +1090,31 @@ img {
 
 /* Bitcoin Theme Utility Classes */
 .text-bitcoin-orange {
-  color: #f7931a !important;
+  color: var(--ts-accent) !important;
 }
 
 .text-bitcoin-gold {
-  color: #ffb81c !important;
+  color: color-mix(in srgb, var(--ts-accent) 85%, var(--ts-paper) 15%) !important;
 }
 
 .text-bitcoin-gray {
-  color: #9ca3af !important;
+  color: var(--ts-ink-soft) !important;
 }
 
 .text-luxury-gold {
-  color: #d4af37 !important;
+  color: color-mix(in srgb, var(--ts-accent) 80%, var(--ts-ink) 20%) !important;
 }
 
 .bg-bitcoin-dark {
-  background-color: #0a0b0d !important;
+  background-color: var(--ts-bg) !important;
 }
 
 .border-bitcoin-orange {
-  border-color: #f7931a !important;
+  border-color: var(--ts-accent) !important;
 }
 
 .border-bitcoin-gray {
-  border-color: #4b5563 !important;
+  border-color: var(--ts-line) !important;
 }
 
 .shadow-bitcoin {
@@ -1091,7 +1126,7 @@ img {
 }
 
 .text-bitcoin-dark {
-  color: #0a0b0d !important;
+  color: var(--ts-ink) !important;
 }
 
 .text-white {

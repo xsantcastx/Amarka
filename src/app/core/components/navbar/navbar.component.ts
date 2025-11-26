@@ -9,7 +9,7 @@ import { SettingsService, AppSettings } from '../../../services/settings.service
 import { LanguageSelectorComponent } from '../../../shared/components/language-selector/language-selector.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { BrandConfigService } from '../../services/brand-config.service';
-import { CollectionsService } from '../../../services/collections.service';
+import { CollectionsService, CollectionDoc } from '../../../services/collections.service';
 
 type NavChild = { label: string; href: string; description?: string };
 type NavLink = { label: string; href: string; exact?: boolean; children?: NavChild[]; ctaLabel?: string; ctaHref?: string };
@@ -46,14 +46,14 @@ export class NavbarComponent implements OnInit {
   user$ = this.authService.user$;
   userProfile$ = this.authService.userProfile$;
 
-  readonly brandName = this.brandConfig.siteName;
-  readonly logoSrc = this.brandConfig.site.brand.logo;
-  readonly logoAlt = this.brandConfig.site.brand.logoAlt || this.brandName;
+  brandName = this.brandConfig.siteName;
+  logoSrc = this.brandConfig.site.brand.logo;
+  logoAlt = this.brandConfig.site.brand.logoAlt || this.brandName;
   readonly headerLinks = this.brandConfig.nav.header as NavLink[];
   collectionLinks: NavChild[] = [];
+  collections: CollectionDoc[] = [];
   readonly exactMatchOption = { exact: true };
   readonly partialMatchOption = { exact: false };
-  private readonly socialLinks = this.brandConfig.nav.social as Array<{ platform: string; href: string }>;
 
   readonly totalItems = toSignal(
     this.cartService.count$,
@@ -81,24 +81,29 @@ export class NavbarComponent implements OnInit {
   }
 
   private applySettings(settings: AppSettings): void {
-    this.facebookUrl = settings.facebookUrl || this.getSocialUrl('facebook');
-    this.twitterUrl = settings.twitterUrl || this.getSocialUrl('twitter') || this.getSocialUrl('x');
-    this.instagramUrl = settings.instagramUrl || this.getSocialUrl('instagram');
-    this.linkedinUrl = settings.linkedinUrl || this.getSocialUrl('linkedin');
-    this.youtubeUrl = settings.youtubeUrl || this.getSocialUrl('youtube');
+    this.brandName = settings.siteName || this.brandName;
+    this.logoSrc = settings.brandLogo || this.logoSrc;
+    this.logoAlt = this.brandName;
+    this.facebookUrl = settings.facebookUrl || '';
+    this.twitterUrl = settings.twitterUrl || '';
+    this.instagramUrl = settings.instagramUrl || '';
+    this.linkedinUrl = settings.linkedinUrl || '';
+    this.youtubeUrl = settings.youtubeUrl || '';
   }
 
   private async loadCollections() {
     try {
       const all = await this.collectionsService.getAllCollections();
-      this.collectionLinks = all
-        .filter(c => c.active !== false)
+      const active = all.filter(c => c.active !== false);
+      this.collections = active;
+      this.collectionLinks = active
         .sort((a, b) => a.name.localeCompare(b.name))
         .slice(0, 6)
         .map(c => ({ label: c.name, href: `/collections/${c.slug}` }));
     } catch (error) {
       console.error('Error loading collections for navbar:', error);
       this.collectionLinks = [];
+      this.collections = [];
     }
   }
 
@@ -141,6 +146,14 @@ export class NavbarComponent implements OnInit {
     this.mobileOpen = !this.mobileOpen;
   }
 
+  goToSearch(term: string): void {
+    const query = (term || '').trim();
+    if (!query) return;
+    this.mobileOpen = false;
+    // Use productos route for search results
+    window.location.href = `/productos?search=${encodeURIComponent(query)}`;
+  }
+
   // User menu controls
   toggleUserMenu(event: Event): void {
     event.stopPropagation();
@@ -150,10 +163,6 @@ export class NavbarComponent implements OnInit {
   closeUserMenu(): void {
     console.log('Closing user menu');
     this.showUserMenu = false;
-  }
-
-  private getSocialUrl(platform: string): string {
-    return this.socialLinks.find(link => link.platform === platform)?.href || '';
   }
 
   // Auth methods

@@ -1,7 +1,8 @@
 import { Component, OnInit, PLATFORM_ID, inject } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
+import { FormsModule } from '@angular/forms';
 import { Firestore, collection, query, where, limit, getDocs } from '@angular/fire/firestore';
 import { GalleryService, GalleryImage } from '../../services/gallery.service';
 import { ServiceService, ServiceItem } from '../../services/service.service';
@@ -17,7 +18,7 @@ import { ProductCardComponent } from '../../shared/components/product-card/produ
 @Component({
   selector: 'app-home-page',
   standalone: true,
-  imports: [CommonModule, RouterModule, HomeReviewsComponent, ProductCardComponent],
+  imports: [CommonModule, RouterModule, FormsModule, HomeReviewsComponent, ProductCardComponent],
   templateUrl: './home.page.html',
   styleUrl: './home.page.scss'
 })
@@ -29,10 +30,16 @@ export class HomePageComponent extends LoadingComponentBase implements OnInit {
   private productsService = inject(ProductsService);
   private collectionsService = inject(CollectionsService);
   private metaService = inject(MetaService);
+  private router = inject(Router);
   
   services: ServiceItem[] = [];
   featuredProducts: Product[] = [];
+  bestSellerProducts: Product[] = [];
+  newArrivalProducts: Product[] = [];
+  heroProducts: Product[] = [];
   collections: CollectionDoc[] = [];
+  categoryShowcase: CollectionDoc[] = [];
+  collectionImages: Record<string, string> = {};
   
   galleryImages: GalleryImage[] = [];
   currentImageIndex = 0;
@@ -50,6 +57,9 @@ export class HomePageComponent extends LoadingComponentBase implements OnInit {
       this.loadGalleryPreview();
       this.loadServices();
       this.loadFeaturedProducts();
+      this.loadBestSellers();
+      this.loadNewArrivals();
+      this.loadHeroProducts();
       this.loadCollections();
     } else {
       // During SSR, set loading to false to show empty state
@@ -74,9 +84,22 @@ export class HomePageComponent extends LoadingComponentBase implements OnInit {
   private async loadCollections() {
     try {
       this.collections = await this.collectionsService.getAllCollections();
+      this.categoryShowcase = this.collections
+        .filter(c => c.active !== false)
+        .sort((a, b) => a.name.localeCompare(b.name))
+        .slice(0, 6);
+      // Optional images: map known fields into a lookup
+      this.collectionImages = Object.fromEntries(
+        this.collections.map(c => [
+          c.slug,
+          (c as any).coverImage || (c as any).imageUrl || ''
+        ])
+      );
     } catch (error) {
       console.error('Error loading collections:', error);
       this.collections = [];
+      this.categoryShowcase = [];
+      this.collectionImages = {};
     }
   }
 
@@ -90,6 +113,52 @@ export class HomePageComponent extends LoadingComponentBase implements OnInit {
         },
         error: error => {
           console.error('Error loading featured products:', error);
+        }
+      });
+  }
+
+  private loadBestSellers() {
+    this.productsService
+      .getProductsByTag('bestseller', 8)
+      .pipe(take(1))
+      .subscribe({
+        next: products => {
+          // Fallback to featured if no tagged products
+          this.bestSellerProducts = products.length ? products : this.featuredProducts;
+        },
+        error: error => {
+          console.error('Error loading best sellers:', error);
+          this.bestSellerProducts = this.featuredProducts;
+        }
+      });
+  }
+
+  private loadNewArrivals() {
+    this.productsService
+      .getFeaturedProducts(6)
+      .pipe(take(1))
+      .subscribe({
+        next: products => {
+          this.newArrivalProducts = products;
+        },
+        error: error => {
+          console.error('Error loading new arrivals:', error);
+          this.newArrivalProducts = this.featuredProducts;
+        }
+      });
+  }
+
+  private loadHeroProducts() {
+    this.productsService
+      .getFeaturedProducts(4)
+      .pipe(take(1))
+      .subscribe({
+        next: products => {
+          this.heroProducts = products;
+        },
+        error: error => {
+          console.error('Error loading hero products:', error);
+          this.heroProducts = [];
         }
       });
   }
@@ -173,6 +242,14 @@ export class HomePageComponent extends LoadingComponentBase implements OnInit {
     // Clean up interval when component is destroyed
     if (this.imageRotationInterval) {
       clearInterval(this.imageRotationInterval);
+    }
+  }
+
+  goToSearch(searchTerm: string) {
+    if (searchTerm && searchTerm.trim()) {
+      this.router.navigate(['/catalog'], { 
+        queryParams: { search: searchTerm.trim() } 
+      });
     }
   }
 

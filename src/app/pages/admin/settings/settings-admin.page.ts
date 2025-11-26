@@ -5,6 +5,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { AdminSidebarComponent } from '../../../shared/components/admin-sidebar/admin-sidebar.component';
 import { ImagePickerComponent } from '../../../shared/components/image-picker/image-picker.component';
 import { HeroImagesManagerComponent } from '../../../shared/components/hero-images-manager/hero-images-manager.component';
+import { ThemeManagerComponent } from '../../../shared/components/theme-manager/theme-manager.component';
 import { LoadingComponentBase } from '../../../core/classes/loading-component.base';
 import { SettingsService, AppSettings, ThemeProfile } from '../../../services/settings.service';
 import { StatsService, SiteStats } from '../../../services/stats.service';
@@ -51,7 +52,15 @@ interface NotificationSummaryCard {
 @Component({
   selector: 'app-settings-admin-page',
   standalone: true,
-  imports: [CommonModule, FormsModule, TranslateModule, AdminSidebarComponent, ImagePickerComponent, HeroImagesManagerComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    TranslateModule,
+    AdminSidebarComponent,
+    ImagePickerComponent,
+    HeroImagesManagerComponent,
+    ThemeManagerComponent
+  ],
   templateUrl: './settings-admin.page.html',
   styleUrl: './settings-admin.page.scss'
 })
@@ -292,34 +301,6 @@ export class SettingsAdminComponent extends LoadingComponentBase implements OnIn
           { key: 'contactAddress', label: 'Contact Address', type: 'textarea', value: this.currentSettings.contactAddress, placeholder: 'Company address and logistics details' },
           { key: 'maintenanceMode', label: 'Maintenance Mode', type: 'boolean', value: this.currentSettings.maintenanceMode, description: 'Enable to show maintenance page to visitors' },
           { key: 'maintenanceMessage', label: 'Maintenance Message', type: 'textarea', value: this.currentSettings.maintenanceMessage, placeholder: 'We are performing scheduled maintenance. Please check back soon.' }
-        ]
-      },
-      {
-        title: 'Theme Customization',
-        icon: 'M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01',
-        color: 'purple',
-        expanded: false,
-        settings: [
-          { key: 'themeAccentColor', label: 'Accent Color (--ts-accent)', type: 'text', value: this.currentSettings.themeAccentColor || '#a8c5a4', placeholder: '#a8c5a4', description: 'Primary brand color (sage green)' },
-          { key: 'themeAccentSoft', label: 'Accent Soft (--ts-accent-soft)', type: 'text', value: this.currentSettings.themeAccentSoft || '#c1d5be', placeholder: '#c1d5be', description: 'Lighter accent for hover states' },
-          { key: 'themeAccentDark', label: 'Accent Dark (--ts-accent-dark)', type: 'text', value: this.currentSettings.themeAccentDark || '#8aab85', placeholder: '#8aab85', description: 'Darker accent for active states' },
-          { key: 'themeInkColor', label: 'Ink Color (--ts-ink)', type: 'text', value: this.currentSettings.themeInkColor || '#1d2a39', placeholder: '#1d2a39', description: 'Primary text color (midnight blue)' },
-          { key: 'themeInkSoft', label: 'Ink Soft (--ts-ink-soft)', type: 'text', value: this.currentSettings.themeInkSoft || '#3f5f47', placeholder: '#3f5f47', description: 'Secondary text color (forest green)' },
-          { key: 'themeBgColor', label: 'Background (--ts-bg)', type: 'text', value: this.currentSettings.themeBgColor || '#f8f9fa', placeholder: '#f8f9fa', description: 'Main background color' },
-          { key: 'themePaperColor', label: 'Paper (--ts-paper)', type: 'text', value: this.currentSettings.themePaperColor || '#ffffff', placeholder: '#ffffff', description: 'Card/panel background' },
-          { key: 'themeLineColor', label: 'Line Color (--ts-line)', type: 'text', value: this.currentSettings.themeLineColor || '#e5e7eb', placeholder: '#e5e7eb', description: 'Border and divider color' },
-          // Theme Profile Settings (hidden system fields)
-          { key: 'activeThemeProfile', label: 'Active Theme Profile', type: 'text', value: this.currentSettings.activeThemeProfile || '', hidden: true },
-          { key: 'themeProfile1Name', label: 'Theme Profile 1 Name', type: 'text', value: this.currentSettings.themeProfile1Name || '', hidden: true },
-          { key: 'themeProfile1Data', label: 'Theme Profile 1 Data', type: 'textarea', value: this.currentSettings.themeProfile1Data || '', hidden: true },
-          { key: 'themeProfile2Name', label: 'Theme Profile 2 Name', type: 'text', value: this.currentSettings.themeProfile2Name || '', hidden: true },
-          { key: 'themeProfile2Data', label: 'Theme Profile 2 Data', type: 'textarea', value: this.currentSettings.themeProfile2Data || '', hidden: true },
-          { key: 'themeProfile3Name', label: 'Theme Profile 3 Name', type: 'text', value: this.currentSettings.themeProfile3Name || '', hidden: true },
-          { key: 'themeProfile3Data', label: 'Theme Profile 3 Data', type: 'textarea', value: this.currentSettings.themeProfile3Data || '', hidden: true },
-          { key: 'themeProfile4Name', label: 'Theme Profile 4 Name', type: 'text', value: this.currentSettings.themeProfile4Name || '', hidden: true },
-          { key: 'themeProfile4Data', label: 'Theme Profile 4 Data', type: 'textarea', value: this.currentSettings.themeProfile4Data || '', hidden: true },
-          { key: 'themeProfile5Name', label: 'Theme Profile 5 Name', type: 'text', value: this.currentSettings.themeProfile5Name || '', hidden: true },
-          { key: 'themeProfile5Data', label: 'Theme Profile 5 Data', type: 'textarea', value: this.currentSettings.themeProfile5Data || '', hidden: true }
         ]
       },
       {

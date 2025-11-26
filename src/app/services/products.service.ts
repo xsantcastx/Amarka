@@ -120,6 +120,26 @@ export class ProductsService {
   }
 
   /**
+   * Get products by tag (e.g., bestseller). Falls back to latest if none found.
+   */
+  getProductsByTag(tag: string, count: number = 8): Observable<Product[]> {
+    const productsCol = collection(this.firestore, 'products');
+    const tagQuery = query(
+      productsCol,
+      where('tags', 'array-contains', tag),
+      orderBy('createdAt', 'desc'),
+      limit(count)
+    );
+
+    return from(getDocs(tagQuery)).pipe(
+      map(snapshot => {
+        const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Product));
+        return items;
+      })
+    );
+  }
+
+  /**
    * Get a single product by ID
    */
   getProduct(id: string): Observable<Product | null> {

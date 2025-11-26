@@ -266,6 +266,19 @@ service cloud.firestore {
       allow read: if settingId in ['public', 'app'];
     }
 
+    // Theme configs
+    match /themes/{themeId} {
+      // Everyone can read global theme for CSS variables
+      allow read: if themeId == 'global';
+      // Only admins can create/update/delete the global theme
+      allow write: if isAdmin() && themeId == 'global';
+    }
+
+    // Per-user themes
+    match /users/{userId}/themes/{themeId} {
+      allow read, write, list: if isOwner(userId);
+    }
+
     // Mail collection for contact form (Brevo integration)
     match /mail/{document} {
       allow create: if resource == null

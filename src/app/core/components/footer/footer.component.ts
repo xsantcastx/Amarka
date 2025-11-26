@@ -135,12 +135,6 @@ export class FooterComponent implements OnInit {
     this.contactPhone = this.brandConfig.site.contact.phone || '';
     this.contactAddress = this.brandConfig.site.contact.address || '';
 
-    this.facebookUrl = this.getSocialUrl('facebook');
-    this.twitterUrl = this.getSocialUrl('twitter') || this.getSocialUrl('x');
-    this.instagramUrl = this.getSocialUrl('instagram');
-    this.linkedinUrl = this.getSocialUrl('linkedin');
-    this.youtubeUrl = this.getSocialUrl('youtube');
-
     this.settingsService.settings$
       .pipe(takeUntilDestroyed())
       .subscribe(settings => this.applySettings(settings));
@@ -155,15 +149,16 @@ export class FooterComponent implements OnInit {
     if (!settings) return;
 
     this.siteName = settings.siteName || this.siteName;
+    this.brandLogo = settings.brandLogo || this.brandLogo;
     this.contactEmail = settings.contactEmail || this.contactEmail;
     this.contactPhone = settings.contactPhone || this.contactPhone;
     this.contactAddress = settings.contactAddress || this.contactAddress;
 
-    this.facebookUrl = settings.facebookUrl || this.facebookUrl;
-    this.twitterUrl = settings.twitterUrl || this.twitterUrl;
-    this.instagramUrl = settings.instagramUrl || this.instagramUrl;
-    this.linkedinUrl = settings.linkedinUrl || this.linkedinUrl;
-    this.youtubeUrl = settings.youtubeUrl || this.youtubeUrl;
+    this.facebookUrl = settings.facebookUrl || '';
+    this.twitterUrl = settings.twitterUrl || '';
+    this.instagramUrl = settings.instagramUrl || '';
+    this.linkedinUrl = settings.linkedinUrl || '';
+    this.youtubeUrl = settings.youtubeUrl || '';
     this.whatsappNumber = settings.whatsappNumber || '';
 
     this.businessName = settings.businessName || settings.siteName;

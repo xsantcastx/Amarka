@@ -33,7 +33,7 @@
     </div>
 
     <!-- Controls -->
-    <div class="rounded-2xl border border-ts-line bg-ts-paper shadow-sm p-4 lg:p-5 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+    <div class="rounded-2xl border border-ts-line bg-surface shadow-lvl1 p-4 lg:p-5 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 sticky top-[calc(var(--nav-height)+0.75rem)] z-10 backdrop-blur supports-[backdrop-filter]:bg-surface/80">
       <div class="flex-1">
         <div class="relative">
           <input
@@ -41,7 +41,7 @@
             [(ngModel)]="searchTerm"
             (input)="applyFilters()"
             placeholder="Search gifts..."
-            class="w-full pl-10 pr-4 py-3 bg-ts-bg-soft border border-ts-line rounded-xl text-ts-ink placeholder-ts-ink-soft focus:ring-2 focus:ring-ts-accent focus:border-ts-accent">
+            class="w-full pl-10 pr-4 py-3 bg-ts-bg-soft border border-ts-line rounded-xl text-ts-ink placeholder-ts-ink-soft focus:ring-2 focus:ring-primary focus:border-primary shadow-lvl1">
           <svg class="w-5 h-5 text-ts-ink-soft absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M4 11a7 7 0 1114 0 7 7 0 01-14 0z"></path>
           </svg>
@@ -50,13 +50,13 @@
       <div class="flex flex-wrap items-center gap-3">
         <div class="flex items-center gap-2">
           <label class="text-sm text-ts-ink-soft">Sort</label>
-          <select [(ngModel)]="sort" (change)="applyFilters()" class="px-3 py-2 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink focus:ring-2 focus:ring-ts-accent focus:border-ts-accent">
+          <select [(ngModel)]="sort" (change)="applyFilters()" class="px-3 py-2 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink focus:ring-2 focus:ring-primary focus:border-primary shadow-lvl1">
             <option value="newest">Newest</option>
             <option value="price-asc">Price: Low to High</option>
             <option value="price-desc">Price: High to Low</option>
           </select>
         </div>
-        <button class="px-4 py-2 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink hover:border-ts-accent" (click)="clearFilters()">Clear</button>
+        <button class="px-4 py-2 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink hover:border-primary shadow-lvl1" (click)="clearFilters()">Clear</button>
       </div>
     </div>
 
@@ -67,10 +67,10 @@
           <button
             type="button"
             (click)="toggleTag(tag)"
-            class="px-3 py-1.5 rounded-full border text-sm transition-all"
-            [class.bg-ts-accent]="selectedTags.has(tag)"
-            [class.text-ts-ink]="selectedTags.has(tag)"
-            [class.border-ts-accent]="selectedTags.has(tag)"
+            class="px-3 py-1.5 rounded-full border text-sm transition-all shadow-lvl0"
+            [class.bg-primary/15]="selectedTags.has(tag)"
+            [class.text-accent]="selectedTags.has(tag)"
+            [class.border-primary/40]="selectedTags.has(tag)"
             [class.text-ts-ink-soft]="!selectedTags.has(tag)"
             [class.border-ts-line]="!selectedTags.has(tag)">
             {{ tag }}

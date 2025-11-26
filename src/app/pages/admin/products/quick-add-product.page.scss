@@ -1,13 +1,13 @@
 // Quick Add Product Page Styles
 .bitcoin-gradient-text {
-  background: linear-gradient(135deg, #f7931a 0%, #ff9933 100%);
+  background: linear-gradient(135deg, var(--ts-accent) 0%, color-mix(in srgb, var(--ts-accent) 75%, var(--ts-ink) 25%) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .shadow-bitcoin {
-  box-shadow: 0 4px 20px rgba(247, 147, 26, 0.1);
+  box-shadow: 0 4px 20px color-mix(in srgb, var(--ts-accent) 18%, transparent);
 }
 
 input::-webkit-outer-spin-button,

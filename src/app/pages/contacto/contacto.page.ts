@@ -63,7 +63,7 @@ export class ContactoPageComponent {
   ) {
     // Set page meta tags from settings
     this.metaService.setPageMeta({
-      title: 'Contact Creation Design & Events',
+      title: 'Contact Amarka Engraving',
       description: 'Tell us about your celebration and we will design a bespoke plan.'
     });
 

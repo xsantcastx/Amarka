@@ -31,7 +31,8 @@
 
   <!-- Main Content -->
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    
+    <app-theme-manager class="mb-8 block"></app-theme-manager>
+
     <div class="space-y-6">
       @for (section of sections; track section.title) {
         <div class="bg-ts-paper border border-ts-line rounded-xl overflow-hidden shadow-sm">
@@ -417,10 +418,10 @@
                 @case ('custom') { Uses dedicated notification address. }
                 @case ('contact') { Falling back to the contact email until a notification email is provided. }
                 @default { Add a notification email to make sure operational alerts reach the right inbox. }
-              }
-            </div>
-          </div>
-        </div>
+      }
+    </div>
+  </div>
+</div>
 
         <div class="grid sm:grid-cols-2 xl:grid-cols-3 gap-4">
           @for (card of notificationCards; track card.key) {
