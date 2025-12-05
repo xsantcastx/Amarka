@@ -1,27 +1,27 @@
-<div class="min-h-screen bg-gradient-to-b from-[#0a0b0d] to-[#13151a]">
+<div class="min-h-screen bg-ts-bg">
   <!-- Hero Section -->
   <section class="relative py-16 lg:py-24 overflow-hidden">
-    <div class="absolute inset-0 bg-gradient-to-r from-bitcoin-orange/5 to-bitcoin-gold/5"></div>
+    <div class="absolute inset-0 bg-gradient-to-r from-accent/5 to-primary/5"></div>
     <div class="relative max-w-7xl mx-auto px-6">
       <!-- Breadcrumb -->
       <nav class="mb-8">
-        <ol class="flex items-center space-x-2 text-sm text-bitcoin-gray">
-          <li><a routerLink="/" class="hover:text-bitcoin-orange transition-colors">{{ 'checkout.breadcrumb.home' | translate }}</a></li>
-          <li class="text-bitcoin-gray/50">/</li>
-          <li><a routerLink="/cart" class="hover:text-bitcoin-orange transition-colors">{{ 'checkout.breadcrumb.cart' | translate }}</a></li>
-          <li class="text-bitcoin-gray/50">/</li>
-          <li><a routerLink="/checkout/review" class="hover:text-bitcoin-orange transition-colors">{{ 'checkout.breadcrumb.review' | translate }}</a></li>
-          <li class="text-bitcoin-gray/50">/</li>
-          <li class="text-bitcoin-orange font-medium">{{ 'checkout.breadcrumb.payment' | translate }}</li>
+        <ol class="flex items-center space-x-2 text-sm text-ts-ink-soft">
+          <li><a routerLink="/" class="hover:text-ts-accent transition-colors">{{ 'checkout.breadcrumb.home' | translate }}</a></li>
+          <li class="text-ts-ink-soft/50">/</li>
+          <li><a routerLink="/cart" class="hover:text-ts-accent transition-colors">{{ 'checkout.breadcrumb.cart' | translate }}</a></li>
+          <li class="text-ts-ink-soft/50">/</li>
+          <li><a routerLink="/checkout/review" class="hover:text-ts-accent transition-colors">{{ 'checkout.breadcrumb.review' | translate }}</a></li>
+          <li class="text-ts-ink-soft/50">/</li>
+          <li class="text-primary font-medium">{{ 'checkout.breadcrumb.payment' | translate }}</li>
         </ol>
       </nav>
       
       <!-- Header -->
       <div class="text-center">
-        <h1 class="font-serif text-4xl lg:text-6xl text-white mb-6 leading-tight">
-          {{ 'payment.title' | translate }} <span class="bitcoin-gradient-text">{{ 'payment.title_highlight' | translate }}</span>
+        <h1 class="font-serif text-4xl lg:text-6xl text-ts-ink mb-6 leading-tight">
+          {{ 'payment.title' | translate }} <span class="text-accent">{{ 'payment.title_highlight' | translate }}</span>
         </h1>
-        <p class="text-xl lg:text-2xl text-bitcoin-gray max-w-3xl mx-auto">
+        <p class="text-xl lg:text-2xl text-ts-ink-soft max-w-3xl mx-auto">
           {{ 'payment.subtitle' | translate }}
         </p>
       </div>
@@ -67,13 +67,13 @@
       <div class="lg:col-span-2">
         <form [formGroup]="form" (ngSubmit)="processPayment()" 
               autocomplete="on"
-              class="rounded-xl border border-bitcoin-orange/20 p-6 bg-bitcoin-dark/40 backdrop-blur-md space-y-6">
-          <h2 class="font-serif text-2xl bitcoin-gradient-text mb-6">{{ 'payment.payment_information' | translate }}</h2>
+              class="rounded-xl border border-ts-line p-6 bg-surface space-y-6">
+          <h2 class="font-serif text-2xl text-accent mb-6">{{ 'payment.payment_information' | translate }}</h2>
           
           <!-- Cardholder Name -->
           <div>
-            <label for="cardholderName" class="block text-sm font-semibold text-bitcoin-gray mb-2">
-              {{ 'payment.cardholder_name' | translate }} <span class="text-red-400">*</span>
+            <label for="cardholderName" class="block text-sm font-semibold text-ts-ink-soft mb-2">
+              {{ 'payment.cardholder_name' | translate }} <span class="text-error">*</span>
             </label>
             <input
               id="cardholderName"
@@ -82,7 +82,7 @@
               formControlName="cardholderName"
               placeholder="John Doe"
               autocomplete="cc-name"
-              class="w-full px-4 py-3 rounded-xl bg-bitcoin-dark/60 border border-bitcoin-gray/20 text-white placeholder-bitcoin-gray/50 focus:ring-2 focus:ring-bitcoin-orange focus:border-bitcoin-orange transition-all"
+              class="w-full px-4 py-3 rounded-xl bg-ts-paper border border-ts-line text-ts-ink placeholder-ts-ink-soft/50 focus:ring-2 focus:ring-primary focus:border-primary transition-all"
               [class.border-red-500]="form.get('cardholderName')?.touched && form.get('cardholderName')?.errors">
             <p *ngIf="form.get('cardholderName')?.touched && form.get('cardholderName')?.errors" 
                class="text-red-400 text-xs mt-1">
@@ -99,13 +99,13 @@
 
           <!-- Stripe Card Element -->
           <div>
-            <label class="block text-sm font-semibold text-bitcoin-gray mb-2">
-              {{ 'payment.card_details' | translate }} <span class="text-red-400">*</span>
+            <label class="block text-sm font-semibold text-ts-ink-soft mb-2">
+              {{ 'payment.card_details' | translate }} <span class="text-error">*</span>
             </label>
             <div id="card-element" 
-                 class="p-5 rounded-xl bg-[#13151a] border-2 border-bitcoin-gray/30 min-h-[60px] hover:border-bitcoin-orange/40 focus-within:border-bitcoin-orange/50 transition-all">
+                 class="p-5 rounded-xl bg-ts-paper border-2 border-ts-line min-h-[60px] hover:border-primary/40 focus-within:border-primary/50 transition-all">
               <!-- Loading indicator for Stripe element -->
-              <div *ngIf="!stripeReady()" class="flex items-center gap-2 text-bitcoin-gray text-sm">
+              <div *ngIf="!stripeReady()" class="flex items-center gap-2 text-ts-ink-soft text-sm">
                 <div class="app-spinner" style="--spinner-size: 72px;"><img src="/Logo Clear.png" alt="Loading" width="96" height="96"></div>
                 {{ 'payment.loading_payment_form' | translate }}
               </div>
@@ -126,18 +126,18 @@
           </div>
 
           <!-- Billing Address Display -->
-          <div *ngIf="billingAddress()" class="mt-6 p-4 rounded-lg bg-bitcoin-dark/40 border border-bitcoin-gray/10">
-            <h3 class="text-sm font-semibold text-bitcoin-gray mb-2">{{ 'payment.billing_address' | translate }}</h3>
-            <div class="text-sm text-bitcoin-gray">
-              <p class="text-white">{{ billingAddress()!.firstName }} {{ billingAddress()!.lastName }}</p>
-              <p class="text-bitcoin-gray">{{ billingAddress()!.line1 }}</p>
-              <p class="text-bitcoin-gray" *ngIf="billingAddress()!.line2">{{ billingAddress()!.line2 }}</p>
-              <p class="text-bitcoin-gray">{{ billingAddress()!.city }}, {{ billingAddress()!.region }} {{ billingAddress()!.postalCode }}</p>
-              <p class="text-bitcoin-gray">{{ billingAddress()!.country }}</p>
+          <div *ngIf="billingAddress()" class="mt-6 p-4 rounded-lg bg-ts-bg-soft border border-ts-line">
+            <h3 class="text-sm font-semibold text-ts-ink-soft mb-2">{{ 'payment.billing_address' | translate }}</h3>
+            <div class="text-sm text-ts-ink-soft">
+              <p class="text-ts-ink">{{ billingAddress()!.firstName }} {{ billingAddress()!.lastName }}</p>
+              <p class="text-ts-ink-soft">{{ billingAddress()!.line1 }}</p>
+              <p class="text-ts-ink-soft" *ngIf="billingAddress()!.line2">{{ billingAddress()!.line2 }}</p>
+              <p class="text-ts-ink-soft">{{ billingAddress()!.city }}, {{ billingAddress()!.region }} {{ billingAddress()!.postalCode }}</p>
+              <p class="text-ts-ink-soft">{{ billingAddress()!.country }}</p>
             </div>
             <button type="button" 
                     (click)="backToReview()"
-                    class="text-xs text-bitcoin-orange hover:text-bitcoin-gold mt-2 transition-colors">
+                    class="text-xs text-accent hover:text-primary mt-2 transition-colors">
               {{ 'payment.change_billing_address' | translate }}
             </button>
           </div>
@@ -147,7 +147,7 @@
             <button
               type="submit"
               [disabled]="processing() || form.invalid || cardErrors()"
-              class="flex-1 py-4 px-6 rounded-xl bg-bitcoin-orange hover:bg-bitcoin-orange/90 text-white font-bold shadow-lg hover:shadow-bitcoin transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+              class="flex-1 py-4 px-6 rounded-xl bg-primary hover:bg-primary/90 text-neutral font-bold shadow-lvl2 hover:shadow-lvl3 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
               <span *ngIf="!processing()">
                 <svg class="w-5 h-5 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
@@ -164,7 +164,7 @@
               type="button"
               (click)="backToReview()"
               [disabled]="processing()"
-              class="px-6 py-4 rounded-xl bg-transparent border-2 border-bitcoin-gray/30 text-bitcoin-gray hover:border-bitcoin-orange/50 hover:text-bitcoin-orange transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+              class="px-6 py-4 rounded-xl bg-transparent border-2 border-ts-line text-ts-ink-soft hover:border-accent hover:text-accent transition-all disabled:opacity-50 disabled:cursor-not-allowed">
               {{ 'payment.back' | translate }}
             </button>
           </div>
@@ -173,35 +173,35 @@
 
       <!-- Right Column: Order Summary -->
       <div class="lg:col-span-1">
-        <div class="sticky top-6 rounded-xl border border-bitcoin-orange/20 p-6 bg-bitcoin-dark/40 backdrop-blur-md shadow-bitcoin">
-          <h2 class="font-serif text-xl bitcoin-gradient-text mb-6">{{ 'payment.order_summary' | translate }}</h2>
+        <div class="sticky top-6 rounded-xl border border-ts-line p-6 bg-surface shadow-lvl2">
+          <h2 class="font-serif text-xl text-accent mb-6">{{ 'payment.order_summary' | translate }}</h2>
           
           <div class="space-y-3 mb-6">
-            <div class="flex justify-between text-bitcoin-gray text-sm">
+            <div class="flex justify-between text-ts-ink-soft text-sm">
               <span>{{ 'payment.subtotal' | translate }}</span>
               <span>{{ formatCurrency(cart()!.subtotal, cart()!.currency) }}</span>
             </div>
             
-            <div class="flex justify-between text-bitcoin-gray text-sm">
+            <div class="flex justify-between text-ts-ink-soft text-sm">
               <span>{{ 'payment.shipping' | translate }}</span>
               <span>{{ formatCurrency(cart()!.shipping || 0, cart()!.currency) }}</span>
             </div>
             
-            <div class="flex justify-between text-bitcoin-gray text-sm">
+            <div class="flex justify-between text-ts-ink-soft text-sm">
               <span>{{ 'payment.tax' | translate }}</span>
               <span>{{ formatCurrency(cart()!.tax || 0, cart()!.currency) }}</span>
             </div>
             
             <div *ngIf="cart()!.discount && cart()!.discount > 0" 
-                 class="flex justify-between text-green-400 text-sm">
+                 class="flex justify-between text-success text-sm">
               <span>{{ 'payment.discount' | translate }}</span>
               <span>-{{ formatCurrency(cart()!.discount, cart()!.currency) }}</span>
             </div>
             
-            <div class="border-t border-bitcoin-gray/20 pt-3 mt-3">
+            <div class="border-t border-ts-line pt-3 mt-3">
               <div class="flex justify-between items-center">
-                <span class="text-lg font-semibold text-white">{{ 'payment.total' | translate }}</span>
-                <span class="text-2xl font-bold bitcoin-gradient-text">
+                <span class="text-lg font-semibold text-ts-ink">{{ 'payment.total' | translate }}</span>
+                <span class="text-2xl font-bold text-accent">
                   {{ formatCurrency(cart()!.total, cart()!.currency) }}
                 </span>
               </div>
@@ -209,22 +209,22 @@
           </div>
 
           <!-- Security Badges -->
-          <div class="pt-6 border-t border-bitcoin-gray/20">
+          <div class="pt-6 border-t border-ts-line">
             <div class="space-y-3">
-              <div class="flex items-center gap-3 text-xs text-bitcoin-gray">
-                <svg class="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+              <div class="flex items-center gap-3 text-xs text-ts-ink-soft">
+                <svg class="w-5 h-5 text-success" fill="currentColor" viewBox="0 0 20 20">
                   <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path>
                 </svg>
                 <span>{{ 'payment.security_ssl' | translate }}</span>
               </div>
-              <div class="flex items-center gap-3 text-xs text-bitcoin-gray">
-                <svg class="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+              <div class="flex items-center gap-3 text-xs text-ts-ink-soft">
+                <svg class="w-5 h-5 text-info" fill="currentColor" viewBox="0 0 20 20">
                   <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                 </svg>
                 <span>{{ 'payment.security_pci' | translate }}</span>
               </div>
-              <div class="flex items-center gap-3 text-xs text-bitcoin-gray">
-                <svg class="w-5 h-5 text-purple-400" fill="currentColor" viewBox="0 0 20 20">
+              <div class="flex items-center gap-3 text-xs text-ts-ink-soft">
+                <svg class="w-5 h-5 text-accent" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"></path>
                   <path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clip-rule="evenodd"></path>
                 </svg>

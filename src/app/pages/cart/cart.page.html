@@ -1,4 +1,4 @@
-<div class="section-stack min-h-screen bg-gradient-to-b from-[#0a0b0d] to-[#13151a]">
+<div class="section-stack min-h-screen bg-ts-bg">
   <!-- Page Header Component -->
   <app-page-header
     *ngIf="(vm$ | async) as vm"
@@ -19,23 +19,23 @@
       <!-- Cart Items Section -->
       <div class="space-y-6">
         <!-- Section Header -->
-        <div class="flex items-center justify-between pb-4 border-b border-bitcoin-gray/20">
-          <h2 class="font-serif text-2xl text-white flex items-center gap-2">
-            <svg class="w-6 h-6 text-bitcoin-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="flex items-center justify-between pb-4 border-b border-ts-line">
+          <h2 class="font-serif text-2xl text-ts-ink flex items-center gap-2">
+            <svg class="w-6 h-6 text-ts-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
             </svg>
             {{ 'cart.cart_items' | translate }}
           </h2>
-          <span class="text-bitcoin-gray text-sm">{{ vm.items.length }} {{ vm.items.length === 1 ? ('cart.item' | translate) : ('cart.items' | translate) }}</span>
+          <span class="text-ts-ink-soft text-sm">{{ vm.items.length }} {{ vm.items.length === 1 ? ('cart.item' | translate) : ('cart.items' | translate) }}</span>
         </div>
         
         <ng-container *ngIf="vm.items.length; else empty">
           <!-- Cart Items -->
           <div class="space-y-4">
             <article *ngFor="let it of vm.items; let i = index" 
-                     class="group relative rounded-2xl border border-bitcoin-gray/20 p-5 bg-gradient-to-br from-bitcoin-dark/60 to-bitcoin-dark/40 backdrop-blur-sm hover:border-bitcoin-orange/40 hover:shadow-bitcoin-lg transition-all duration-300">
+                     class="group relative rounded-xl border border-ts-line p-5 bg-surface hover:border-ts-accent hover:shadow-lvl3 transition-all duration-300">
               <!-- Item Number Badge -->
-              <div class="absolute -top-3 -left-3 w-8 h-8 bg-bitcoin-orange rounded-full flex items-center justify-center text-white text-sm font-bold border-2 border-[#0a0b0d]">
+              <div class="absolute -top-3 -left-3 w-8 h-8 bg-primary rounded-full flex items-center justify-center text-neutral text-sm font-bold border-2 border-ts-bg">
                 {{ i + 1 }}
               </div>
               
@@ -44,9 +44,9 @@
                 <div class="relative flex-shrink-0">
                   <img [src]="it.product.imageUrl || 'assets/placeholder-product.jpg'" 
                        [alt]="it.product.name" 
-                       class="w-28 h-28 object-cover rounded-xl bg-bitcoin-dark/80 border border-bitcoin-gray/10 group-hover:scale-105 transition-transform duration-300">
+                       class="w-28 h-28 object-cover rounded-lg bg-ts-bg-soft border border-ts-line group-hover:scale-105 transition-transform duration-300">
                   <!-- Price Tag -->
-                  <div class="absolute -bottom-2 -right-2 bg-bitcoin-gold text-bitcoin-dark px-3 py-1 rounded-lg text-sm font-bold shadow-lg">
+                  <div class="absolute -bottom-2 -right-2 bg-accent text-neutral px-3 py-1 rounded-lg text-sm font-bold shadow-lvl2">
                     ${{ it.product.price.toFixed(2) || '0.00' }}
                   </div>
                 </div>
@@ -55,11 +55,11 @@
                 <div class="flex-1 min-w-0">
                   <div class="flex items-start justify-between gap-3 mb-3">
                     <div class="flex-1">
-                      <h3 class="font-semibold text-lg text-white mb-1 group-hover:text-bitcoin-gold transition-colors">
+                      <h3 class="font-semibold text-lg text-ts-ink mb-1 group-hover:text-ts-accent transition-colors">
                         {{ it.product.name }}
                       </h3>
-                      <div class="flex flex-wrap items-center gap-2 text-sm text-bitcoin-gray/80">
-                        <span *ngIf="it.product.sku" class="px-2 py-0.5 bg-bitcoin-gray/10 rounded-md border border-bitcoin-gray/20 font-mono text-xs">
+                      <div class="flex flex-wrap items-center gap-2 text-sm text-ts-ink-soft">
+                        <span *ngIf="it.product.sku" class="px-2 py-0.5 bg-ts-bg-soft rounded-md border border-ts-line font-mono text-xs">
                           SKU: {{ it.product.sku }}
                         </span>
                       </div>
@@ -68,7 +68,7 @@
                     <!-- Remove Button -->
                     <button 
                       (click)="remove(it.product.id)"
-                      class="flex-shrink-0 p-2 text-bitcoin-gray hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all group/btn"
+                      class="flex-shrink-0 p-2 text-ts-ink-soft hover:text-error hover:bg-error/10 rounded-lg transition-all group/btn"
                       title="Remove item">
                       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
@@ -78,12 +78,12 @@
                   
                   <!-- Quantity Controls -->
                   <div class="flex items-center gap-3">
-                      <label class="text-sm text-bitcoin-gray font-medium">{{ 'cart.quantity' | translate }}:</label>
-                    <div class="flex items-center gap-2 bg-bitcoin-dark/80 border border-bitcoin-gray/20 rounded-lg px-1 py-1">
+                      <label class="text-sm text-ts-ink-soft font-medium">{{ 'cart.quantity' | translate }}:</label>
+                    <div class="flex items-center gap-2 bg-ts-bg-soft border border-ts-line rounded-lg px-1 py-1">
                       <button 
                         (click)="updateQty(it.product.id, (it.qty - 1).toString())"
                         [disabled]="it.qty <= 1"
-                        class="w-8 h-8 flex items-center justify-center text-bitcoin-gray hover:text-white hover:bg-bitcoin-orange/20 rounded-md transition-all disabled:opacity-30 disabled:cursor-not-allowed">
+                        class="w-8 h-8 flex items-center justify-center text-ts-ink-soft hover:text-ts-ink hover:bg-ts-accent/20 rounded-md transition-all disabled:opacity-30 disabled:cursor-not-allowed">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
                         </svg>
@@ -93,17 +93,17 @@
                         min="1" 
                         [value]="it.qty"
                         (input)="updateQty(it.product.id, $any($event.target).value)"
-                        class="w-16 text-center bg-transparent border-0 text-white font-semibold focus:outline-none focus:ring-0">
+                        class="w-16 text-center bg-transparent border-0 text-ts-ink font-semibold focus:outline-none focus:ring-0">
                       <button 
                         (click)="updateQty(it.product.id, (it.qty + 1).toString())"
-                        class="w-8 h-8 flex items-center justify-center text-bitcoin-gray hover:text-white hover:bg-bitcoin-orange/20 rounded-md transition-all">
+                        class="w-8 h-8 flex items-center justify-center text-ts-ink-soft hover:text-ts-ink hover:bg-ts-accent/20 rounded-md transition-all">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                         </svg>
                       </button>
                     </div>
-                    <span class="text-sm text-bitcoin-gray/60 ml-auto">
-                      {{ 'cart.subtotal' | translate }}: <span class="text-bitcoin-gold font-semibold">${{ (it.product.price * it.qty).toFixed(2) }}</span>
+                    <span class="text-sm text-ts-ink-soft ml-auto">
+                      {{ 'cart.subtotal' | translate }}: <span class="text-accent font-semibold">${{ (it.product.price * it.qty).toFixed(2) }}</span>
                     </span>
                   </div>
                 </div>
@@ -112,10 +112,10 @@
           </div>
           
           <!-- Clear Cart Button -->
-            <div class="pt-4 border-t border-bitcoin-gray/20">
+            <div class="pt-4 border-t border-ts-line">
             <button 
               (click)="clear()"
-              class="text-sm text-bitcoin-gray hover:text-red-400 transition-colors flex items-center gap-2">
+              class="text-sm text-ts-ink-soft hover:text-error transition-colors flex items-center gap-2">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
               </svg>
@@ -126,16 +126,16 @@
         
         <!-- Empty Cart State -->
         <ng-template #empty>
-          <div class="rounded-2xl border border-bitcoin-gray/20 p-12 text-center bg-gradient-to-br from-bitcoin-dark/60 to-bitcoin-dark/40 backdrop-blur-sm">
-            <div class="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-br from-bitcoin-orange/20 to-bitcoin-gold/20 border-2 border-bitcoin-orange/30 flex items-center justify-center animate-pulse">
-              <svg class="w-12 h-12 text-bitcoin-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div class="rounded-xl border border-ts-line p-12 text-center bg-surface">
+            <div class="w-24 h-24 mx-auto mb-6 rounded-full bg-accent/10 border-2 border-accent/30 flex items-center justify-center">
+              <svg class="w-12 h-12 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
               </svg>
             </div>
-        <h3 class="font-serif text-2xl bitcoin-gradient-text mb-3">{{ 'cart.empty_title' | translate }}</h3>
-        <p class="text-bitcoin-gray mb-6 max-w-md mx-auto">{{ 'cart.empty_message' | translate }}</p>
+        <h3 class="font-serif text-2xl text-ts-ink mb-3">{{ 'cart.empty_title' | translate }}</h3>
+        <p class="text-ts-ink-soft mb-6 max-w-md mx-auto">{{ 'cart.empty_message' | translate }}</p>
             <a routerLink="/productos" 
-               class="inline-flex items-center gap-2 px-8 py-4 bg-bitcoin-orange hover:bg-bitcoin-orange/90 text-white rounded-xl font-semibold shadow-bitcoin hover:shadow-bitcoin-lg transition-all">
+               class="inline-flex items-center gap-2 px-8 py-4 bg-primary hover:bg-primary/90 text-neutral rounded-lg font-semibold shadow-lvl1 hover:shadow-lvl2 transition-all">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
               </svg>
@@ -149,9 +149,9 @@
       <div class="space-y-6" *ngIf="vm.items.length > 0 && auth.currentUser">
         <!-- Start checkoutForm here, BEFORE address section div -->
         <form [formGroup]="checkoutForm">
-        <div class="rounded-2xl border border-bitcoin-orange/20 p-6 bg-gradient-to-br from-bitcoin-dark/60 to-bitcoin-dark/40 backdrop-blur-sm hover:border-bitcoin-orange/30 transition-all">
-          <h2 class="font-serif text-2xl text-white mb-6 flex items-center gap-2">
-            <svg class="w-6 h-6 text-bitcoin-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="rounded-xl border border-ts-line p-6 bg-surface hover:border-ts-accent/50 transition-all">
+          <h2 class="font-serif text-2xl text-ts-ink mb-6 flex items-center gap-2">
+            <svg class="w-6 h-6 text-ts-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
             </svg>
             Shipping Address
@@ -161,14 +161,14 @@
             <div class="space-y-3 mb-4" *ngIf="addresses().length > 0">
               <div *ngFor="let address of addresses()" 
                    class="relative block p-4 rounded-lg border-2 transition-all"
-                   [class.border-bitcoin-orange]="checkoutForm.value.addressId === address.id"
-                   [class.bg-bitcoin-orange/10]="checkoutForm.value.addressId === address.id"
-                   [class.border-bitcoin-gray/20]="checkoutForm.value.addressId !== address.id">
+                   [class.border-primary]="checkoutForm.value.addressId === address.id"
+                   [class.bg-primary/10]="checkoutForm.value.addressId === address.id"
+                   [class.border-ts-line]="checkoutForm.value.addressId !== address.id">
                 
                 <!-- Delete button (positioned absolutely to be clickable) -->
                 <button type="button"
                         (click)="deleteAddress(address.id!)"
-                        class="absolute top-2 right-2 p-2 text-red-400 hover:text-red-300 hover:bg-red-900/30 rounded-lg transition-all z-10"
+                        class="absolute top-2 right-2 p-2 text-error hover:text-error/80 hover:bg-error/10 rounded-lg transition-all z-10"
                         title="Delete address">
                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
@@ -185,19 +185,19 @@
                   <div class="flex items-start justify-between pr-8">
                     <div class="flex-1">
                       <div class="flex items-center gap-2 mb-2">
-                        <p class="font-semibold text-white">{{ address.firstName }} {{ address.lastName }}</p>
+                        <p class="font-semibold text-ts-ink">{{ address.firstName }} {{ address.lastName }}</p>
                         <span *ngIf="address.isDefault" 
-                              class="text-xs px-2 py-0.5 rounded-full bg-bitcoin-orange/20 text-bitcoin-orange border border-bitcoin-orange/30">
+                              class="text-xs px-2 py-0.5 rounded-full bg-primary/20 text-primary border border-primary/30">
                           Default
                         </span>
                       </div>
-                      <p class="text-sm text-bitcoin-gray">{{ address.line1 }}</p>
-                      <p class="text-sm text-bitcoin-gray" *ngIf="address.line2">{{ address.line2 }}</p>
-                      <p class="text-sm text-bitcoin-gray">{{ address.city }}, {{ address.region }} {{ address.postalCode }}</p>
+                      <p class="text-sm text-ts-ink-soft">{{ address.line1 }}</p>
+                      <p class="text-sm text-ts-ink-soft" *ngIf="address.line2">{{ address.line2 }}</p>
+                      <p class="text-sm text-ts-ink-soft">{{ address.city }}, {{ address.region }} {{ address.postalCode }}</p>
                     </div>
                     <div *ngIf="checkoutForm.value.addressId === address.id" 
-                         class="flex-shrink-0 w-6 h-6 rounded-full bg-bitcoin-orange flex items-center justify-center">
-                      <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                         class="flex-shrink-0 w-6 h-6 rounded-full bg-primary flex items-center justify-center">
+                      <svg class="w-4 h-4 text-neutral" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                       </svg>
                     </div>
@@ -207,11 +207,11 @@
             </div>
 
             <!-- No Addresses Message -->
-            <div *ngIf="addresses().length === 0 && !showAddressForm()" class="text-center py-6 bg-bitcoin-dark/40 rounded-lg border border-bitcoin-gray/20 mb-4">
-              <p class="text-bitcoin-gray mb-3">No shipping addresses found</p>
+            <div *ngIf="addresses().length === 0 && !showAddressForm()" class="text-center py-6 bg-ts-bg-soft rounded-lg border border-ts-line mb-4">
+              <p class="text-ts-ink-soft mb-3">No shipping addresses found</p>
               <button type="button"
                       (click)="showAddressForm.set(true)"
-                      class="px-6 py-2 bg-bitcoin-orange/20 hover:bg-bitcoin-orange/30 border border-bitcoin-orange/30 text-bitcoin-orange rounded-lg transition-all">
+                      class="px-6 py-2 bg-primary/20 hover:bg-primary/30 border border-primary/30 text-primary rounded-lg transition-all">
                 Add Shipping Address
               </button>
             </div>
@@ -220,7 +220,7 @@
             <button type="button"
                     *ngIf="addresses().length > 0 && !showAddressForm()"
                     (click)="showAddressForm.set(true)"
-                    class="w-full py-3 px-4 rounded-lg border-2 border-dashed border-bitcoin-gray/30 hover:border-bitcoin-orange/30 text-bitcoin-gray hover:text-bitcoin-orange transition-all flex items-center justify-center gap-2">
+                    class="w-full py-3 px-4 rounded-lg border-2 border-dashed border-ts-line hover:border-ts-accent text-ts-ink-soft hover:text-ts-accent transition-all flex items-center justify-center gap-2">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
               </svg>
@@ -228,25 +228,25 @@
             </button>
 
             <!-- Inline Address Form -->
-            <div *ngIf="showAddressForm()" class="p-6 bg-bitcoin-dark/80 rounded-lg border border-bitcoin-orange/30 mt-4">
-              <h3 class="text-lg font-semibold text-white mb-4">New Shipping Address</h3>
+            <div *ngIf="showAddressForm()" class="p-6 bg-ts-bg-soft rounded-lg border border-ts-accent/50 mt-4">
+              <h3 class="text-lg font-semibold text-ts-ink mb-4">New Shipping Address</h3>
               
               <form [formGroup]="addressForm" class="space-y-4">
                 <div class="grid grid-cols-2 gap-4">
                   <div>
-                    <label class="block text-sm font-medium text-bitcoin-gray mb-1">First Name *</label>
+                    <label class="block text-sm font-medium text-ts-ink-soft mb-1">First Name *</label>
                     <input type="text" formControlName="firstName"
-                           class="w-full px-3 py-2 bg-bitcoin-dark border border-bitcoin-gray/30 rounded-lg text-white focus:ring-2 focus:ring-bitcoin-orange focus:border-bitcoin-orange"
-                           [class.border-red-500]="addressForm.get('firstName')?.invalid && addressForm.get('firstName')?.touched">
+                           class="w-full px-3 py-2 bg-ts-paper border border-ts-line rounded-lg text-ts-ink focus:ring-2 focus:ring-primary focus:border-primary"
+                           [class.border-error]="addressForm.get('firstName')?.invalid && addressForm.get('firstName')?.touched">
                     @if (addressForm.get('firstName')?.invalid && addressForm.get('firstName')?.touched) {
-                      <p class="text-xs text-red-400 mt-1">First name is required (min 2 characters)</p>
+                      <p class="text-xs text-error mt-1">First name is required (min 2 characters)</p>
                     }
                   </div>
                   <div>
-                    <label class="block text-sm font-medium text-bitcoin-gray mb-1">Last Name *</label>
+                    <label class="block text-sm font-medium text-ts-ink-soft mb-1">Last Name *</label>
                     <input type="text" formControlName="lastName"
-                           class="w-full px-3 py-2 bg-bitcoin-dark border border-bitcoin-gray/30 rounded-lg text-white focus:ring-2 focus:ring-bitcoin-orange focus:border-bitcoin-orange"
-                           [class.border-red-500]="addressForm.get('lastName')?.invalid && addressForm.get('lastName')?.touched">
+                           class="w-full px-3 py-2 bg-ts-paper border border-ts-line rounded-lg text-ts-ink focus:ring-2 focus:ring-primary focus:border-primary"
+                           [class.border-error]="addressForm.get('lastName')?.invalid && addressForm.get('lastName')?.touched">
                     @if (addressForm.get('lastName')?.invalid && addressForm.get('lastName')?.touched) {
                       <p class="text-xs text-red-400 mt-1">Last name is required (min 2 characters)</p>
                     }

@@ -1,4 +1,4 @@
-<div class="min-h-screen bg-gradient-to-b from-gray-900 to-black py-12 px-4">
+<div class="min-h-screen bg-ts-bg py-12 px-4">
   <div class="max-w-4xl mx-auto">
     
     <!-- Loading State -->
@@ -7,24 +7,24 @@
         <div class="app-spinner" style="--spinner-size: 64px;" aria-hidden="true">
           <img src="/Logo Clear.png" alt="" width="80" height="80">
         </div>
-        <p class="text-white/70">Processing your order...</p>
-        <p class="text-sm text-white/50">This may take a few moments</p>
+        <p class="text-ts-ink-soft">Processing your order...</p>
+        <p class="text-sm text-ts-ink-soft/70">This may take a few moments</p>
       </div>
     }
 
     <!-- Error State -->
     @else if (error()) {
-      <div class="bg-red-500/10 border border-red-500 rounded-2xl p-8 text-center">
-        <svg class="mx-auto h-16 w-16 text-red-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <div class="bg-error/10 border border-error rounded-2xl p-8 text-center">
+        <svg class="mx-auto h-16 w-16 text-error mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
-        <h2 class="text-2xl font-bold text-white mb-2">Order Processing</h2>
-        <p class="text-white/70 mb-6">{{ error() }}</p>
+        <h2 class="text-2xl font-bold text-ts-ink mb-2">Order Processing</h2>
+        <p class="text-ts-ink-soft mb-6">{{ error() }}</p>
         <div class="flex gap-4 justify-center">
-          <button (click)="viewOrders()" class="px-6 py-3 bg-bitcoin-orange hover:bg-bitcoin-orange/80 text-white rounded-xl transition-colors">
+          <button (click)="viewOrders()" class="px-6 py-3 bg-primary hover:bg-primary/80 text-white rounded-xl transition-colors">
             View My Orders
           </button>
-          <button (click)="continueShopping()" class="px-6 py-3 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-colors">
+          <button (click)="continueShopping()" class="px-6 py-3 bg-ts-bg-soft hover:bg-ts-bg-soft/80 text-ts-ink rounded-xl transition-colors">
             Continue Shopping
           </button>
         </div>
@@ -35,51 +35,51 @@
     @else if (order()) {
       <!-- Success Header -->
       <div class="text-center mb-8">
-        <div class="inline-flex items-center justify-center w-20 h-20 bg-green-500/20 rounded-full mb-4">
-          <svg class="h-12 w-12 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div class="inline-flex items-center justify-center w-20 h-20 bg-success/20 rounded-full mb-4">
+          <svg class="h-12 w-12 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
           </svg>
         </div>
-        <h1 class="text-4xl font-bold text-white mb-2">Order Confirmed!</h1>
-        <p class="text-xl text-white/70">Thank you for your purchase</p>
+        <h1 class="text-4xl font-bold text-ts-ink mb-2">Order Confirmed!</h1>
+        <p class="text-xl text-ts-ink-soft">Thank you for your purchase</p>
       </div>
 
       <!-- Order Number Banner -->
-      <div class="bg-gradient-to-r from-bitcoin-orange to-yellow-600 rounded-2xl p-6 mb-8 text-center">
+      <div class="bg-primary rounded-2xl p-6 mb-8 text-center">
         <p class="text-sm font-semibold text-white/90 mb-1">Order Number</p>
         <p class="text-3xl font-bold text-white tracking-wider">{{ order()?.orderNumber }}</p>
       </div>
 
       <!-- Email Confirmation Notice -->
-      <div class="bg-blue-500/10 border border-blue-500/30 rounded-2xl p-6 mb-8">
+      <div class="bg-info/10 border border-info/30 rounded-2xl p-6 mb-8">
         <div class="flex items-start gap-4">
-          <svg class="h-6 w-6 text-blue-400 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg class="h-6 w-6 text-info flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
           </svg>
           <div>
-            <h3 class="text-lg font-semibold text-white mb-1">Confirmation Email Sent</h3>
-            <p class="text-white/70 text-sm">We've sent a confirmation email with your order details and receipt. Please check your inbox.</p>
+            <h3 class="text-lg font-semibold text-ts-ink mb-1">Confirmation Email Sent</h3>
+            <p class="text-ts-ink-soft text-sm">We've sent a confirmation email with your order details and receipt. Please check your inbox.</p>
           </div>
         </div>
       </div>
 
       <div class="grid gap-8">
         <!-- Order Summary Card -->
-        <div class="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden">
-          <div class="bg-gradient-to-r from-bitcoin-orange/20 to-transparent p-6 border-b border-white/10">
-            <h2 class="text-2xl font-bold text-white">Order Summary</h2>
+        <div class="bg-ts-paper backdrop-blur-sm border border-ts-line rounded-2xl overflow-hidden">
+          <div class="bg-accent/10 p-6 border-b border-ts-line">
+            <h2 class="text-2xl font-bold text-ts-ink">Order Summary</h2>
           </div>
           
           <!-- Items List -->
           <div class="p-6 space-y-4">
             @for (item of order()?.items; track item.productId) {
-              <div class="flex gap-4 p-4 bg-white/5 rounded-xl">
+              <div class="flex gap-4 p-4 bg-ts-bg-soft rounded-xl">
                 <!-- Product Image -->
                 @if (item.imageUrl) {
                   <img [src]="item.imageUrl" [alt]="item.name" class="w-20 h-20 object-cover rounded-lg">
                 } @else {
-                  <div class="w-20 h-20 bg-white/10 rounded-lg flex items-center justify-center">
-                    <svg class="h-10 w-10 text-white/30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <div class="w-20 h-20 bg-ts-bg-soft rounded-lg flex items-center justify-center">
+                    <svg class="h-10 w-10 text-ts-ink-soft" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                     </svg>
                   </div>
@@ -87,43 +87,43 @@
                 
                 <!-- Product Details -->
                 <div class="flex-1">
-                  <h3 class="text-lg font-semibold text-white">{{ item.name }}</h3>
+                  <h3 class="text-lg font-semibold text-ts-ink">{{ item.name }}</h3>
                   @if (item.sku) {
-                    <p class="text-sm text-white/50">SKU: {{ item.sku }}</p>
+                    <p class="text-sm text-ts-ink-soft">SKU: {{ item.sku }}</p>
                   }
-                  <p class="text-sm text-white/70 mt-1">Quantity: {{ item.qty }}</p>
+                  <p class="text-sm text-ts-ink-soft mt-1">Quantity: {{ item.qty }}</p>
                 </div>
                 
                 <!-- Price -->
                 <div class="text-right">
-                  <p class="text-lg font-bold text-white">${{ (item.unitPrice * item.qty).toFixed(2) }}</p>
-                  <p class="text-sm text-white/50">${{ item.unitPrice.toFixed(2) }} each</p>
+                  <p class="text-lg font-bold text-ts-ink">${{ (item.unitPrice * item.qty).toFixed(2) }}</p>
+                  <p class="text-sm text-ts-ink-soft">${{ item.unitPrice.toFixed(2) }} each</p>
                 </div>
               </div>
             }
           </div>
 
           <!-- Totals -->
-          <div class="border-t border-white/10 p-6 space-y-3">
-            <div class="flex justify-between text-white/70">
+          <div class="border-t border-ts-line p-6 space-y-3">
+            <div class="flex justify-between text-ts-ink-soft">
               <span>Subtotal ({{ order()?.itemCount }} items)</span>
               <span>${{ (order()?.subtotal || 0).toFixed(2) }}</span>
             </div>
-            <div class="flex justify-between text-white/70">
+            <div class="flex justify-between text-ts-ink-soft">
               <span>Shipping</span>
               <span>${{ (order()?.shipping || 0).toFixed(2) }}</span>
             </div>
-            <div class="flex justify-between text-white/70">
+            <div class="flex justify-between text-ts-ink-soft">
               <span>Tax</span>
               <span>${{ (order()?.tax || 0).toFixed(2) }}</span>
             </div>
             @if (order()?.discount && (order()?.discount || 0) > 0) {
-              <div class="flex justify-between text-green-400">
+              <div class="flex justify-between text-success">
                 <span>Discount</span>
                 <span>-${{ (order()?.discount || 0).toFixed(2) }}</span>
               </div>
             }
-            <div class="border-t border-white/10 pt-3 flex justify-between text-2xl font-bold text-white">
+            <div class="border-t border-ts-line pt-3 flex justify-between text-2xl font-bold text-ts-ink">
               <span>Total</span>
               <span>${{ (order()?.total || 0).toFixed(2) }} {{ order()?.currency || 'USD' }}</span>
             </div>
@@ -131,17 +131,17 @@
         </div>
 
         <!-- Shipping Information Card -->
-        <div class="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden">
-          <div class="bg-gradient-to-r from-bitcoin-orange/20 to-transparent p-6 border-b border-white/10">
-            <h2 class="text-2xl font-bold text-white">Shipping Information</h2>
+        <div class="bg-ts-paper backdrop-blur-sm border border-ts-line rounded-2xl overflow-hidden">
+          <div class="bg-accent/10 p-6 border-b border-ts-line">
+            <h2 class="text-2xl font-bold text-ts-ink">Shipping Information</h2>
           </div>
           
           <div class="p-6 space-y-6">
             <!-- Shipping Address -->
             <div>
-              <h3 class="text-sm font-semibold text-white/50 uppercase tracking-wider mb-2">Delivery Address</h3>
+              <h3 class="text-sm font-semibold text-ts-ink-soft uppercase tracking-wider mb-2">Delivery Address</h3>
               @if (order()?.shippingAddress) {
-                <div class="bg-white/5 rounded-xl p-4 text-white">
+                <div class="bg-ts-bg-soft rounded-xl p-4 text-ts-ink">
                   <p class="font-semibold">{{ order()?.shippingAddress.firstName }} {{ order()?.shippingAddress.lastName }}</p>
                   <p>{{ order()?.shippingAddress.line1 }}</p>
                   @if (order()?.shippingAddress.line2) {
@@ -150,10 +150,10 @@
                   <p>{{ order()?.shippingAddress.city }}, {{ order()?.shippingAddress.region }} {{ order()?.shippingAddress.postalCode }}</p>
                   <p>{{ order()?.shippingAddress.country }}</p>
                   @if (order()?.shippingAddress.phoneE164) {
-                    <p class="mt-2 text-white/70">📞 {{ order()?.shippingAddress.phoneE164 }}</p>
+                    <p class="mt-2 text-ts-ink-soft">📞 {{ order()?.shippingAddress.phoneE164 }}</p>
                   }
                   @if (order()?.shippingAddress.email) {
-                    <p class="text-white/70">📧 {{ order()?.shippingAddress.email }}</p>
+                    <p class="text-ts-ink-soft">📧 {{ order()?.shippingAddress.email }}</p>
                   }
                 </div>
               }
@@ -161,28 +161,28 @@
 
             <!-- Shipping Method -->
             <div>
-              <h3 class="text-sm font-semibold text-white/50 uppercase tracking-wider mb-2">Shipping Method</h3>
-              <div class="bg-white/5 rounded-xl p-4">
-                <p class="text-white font-semibold">{{ getShippingMethodLabel() }}</p>
+              <h3 class="text-sm font-semibold text-ts-ink-soft uppercase tracking-wider mb-2">Shipping Method</h3>
+              <div class="bg-ts-bg-soft rounded-xl p-4">
+                <p class="text-ts-ink font-semibold">{{ getShippingMethodLabel() }}</p>
               </div>
             </div>
 
             <!-- Estimated Delivery -->
             <div>
-              <h3 class="text-sm font-semibold text-white/50 uppercase tracking-wider mb-2">Estimated Delivery</h3>
-              <div class="bg-white/5 rounded-xl p-4">
-                <p class="text-white font-semibold">{{ getEstimatedDeliveryDate() }}</p>
-                <p class="text-white/70 text-sm mt-1">You will receive a tracking number once your order ships</p>
+              <h3 class="text-sm font-semibold text-ts-ink-soft uppercase tracking-wider mb-2">Estimated Delivery</h3>
+              <div class="bg-ts-bg-soft rounded-xl p-4">
+                <p class="text-ts-ink font-semibold">{{ getEstimatedDeliveryDate() }}</p>
+                <p class="text-ts-ink-soft text-sm mt-1">You will receive a tracking number once your order ships</p>
               </div>
             </div>
 
             <!-- Tracking (if available) -->
             @if (order()?.trackingNumber) {
               <div>
-                <h3 class="text-sm font-semibold text-white/50 uppercase tracking-wider mb-2">Tracking Number</h3>
-                <div class="bg-white/5 rounded-xl p-4 flex items-center justify-between">
-                  <p class="text-white font-mono">{{ order()?.trackingNumber }}</p>
-                  <button (click)="trackOrder()" class="text-bitcoin-orange hover:text-yellow-400 font-semibold">
+                <h3 class="text-sm font-semibold text-ts-ink-soft uppercase tracking-wider mb-2">Tracking Number</h3>
+                <div class="bg-ts-bg-soft rounded-xl p-4 flex items-center justify-between">
+                  <p class="text-ts-ink font-mono">{{ order()?.trackingNumber }}</p>
+                  <button (click)="trackOrder()" class="text-accent hover:text-accent/80 font-semibold">
                     Track Package →
                   </button>
                 </div>
@@ -216,23 +216,23 @@
         </div>
 
         <!-- Next Steps -->
-        <div class="bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-blue-500/30 rounded-2xl p-6">
-          <h3 class="text-xl font-bold text-white mb-4">What Happens Next?</h3>
-          <ol class="space-y-3 text-white/70">
+        <div class="bg-info/10 border border-info/30 rounded-2xl p-6">
+          <h3 class="text-xl font-bold text-ts-ink mb-4">What Happens Next?</h3>
+          <ol class="space-y-3 text-ts-ink-soft">
             <li class="flex gap-3">
-              <span class="flex-shrink-0 w-6 h-6 bg-bitcoin-orange rounded-full flex items-center justify-center text-white text-sm font-bold">1</span>
+              <span class="flex-shrink-0 w-6 h-6 bg-primary rounded-full flex items-center justify-center text-white text-sm font-bold">1</span>
               <span>We'll prepare your order for shipment (typically within 1-2 business days)</span>
             </li>
             <li class="flex gap-3">
-              <span class="flex-shrink-0 w-6 h-6 bg-bitcoin-orange rounded-full flex items-center justify-center text-white text-sm font-bold">2</span>
+              <span class="flex-shrink-0 w-6 h-6 bg-primary rounded-full flex items-center justify-center text-white text-sm font-bold">2</span>
               <span>You'll receive an email with tracking information once your order ships</span>
             </li>
             <li class="flex gap-3">
-              <span class="flex-shrink-0 w-6 h-6 bg-bitcoin-orange rounded-full flex items-center justify-center text-white text-sm font-bold">3</span>
+              <span class="flex-shrink-0 w-6 h-6 bg-primary rounded-full flex items-center justify-center text-white text-sm font-bold">3</span>
               <span>Your mining equipment will arrive by {{ getEstimatedDeliveryDate() }}</span>
             </li>
             <li class="flex gap-3">
-              <span class="flex-shrink-0 w-6 h-6 bg-bitcoin-orange rounded-full flex items-center justify-center text-white text-sm font-bold">4</span>
+              <span class="flex-shrink-0 w-6 h-6 bg-primary rounded-full flex items-center justify-center text-white text-sm font-bold">4</span>
               <span>Start mining Bitcoin! 🚀</span>
             </li>
           </ol>
