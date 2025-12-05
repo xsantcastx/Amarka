@@ -2,33 +2,15 @@
   <!-- Top rail -->
   <div class="bg-ts-paper border-b border-ts-line shadow-sm">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 flex items-center gap-4">
-      <!-- Left: menu + logo -->
+      <!-- Left: logo -->
       <div class="flex items-center gap-3 flex-shrink-0">
-        <button
-          class="p-2 rounded-lg border border-ts-line bg-ts-bg hover:border-ts-accent transition-colors"
-          (click)="toggleMobile(); $event.stopPropagation()"
-          aria-label="Open navigation">
-          <svg class="w-5 h-5 text-ts-ink" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-          </svg>
-        </button>
-        <a routerLink="/" class="flex items-center gap-2">
+        <a routerLink="/">
           <img [src]="logoSrc" [alt]="logoAlt" class="h-9 w-9 rounded-lg shadow-sm" />
-          <div class="hidden sm:flex flex-col leading-tight">
-            <span class="font-semibold text-ts-ink text-sm">{{ brandName }}</span>
-            <span class="text-xs text-ts-ink-soft">Engraving & gifts</span>
-          </div>
         </a>
       </div>
 
       <!-- Center: search -->
       <div class="flex-1 hidden md:flex items-stretch rounded-xl overflow-hidden border border-ts-line bg-ts-paper shadow-lvl1">
-        <select class="px-3 text-sm bg-ts-bg-soft border-r border-ts-line text-ts-ink-soft focus:outline-none">
-          <option>All categories</option>
-          @for (col of collections; track col.slug) {
-            <option>{{ col.name }}</option>
-          }
-        </select>
         <input
           type="search"
           placeholder="Search engraved gifts, occasions, recipients..."
@@ -40,7 +22,7 @@
         </button>
       </div>
 
-      <!-- Right: account / orders / cart -->
+      <!-- Right: account / orders / cart / menu -->
       <div class="flex items-center gap-4 text-xs text-ts-ink">
         <div class="hidden lg:flex flex-col leading-tight">
           <span class="text-ts-ink-soft">Hello</span>
@@ -56,6 +38,14 @@
           </svg>
           <span class="font-semibold">Cart</span>
         </a>
+        <button
+          class="p-2 rounded-lg border border-ts-line bg-ts-bg hover:border-ts-accent transition-colors"
+          (click)="toggleMobile(); $event.stopPropagation()"
+          aria-label="Open navigation">
+          <svg class="w-5 h-5 text-ts-ink" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
       </div>
     </div>
   </div>
