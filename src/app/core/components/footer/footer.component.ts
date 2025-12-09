@@ -63,17 +63,17 @@ interface Category {
           </div>
 
           <div>
-            <h3 class="footer__heading">Explore</h3>
+            <h3 class="footer__heading">{{ 'footer.explore' | translate }}</h3>
             <div class="footer__links">
-              <a routerLink="/" class="footer__link">Home</a>
-              <a routerLink="/servicios" class="footer__link">Services</a>
-              <a routerLink="/galeria" class="footer__link">Gallery</a>
-              <a routerLink="/contacto" class="footer__link">Contact</a>
+              <a routerLink="/" class="footer__link">{{ 'nav.home' | translate }}</a>
+              <a routerLink="/servicios" class="footer__link">{{ 'page_titles.services' | translate }}</a>
+              <a routerLink="/galeria" class="footer__link">{{ 'page_titles.gallery' | translate }}</a>
+              <a routerLink="/contacto" class="footer__link">{{ 'page_titles.contact' | translate }}</a>
             </div>
           </div>
 
           <div>
-            <h3 class="footer__heading">Contact</h3>
+            <h3 class="footer__heading">{{ 'footer.contact' | translate }}</h3>
             <div class="footer__links">
               <a [href]="'mailto:' + contactEmail" class="footer__link">{{ contactEmail }}</a>
               <a [href]="'tel:' + contactPhone" class="footer__link">{{ contactPhone }}</a>
@@ -88,10 +88,10 @@ interface Category {
         </div>
 
         <div class="border-t border-ts-line pt-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4 text-ts-ink-soft text-sm">
-          <p class="m-0">&copy; {{ currentYear }} {{ siteName }}. All rights reserved.</p>
+          <p class="m-0">&copy; {{ currentYear }} {{ siteName }}. {{ 'footer.rights' | translate }}</p>
           <div class="flex gap-4">
-            <a [routerLink]="privacyPolicyUrl" class="footer__link">Privacy</a>
-            <a [routerLink]="termsOfServiceUrl" class="footer__link">Terms</a>
+            <a [routerLink]="privacyPolicyUrl" class="footer__link">{{ 'footer.privacy' | translate }}</a>
+            <a [routerLink]="termsOfServiceUrl" class="footer__link">{{ 'footer.terms' | translate }}</a>
           </div>
         </div>
       </div>

@@ -66,6 +66,17 @@ export class AuthService {
   constructor() {
     // Note: Firebase persistence is configured during provideAuth in app.config.ts.
     // Leaving constructor empty keeps this service tree-shakable and avoids duplicate init.
+    
+    // Monitor auth state changes for debugging
+    if (typeof window !== 'undefined') {
+      this.user$.subscribe(user => {
+        if (user) {
+          console.log('[Auth] User signed in:', user.email);
+        } else {
+          console.log('[Auth] User signed out or not authenticated');
+        }
+      });
+    }
   }
 
   // Register new user

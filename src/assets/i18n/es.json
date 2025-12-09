@@ -1,0 +1,636 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "profile": "Mi Perfil",
+    "collections": "Colecciones",
+    "account_lists": "Cuenta y Listas",
+    "cart": "Carrito",
+    "search_placeholder": "Buscar regalos grabados, ocasiones, destinatarios..."
+  },
+  "page_titles": {
+    "privacy": "Política de Privacidad",
+    "cookie_policy": "Política de Cookies",
+    "home": "Inicio",
+    "products": "Productos",
+    "product_details": "Detalles del producto",
+    "checkout_review": "Revisión de compra",
+    "payment": "Pago",
+    "order_confirmation": "Confirmación de pedido",
+    "login": "Iniciar sesión",
+    "register": "Registrarse",
+    "profile": "Perfil",
+    "orders": "Pedidos",
+    "cart": "Carrito",
+    "contact": "Contacto",
+    "gallery": "Galería",
+    "services": "Servicios"
+  },
+  "client": {
+    "login": "Iniciar Sesión",
+    "login_subtitle": "Bienvenido de Nuevo",
+    "login_description": "Inicia sesión para administrar tus pedidos, regalos guardados y configuraciones personalizadas.",
+    "login_form_description": "Inicia sesión para continuar comprando, rastreando y administrando tus regalos grabados.",
+    "register": "Registrarse",
+    "register_subtitle": "Únete a Amarka",
+    "register_description": "Crea tu cuenta para guardar favoritos, rastrear pedidos y personalizar tus regalos.",
+    "create_account": "Crear Cuenta",
+    "unified_dashboard_title": "Panel Unificado",
+    "unified_dashboard_description": "Rastrea pedidos, administra favoritos y accede a tus recomendaciones de regalos personalizados en un solo lugar.",
+    "secure_account_title": "Cuenta Segura",
+    "secure_account_description": "Autenticación de múltiples capas e infraestructura segura mantienen tu información protegida.",
+    "support_24_7": "Soporte 24/7",
+    "fast_shipping": "Envío Rápido",
+    "exclusive_gifts": "Regalos Exclusivos",
+    "priority_service_title": "Servicio Prioritario",
+    "priority_service_description": "Obtén acceso anticipado a nuevas colecciones, diseños exclusivos y regalos grabados de edición limitada.",
+    "personalisation_title": "Personalización",
+    "personalisation_description": "Guarda tus diseños, direcciones y preferencias de personalización favoritas para un pago más rápido.",
+    "dedicated_support": "Soporte dedicado",
+    "order_tracking": "Rastreo de pedidos",
+    "secure_payments": "Pagos seguros",
+    "profile": "Mi Perfil",
+    "profile_subtitle": "Administra la configuración y preferencias de tu cuenta",
+    "logout": "Cerrar Sesión",
+    "my_account": "Mi Cuenta",
+    "my_orders": "Mis Pedidos",
+    "name": "Nombre",
+    "email": "Correo electrónico",
+    "phone": "Teléfono",
+    "company": "Empresa",
+    "not_provided": "No proporcionado",
+    "profile_metrics": {
+      "member_since": "Miembro desde",
+      "last_login": "Último acceso",
+      "last_login_never": "Nunca",
+      "account_status": "Estado de la cuenta",
+      "account_type": "Tipo de cuenta",
+      "not_available": "No disponible"
+    },
+    "profile_status": {
+      "active": "Activo",
+      "disabled": "Deshabilitado",
+      "locked": "Bloqueado"
+    },
+    "profile_role": {
+      "admin": "Administrador",
+      "client": "Cliente"
+    },
+    "profile_sections": {
+      "account_overview": "Resumen de cuenta",
+      "account_overview_hint": "Resumen de tu cuenta y métricas clave",
+      "contact_information": "Información de contacto",
+      "contact_information_hint": "Administra tus datos de contacto",
+      "security": "Seguridad y acceso",
+      "security_hint": "Monitorea la seguridad de tu cuenta y actividad de inicio de sesión",
+      "support": "¿Necesitas ayuda?"
+    },
+    "profile_support_description": "Nuestro equipo de soporte está aquí para ayudarte con cualquier pregunta o inquietud",
+    "email_cannot_change": "El correo electrónico no se puede cambiar",
+    "security": {
+      "email_verified": "Verificación de correo",
+      "verified": "Verificado",
+      "not_verified": "No verificado",
+      "login_attempts": "Intentos de inicio de sesión",
+      "last_failed_login": "Último intento fallido",
+      "session_status": "Estado de sesión"
+    },
+    "profile_actions": {
+      "view_orders": "Ver pedidos",
+      "contact_support": "Contactar soporte",
+      "edit_profile": "Editar perfil",
+      "save_changes": "Guardar cambios",
+      "cancel": "Cancelar"
+    },
+    "errors": {
+      "email_in_use": "Este correo ya está registrado",
+      "weak_password": "La contraseña es muy débil",
+      "registration_failed": "Registro fallido. Por favor, inténtalo de nuevo.",
+      "login_failed": "Inicio de sesión fallido. Verifica tus credenciales.",
+      "name_required": "El nombre es obligatorio y debe tener al menos 3 caracteres"
+    }
+  },
+  "common": {
+    "loading": "Cargando...",
+    "loading_content": "Cargando contenido...",
+    "back": "Volver al inicio",
+    "search": "Buscar",
+    "hello": "Hola",
+    "active": "Activo",
+    "inactive": "Inactivo"
+  },
+  "product": {
+    "in_stock": "en stock",
+    "out_of_stock": "Sin stock",
+    "view_details": "Ver detalles",
+    "view_product": "Ver producto",
+    "added": "Añadido",
+    "add_to_cart": "Añadir"
+  },
+  "home": {
+    "hero": {
+      "badge": "Regalos grabados más queridos",
+      "title": "Regalos grabados premium hechos para durar",
+      "subtitle": "Grabado láser de precisión en vidrio, madera, metal y cuero con empaque listo para regalo. Rápida entrega para hitos, regalos corporativos y victorias cotidianas.",
+      "view_collection": "Ver colección",
+      "rush_badge": "Urgente",
+      "rush_title": "Grabado urgente",
+      "rush_subtitle": "Producción y envío prioritarios",
+      "cta_collections": "Comprar colecciones",
+      "cta_products": "Ver todos los productos",
+      "fast": "Grabado y envío rápido",
+      "packaging": "Empaque listo para regalo",
+      "view_product": "Ver producto"
+    },
+    "collections": {
+      "heading": "Comprar por colección",
+      "view_all": "Ver todas",
+      "empty": "Crea colecciones para mostrarlas aquí."
+    }
+  },
+  "collections": {
+    "title": "Colecciones",
+    "subtitle": "Lanzamientos curados como Regalos para Hombres, Recuerdos de Boda y sets grabados personalizados.",
+    "loading": "Cargando colecciones…",
+    "empty": {
+      "title": "Aún no hay colecciones",
+      "body": "Crea una colección en Admin → Colecciones y aparecerá aquí automáticamente."
+    },
+    "card": {
+      "label": "Colección",
+      "cta": "Comprar ahora"
+    }
+  },
+  "admin": {
+    "total_products": "Total de Productos",
+    "total_orders": "Total de Pedidos",
+    "gallery_images": "Imágenes de Galería",
+    "total_users": "Total de Usuarios",
+    "pending_reviews": "Reseñas Pendientes",
+    "total_revenue": "Ingresos Totales",
+    "quick_actions": "Acciones Rápidas",
+    "add_product": "Agregar Producto",
+    "upload_image": "Subir Imagen",
+    "manage_products": "Administrar Productos",
+    "manage_orders": "Administrar Pedidos",
+    "manage_gallery": "Administrar Galería",
+    "manage_users": "Administrar Usuarios",
+    "catalog": {
+      "title": "Catálogo"
+    },
+    "models": {
+      "title": "Modelos de Productos",
+      "subtitle": "Administra variantes y configuraciones de modelos de productos",
+      "empty": "No se encontraron modelos. Crea tu primer modelo para comenzar.",
+      "filters": {
+        "search_placeholder": "Buscar por nombre o slug...",
+        "status_label": "Estado",
+        "status_all": "Todos",
+        "status_active": "Activos",
+        "status_inactive": "Inactivos"
+      },
+      "table": {
+        "name": "Nombre",
+        "slug": "Slug",
+        "category": "Categoría",
+        "status": "Estado",
+        "actions": "Acciones",
+        "active": "Activo",
+        "inactive": "Inactivo"
+      },
+      "actions": {
+        "add": "Agregar Modelo",
+        "edit": "Editar",
+        "delete": "Eliminar",
+        "create_first": "Crear Primer Modelo"
+      },
+      "modal": {
+        "new_title": "Nuevo Modelo",
+        "edit_title": "Editar Modelo"
+      }
+    },
+    "collections": {
+      "title": "Colecciones",
+      "back_to_admin": "Admin",
+      "new_collection": "+ Nueva Colección",
+      "loading": "Cargando colecciones...",
+      "edit_collection": "Editar Colección",
+      "new_collection_title": "Nueva Colección",
+      "form": {
+        "name": "Nombre",
+        "slug": "Slug",
+        "description": "Descripción",
+        "hero_image": "Imagen Principal",
+        "choose_image": "Elegir Imagen",
+        "max_size": "Máx 5MB (JPG, PNG, WebP)",
+        "upload_progress": "Subiendo",
+        "active": "Activo",
+        "save": "Guardar",
+        "cancel": "Cancelar",
+        "edit": "Editar",
+        "delete": "Eliminar"
+      }
+    }
+  },
+  "footer": {
+    "description": "Grabado premium y regalos personalizados hechos para durar. Desde premios corporativos hasta recuerdos de hitos importantes, grabamos con precisión y entregamos listos para regalar.",
+    "business_hours": "Horario de atención",
+    "explore": "Explora",
+    "contact": "Contacto",
+    "rights": "Todos los derechos reservados.",
+    "privacy": "Privacidad",
+    "terms": "Términos"
+  },
+  "cart": {
+    "your": "Tu",
+    "title": "Carrito de Compras",
+    "subtitle": "Revisa tus artículos y procede al pago",
+    "cart_items": "Artículos del Carrito",
+    "item": "artículo",
+    "items": "artículos",
+    "quantity": "Cantidad",
+    "subtotal": "Subtotal",
+    "clear_cart": "Vaciar Carrito",
+    "empty_title": "Tu carrito está vacío",
+    "empty_message": "Parece que aún no has añadido nada a tu carrito. ¡Comienza a comprar para llenarlo!",
+    "explore_products": "Explorar Productos",
+    "order_summary": "Resumen del Pedido",
+    "shipping_label": "Envío",
+    "tax": "Impuestos",
+    "total": "Total",
+    "summary": {
+      "shipping_dynamic": "Costo de envío calculado al finalizar la compra según tu dirección",
+      "shipping_flat": "Envío estimado: {{estimate}}",
+      "free_shipping": "Envío Gratis"
+    },
+    "shipping": {
+      "estimate_default": "$5-15"
+    },
+    "proceed_to_checkout": "Proceder al Pago",
+    "secure": "Pago Seguro",
+    "ssl": "Cifrado SSL",
+    "fast_shipping": "Envío Rápido",
+    "continue_shopping": "Seguir Comprando",
+    "address": {
+      "shipping_address": "Dirección de Envío",
+      "required": "Requerido",
+      "no_addresses": "No se encontraron direcciones de envío",
+      "add_shipping_address": "Agregar Dirección de Envío",
+      "add_new_address": "Agregar Nueva Dirección",
+      "new_shipping_address": "Nueva Dirección de Envío",
+      "first_name": "Nombre",
+      "last_name": "Apellido",
+      "email": "Correo Electrónico",
+      "phone": "Teléfono",
+      "phone_hint": "Formato: +1 (código de país) seguido del número de teléfono",
+      "address_line1": "Dirección",
+      "city": "Ciudad",
+      "state": "Estado",
+      "zip_code": "Código Postal",
+      "country": "País",
+      "default": "Predeterminado",
+      "save_address": "Guardar Dirección",
+      "saving": "Guardando...",
+      "cancel": "Cancelar",
+      "select_state": "Selecciona un estado...",
+      "us_only": "Actualmente solo enviamos a direcciones de EE. UU."
+    },
+    "shipping_method": {
+      "title": "Método de Envío",
+      "required": "Requerido",
+      "calculating": "Calculando tarifas de envío..."
+    }
+  },
+  "checkout": {
+    "breadcrumb": {
+      "home": "Inicio",
+      "cart": "Carrito",
+      "review": "Revisar",
+      "payment": "Pago"
+    },
+    "review_title": "Revisa Tu",
+    "review_title_highlight": "Pedido",
+    "review_subtitle": "Por favor verifica los detalles de tu pedido antes de proceder al pago",
+    "order_items": "Artículos del Pedido",
+    "sku": "SKU",
+    "qty": "Cant",
+    "each": "c/u",
+    "edit_cart": "Editar Carrito",
+    "shipping_address": "Dirección de Envío",
+    "default": "Predeterminado",
+    "no_addresses": "No se encontraron direcciones de envío",
+    "no_addresses_message": "Por favor agrega una dirección de envío para continuar",
+    "add_shipping_address": "Agregar Dirección de Envío",
+    "new_shipping_address": "Nueva Dirección de Envío",
+    "first_name": "Nombre",
+    "last_name": "Apellido",
+    "email": "Correo Electrónico",
+    "phone": "Teléfono",
+    "phone_hint": "Formato: +1 (código de país) seguido del número de teléfono",
+    "address_line1": "Dirección",
+    "address_line2": "Apartamento, suite, etc. (opcional)",
+    "city": "Ciudad",
+    "state_region": "Estado/Región",
+    "postal_code": "Código Postal",
+    "country": "País",
+    "save_address": "Guardar Dirección",
+    "saving": "Guardando...",
+    "cancel": "Cancelar",
+    "add_new_address": "Agregar Otra Dirección",
+    "shipping_method": "Método de Envío",
+    "calculating_shipping": "Calculando tarifas de envío...",
+    "order_summary": "Resumen del Pedido",
+    "subtotal": "Subtotal",
+    "shipping": "Envío",
+    "tax": "Impuestos",
+    "discount": "Descuento",
+    "total": "Total",
+    "proceed_to_payment": "Proceder al Pago",
+    "back_to_cart": "Volver al Carrito",
+    "secure_checkout": "Pago Seguro",
+    "ssl_encrypted": "Cifrado SSL"
+  },
+  "payment": {
+    "title": "Completa Tu",
+    "title_highlight": "Pago",
+    "subtitle": "Ingresa los detalles de tu pago para completar tu pedido",
+    "payment_information": "Información de Pago",
+    "cardholder_name": "Nombre del Titular",
+    "cardholder_name_error": "El nombre del titular es obligatorio",
+    "card_details": "Detalles de la Tarjeta",
+    "loading_payment_form": "Cargando formulario de pago...",
+    "card_secure_message": "Tu información de pago está segura y cifrada",
+    "billing_address": "Dirección de Facturación",
+    "change_billing_address": "Cambiar dirección de facturación",
+    "pay": "Pagar",
+    "processing": "Procesando...",
+    "back": "Atrás",
+    "order_summary": "Resumen del Pedido",
+    "subtotal": "Subtotal",
+    "shipping": "Envío",
+    "tax": "Impuestos",
+    "discount": "Descuento",
+    "total": "Total",
+    "security_ssl": "Cifrado SSL de 256 bits",
+    "security_pci": "Cumple con PCI DSS",
+    "security_stripe": "Procesado por Stripe"
+  },
+  "nav": {
+    "add_links": "Agrega enlaces en la configuracion de marca",
+    "account_lists": "Cuenta y listas",
+    "search_placeholder": "Busca regalos grabados, ocasiones, destinatarios...",
+    "cart": "Carrito",
+    "follow_us": "Siguenos",
+    "language": "Idioma",
+    "account": "Cuenta"
+  },
+  "home": {
+    "loading": "Cargando contenido...",
+    "hero": {
+      "badge": "Regalos grabados mas queridos",
+      "title": "Regalos grabados premium hechos para durar",
+      "subtitle": "Grabado preciso en vidrio, madera, metal y cuero con empaque listo para regalo. Entrega rapida para momentos, regalos corporativos y mas.",
+      "view_collection": "Ver coleccion",
+      "rush_badge": "Express",
+      "rush_title": "Grabado urgente",
+      "rush_subtitle": "Produccion prioritaria y envio",
+      "cta_collections": "Ver colecciones",
+      "cta_products": "Ver todos los productos",
+      "fast": "Grabado y envio rapido",
+      "packaging": "Empaque listo para regalo",
+      "view_product": "Ver producto"
+    },
+    "collections": {
+      "heading": "Compra por coleccion",
+      "view_all": "Ver todas",
+      "empty": "Crea colecciones para mostrarlas aqui."
+    },
+    "featured": {
+      "badge": "Selecciones curadas",
+      "title": "Regalos personalizados destacados",
+      "subtitle": "Superventas y novedades listas para grabar.",
+      "cta_all": "Ver todo",
+      "cta_special": "Regalos para hombres",
+      "empty": "Sin productos aun. Agrega productos en admin para mostrarlos aqui."
+    },
+    "bestsellers": {
+      "badge": "Mas vendidos",
+      "title": "Lo mas popular ahora",
+      "subtitle": "Favoritos de clientes y repetidos.",
+      "cta": "Ver todos los productos"
+    },
+    "new": {
+      "badge": "Nuevos",
+      "title": "Nuevas llegadas",
+      "subtitle": "Piezas personalizadas recien agregadas.",
+      "cta": "Comprar nuevo"
+    },
+    "bundles": {
+      "badge": "Paquetes y sets",
+      "title": "Paquetes de valor y sets de grabado",
+      "subtitle": "Combos curados listos para grabar y regalar.",
+      "cta": "Comprar paquetes"
+    },
+    "story": {
+      "badge": "Por que Amarka",
+      "title": "Calidad lista para regalo con grabado cuidado",
+      "subtitle": "Personalizamos rapido, empacamos bonito y enviamos con cuidado para impresionar.",
+      "fast": {
+        "title": "Grabado y envio rapido",
+        "copy": "Personalizado y enviado rapido, incluso para regalos de ultima hora."
+      },
+      "materials": {
+        "title": "Materiales premium",
+        "copy": "Maderas, metales y acabados de calidad que se sienten premium."
+      },
+      "packaging": {
+        "title": "Empaque listo para regalo",
+        "copy": "Llega en caja bonita con instrucciones y notas."
+      },
+      "trust": {
+        "title": "Confiado por clientes",
+        "copy": "Resenas reales; mira lo que mas gusta."
+      }
+    },
+    "gallery": {
+      "badge": "Detalle y oficio",
+      "title": "Una mirada cercana",
+      "subtitle": "Instantaneas de piezas personalizadas recientes.",
+      "cta": "Ver galeria completa",
+      "alt": "Galeria"
+    },
+    "cta": {
+      "badge": "Listo para personalizar?",
+      "title": "Creamos el regalo perfecto juntos",
+      "subtitle": "Necesitas consejo sobre sets, grabado o envios? Aqui estamos.",
+      "primary": "Ver colecciones",
+      "secondary": "Habla con nosotros"
+    }
+  },
+  "collections": {
+    "title": "Colecciones",
+    "subtitle": "Selecciones curadas como regalos para hombres, recuerdos de boda y sets grabados a medida.",
+    "loading": "Cargando colecciones...",
+    "empty": {
+      "title": "Sin colecciones aun",
+      "body": "Crea una coleccion en Admin -> Colecciones y aparecera aqui automaticamente."
+    },
+    "card": {
+      "label": "Coleccion",
+      "cta": "Comprar ahora"
+    }
+  },
+  "admin": {
+    "title": "Admin",
+    "collections": {
+      "title": "Colecciones",
+      "back_to_admin": "Admin",
+      "new_collection": "Nueva coleccion",
+      "new_collection_title": "Nueva coleccion",
+      "edit_collection": "Editar coleccion",
+      "loading": "Cargando colecciones...",
+      "form": {
+        "edit": "Editar",
+        "delete": "Eliminar",
+        "name": "Nombre",
+        "slug": "Slug",
+        "description": "Descripcion",
+        "hero_image": "Imagen principal",
+        "choose_image": "Elegir imagen",
+        "max_size": "Max 5MB (JPG, PNG, WebP)",
+        "upload_progress": "Subiendo imagen principal",
+        "seo_title": "Titulo SEO",
+        "seo_description": "Descripcion SEO",
+        "seo_image": "URL de imagen SEO"
+      }
+    }
+  },
+  "common": {
+    "active": "Activo",
+    "inactive": "Inactivo",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "hello": "Hola",
+    "search": "Buscar"
+  },
+  "cookie": {
+    "banner": {
+      "title": "Usamos cookies para una mejor experiencia de grabado",
+      "body": "Usamos cookies y tecnologias similares para mejorar tu experiencia, analizar trafico y personalizar contenido y ofertas.",
+      "read": "Lee nuestra",
+      "and": "y",
+      "privacy": "Politica de Privacidad",
+      "cookie": "Politica de Cookies",
+      "more": "para mas informacion."
+    },
+    "actions": {
+      "accept_all": "Aceptar todo",
+      "essential": "Solo esenciales",
+      "customize": "Personalizar"
+    },
+    "settings": {
+      "title": "Configuracion de cookies",
+      "body": "Administra tus preferencias. Algunas cookies son esenciales y no pueden deshabilitarse.",
+      "essential": {
+        "title": "Cookies esenciales",
+        "body": "Necesarias para seguridad, compra y acceso a areas protegidas.",
+        "always": "Siempre activas"
+      },
+      "analytics": {
+        "title": "Cookies de analitica",
+        "body": "Nos ayudan a entender como navegan los visitantes (datos anonimos).",
+        "allow": "Permitir cookies de analitica"
+      },
+      "marketing": {
+        "title": "Cookies de marketing",
+        "body": "Usadas para personalizar ofertas y medir campanas.",
+        "allow": "Permitir cookies de marketing"
+      },
+      "preferences": {
+        "title": "Cookies de preferencias",
+        "body": "Recuerdan idioma, region y preferencias de tema.",
+        "allow": "Permitir cookies de preferencias"
+      },
+      "save": "Guardar preferencias"
+    }
+  },
+  "privacy": {
+    "title": "Política de Privacidad",
+    "subtitle": "Cómo protegemos tus datos mientras preparamos tus grabados",
+    "last_updated": "Última actualización: enero 2025",
+    "intro": "Tu confianza importa. Solo recopilamos lo necesario para personalizar y enviar tus pedidos y lo mantenemos seguro.",
+    "data": {
+      "heading": "Datos que recopilamos",
+      "copy": "Recolectamos datos de contacto, envío e historial de pedidos para cumplir y dar soporte a tus compras de grabado.",
+      "items": {
+        "account": "Datos de cuenta (nombre, correo, teléfono) para gestionar tu perfil y soporte.",
+        "orders": "Datos de pedido y envío para grabado, personalización y entrega.",
+        "analytics": "Analítica anónima para mejorar el catálogo y la experiencia del sitio."
+      }
+    },
+    "cookies": {
+      "heading": "Cookies",
+      "copy": "Usamos cookies esenciales para seguridad y checkout, y opcionales para analítica/marketing. Puedes gestionarlas en el banner.",
+      "link": "Lee la política completa de cookies"
+    },
+    "security": {
+      "heading": "Seguridad",
+      "copy": "Usamos conexiones cifradas, acceso por roles y retención limitada para proteger tu información."
+    },
+    "contact": {
+      "heading": "Preguntas",
+      "copy": "Si tienes dudas o solicitudes de datos, contáctanos.",
+      "email": "privacy@amarka.com"
+    }
+  },
+  "cookiePolicy": {
+    "title": "Política de Cookies",
+    "subtitle": "Nuestro enfoque de cookies para una experiencia de grabado fluida",
+    "last_updated": "Última actualización: enero 2025",
+    "intro": "Usamos cookies para mantener tu carrito, recordar preferencias y mejorar nuestra tienda de grabados.",
+    "what": {
+      "heading": "¿Qué son las cookies?",
+      "copy": "Archivos de texto pequeños en tu dispositivo que ayudan al sitio a funcionar, mantenerse seguro y recordar preferencias."
+    },
+    "types": {
+      "heading": "Tipos de cookies que usamos",
+      "essential": "Esenciales: seguridad, autenticación, carrito y checkout.",
+      "analytics": "Analítica: uso anónimo para mejorar productos y navegación.",
+      "marketing": "Marketing: personalizar ofertas y medir campañas.",
+      "preferences": "Preferencias: recordar idioma, región y ajustes de display."
+    },
+    "control": {
+      "heading": "Cómo controlar las cookies",
+      "copy": "Usa los controles del banner en nuestro sitio, la configuración de tu navegador o borra cookies. Las esenciales son necesarias para el checkout."
+    },
+    "contact": {
+      "heading": "Contacto",
+      "copy": "Para preguntas sobre cookies, contacta a nuestro equipo de privacidad.",
+      "email": "privacy@amarka.com"
+    }
+  },
+  "terms": {
+    "title": "Términos de Servicio",
+    "subtitle": "Las reglas para comprar regalos grabados con nosotros",
+    "last_updated": "Última actualización: enero 2025",
+    "intro": "Al usar este sitio o hacer un pedido aceptas estos términos. Nos permiten fabricar, personalizar y entregar tus grabados de forma confiable.",
+    "use": {
+      "heading": "Uso del sitio",
+      "copy": "Aceptas proporcionar información correcta, respetar la propiedad intelectual y no hacer uso indebido del sitio. Las cuentas son personales; mantén tu acceso seguro."
+    },
+    "orders": {
+      "heading": "Pedidos, grabado y pago",
+      "copy": "Los pedidos personalizados inician producción tras el pago. Las pruebas solo se hacen cuando se indica. Precios y disponibilidad pueden cambiar. Impuestos y envío se muestran en el checkout. Nos autorizas a grabar el texto o arte que envíes."
+    },
+    "returns": {
+      "heading": "Devoluciones y cancelaciones",
+      "copy": "Artículos grabados o personalizados son venta final salvo defectos o errores nuestros. Reporta problemas dentro de 7 días con fotos para poder rehacer o reembolsar si aplica."
+    },
+    "contact": {
+      "heading": "¿Necesitas ayuda?",
+      "copy": "Para preguntas sobre estos términos o tu pedido, contacta a soporte.",
+      "email": "support@amarka.com"
+    }
+  }
+}

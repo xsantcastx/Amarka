@@ -29,6 +29,8 @@ export interface SiteConfig {
   contact: {
     email: string;
     phone?: string;
+    phone2?: string;
+    whatsapp?: string;
     address?: string;
     supportHours?: string;
   };

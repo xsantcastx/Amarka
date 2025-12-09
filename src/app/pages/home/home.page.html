@@ -1,81 +1,58 @@
-<!-- Hero with left rail + search -->
-<section class="bg-gradient-to-br from-background to-surface">
-  <div class="page-container grid lg:grid-cols-[280px,1fr] gap-8 py-12 lg:py-16 items-start">
-    <!-- Left rail (departments) -->
-    <aside class="hidden lg:block bg-surface border border-ts-line rounded-2xl shadow-lvl1 p-4 space-y-3 sticky top-[calc(var(--nav-height)+1rem)]">
-      <div class="flex items-center gap-2 mb-2">
-        <span class="w-2.5 h-2.5 rounded-full bg-accent"></span>
-        <p class="text-sm font-semibold text-ts-ink">Departments</p>
-      </div>
-      <div class="space-y-1.5 max-h-[420px] overflow-y-auto pr-1">
-        @for (col of collections; track col.slug) {
-          <a [routerLink]="['/collections', col.slug]"
-             class="flex items-center justify-between px-3 py-2 rounded-lg border border-transparent hover:border-ts-line hover:bg-ts-bg-soft text-sm text-ts-ink transition-colors">
-            <span>{{ col.name }}</span>
-            <svg class="w-4 h-4 text-ts-ink/50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-          </a>
-        }
-        @if (!collections.length) {
-          <p class="text-xs text-ts-ink-soft">Create collections to feature departments.</p>
-        }
-      </div>
-      <div class="pt-3 border-t border-ts-line text-xs text-ts-ink-soft">
-        Discover best sellers, gift guides, and new arrivals.
-      </div>
-    </aside>
+<!-- Loading State -->
+@if (isLoading) {
+  <div class="min-h-screen flex items-center justify-center bg-ts-bg">
+    <div class="text-center space-y-4">
+      <div class="app-spinner" style="--spinner-size: 72px;"><img src="/Logo Clear.png" alt="Loading" width="96" height="96"></div>
+      <p class="text-ts-ink-soft">{{ 'common.loading_content' | translate }}</p>
+    </div>
+  </div>
+}
 
+<!-- Content -->
+@if (!isLoading) {
+<!-- Hero with search -->
+<section class="bg-gradient-to-br from-background to-surface">
+  <div class="page-container py-12 lg:py-16">
     <!-- Hero content -->
     <div class="grid lg:grid-cols-2 gap-8 items-center">
       <div class="space-y-5">
         <div class="flex items-center gap-2 text-xs uppercase tracking-[0.08em] text-ts-ink-soft">
           <span class="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-ts-accent font-semibold">★</span>
-          Most-loved engraved gifts
+          {{ 'home.hero.badge' | translate }}
         </div>
         <h1 class="text-4xl lg:text-5xl font-serif text-ts-ink leading-tight">
-          Premium engraved gifts crafted to keep
+          {{ 'home.hero.title' | translate }}
         </h1>
         <p class="text-lg text-ts-ink-soft max-w-2xl">
-          Laser-sharp engraving on glass, wood, metal, and leather with gift-ready packaging. Fast turnaround for milestones, corporate gifts, and everyday wins.
+          {{ 'home.hero.subtitle' | translate }}
         </p>
 
         <div class="grid grid-cols-2 gap-3">
-          <a routerLink="/collections/gifts-for-men" class="flex items-center gap-2 p-4 rounded-xl border border-ts-line bg-surface shadow-lvl1 hover:shadow-lvl2 transition">
-            <div class="w-10 h-10 rounded-lg bg-primary/15 flex items-center justify-center text-ts-ink font-semibold">Men</div>
-            <div>
-              <div class="font-semibold text-ts-ink">Gifts for him</div>
-              <div class="text-xs text-ts-ink-soft">Flasks, decanters, pens</div>
-            </div>
-          </a>
-          <a routerLink="/collections" class="flex items-center gap-2 p-4 rounded-xl border border-ts-line bg-surface shadow-lvl1 hover:shadow-lvl2 transition">
-            <div class="w-10 h-10 rounded-lg bg-primary/15 flex items-center justify-center text-ts-ink font-semibold">Corp</div>
-            <div>
-              <div class="font-semibold text-ts-ink">Corporate & awards</div>
-              <div class="text-xs text-ts-ink-soft">Plaques, trophies, signage</div>
-            </div>
-          </a>
-          <a routerLink="/collections" class="flex items-center gap-2 p-4 rounded-xl border border-ts-line bg-surface shadow-lvl1 hover:shadow-lvl2 transition">
-            <div class="w-10 h-10 rounded-lg bg-primary/15 flex items-center justify-center text-ts-ink font-semibold">Weds</div>
-            <div>
-              <div class="font-semibold text-ts-ink">Wedding & milestone</div>
-              <div class="text-xs text-ts-ink-soft">Keepsakes, gifts, decor</div>
-            </div>
-          </a>
+          @for (col of heroCollections.slice(0, 3); track col.slug) {
+            <a [routerLink]="['/collections', col.slug]" class="flex items-center gap-2 p-4 rounded-xl border border-ts-line bg-surface shadow-lvl1 hover:shadow-lvl2 transition">
+              <div class="w-10 h-10 rounded-lg bg-primary/15 flex items-center justify-center text-ts-ink font-semibold text-xs">{{ col.name.substring(0, 4) }}</div>
+              <div>
+                <div class="font-semibold text-ts-ink">{{ col.name }}</div>
+                <div class="text-xs text-ts-ink-soft">{{ col.description?.substring(0, 25) || ('home.hero.view_collection' | translate) }}</div>
+              </div>
+            </a>
+          }
           <a routerLink="/productos" class="flex items-center gap-2 p-4 rounded-xl border border-ts-line bg-surface shadow-lvl1 hover:shadow-lvl2 transition">
-            <div class="w-10 h-10 rounded-lg bg-primary/15 flex items-center justify-center text-ts-ink font-semibold">Rush</div>
+            <div class="w-10 h-10 rounded-lg bg-primary/15 flex items-center justify-center text-ts-ink font-semibold">{{ 'home.hero.rush_badge' | translate }}</div>
             <div>
-              <div class="font-semibold text-ts-ink">Rush engraving</div>
-              <div class="text-xs text-ts-ink-soft">Priority production & ship</div>
+              <div class="font-semibold text-ts-ink">{{ 'home.hero.rush_title' | translate }}</div>
+              <div class="text-xs text-ts-ink-soft">{{ 'home.hero.rush_subtitle' | translate }}</div>
             </div>
           </a>
         </div>
 
         <div class="flex flex-wrap gap-3">
-          <a routerLink="/collections" class="btn-primary">Shop collections</a>
-          <a routerLink="/productos" class="btn-outline">Browse all products</a>
+          <a routerLink="/collections" class="btn-primary">{{ 'home.hero.cta_collections' | translate }}</a>
+          <a routerLink="/productos" class="btn-outline">{{ 'home.hero.cta_products' | translate }}</a>
         </div>
         <div class="flex items-center gap-6 text-sm text-ts-ink-soft pt-2">
-          <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-success"></span>Fast engraving & dispatch</div>
-          <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-primary"></span>Gift-ready packaging</div>
+          <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-success"></span>{{ 'home.hero.fast' | translate }}</div>
+          <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-primary"></span>{{ 'home.hero.packaging' | translate }}</div>
         </div>
       </div>
 
@@ -86,23 +63,23 @@
               <img [src]="product.imageUrl || product.coverImage || 'assets/placeholder-product.jpg'"
                    [alt]="product.name"
                    class="w-full h-full object-cover"
-                   loading="lazy">
+                   loading="eager">
               <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/60 to-transparent p-3 text-white">
                 <div class="text-sm font-semibold truncate">{{ product.name }}</div>
-                <a [routerLink]="['/productos', product.slug || product.id]" class="text-xs underline">View product</a>
+                <a [routerLink]="['/productos', product.slug || product.id]" class="text-xs underline">{{ 'home.hero.view_product' | translate }}</a>
               </div>
             </div>
           }
         } @else {
           <div class="rounded-2xl overflow-hidden border border-ts-line shadow-lvl2 bg-surface aspect-[4/5]">
-            <img src="/Logo.jpg" alt="Featured gift" class="w-full h-full object-cover" loading="lazy">
+            <img src="/Logo.jpg" alt="Featured gift" class="w-full h-full object-cover" loading="eager">
           </div>
           <div class="space-y-4">
             <div class="rounded-2xl overflow-hidden border border-ts-line bg-surface shadow-lvl2 aspect-[4/3]">
-              <img src="/Logo.jpg" alt="Gift set" class="w-full h-full object-cover" loading="lazy">
+              <img src="/Logo.jpg" alt="Gift set" class="w-full h-full object-cover" loading="eager">
             </div>
             <div class="rounded-2xl overflow-hidden border border-ts-line bg-surface shadow-lvl2 aspect-[4/3]">
-              <img src="/Logo.jpg" alt="Engraved detail" class="w-full h-full object-cover" loading="lazy">
+              <img src="/Logo.jpg" alt="Engraved detail" class="w-full h-full object-cover" loading="eager">
             </div>
           </div>
         }
@@ -113,16 +90,16 @@
 
 <!-- Collections Strip -->
 <section class="page-container py-8">
-  <div class="flex items-center justify-between mb-4">
-    <h2 class="text-xl font-semibold text-ts-ink">Shop by collection</h2>
-    <a routerLink="/collections" class="text-sm text-ts-accent hover:underline">View all</a>
-  </div>
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-xl font-semibold text-ts-ink">{{ 'home.collections.heading' | translate }}</h2>
+      <a routerLink="/collections" class="text-sm text-ts-accent hover:underline">{{ 'home.collections.view_all' | translate }}</a>
+    </div>
   <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
     @for (col of categoryShowcase; track col.slug) {
       <a [routerLink]="['/collections', col.slug]"
          class="group relative rounded-xl border border-ts-line bg-surface shadow-lvl1 overflow-hidden hover:shadow-lvl2 transition">
         <div class="aspect-[4/3] bg-ts-bg-soft">
-          <img [src]="collectionImages[col.slug] || 'assets/placeholder-product.jpg'" [alt]="col.name" class="w-full h-full object-cover" loading="lazy">
+          <img [src]="collectionImages[col.slug] || 'assets/placeholder-product.jpg'" [alt]="col.name" class="w-full h-full object-cover" loading="eager">
         </div>
         <div class="p-3 flex items-center justify-between gap-2">
           <div class="text-sm font-semibold text-ts-ink">{{ col.name }}</div>
@@ -131,7 +108,7 @@
       </a>
     }
     @if (!categoryShowcase.length) {
-      <span class="text-ts-ink-soft text-sm">Create collections to feature them here.</span>
+      <span class="text-ts-ink-soft text-sm">{{ 'home.collections.empty' | translate }}</span>
     }
   </div>
 </section>
@@ -141,19 +118,19 @@
   <div class="page-container">
     <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-8">
       <div>
-        <p class="badge">Curated picks</p>
-        <h2 class="heading-display text-4xl lg:text-5xl text-ts-ink">Featured personalised gifts</h2>
-        <p class="text-ts-ink-soft">Best sellers and new arrivals, ready to engrave.</p>
+        <p class="badge">{{ 'home.featured.badge' | translate }}</p>
+        <h2 class="heading-display text-4xl lg:text-5xl text-ts-ink">{{ 'home.featured.title' | translate }}</h2>
+        <p class="text-ts-ink-soft">{{ 'home.featured.subtitle' | translate }}</p>
       </div>
       <div class="flex gap-2">
-        <button class="btn-outline" routerLink="/productos">Browse all</button>
-        <button class="btn-secondary" routerLink="/collections/gifts-for-men">Gifts for men</button>
+        <button class="btn-outline" routerLink="/productos">{{ 'home.featured.cta_all' | translate }}</button>
+        <button class="btn-secondary" routerLink="/collections/gifts-for-men">{{ 'home.featured.cta_special' | translate }}</button>
       </div>
     </div>
     <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
       @if (featuredProducts.length === 0) {
         <div class="sm:col-span-2 lg:col-span-4 text-center text-ts-ink-soft">
-          No products yet. Add products in the admin to showcase them here.
+          {{ 'home.featured.empty' | translate }}
         </div>
       } @else {
         @for (product of featuredProducts; track product.id) {
@@ -170,11 +147,11 @@
     <div class="page-container">
       <div class="flex items-center justify-between mb-6">
         <div>
-          <p class="badge">Top sellers</p>
-          <h3 class="heading-display text-3xl text-ts-ink">Most popular right now</h3>
-          <p class="text-ts-ink-soft">Customer favorites and repeat best-sellers.</p>
+          <p class="badge">{{ 'home.bestsellers.badge' | translate }}</p>
+          <h3 class="heading-display text-3xl text-ts-ink">{{ 'home.bestsellers.title' | translate }}</h3>
+          <p class="text-ts-ink-soft">{{ 'home.bestsellers.subtitle' | translate }}</p>
         </div>
-        <a routerLink="/productos" class="btn-outline">View all products</a>
+        <a routerLink="/productos" class="btn-outline">{{ 'home.bestsellers.cta' | translate }}</a>
       </div>
       <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
         @for (product of bestSellerProducts; track product.id) {
@@ -191,11 +168,11 @@
     <div class="page-container">
       <div class="flex items-center justify-between mb-6">
         <div>
-          <p class="badge">Fresh drops</p>
-          <h3 class="heading-display text-3xl text-ts-ink">New arrivals</h3>
-          <p class="text-ts-ink-soft">Latest personalised pieces just added.</p>
+          <p class="badge">{{ 'home.new.badge' | translate }}</p>
+          <h3 class="heading-display text-3xl text-ts-ink">{{ 'home.new.title' | translate }}</h3>
+          <p class="text-ts-ink-soft">{{ 'home.new.subtitle' | translate }}</p>
         </div>
-        <a routerLink="/productos" class="btn-outline">Shop new</a>
+        <a routerLink="/productos" class="btn-outline">{{ 'home.new.cta' | translate }}</a>
       </div>
       <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
         @for (product of newArrivalProducts; track product.id) {
@@ -212,11 +189,11 @@
     <div class="page-container">
       <div class="flex items-center justify-between mb-6">
         <div>
-          <p class="badge">Bundles & gift sets</p>
-          <h3 class="heading-display text-3xl text-ts-ink">Value bundles & engraving sets</h3>
-          <p class="text-ts-ink-soft">Curated combos ready to engrave and gift.</p>
+          <p class="badge">{{ 'home.bundles.badge' | translate }}</p>
+          <h3 class="heading-display text-3xl text-ts-ink">{{ 'home.bundles.title' | translate }}</h3>
+          <p class="text-ts-ink-soft">{{ 'home.bundles.subtitle' | translate }}</p>
         </div>
-        <a routerLink="/productos" class="btn-outline">Shop bundles</a>
+        <a routerLink="/productos" class="btn-outline">{{ 'home.bundles.cta' | translate }}</a>
       </div>
       <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
         @for (product of featuredProducts.slice(0,4); track product.id) {
@@ -231,26 +208,26 @@
 <section class="section-gap">
   <div class="page-container grid lg:grid-cols-3 gap-8 items-center">
     <div class="lg:col-span-1 space-y-4">
-      <p class="badge">Why Amarka</p>
-      <h3 class="text-3xl font-serif text-ts-ink leading-tight">Gift-ready quality with thoughtful engraving</h3>
-      <p class="text-ts-ink-soft">We personalize fast, package beautifully, and ship with care so your gifts arrive ready to impress.</p>
+      <p class="badge">{{ 'home.story.badge' | translate }}</p>
+      <h3 class="text-3xl font-serif text-ts-ink leading-tight">{{ 'home.story.title' | translate }}</h3>
+      <p class="text-ts-ink-soft">{{ 'home.story.subtitle' | translate }}</p>
     </div>
     <div class="lg:col-span-2 grid sm:grid-cols-2 gap-4">
       <div class="rounded-2xl border border-ts-line bg-white p-5 shadow-sm">
-        <div class="font-semibold text-ts-ink mb-2">Fast engraving & dispatch</div>
-        <p class="text-sm text-ts-ink-soft">Personalized and out the door quickly, even for last-minute gifting.</p>
+        <div class="font-semibold text-ts-ink mb-2">{{ 'home.story.fast.title' | translate }}</div>
+        <p class="text-sm text-ts-ink-soft">{{ 'home.story.fast.copy' | translate }}</p>
       </div>
       <div class="rounded-2xl border border-ts-line bg-white p-5 shadow-sm">
-        <div class="font-semibold text-ts-ink mb-2">Premium materials</div>
-        <p class="text-sm text-ts-ink-soft">Quality woods, metals, and finishes that feel premium in hand.</p>
+        <div class="font-semibold text-ts-ink mb-2">{{ 'home.story.materials.title' | translate }}</div>
+        <p class="text-sm text-ts-ink-soft">{{ 'home.story.materials.copy' | translate }}</p>
       </div>
       <div class="rounded-2xl border border-ts-line bg-white p-5 shadow-sm">
-        <div class="font-semibold text-ts-ink mb-2">Gift-ready packaging</div>
-        <p class="text-sm text-ts-ink-soft">Arrives beautifully boxed with care instructions and notes.</p>
+        <div class="font-semibold text-ts-ink mb-2">{{ 'home.story.packaging.title' | translate }}</div>
+        <p class="text-sm text-ts-ink-soft">{{ 'home.story.packaging.copy' | translate }}</p>
       </div>
       <div class="rounded-2xl border border-ts-line bg-white p-5 shadow-sm">
-        <div class="font-semibold text-ts-ink mb-2">Trusted by customers</div>
-        <p class="text-sm text-ts-ink-soft">Reviews from real recipients; see what people love most.</p>
+        <div class="font-semibold text-ts-ink mb-2">{{ 'home.story.trust.title' | translate }}</div>
+        <p class="text-sm text-ts-ink-soft">{{ 'home.story.trust.copy' | translate }}</p>
       </div>
     </div>
   </div>
@@ -262,16 +239,16 @@
     <div class="page-container">
       <div class="flex items-center justify-between mb-6">
         <div>
-          <p class="badge">Detail & craft</p>
-          <h3 class="heading-display text-3xl text-ts-ink">A closer look</h3>
-          <p class="text-ts-ink-soft">Snapshots from recent personalised pieces.</p>
+          <p class="badge">{{ 'home.gallery.badge' | translate }}</p>
+          <h3 class="heading-display text-3xl text-ts-ink">{{ 'home.gallery.title' | translate }}</h3>
+          <p class="text-ts-ink-soft">{{ 'home.gallery.subtitle' | translate }}</p>
         </div>
-        <a routerLink="/galeria" class="btn-outline">View full gallery</a>
+        <a routerLink="/galeria" class="btn-outline">{{ 'home.gallery.cta' | translate }}</a>
       </div>
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
         @for (image of galleryImages; track image.id) {
           <div class="rounded-2xl overflow-hidden border border-ts-line bg-white shadow-sm aspect-[4/3]">
-            <img [src]="image.thumbnailUrl || image.imageUrl" [alt]="image.title || 'Gallery'" class="w-full h-full object-cover" loading="lazy">
+            <img [src]="image.thumbnailUrl || image.imageUrl" [alt]="image.title || ('home.gallery.alt' | translate)" class="w-full h-full object-cover" loading="lazy">
           </div>
         }
       </div>
@@ -286,14 +263,14 @@
 <section class="section-gap">
   <div class="page-container rounded-3xl border border-ts-line bg-white shadow-lg p-10 flex flex-col lg:flex-row items-center justify-between gap-6">
     <div>
-      <p class="badge">Ready to personalise?</p>
-      <h3 class="text-3xl font-serif text-ts-ink">Let’s craft the perfect gift together</h3>
-      <p class="text-ts-ink-soft">Need advice on sets, engraving, or shipping times? We’re here.</p>
+      <p class="badge">{{ 'home.cta.badge' | translate }}</p>
+      <h3 class="text-3xl font-serif text-ts-ink">{{ 'home.cta.title' | translate }}</h3>
+      <p class="text-ts-ink-soft">{{ 'home.cta.subtitle' | translate }}</p>
     </div>
     <div class="flex gap-3">
-      <a routerLink="/collections" class="btn-primary">Shop collections</a>
-      <a routerLink="/contacto" class="btn-outline">Talk to us</a>
+      <a routerLink="/collections" class="btn-primary">{{ 'home.cta.primary' | translate }}</a>
+      <a routerLink="/contacto" class="btn-outline">{{ 'home.cta.secondary' | translate }}</a>
     </div>
   </div>
 </section>
-
+}

@@ -78,7 +78,7 @@
   --shadow-soft: 0 28px 60px -35px rgba(29, 42, 57, 0.25);
   --shadow-hover: 0 18px 40px -30px rgba(29, 42, 57, 0.28);
   --shadow-focus: 0 0 0 1px color-mix(in srgb, var(--ts-accent) 45%, transparent), 0 18px 42px -30px rgba(29, 42, 57, 0.32);
-  --nav-height: 3.5rem;
+  --nav-height: 6.5rem;
   --content-offset: clamp(2.5rem, 6vw, 3.75rem);
   --section-spacing: clamp(3rem, 8vw, 5rem);
   --container-inline-padding: clamp(1.25rem, 5vw, 2.5rem);
@@ -86,7 +86,7 @@
 
 @media (max-width: 768px) {
   :root {
-    --nav-height: 3.25rem;
+    --nav-height: 6rem;
     --content-offset: clamp(2rem, 7vw, 3rem);
     --section-spacing: clamp(2.75rem, 10vw, 4.25rem);
     --container-inline-padding: clamp(1.1rem, 6vw, 1.9rem);
@@ -95,7 +95,7 @@
 
 @media (max-width: 480px) {
   :root {
-    --nav-height: 3rem;
+    --nav-height: 5.5rem;
     --content-offset: clamp(1.75rem, 9vw, 2.6rem);
     --section-spacing: clamp(2.25rem, 12vw, 3.75rem);
   }

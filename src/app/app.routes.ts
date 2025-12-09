@@ -69,6 +69,21 @@ export const routes: Routes = [
     title: routeTitle('page_titles.contact')
   },
   {
+    path: 'privacy-policy',
+    loadComponent: () => import('./pages/privacy/privacy.page').then(m => m.PrivacyPageComponent),
+    title: routeTitle('page_titles.privacy')
+  },
+  {
+    path: 'cookie-policy',
+    loadComponent: () => import('./pages/cookie-policy/cookie-policy.page').then(m => m.CookiePolicyPageComponent),
+    title: routeTitle('page_titles.cookie_policy')
+  },
+  {
+    path: 'terms',
+    loadComponent: () => import('./pages/terms/terms.page').then(m => m.TermsPageComponent),
+    title: routeTitle('page_titles.terms')
+  },
+  {
     path: 'cart',
     loadComponent: () => import('./pages/cart/cart.page').then(m => m.CartPage),
     title: routeTitle('page_titles.cart')
@@ -156,7 +171,13 @@ export const routes: Routes = [
     path: 'admin/collections',
     loadComponent: () => import('./pages/admin/collections/collections-admin.page').then(m => m.CollectionsAdminPageComponent),
     canActivate: [adminGuard],
-    title: routeTitle('Collections')
+    title: routeTitle('page_titles.collections')
+  },
+  {
+    path: 'admin/models',
+    loadComponent: () => import('./pages/admin/models/models-admin.page').then(m => m.ModelsAdminComponent),
+    canActivate: [adminGuard],
+    title: routeTitle('page_titles.models')
   },
   {
     path: 'admin/users',

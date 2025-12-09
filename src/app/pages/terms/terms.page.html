@@ -1,0 +1,36 @@
+<section class="bg-ts-bg min-h-screen">
+  <app-page-header
+    title="terms.title"
+    subtitle="terms.subtitle"
+    [breadcrumbs]="breadcrumbs"
+    icon="contact">
+  </app-page-header>
+
+  <div class="page-container py-12 space-y-8 max-w-4xl">
+    <div class="rounded-2xl bg-ts-paper border border-ts-line shadow-sm p-6 space-y-3">
+      <p class="text-sm text-ts-ink-soft">{{ 'terms.last_updated' | translate }}</p>
+      <p class="text-ts-ink-soft">{{ 'terms.intro' | translate }}</p>
+    </div>
+
+    <div class="rounded-2xl bg-ts-paper border border-ts-line shadow-sm p-6 space-y-4">
+      <h2 class="text-xl font-semibold text-ts-ink">{{ 'terms.use.heading' | translate }}</h2>
+      <p class="text-ts-ink-soft">{{ 'terms.use.copy' | translate }}</p>
+    </div>
+
+    <div class="rounded-2xl bg-ts-paper border border-ts-line shadow-sm p-6 space-y-4">
+      <h2 class="text-xl font-semibold text-ts-ink">{{ 'terms.orders.heading' | translate }}</h2>
+      <p class="text-ts-ink-soft">{{ 'terms.orders.copy' | translate }}</p>
+    </div>
+
+    <div class="rounded-2xl bg-ts-paper border border-ts-line shadow-sm p-6 space-y-4">
+      <h2 class="text-xl font-semibold text-ts-ink">{{ 'terms.returns.heading' | translate }}</h2>
+      <p class="text-ts-ink-soft">{{ 'terms.returns.copy' | translate }}</p>
+    </div>
+
+    <div class="rounded-2xl bg-ts-paper border border-ts-line shadow-sm p-6 space-y-4">
+      <h2 class="text-xl font-semibold text-ts-ink">{{ 'terms.contact.heading' | translate }}</h2>
+      <p class="text-ts-ink-soft">{{ 'terms.contact.copy' | translate }}</p>
+      <a href="mailto:{{ 'terms.contact.email' | translate }}" class="text-ts-accent underline">{{ 'terms.contact.email' | translate }}</a>
+    </div>
+  </div>
+</section>

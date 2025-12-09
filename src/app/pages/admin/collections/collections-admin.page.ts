@@ -5,8 +5,9 @@ import { RouterLink, Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { CollectionsService, CollectionDoc } from '../../../services/collections.service';
 import { AuthService } from '../../../services/auth.service';
+import { StorageService } from '../../../services/storage.service';
 import { AdminSidebarComponent } from '../../../shared/components/admin-sidebar/admin-sidebar.component';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, lastValueFrom } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
 
 @Component({
@@ -19,6 +20,7 @@ import { filter, take } from 'rxjs/operators';
 export class CollectionsAdminPageComponent implements OnInit {
   private collectionsService = inject(CollectionsService);
   private authService = inject(AuthService);
+  private storageService = inject(StorageService);
   private router = inject(Router);
   private fb = inject(FormBuilder);
   private cdr = inject(ChangeDetectorRef);
@@ -28,6 +30,13 @@ export class CollectionsAdminPageComponent implements OnInit {
   showModal = false;
   editing: CollectionDoc | null = null;
   errorMessage = '';
+  
+  // Image upload
+  selectedHeroFile: File | null = null;
+  heroPreview: string | null = null;
+  uploadingHero = false;
+  heroUploadProgress = 0;
+  existingHeroUrl = '';
 
   form: FormGroup = this.fb.group({
     name: ['', Validators.required],
@@ -92,6 +101,9 @@ export class CollectionsAdminPageComponent implements OnInit {
 
   openCreate() {
     this.editing = null;
+    this.selectedHeroFile = null;
+    this.heroPreview = null;
+    this.existingHeroUrl = '';
     this.form.reset({
       name: '',
       slug: '',
@@ -106,8 +118,46 @@ export class CollectionsAdminPageComponent implements OnInit {
     this.cdr.detectChanges();
   }
 
+  onHeroSelected(event: any) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      alert('Please select an image file');
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      alert('Image must be less than 5MB');
+      return;
+    }
+
+    this.selectedHeroFile = file;
+    
+    // Create preview
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      this.heroPreview = e.target.result;
+      this.cdr.detectChanges();
+    };
+    reader.readAsDataURL(file);
+  }
+
+  removeHeroImage() {
+    this.selectedHeroFile = null;
+    this.heroPreview = null;
+    this.existingHeroUrl = '';
+    this.form.patchValue({ heroImageUrl: '' });
+    this.cdr.detectChanges();
+  }
+
   editCollection(col: CollectionDoc) {
     this.editing = col;
+    this.selectedHeroFile = null;
+    this.heroPreview = null;
+    this.existingHeroUrl = col.heroImageUrl || '';
     this.form.patchValue({
       name: col.name,
       slug: col.slug,
@@ -132,12 +182,41 @@ export class CollectionsAdminPageComponent implements OnInit {
       this.form.markAllAsTouched();
       return;
     }
+
+    let heroImageUrl = this.existingHeroUrl || this.form.value.heroImageUrl || '';
+
+    // Upload hero image if a new file was selected
+    if (this.selectedHeroFile) {
+      try {
+        this.uploadingHero = true;
+        this.heroUploadProgress = 0;
+        this.cdr.detectChanges();
+
+        const uploadResult = await lastValueFrom(
+          this.storageService.uploadFile(
+            this.selectedHeroFile,
+            `collections/hero/${Date.now()}_${this.selectedHeroFile.name}`
+          )
+        );
+
+        heroImageUrl = uploadResult.downloadURL || '';
+        this.uploadingHero = false;
+        this.cdr.detectChanges();
+      } catch (error) {
+        console.error('Error uploading hero image:', error);
+        alert('Failed to upload hero image');
+        this.uploadingHero = false;
+        this.cdr.detectChanges();
+        return;
+      }
+    }
+
     const value = this.form.value;
     const payload: CollectionDoc = {
       name: value.name,
       slug: value.slug,
       description: value.description,
-      heroImageUrl: value.heroImageUrl,
+      heroImageUrl: heroImageUrl,
       active: value.active,
       seo: {
         title: value.seoTitle,
@@ -145,11 +224,13 @@ export class CollectionsAdminPageComponent implements OnInit {
         image: value.seoImage
       }
     };
+    
     if (this.editing?.id) {
       await this.collectionsService.updateCollection(this.editing.id, payload);
     } else {
       await this.collectionsService.addCollection(payload);
     }
+    
     this.showModal = false;
     await this.loadCollections();
   }

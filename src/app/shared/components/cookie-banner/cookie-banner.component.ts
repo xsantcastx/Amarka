@@ -1,12 +1,13 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
 import { ConsentService } from '../../../services/consent.service';
 
 @Component({
   selector: 'app-cookie-banner',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TranslateModule],
   templateUrl: './cookie-banner.component.html',
   styleUrl: './cookie-banner.component.scss'
 })

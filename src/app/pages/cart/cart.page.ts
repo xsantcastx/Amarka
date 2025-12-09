@@ -159,10 +159,10 @@ export class CartPage implements OnInit {
         
         // Auto-select default address
         const defaultAddr = addresses.find(a => a.isDefault);
-        if (defaultAddr) {
-          this.selectedAddress.set(defaultAddr);
-          this.checkoutForm.patchValue({ addressId: defaultAddr.id });
-          this.calculateShipping(defaultAddr);
+        if (defaultAddr?.id) {
+          this.checkoutForm.patchValue({ addressId: defaultAddr.id }, { emitEvent: false });
+          // Use the same flow as manual selection so the address is persisted to the cart
+          void this.onAddressChange(defaultAddr.id);
         }
       },
       error: (err) => console.error('Failed to load addresses:', err)
@@ -260,28 +260,39 @@ export class CartPage implements OnInit {
     }).subscribe({
       next: (response) => {
         this.shippingMethods.set(response.shippingMethods);
+
+        // If the function returned no methods, fall back to static settings so checkout isn't blocked
+        if (!response.shippingMethods?.length) {
+          if (this.applyStaticShipping(address, true)) {
+            return;
+          }
+        }
         
         // Auto-select standard shipping
         const standard = response.shippingMethods.find(m => m.id === 'standard');
         if (standard) {
           this.selectedShippingMethod.set(standard);
           this.checkoutForm.patchValue({ shippingMethodId: 'standard' });
+        } else if (response.shippingMethods[0]) {
+          // Fallback to the first returned method if "standard" isn't present
+          this.selectedShippingMethod.set(response.shippingMethods[0]);
+          this.checkoutForm.patchValue({ shippingMethodId: response.shippingMethods[0].id });
         }
 
         this.calculatingShipping.set(false);
       },
       error: (err) => {
         console.error('Shipping calculation error:', err);
-        if (!this.applyStaticShipping(address)) {
+        if (!this.applyStaticShipping(address, true)) {
           this.calculatingShipping.set(false);
         }
       }
     });
   }
 
-  private applyStaticShipping(_address?: Address | null): boolean {
+  private applyStaticShipping(_address?: Address | null, force = false): boolean {
     const settings = this.shippingSettings();
-    if (!settings || settings.shippingEnabled) {
+    if (!settings || (settings.shippingEnabled && !force)) {
       return false;
     }
 
@@ -331,6 +342,33 @@ export class CartPage implements OnInit {
     this.cart.updateShippingCost(shippingCost, method.id);
     this.calculatingShipping.set(false);
     return true;
+  }
+
+  /**
+   * Build a shipping method from the current cart snapshot so checkout can continue
+   * even if the rates UI is hidden.
+   */
+  private hydrateShippingFromCart(): ShippingMethod | null {
+    const cartSnapshot = this.cart.snapshot();
+    if (!cartSnapshot) {
+      return null;
+    }
+
+    const methodId = cartSnapshot.shippingMethodId || (cartSnapshot as any).shippingMethod;
+    if (!methodId) {
+      return null;
+    }
+
+    return {
+      id: methodId,
+      name: methodId === 'flat-rate'
+        ? this.translate.instant('cart.shipping.flat_rate')
+        : this.translate.instant('cart.shipping.standard') || 'Standard Shipping',
+      description: this.translate.instant('cart.shipping.estimate_default'),
+      cost: cartSnapshot.shipping ?? 0,
+      currency: cartSnapshot.currency || 'USD',
+      estimatedDays: this.shippingSettings()?.shippingEstimate || ''
+    };
   }
 
   /**
@@ -453,7 +491,29 @@ export class CartPage implements OnInit {
     }
 
     // Check if address and shipping are selected
-    if (!this.selectedAddress() || !this.selectedShippingMethod()) {
+    console.log('Checkout validation:', {
+      selectedAddress: this.selectedAddress(),
+      selectedShippingMethod: this.selectedShippingMethod(),
+      formAddressId: this.checkoutForm.value.addressId,
+      formShippingMethodId: this.checkoutForm.value.shippingMethodId
+    });
+
+    const address = this.selectedAddress() 
+      || this.addresses().find(a => a.id === this.checkoutForm.value.addressId);
+
+    let shippingMethod = this.selectedShippingMethod() 
+      || this.shippingMethods().find(m => m.id === this.checkoutForm.value.shippingMethodId) 
+      || this.hydrateShippingFromCart();
+
+    if (address && !this.selectedAddress()) {
+      this.selectedAddress.set(address);
+    }
+    if (shippingMethod && !this.selectedShippingMethod()) {
+      this.selectedShippingMethod.set(shippingMethod);
+      this.checkoutForm.patchValue({ shippingMethodId: shippingMethod.id }, { emitEvent: false });
+    }
+    
+    if (!address || !shippingMethod) {
       alert('Please select a shipping address and shipping method');
       return;
     }
@@ -472,6 +532,33 @@ export class CartPage implements OnInit {
       shipping: cartSnapshot.shipping,
       shippingMethodId: cartSnapshot.shippingMethodId
     });
+
+    // Persist selections to the cart so the payment step has everything it needs
+    if (cartSnapshot.id) {
+      try {
+        await this.cart.updateShippingAddress(cartSnapshot.id, {
+          firstName: address.firstName,
+          lastName: address.lastName,
+          line1: address.line1,
+          line2: address.line2 || null,
+          city: address.city,
+          region: address.region,
+          state: address.region,
+          postalCode: address.postalCode,
+          country: address.country,
+          phoneE164: address.phoneE164,
+          email: address.email
+        });
+
+        if (shippingMethod) {
+          const methodCost = shippingMethod.cost ?? cartSnapshot.shipping ?? 0;
+          const methodId = shippingMethod.id;
+          await this.cart.updateShippingCost(methodCost, methodId);
+        }
+      } catch (persistError) {
+        console.error('Failed to persist checkout selections:', persistError);
+      }
+    }
 
     // Navigate directly to payment
     this.router.navigate(['/checkout/payment']);

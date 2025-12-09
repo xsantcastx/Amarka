@@ -1,4 +1,4 @@
-import { Component, OnInit, PLATFORM_ID, inject } from '@angular/core';
+import { Component, OnInit, PLATFORM_ID, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
@@ -14,11 +14,12 @@ import { LoadingComponentBase } from '../../core/classes/loading-component.base'
 import { MetaService } from '../../services/meta.service';
 import { take } from 'rxjs/operators';
 import { ProductCardComponent } from '../../shared/components/product-card/product-card.component';
+import { forkJoin, of } from 'rxjs';
 
 @Component({
   selector: 'app-home-page',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, HomeReviewsComponent, ProductCardComponent],
+  imports: [CommonModule, RouterModule, FormsModule, TranslateModule, HomeReviewsComponent, ProductCardComponent],
   templateUrl: './home.page.html',
   styleUrl: './home.page.scss'
 })
@@ -31,6 +32,7 @@ export class HomePageComponent extends LoadingComponentBase implements OnInit {
   private collectionsService = inject(CollectionsService);
   private metaService = inject(MetaService);
   private router = inject(Router);
+  protected override cdr = inject(ChangeDetectorRef);
   
   services: ServiceItem[] = [];
   featuredProducts: Product[] = [];
@@ -40,6 +42,7 @@ export class HomePageComponent extends LoadingComponentBase implements OnInit {
   collections: CollectionDoc[] = [];
   categoryShowcase: CollectionDoc[] = [];
   collectionImages: Record<string, string> = {};
+  heroCollections: CollectionDoc[] = [];
   
   galleryImages: GalleryImage[] = [];
   currentImageIndex = 0;
@@ -54,113 +57,111 @@ export class HomePageComponent extends LoadingComponentBase implements OnInit {
 
     // Only load from service if in browser (not during SSR)
     if (isPlatformBrowser(this.platformId)) {
-      this.loadGalleryPreview();
-      this.loadServices();
-      this.loadFeaturedProducts();
-      this.loadBestSellers();
-      this.loadNewArrivals();
-      this.loadHeroProducts();
-      this.loadCollections();
+      this.setLoading(true);
+      this.loadAllContent();
     } else {
       // During SSR, set loading to false to show empty state
       this.setLoading(false);
     }
   }
 
-  private loadServices() {
-    this.serviceService.getServices()
-      .pipe(take(1))
-      .subscribe({
-        next: (services: ServiceItem[]) => {
-          // Show first 6 services on home page
-          this.services = services.slice(0, 6);
-        },
-        error: (error: any) => {
-          console.error('Error loading services:', error);
-        }
-      });
+  private async loadAllContent() {
+    // Load all content in parallel
+    try {
+      await Promise.all([
+        this.loadCollections(),
+        this.loadGalleryPreview(),
+        this.loadServicesAsync(),
+        this.loadFeaturedProductsAsync(),
+        this.loadBestSellersAsync(),
+        this.loadNewArrivalsAsync(),
+        this.loadHeroProductsAsync()
+      ]);
+    } catch (error) {
+      console.error('Error loading content:', error);
+    } finally {
+      this.setLoading(false);
+      this.cdr.detectChanges();
+    }
+  }
+
+  private async loadServicesAsync() {
+    try {
+      const services = await this.serviceService.getServices().pipe(take(1)).toPromise();
+      this.services = services?.slice(0, 6) || [];
+      this.cdr.detectChanges();
+    } catch (error) {
+      console.error('Error loading services:', error);
+    }
   }
 
   private async loadCollections() {
     try {
       this.collections = await this.collectionsService.getAllCollections();
-      this.categoryShowcase = this.collections
-        .filter(c => c.active !== false)
+      const activeCollections = this.collections.filter(c => c.active !== false);
+      
+      this.categoryShowcase = activeCollections
         .sort((a, b) => a.name.localeCompare(b.name))
         .slice(0, 6);
+      
+      // First 4 active collections for hero quick links
+      this.heroCollections = activeCollections.slice(0, 4);
+      
       // Optional images: map known fields into a lookup
       this.collectionImages = Object.fromEntries(
         this.collections.map(c => [
           c.slug,
-          (c as any).coverImage || (c as any).imageUrl || ''
+          c.heroImageUrl || ''
         ])
       );
+      this.cdr.detectChanges();
     } catch (error) {
       console.error('Error loading collections:', error);
       this.collections = [];
       this.categoryShowcase = [];
+      this.heroCollections = [];
       this.collectionImages = {};
     }
   }
 
-  private loadFeaturedProducts() {
-    this.productsService
-      .getFeaturedProducts(8)
-      .pipe(take(1))
-      .subscribe({
-        next: products => {
-          this.featuredProducts = products;
-        },
-        error: error => {
-          console.error('Error loading featured products:', error);
-        }
-      });
+  private async loadFeaturedProductsAsync() {
+    try {
+      const products = await this.productsService.getFeaturedProducts(8).pipe(take(1)).toPromise();
+      this.featuredProducts = products || [];
+      this.cdr.detectChanges();
+    } catch (error) {
+      console.error('Error loading featured products:', error);
+    }
   }
 
-  private loadBestSellers() {
-    this.productsService
-      .getProductsByTag('bestseller', 8)
-      .pipe(take(1))
-      .subscribe({
-        next: products => {
-          // Fallback to featured if no tagged products
-          this.bestSellerProducts = products.length ? products : this.featuredProducts;
-        },
-        error: error => {
-          console.error('Error loading best sellers:', error);
-          this.bestSellerProducts = this.featuredProducts;
-        }
-      });
+  private async loadBestSellersAsync() {
+    try {
+      const products = await this.productsService.getProductsByTag('bestseller', 8).pipe(take(1)).toPromise();
+      this.bestSellerProducts = products || [];
+      this.cdr.detectChanges();
+    } catch (error) {
+      console.error('Error loading best sellers:', error);
+    }
   }
 
-  private loadNewArrivals() {
-    this.productsService
-      .getFeaturedProducts(6)
-      .pipe(take(1))
-      .subscribe({
-        next: products => {
-          this.newArrivalProducts = products;
-        },
-        error: error => {
-          console.error('Error loading new arrivals:', error);
-          this.newArrivalProducts = this.featuredProducts;
-        }
-      });
+  private async loadNewArrivalsAsync() {
+    try {
+      const products = await this.productsService.getFeaturedProducts(6).pipe(take(1)).toPromise();
+      this.newArrivalProducts = products || [];
+      this.cdr.detectChanges();
+    } catch (error) {
+      console.error('Error loading new arrivals:', error);
+    }
   }
 
-  private loadHeroProducts() {
-    this.productsService
-      .getFeaturedProducts(4)
-      .pipe(take(1))
-      .subscribe({
-        next: products => {
-          this.heroProducts = products;
-        },
-        error: error => {
-          console.error('Error loading hero products:', error);
-          this.heroProducts = [];
-        }
-      });
+  private async loadHeroProductsAsync() {
+    try {
+      const products = await this.productsService.getFeaturedProducts(4).pipe(take(1)).toPromise();
+      this.heroProducts = products || [];
+      this.cdr.detectChanges();
+    } catch (error) {
+      console.error('Error loading hero products:', error);
+    }
   }
 
   private async loadGalleryPreview() {

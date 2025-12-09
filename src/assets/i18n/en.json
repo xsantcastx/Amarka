@@ -1,12 +1,59 @@
 {
   "nav": {
     "home": "Home",
-    "profile": "My Profile"
+    "profile": "My Profile",
+    "collections": "Collections",
+    "account_lists": "Account & Lists",
+    "cart": "Cart",
+    "search_placeholder": "Search engraved gifts, occasions, recipients..."
+  },
+  "page_titles": {
+    "privacy": "Privacy Policy",
+    "cookie_policy": "Cookie Policy",
+    "terms": "Terms of Service",
+    "home": "Home",
+    "products": "Products",
+    "product_details": "Product Details",
+    "checkout_review": "Checkout Review",
+    "payment": "Payment",
+    "order_confirmation": "Order Confirmation",
+    "login": "Login",
+    "register": "Register",
+    "profile": "Profile",
+    "orders": "Orders",
+    "cart": "Cart",
+    "contact": "Contact",
+    "gallery": "Gallery",
+    "services": "Services"
   },
   "client": {
+    "login": "Login",
+    "login_subtitle": "Welcome Back",
+    "login_description": "Sign in to manage your orders, saved gifts, and personalised settings.",
+    "login_form_description": "Sign in to continue purchasing, tracking, and managing your engraved gifts.",
+    "register": "Register",
+    "register_subtitle": "Join Amarka",
+    "register_description": "Create your account to save favourites, track orders, and personalise gifting.",
+    "create_account": "Create Account",
+    "unified_dashboard_title": "Unified Dashboard",
+    "unified_dashboard_description": "Track orders, manage favourites, and access your personalised gift recommendations in one place.",
+    "secure_account_title": "Secure Account",
+    "secure_account_description": "Multi-layer authentication and secure infrastructure keep your information protected.",
+    "support_24_7": "24/7 Support",
+    "fast_shipping": "Fast Shipping",
+    "exclusive_gifts": "Exclusive Gifts",
+    "priority_service_title": "Priority Service",
+    "priority_service_description": "Get early access to new collections, exclusive designs, and limited edition engraved gifts.",
+    "personalisation_title": "Personalisation",
+    "personalisation_description": "Save your favourite designs, addresses, and customisation preferences for faster checkout.",
+    "dedicated_support": "Dedicated support",
+    "order_tracking": "Order tracking",
+    "secure_payments": "Secure payments",
     "profile": "My Profile",
     "profile_subtitle": "Manage your account settings and preferences",
     "logout": "Logout",
+    "my_account": "My Account",
+    "my_orders": "My Orders",
     "name": "Name",
     "email": "Email",
     "phone": "Phone",
@@ -65,10 +112,526 @@
   },
   "common": {
     "loading": "Loading...",
-    "back": "Back to Home"
+    "loading_content": "Loading content...",
+    "back": "Back to Home",
+    "search": "Search",
+    "hello": "Hello",
+    "active": "Active",
+    "inactive": "Inactive"
+  },
+  "product": {
+    "in_stock": "in stock",
+    "out_of_stock": "Out of stock",
+    "view_details": "View details",
+    "view_product": "View product",
+    "added": "Added",
+    "add_to_cart": "Add to cart"
+  },
+  "home": {
+    "hero": {
+      "badge": "Most-loved engraved gifts",
+      "title": "Premium engraved gifts crafted to keep",
+      "subtitle": "Laser-sharp engraving on glass, wood, metal, and leather with gift-ready packaging. Fast turnaround for milestones, corporate gifts, and everyday wins.",
+      "view_collection": "View collection",
+      "rush_badge": "Rush",
+      "rush_title": "Rush engraving",
+      "rush_subtitle": "Priority production & ship",
+      "cta_collections": "Shop collections",
+      "cta_products": "Browse all products",
+      "fast": "Fast engraving & dispatch",
+      "packaging": "Gift-ready packaging",
+      "view_product": "View product"
+    },
+    "collections": {
+      "heading": "Shop by collection",
+      "view_all": "View all",
+      "empty": "Create collections to feature them here."
+    }
+  },
+  "collections": {
+    "title": "Collections",
+    "subtitle": "Curated drops like Gifts for Men, Wedding Keepsakes, and bespoke engraved sets.",
+    "loading": "Loading collections…",
+    "empty": {
+      "title": "No collections yet",
+      "body": "Create a collection in Admin → Collections and it will appear here automatically."
+    },
+    "card": {
+      "label": "Collection",
+      "cta": "Shop now"
+    }
+  },
+  "admin": {
+    "total_products": "Total Products",
+    "total_orders": "Total Orders",
+    "gallery_images": "Gallery Images",
+    "total_users": "Total Users",
+    "pending_reviews": "Pending Reviews",
+    "total_revenue": "Total Revenue",
+    "quick_actions": "Quick Actions",
+    "add_product": "Add Product",
+    "upload_image": "Upload Image",
+    "manage_products": "Manage Products",
+    "manage_orders": "Manage Orders",
+    "manage_gallery": "Manage Gallery",
+    "manage_users": "Manage Users",
+    "catalog": {
+      "title": "Catalog"
+    },
+    "models": {
+      "title": "Product Models",
+      "subtitle": "Manage product model variants and configurations",
+      "empty": "No models found. Create your first model to get started.",
+      "filters": {
+        "search_placeholder": "Search by name or slug...",
+        "status_label": "Status",
+        "status_all": "All",
+        "status_active": "Active",
+        "status_inactive": "Inactive"
+      },
+      "table": {
+        "name": "Name",
+        "slug": "Slug",
+        "category": "Category",
+        "status": "Status",
+        "actions": "Actions",
+        "active": "Active",
+        "inactive": "Inactive"
+      },
+      "actions": {
+        "add": "Add Model",
+        "edit": "Edit",
+        "delete": "Delete",
+        "create_first": "Create First Model"
+      },
+      "modal": {
+        "new_title": "New Model",
+        "edit_title": "Edit Model"
+      }
+    },
+    "collections": {
+      "title": "Collections",
+      "back_to_admin": "Admin",
+      "new_collection": "+ New Collection",
+      "loading": "Loading collections...",
+      "edit_collection": "Edit Collection",
+      "new_collection_title": "New Collection",
+      "form": {
+        "name": "Name",
+        "slug": "Slug",
+        "description": "Description",
+        "hero_image": "Hero Image",
+        "choose_image": "Choose Image",
+        "max_size": "Max 5MB (JPG, PNG, WebP)",
+        "upload_progress": "Uploading",
+        "active": "Active",
+        "save": "Save",
+        "cancel": "Cancel",
+        "edit": "Edit",
+        "delete": "Delete"
+      }
+    }
   },
   "footer": {
     "description": "Premium engraving and personalized gifts crafted to keep. From corporate awards to milestone keepsakes, we engrave with precision and deliver gift-ready.",
-    "business_hours": "Business Hours"
+    "business_hours": "Business Hours",
+    "explore": "Explore",
+    "contact": "Contact",
+    "rights": "All rights reserved.",
+    "privacy": "Privacy",
+    "terms": "Terms"
+  },
+  "cart": {
+    "your": "Your",
+    "title": "Shopping Cart",
+    "subtitle": "Review your items and proceed to checkout",
+    "cart_items": "Cart Items",
+    "item": "item",
+    "items": "items",
+    "quantity": "Quantity",
+    "subtotal": "Subtotal",
+    "clear_cart": "Clear Cart",
+    "empty_title": "Your cart is empty",
+    "empty_message": "Looks like you haven't added anything to your cart yet. Start shopping to fill it up!",
+    "explore_products": "Explore Products",
+    "order_summary": "Order Summary",
+    "shipping_label": "Shipping",
+    "tax": "Tax",
+    "total": "Total",
+    "summary": {
+      "shipping_dynamic": "Shipping cost calculated at checkout based on your address",
+      "shipping_flat": "Estimated shipping: {{estimate}}",
+      "free_shipping": "Free Shipping"
+    },
+    "shipping": {
+      "estimate_default": "$5-15"
+    },
+    "proceed_to_checkout": "Proceed to Checkout",
+    "secure": "Secure Checkout",
+    "ssl": "SSL Encrypted",
+    "fast_shipping": "Fast Shipping",
+    "continue_shopping": "Continue Shopping",
+    "address": {
+      "shipping_address": "Shipping Address",
+      "required": "Required",
+      "no_addresses": "No shipping addresses found",
+      "add_shipping_address": "Add Shipping Address",
+      "add_new_address": "Add New Address",
+      "new_shipping_address": "New Shipping Address",
+      "first_name": "First Name",
+      "last_name": "Last Name",
+      "email": "Email",
+      "phone": "Phone",
+      "phone_hint": "Format: +1 (country code) followed by phone number",
+      "address_line1": "Address",
+      "city": "City",
+      "state": "State",
+      "zip_code": "ZIP Code",
+      "country": "Country",
+      "default": "Default",
+      "save_address": "Save Address",
+      "saving": "Saving...",
+      "cancel": "Cancel",
+      "select_state": "Select a state...",
+      "us_only": "Currently shipping to US addresses only"
+    },
+    "shipping_method": {
+      "title": "Shipping Method",
+      "required": "Required",
+      "calculating": "Calculating shipping rates..."
+    }
+  },
+  "checkout": {
+    "breadcrumb": {
+      "home": "Home",
+      "cart": "Cart",
+      "review": "Review",
+      "payment": "Payment"
+    },
+    "review_title": "Review Your",
+    "review_title_highlight": "Order",
+    "review_subtitle": "Please verify your order details before proceeding to payment",
+    "order_items": "Order Items",
+    "sku": "SKU",
+    "qty": "Qty",
+    "each": "each",
+    "edit_cart": "Edit Cart",
+    "shipping_address": "Shipping Address",
+    "default": "Default",
+    "no_addresses": "No shipping addresses found",
+    "no_addresses_message": "Please add a shipping address to continue",
+    "add_shipping_address": "Add Shipping Address",
+    "new_shipping_address": "New Shipping Address",
+    "first_name": "First Name",
+    "last_name": "Last Name",
+    "email": "Email",
+    "phone": "Phone",
+    "phone_hint": "Format: +1 (country code) followed by phone number",
+    "address_line1": "Street Address",
+    "address_line2": "Apartment, suite, etc. (optional)",
+    "city": "City",
+    "state_region": "State/Region",
+    "postal_code": "Postal Code",
+    "country": "Country",
+    "save_address": "Save Address",
+    "saving": "Saving...",
+    "cancel": "Cancel",
+    "add_new_address": "Add Another Address",
+    "shipping_method": "Shipping Method",
+    "calculating_shipping": "Calculating shipping rates...",
+    "order_summary": "Order Summary",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "tax": "Tax",
+    "discount": "Discount",
+    "total": "Total",
+    "proceed_to_payment": "Proceed to Payment",
+    "back_to_cart": "Back to Cart",
+    "secure_checkout": "Secure Checkout",
+    "ssl_encrypted": "SSL Encrypted"
+  },
+  "payment": {
+    "title": "Complete Your",
+    "title_highlight": "Payment",
+    "subtitle": "Enter your payment details to complete your order",
+    "payment_information": "Payment Information",
+    "cardholder_name": "Cardholder Name",
+    "cardholder_name_error": "Cardholder name is required",
+    "card_details": "Card Details",
+    "loading_payment_form": "Loading payment form...",
+    "card_secure_message": "Your payment information is secure and encrypted",
+    "billing_address": "Billing Address",
+    "change_billing_address": "Change billing address",
+    "pay": "Pay",
+    "processing": "Processing...",
+    "back": "Back",
+    "order_summary": "Order Summary",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "tax": "Tax",
+    "discount": "Discount",
+    "total": "Total",
+    "security_ssl": "256-bit SSL Encryption",
+    "security_pci": "PCI DSS Compliant",
+    "security_stripe": "Powered by Stripe"
+  },
+  "nav": {
+    "add_links": "Add links in brand config",
+    "account_lists": "Account & Lists",
+    "search_placeholder": "Search engraved gifts, occasions, recipients...",
+    "cart": "Cart",
+    "follow_us": "Follow us",
+    "language": "Language",
+    "account": "Account"
+  },
+  "home": {
+    "loading": "Loading content...",
+    "hero": {
+      "badge": "Most-loved engraved gifts",
+      "title": "Premium engraved gifts crafted to keep",
+      "subtitle": "Laser-sharp engraving on glass, wood, metal, and leather with gift-ready packaging. Fast turnaround for milestones, corporate gifts, and everyday wins.",
+      "view_collection": "View collection",
+      "rush_badge": "Rush",
+      "rush_title": "Rush engraving",
+      "rush_subtitle": "Priority production & ship",
+      "cta_collections": "Shop collections",
+      "cta_products": "Browse all products",
+      "fast": "Fast engraving & dispatch",
+      "packaging": "Gift-ready packaging",
+      "view_product": "View product"
+    },
+    "collections": {
+      "heading": "Shop by collection",
+      "view_all": "View all",
+      "empty": "Create collections to feature them here."
+    },
+    "featured": {
+      "badge": "Curated picks",
+      "title": "Featured personalised gifts",
+      "subtitle": "Best sellers and new arrivals, ready to engrave.",
+      "cta_all": "Browse all",
+      "cta_special": "Gifts for men",
+      "empty": "No products yet. Add products in the admin to showcase them here."
+    },
+    "bestsellers": {
+      "badge": "Top sellers",
+      "title": "Most popular right now",
+      "subtitle": "Customer favorites and repeat best-sellers.",
+      "cta": "View all products"
+    },
+    "new": {
+      "badge": "Fresh drops",
+      "title": "New arrivals",
+      "subtitle": "Latest personalised pieces just added.",
+      "cta": "Shop new"
+    },
+    "bundles": {
+      "badge": "Bundles & gift sets",
+      "title": "Value bundles & engraving sets",
+      "subtitle": "Curated combos ready to engrave and gift.",
+      "cta": "Shop bundles"
+    },
+    "story": {
+      "badge": "Why Amarka",
+      "title": "Gift-ready quality with thoughtful engraving",
+      "subtitle": "We personalize fast, package beautifully, and ship with care so your gifts arrive ready to impress.",
+      "fast": {
+        "title": "Fast engraving & dispatch",
+        "copy": "Personalized and out the door quickly, even for last-minute gifting."
+      },
+      "materials": {
+        "title": "Premium materials",
+        "copy": "Quality woods, metals, and finishes that feel premium in hand."
+      },
+      "packaging": {
+        "title": "Gift-ready packaging",
+        "copy": "Arrives beautifully boxed with care instructions and notes."
+      },
+      "trust": {
+        "title": "Trusted by customers",
+        "copy": "Reviews from real recipients; see what people love most."
+      }
+    },
+    "gallery": {
+      "badge": "Detail & craft",
+      "title": "A closer look",
+      "subtitle": "Snapshots from recent personalised pieces.",
+      "cta": "View full gallery",
+      "alt": "Gallery"
+    },
+    "cta": {
+      "badge": "Ready to personalise?",
+      "title": "Let’s craft the perfect gift together",
+      "subtitle": "Need advice on sets, engraving, or shipping times? We’re here.",
+      "primary": "Shop collections",
+      "secondary": "Talk to us"
+    }
+  },
+  "collections": {
+    "title": "Collections",
+    "subtitle": "Curated drops like Gifts for Men, Wedding Keepsakes, and bespoke engraved sets.",
+    "loading": "Loading collections...",
+    "empty": {
+      "title": "No collections yet",
+      "body": "Create a collection in Admin -> Collections and it will appear here automatically."
+    },
+    "card": {
+      "label": "Collection",
+      "cta": "Shop now"
+    }
+  },
+  "admin": {
+    "title": "Admin",
+    "collections": {
+      "title": "Collections",
+      "back_to_admin": "Admin",
+      "new_collection": "New Collection",
+      "new_collection_title": "New Collection",
+      "edit_collection": "Edit Collection",
+      "loading": "Loading collections...",
+      "form": {
+        "edit": "Edit",
+        "delete": "Delete",
+        "name": "Name",
+        "slug": "Slug",
+        "description": "Description",
+        "hero_image": "Hero Image",
+        "choose_image": "Choose Image",
+        "max_size": "Max 5MB (JPG, PNG, WebP)",
+        "upload_progress": "Uploading hero image",
+        "seo_title": "SEO Title",
+        "seo_description": "SEO Description",
+        "seo_image": "SEO Image URL"
+      }
+    }
+  },
+  "common": {
+    "active": "Active",
+    "inactive": "Inactive",
+    "edit": "Edit",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "save": "Save",
+    "hello": "Hello",
+    "search": "Search"
+  },
+  "cookie": {
+    "banner": {
+      "title": "We use cookies for a better engraving experience",
+      "body": "We use cookies and similar technologies to enhance your experience, analyze site traffic, and personalize content and offers.",
+      "read": "Read our",
+      "and": "and",
+      "privacy": "Privacy Policy",
+      "cookie": "Cookie Policy",
+      "more": "for more information."
+    },
+    "actions": {
+      "accept_all": "Accept All",
+      "essential": "Essential Only",
+      "customize": "Customize"
+    },
+    "settings": {
+      "title": "Cookie Settings",
+      "body": "Manage your cookie preferences. Some cookies are essential for the site to function and cannot be disabled.",
+      "essential": {
+        "title": "Essential Cookies",
+        "body": "Required for security, checkout, and access to protected areas.",
+        "always": "Always Active"
+      },
+      "analytics": {
+        "title": "Analytics Cookies",
+        "body": "Help us understand how visitors interact with our site (anonymous performance data).",
+        "allow": "Allow analytics cookies"
+      },
+      "marketing": {
+        "title": "Marketing Cookies",
+        "body": "Used to personalize offers and measure campaign performance.",
+        "allow": "Allow marketing cookies"
+      },
+      "preferences": {
+        "title": "Preference Cookies",
+        "body": "Remember language, region, and theme preferences.",
+        "allow": "Allow preference cookies"
+      },
+      "save": "Save Preferences"
+    }
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "subtitle": "How we protect your data while crafting your engraved gifts",
+    "last_updated": "Last updated: January 2025",
+    "intro": "Your trust matters. We collect only what we need to personalize and fulfill your engraved orders, and we keep it secure.",
+    "data": {
+      "heading": "Data we collect",
+      "copy": "We collect contact details, shipping information, and order history to fulfill and support your engraving purchases.",
+      "items": {
+        "account": "Account details (name, email, phone) to manage your profile and support requests.",
+        "orders": "Order and shipping details for engraving, personalization, and delivery.",
+        "analytics": "Anonymous analytics to improve our catalog and site experience."
+      }
+    },
+    "cookies": {
+      "heading": "Cookies",
+      "copy": "We use essential cookies for security and checkout, plus optional analytics/marketing. You can manage them in the cookie banner.",
+      "link": "Read the full cookie policy"
+    },
+    "security": {
+      "heading": "Security",
+      "copy": "We use encrypted connections, role-based access, and limited retention to safeguard your information."
+    },
+    "contact": {
+      "heading": "Questions",
+      "copy": "If you have privacy questions or data requests, contact our team.",
+      "email": "privacy@amarka.com"
+    }
+  },
+  "cookiePolicy": {
+    "title": "Cookie Policy",
+    "subtitle": "Our approach to cookies for a smooth engraving experience",
+    "last_updated": "Last updated: January 2025",
+    "intro": "We use cookies to keep your cart, remember preferences, and improve our engraving storefront.",
+    "what": {
+      "heading": "What are cookies?",
+      "copy": "Small text files stored on your device that help the site function, stay secure, and remember your preferences."
+    },
+    "types": {
+      "heading": "Types of cookies we use",
+      "essential": "Essential: security, authentication, cart, and checkout.",
+      "analytics": "Analytics: anonymous usage to improve products and navigation.",
+      "marketing": "Marketing: personalize offers and measure campaigns.",
+      "preferences": "Preferences: remember language, region, and display settings."
+    },
+    "control": {
+      "heading": "How to control cookies",
+      "copy": "Use the banner controls on our site, your browser settings, or clear cookies. Essential cookies are required for checkout."
+    },
+    "contact": {
+      "heading": "Contact",
+      "copy": "For cookie questions, reach out to our privacy team.",
+      "email": "privacy@amarka.com"
+    }
+  },
+  "terms": {
+    "title": "Terms of Service",
+    "subtitle": "The rules for shopping engraved gifts with us",
+    "last_updated": "Last updated: January 2025",
+    "intro": "By using this site or placing an order, you agree to these terms. They ensure we can craft, personalize, and deliver your engraved items reliably.",
+    "use": {
+      "heading": "Use of the site",
+      "copy": "You agree to provide accurate information, respect intellectual property, and not misuse the site. Accounts are for your personal use; keep your login secure."
+    },
+    "orders": {
+      "heading": "Orders, engraving, and payment",
+      "copy": "Personalized orders begin production after payment. Proofs are produced only when stated. Prices and availability may change. Taxes and shipping are shown at checkout. You authorize us to engrave text or artwork you provide."
+    },
+    "returns": {
+      "heading": "Returns and cancellations",
+      "copy": "Engraved or personalized items are final sale except for defects or errors on our part. Report issues within 7 days of delivery with photos so we can remake or refund when appropriate."
+    },
+    "contact": {
+      "heading": "Need help?",
+      "copy": "For questions about these terms or your order, contact our support team.",
+      "email": "support@amarka.com"
+    }
   }
 }

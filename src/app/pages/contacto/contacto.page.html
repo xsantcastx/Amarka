@@ -29,8 +29,8 @@
       <!-- Form -->
       <div class="bg-ts-paper border border-ts-line rounded-2xl shadow-soft p-8">
         <div class="mb-8 space-y-2">
-          <h2 class="font-serif text-3xl text-ts-ink">Let's bring your vision to life</h2>
-          <p class="text-ts-ink-soft">Share a few details about your event. We respond within one business day.</p>
+          <h2 class="font-serif text-3xl text-ts-ink">Share Your Vision</h2>
+          <p class="text-ts-ink-soft">Tell us about your personalized gift needs. We respond within one business day with custom recommendations.</p>
         </div>
 
         <div *ngIf="submitSuccess"
@@ -69,30 +69,30 @@
                 class="w-full px-4 py-3 rounded-xl border border-ts-line bg-white text-ts-ink placeholder:text-ts-ink-soft focus:outline-none focus:ring-2 focus:ring-ts-accent focus:border-ts-accent-soft transition">
             </div>
             <div class="md:col-span-1">
-              <label for="eventDate" class="block text-sm font-semibold text-ts-ink mb-1">Event date</label>
+              <label for="eventDate" class="block text-sm font-semibold text-ts-ink mb-1">Needed by date</label>
               <input type="text" id="eventDate" formControlName="eventDate" placeholder="MM / DD / YYYY"
                 class="w-full px-4 py-3 rounded-xl border border-ts-line bg-white text-ts-ink placeholder:text-ts-ink-soft focus:outline-none focus:ring-2 focus:ring-ts-accent focus:border-ts-accent-soft transition">
             </div>
             <div class="md:col-span-1">
-              <label for="location" class="block text-sm font-semibold text-ts-ink mb-1">Location</label>
-              <input type="text" id="location" formControlName="location" placeholder="Venue or city"
+              <label for="location" class="block text-sm font-semibold text-ts-ink mb-1">Shipping to</label>
+              <input type="text" id="location" formControlName="location" placeholder="City, State or ZIP"
                 class="w-full px-4 py-3 rounded-xl border border-ts-line bg-white text-ts-ink placeholder:text-ts-ink-soft focus:outline-none focus:ring-2 focus:ring-ts-accent focus:border-ts-accent-soft transition">
             </div>
             <div class="md:col-span-1">
-              <label for="guestCount" class="block text-sm font-semibold text-ts-ink mb-1">Guest count</label>
-              <input type="text" id="guestCount" formControlName="guestCount" placeholder="Approx. number of guests"
+              <label for="guestCount" class="block text-sm font-semibold text-ts-ink mb-1">Quantity needed</label>
+              <input type="text" id="guestCount" formControlName="guestCount" placeholder="Approx. number of items"
                 class="w-full px-4 py-3 rounded-xl border border-ts-line bg-white text-ts-ink placeholder:text-ts-ink-soft focus:outline-none focus:ring-2 focus:ring-ts-accent focus:border-ts-accent-soft transition">
             </div>
             <div class="md:col-span-1">
               <label for="budget" class="block text-sm font-semibold text-ts-ink mb-1">Budget range</label>
-              <input type="text" id="budget" formControlName="budget" placeholder="e.g., $5,000 - $15,000"
+              <input type="text" id="budget" formControlName="budget" placeholder="e.g., $500 - $2,000"
                 class="w-full px-4 py-3 rounded-xl border border-ts-line bg-white text-ts-ink placeholder:text-ts-ink-soft focus:outline-none focus:ring-2 focus:ring-ts-accent focus:border-ts-accent-soft transition">
             </div>
           </div>
 
           <div>
-            <label for="mensaje" class="block text-sm font-semibold text-ts-ink mb-1">Tell us about your event *</label>
-            <textarea id="mensaje" formControlName="mensaje" rows="5"
+            <label for="mensaje" class="block text-sm font-semibold text-ts-ink mb-1">Tell us about your project *</label>
+            <textarea id="mensaje" formControlName="mensaje" rows="5" placeholder="Describe what you're looking to create, any engraving details, occasion, or special requests..."
               class="w-full px-4 py-3 rounded-xl border border-ts-line bg-white text-ts-ink placeholder:text-ts-ink-soft focus:outline-none focus:ring-2 focus:ring-ts-accent focus:border-ts-accent-soft transition resize-none"></textarea>
             <p *ngIf="getFieldError('mensaje')" class="mt-1 text-sm text-rose-700">{{getFieldError('mensaje')}}</p>
           </div>
@@ -135,8 +135,8 @@
                 </svg>
               </div>
               <div>
-                <h3 class="font-semibold text-lg text-ts-ink">Miami & South Florida</h3>
-                <p class="text-ts-ink-soft">Available for events across South Florida and destination requests.</p>
+                <h3 class="font-semibold text-lg text-ts-ink">{{ contactAddress || 'Service Area' }}</h3>
+                <p class="text-ts-ink-soft">Serving customers across the US with fast, reliable shipping for personalized gifts.</p>
               </div>
             </div>
 
@@ -181,12 +181,12 @@
             <div class="flex gap-4 items-start">
               <div class="w-12 h-12 rounded-full bg-ts-bg-soft border border-ts-line flex items-center justify-center">
                 <svg class="w-6 h-6 text-ts-ink" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 7h18M3 12h18M3 17h18"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                 </svg>
               </div>
               <div>
-                <h3 class="font-semibold text-lg text-ts-ink">Hours</h3>
-                <p class="text-ts-ink-soft">Mon – Sat: 08:00 AM – 07:00 PM</p>
+                <h3 class="font-semibold text-lg text-ts-ink">Business Hours</h3>
+                <p class="text-ts-ink-soft">Mon – Fri: 9:00 AM – 6:00 PM EST<br>Sat: 10:00 AM – 4:00 PM EST</p>
               </div>
             </div>
           </div>

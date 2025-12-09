@@ -1,0 +1,41 @@
+<section class="bg-ts-bg min-h-screen">
+  <app-page-header
+    title="cookiePolicy.title"
+    subtitle="cookiePolicy.subtitle"
+    [breadcrumbs]="breadcrumbs"
+    icon="products">
+  </app-page-header>
+
+  <div class="page-container py-12 space-y-8 max-w-4xl">
+    <div class="rounded-2xl bg-ts-paper border border-ts-line shadow-sm p-6 space-y-3">
+      <p class="text-sm text-ts-ink-soft">{{ 'cookiePolicy.last_updated' | translate }}</p>
+      <p class="text-ts-ink-soft">{{ 'cookiePolicy.intro' | translate }}</p>
+    </div>
+
+    <div class="rounded-2xl bg-ts-paper border border-ts-line shadow-sm p-6 space-y-4">
+      <h2 class="text-xl font-semibold text-ts-ink">{{ 'cookiePolicy.what.heading' | translate }}</h2>
+      <p class="text-ts-ink-soft">{{ 'cookiePolicy.what.copy' | translate }}</p>
+    </div>
+
+    <div class="rounded-2xl bg-ts-paper border border-ts-line shadow-sm p-6 space-y-4">
+      <h2 class="text-xl font-semibold text-ts-ink">{{ 'cookiePolicy.types.heading' | translate }}</h2>
+      <ul class="list-disc pl-5 space-y-2 text-ts-ink-soft">
+        <li>{{ 'cookiePolicy.types.essential' | translate }}</li>
+        <li>{{ 'cookiePolicy.types.analytics' | translate }}</li>
+        <li>{{ 'cookiePolicy.types.marketing' | translate }}</li>
+        <li>{{ 'cookiePolicy.types.preferences' | translate }}</li>
+      </ul>
+    </div>
+
+    <div class="rounded-2xl bg-ts-paper border border-ts-line shadow-sm p-6 space-y-4">
+      <h2 class="text-xl font-semibold text-ts-ink">{{ 'cookiePolicy.control.heading' | translate }}</h2>
+      <p class="text-ts-ink-soft">{{ 'cookiePolicy.control.copy' | translate }}</p>
+    </div>
+
+    <div class="rounded-2xl bg-ts-paper border border-ts-line shadow-sm p-6 space-y-4">
+      <h2 class="text-xl font-semibold text-ts-ink">{{ 'cookiePolicy.contact.heading' | translate }}</h2>
+      <p class="text-ts-ink-soft">{{ 'cookiePolicy.contact.copy' | translate }}</p>
+      <a href="mailto:{{ 'cookiePolicy.contact.email' | translate }}" class="text-ts-accent underline">{{ 'cookiePolicy.contact.email' | translate }}</a>
+    </div>
+  </div>
+</section>

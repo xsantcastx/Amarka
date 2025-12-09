@@ -452,7 +452,7 @@ export class SettingsService {
       instagramUrl: '',
       linkedinUrl: '',
       youtubeUrl: '',
-      whatsappNumber: '',
+      whatsappNumber: site.contact.whatsapp || '',
 
       // Security
       twoFactorEnabled: false,

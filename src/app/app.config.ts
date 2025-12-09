@@ -17,6 +17,7 @@ import { PageTitleStrategy } from './core/services/page-title.strategy';
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { environment } from '../environments/environment';
+import { generatedEnvironment } from '../environments/environment.generated';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new CustomTranslateLoader(http);
@@ -38,12 +39,25 @@ export const appConfig: ApplicationConfig = {
     }),
     provideAuth(() => {
       const auth = getAuth();
-      // Ensure auth persistence is set to LOCAL (default, but explicitly set for clarity)
-      // This keeps users signed in even after browser refresh/close
+      // Ensure auth persistence is set to LOCAL (keeps users signed in across sessions)
+      // This prevents unexpected logouts on page refresh
       if (typeof window !== 'undefined') {
-        import('firebase/auth').then(({ setPersistence, browserLocalPersistence }) => {
-          setPersistence(auth, browserLocalPersistence).catch((error) => {
-            console.error('Error setting auth persistence:', error);
+        import('firebase/auth').then(({ setPersistence, browserLocalPersistence, onAuthStateChanged }) => {
+          setPersistence(auth, browserLocalPersistence)
+            .then(() => {
+              console.log('[Auth] Persistence set to LOCAL - sessions will persist across page refreshes');
+            })
+            .catch((error) => {
+              console.error('[Auth] Error setting persistence:', error);
+            });
+          
+          // Monitor auth state for debugging
+          onAuthStateChanged(auth, (user) => {
+            if (user) {
+              console.log('[Auth] Auth state changed - user logged in:', user.email);
+            } else {
+              console.log('[Auth] Auth state changed - no user (logged out or not authenticated)');
+            }
           });
         });
       }
@@ -57,6 +71,7 @@ export const appConfig: ApplicationConfig = {
     ...(environment.recaptcha?.enabled && typeof window !== 'undefined' ? [
       provideAppCheck(() => {
         console.log('[AppCheck] Initializing App Check with reCAPTCHA v3');
+        console.log('[AppCheck] Note: App Check failures will NOT sign out users');
         
         // Use reCAPTCHA v3 provider
         const provider = new ReCaptchaV3Provider(
@@ -75,10 +90,10 @@ export const appConfig: ApplicationConfig = {
     ] : []),
     provideFunctions(() => {
       const functions = getFunctions();
-      // Optionally connect to emulator in development
-      // if (!environment.production) {
-      //   connectFunctionsEmulator(functions, 'localhost', 5001);
-      // }
+      // Connect to emulator in development
+      if (generatedEnvironment.useEmulators) {
+        connectFunctionsEmulator(functions, 'localhost', 5001);
+      }
       return functions;
     }),
     // Analytics with browser support check and production-only (browser only)

@@ -1,12 +1,20 @@
 <section class="bg-ts-bg min-h-screen">
   <app-page-header
-    title="Collections"
-    subtitle="Curated drops like Gifts for Men, Wedding Keepsakes, and bespoke engraved sets."
+    title="collections.title"
+    subtitle="collections.subtitle"
     [breadcrumbs]="breadcrumbs"
     icon="collections">
   </app-page-header>
 
-  <div class="page-container py-10 space-y-8">
+  <div class="page-container py-10 space-y-8 relative">
+    @if (isLoading) {
+      <div class="absolute inset-0 flex items-center justify-center bg-ts-bg/80 backdrop-blur-sm z-10">
+        <div class="text-center space-y-3">
+          <div class="app-spinner" style="--spinner-size: 64px;"><img src="/Logo Clear.png" alt="Loading" width="80" height="80"></div>
+          <p class="text-ts-ink-soft text-sm">{{ 'collections.loading' | translate }}</p>
+        </div>
+      </div>
+    }
     @if (isLoading) {
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
         @for (i of [1,2,3,4,5,6]; track i) {
@@ -15,8 +23,8 @@
       </div>
     } @else if (!collections.length) {
       <div class="rounded-2xl bg-ts-paper border border-ts-line p-10 text-center">
-        <h3 class="text-xl font-semibold text-ts-ink mb-2">No collections yet</h3>
-        <p class="text-ts-ink-soft">Create a collection in Admin → Collections and it will appear here automatically.</p>
+        <h3 class="text-xl font-semibold text-ts-ink mb-2">{{ 'collections.empty.title' | translate }}</h3>
+        <p class="text-ts-ink-soft">{{ 'collections.empty.body' | translate }}</p>
       </div>
     } @else {
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -36,13 +44,13 @@
               }
             </div>
             <div class="p-5 space-y-2">
-              <div class="text-sm uppercase tracking-wide text-ts-ink-soft">Collection</div>
+              <div class="text-sm uppercase tracking-wide text-ts-ink-soft">{{ 'collections.card.label' | translate }}</div>
               <h3 class="text-xl font-semibold text-ts-ink">{{ collection.name }}</h3>
               @if (collection.description) {
                 <p class="text-sm text-ts-ink-soft line-clamp-2">{{ collection.description }}</p>
               }
               <div class="flex items-center gap-2 text-sm font-semibold text-ts-accent group-hover:text-ts-ink">
-                <span>Shop now</span>
+                <span>{{ 'collections.card.cta' | translate }}</span>
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                 </svg>

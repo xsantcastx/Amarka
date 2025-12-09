@@ -154,7 +154,8 @@
             <svg class="w-6 h-6 text-ts-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
             </svg>
-            Shipping Address
+            {{ 'cart.address.shipping_address' | translate }}
+            <span class="ml-2 text-sm text-error font-normal">*{{ 'cart.address.required' | translate }}</span>
           </h2>
 
             <!-- Address List -->
@@ -188,7 +189,7 @@
                         <p class="font-semibold text-ts-ink">{{ address.firstName }} {{ address.lastName }}</p>
                         <span *ngIf="address.isDefault" 
                               class="text-xs px-2 py-0.5 rounded-full bg-primary/20 text-primary border border-primary/30">
-                          Default
+                          {{ 'cart.address.default' | translate }}
                         </span>
                       </div>
                       <p class="text-sm text-ts-ink-soft">{{ address.line1 }}</p>
@@ -208,11 +209,11 @@
 
             <!-- No Addresses Message -->
             <div *ngIf="addresses().length === 0 && !showAddressForm()" class="text-center py-6 bg-ts-bg-soft rounded-lg border border-ts-line mb-4">
-              <p class="text-ts-ink-soft mb-3">No shipping addresses found</p>
+              <p class="text-ts-ink-soft mb-3">{{ 'cart.address.no_addresses' | translate }}</p>
               <button type="button"
                       (click)="showAddressForm.set(true)"
                       class="px-6 py-2 bg-primary/20 hover:bg-primary/30 border border-primary/30 text-primary rounded-lg transition-all">
-                Add Shipping Address
+                {{ 'cart.address.add_shipping_address' | translate }}
               </button>
             </div>
 
@@ -224,17 +225,17 @@
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
               </svg>
-              Add New Address
+              {{ 'cart.address.add_new_address' | translate }}
             </button>
 
             <!-- Inline Address Form -->
             <div *ngIf="showAddressForm()" class="p-6 bg-ts-bg-soft rounded-lg border border-ts-accent/50 mt-4">
-              <h3 class="text-lg font-semibold text-ts-ink mb-4">New Shipping Address</h3>
+              <h3 class="text-lg font-semibold text-ts-ink mb-4">{{ 'cart.address.new_shipping_address' | translate }}</h3>
               
               <form [formGroup]="addressForm" class="space-y-4">
                 <div class="grid grid-cols-2 gap-4">
                   <div>
-                    <label class="block text-sm font-medium text-ts-ink-soft mb-1">First Name *</label>
+                    <label class="block text-sm font-medium text-ts-ink-soft mb-1">{{ 'cart.address.first_name' | translate }} *</label>
                     <input type="text" formControlName="firstName"
                            class="w-full px-3 py-2 bg-ts-paper border border-ts-line rounded-lg text-ts-ink focus:ring-2 focus:ring-primary focus:border-primary"
                            [class.border-error]="addressForm.get('firstName')?.invalid && addressForm.get('firstName')?.touched">
@@ -243,7 +244,7 @@
                     }
                   </div>
                   <div>
-                    <label class="block text-sm font-medium text-ts-ink-soft mb-1">Last Name *</label>
+                    <label class="block text-sm font-medium text-ts-ink-soft mb-1">{{ 'cart.address.last_name' | translate }} *</label>
                     <input type="text" formControlName="lastName"
                            class="w-full px-3 py-2 bg-ts-paper border border-ts-line rounded-lg text-ts-ink focus:ring-2 focus:ring-primary focus:border-primary"
                            [class.border-error]="addressForm.get('lastName')?.invalid && addressForm.get('lastName')?.touched">
@@ -254,52 +255,52 @@
                 </div>
 
                 <div>
-                  <label class="block text-sm font-medium text-bitcoin-gray mb-1">Email *</label>
+                  <label class="block text-sm font-medium text-ts-ink-soft mb-1">{{ 'cart.address.email' | translate }} *</label>
                   <input type="email" formControlName="email"
-                         class="w-full px-3 py-2 bg-bitcoin-dark border border-bitcoin-gray/30 rounded-lg text-white focus:ring-2 focus:ring-bitcoin-orange focus:border-bitcoin-orange"
-                         [class.border-red-500]="addressForm.get('email')?.invalid && addressForm.get('email')?.touched">
+                         class="w-full px-3 py-2 bg-ts-paper border border-ts-line rounded-lg text-ts-ink focus:ring-2 focus:ring-accent focus:border-accent"
+                         [class.border-error]="addressForm.get('email')?.invalid && addressForm.get('email')?.touched">
                   @if (addressForm.get('email')?.invalid && addressForm.get('email')?.touched) {
-                    <p class="text-xs text-red-400 mt-1">Please enter a valid email address</p>
+                    <p class="text-xs text-error mt-1">Please enter a valid email address</p>
                   }
                 </div>
 
                 <div>
-                  <label class="block text-sm font-medium text-bitcoin-gray mb-1">Phone *</label>
+                  <label class="block text-sm font-medium text-ts-ink-soft mb-1">{{ 'cart.address.phone' | translate }} *</label>
                   <input type="tel" formControlName="phoneE164" placeholder="+14155551234"
-                         class="w-full px-3 py-2 bg-bitcoin-dark border border-bitcoin-gray/30 rounded-lg text-white focus:ring-2 focus:ring-bitcoin-orange focus:border-bitcoin-orange"
-                         [class.border-red-500]="addressForm.get('phoneE164')?.invalid && addressForm.get('phoneE164')?.touched">
-                  <p class="text-xs text-bitcoin-gray/60 mt-1">Format: +1 (country code) followed by phone number</p>
+                         class="w-full px-3 py-2 bg-ts-paper border border-ts-line rounded-lg text-ts-ink focus:ring-2 focus:ring-accent focus:border-accent"
+                         [class.border-error]="addressForm.get('phoneE164')?.invalid && addressForm.get('phoneE164')?.touched">
+                  <p class="text-xs text-ts-ink-soft/60 mt-1">{{ 'cart.address.phone_hint' | translate }}</p>
                   @if (addressForm.get('phoneE164')?.invalid && addressForm.get('phoneE164')?.touched) {
-                    <p class="text-xs text-red-400 mt-1">Please enter a valid phone number with country code (e.g., +14155551234)</p>
+                    <p class="text-xs text-error mt-1">Please enter a valid phone number with country code (e.g., +14155551234)</p>
                   }
                 </div>
 
                 <div>
-                  <label class="block text-sm font-medium text-bitcoin-gray mb-1">Address *</label>
+                  <label class="block text-sm font-medium text-ts-ink-soft mb-1">{{ 'cart.address.address_line1' | translate }} *</label>
                   <input type="text" formControlName="line1" placeholder="123 Main Street"
-                         class="w-full px-3 py-2 bg-bitcoin-dark border border-bitcoin-gray/30 rounded-lg text-white focus:ring-2 focus:ring-bitcoin-orange focus:border-bitcoin-orange"
-                         [class.border-red-500]="addressForm.get('line1')?.invalid && addressForm.get('line1')?.touched">
+                         class="w-full px-3 py-2 bg-ts-paper border border-ts-line rounded-lg text-ts-ink focus:ring-2 focus:ring-accent focus:border-accent"
+                         [class.border-error]="addressForm.get('line1')?.invalid && addressForm.get('line1')?.touched">
                   @if (addressForm.get('line1')?.invalid && addressForm.get('line1')?.touched) {
-                    <p class="text-xs text-red-400 mt-1">Please enter a valid street address</p>
+                    <p class="text-xs text-error mt-1">Please enter a valid street address</p>
                   }
                 </div>
 
                 <div class="grid grid-cols-2 gap-4">
                   <div>
-                    <label class="block text-sm font-medium text-bitcoin-gray mb-1">City *</label>
+                    <label class="block text-sm font-medium text-ts-ink-soft mb-1">{{ 'cart.address.city' | translate }} *</label>
                     <input type="text" formControlName="city"
-                           class="w-full px-3 py-2 bg-bitcoin-dark border border-bitcoin-gray/30 rounded-lg text-white focus:ring-2 focus:ring-bitcoin-orange focus:border-bitcoin-orange"
-                           [class.border-red-500]="addressForm.get('city')?.invalid && addressForm.get('city')?.touched">
+                           class="w-full px-3 py-2 bg-ts-paper border border-ts-line rounded-lg text-ts-ink focus:ring-2 focus:ring-accent focus:border-accent"
+                           [class.border-error]="addressForm.get('city')?.invalid && addressForm.get('city')?.touched">
                     @if (addressForm.get('city')?.invalid && addressForm.get('city')?.touched) {
-                      <p class="text-xs text-red-400 mt-1">Please enter a city</p>
+                      <p class="text-xs text-error mt-1">Please enter a city</p>
                     }
                   </div>
                   <div>
-                    <label class="block text-sm font-medium text-bitcoin-gray mb-1">State *</label>
+                    <label class="block text-sm font-medium text-ts-ink-soft mb-1">{{ 'cart.address.state' | translate }} *</label>
                     <select formControlName="region"
-                            class="w-full px-3 py-2 bg-bitcoin-dark border border-bitcoin-gray/30 rounded-lg text-white focus:ring-2 focus:ring-bitcoin-orange focus:border-bitcoin-orange"
-                            [class.border-red-500]="addressForm.get('region')?.invalid && addressForm.get('region')?.touched">
-                      <option value="">Select a state...</option>
+                            class="w-full px-3 py-2 bg-ts-paper border border-ts-line rounded-lg text-ts-ink focus:ring-2 focus:ring-accent focus:border-accent"
+                            [class.border-error]="addressForm.get('region')?.invalid && addressForm.get('region')?.touched">
+                      <option value="">{{ 'cart.address.select_state' | translate }}</option>
                       <option value="AL">Alabama</option>
                       <option value="AK">Alaska</option>
                       <option value="AZ">Arizona</option>
@@ -360,21 +361,21 @@
 
                 <div class="grid grid-cols-2 gap-4">
                   <div>
-                    <label class="block text-sm font-medium text-bitcoin-gray mb-1">ZIP Code *</label>
+                    <label class="block text-sm font-medium text-ts-ink-soft mb-1">{{ 'cart.address.zip_code' | translate }} *</label>
                     <input type="text" formControlName="postalCode" placeholder="12345 or 12345-6789"
-                           class="w-full px-3 py-2 bg-bitcoin-dark border border-bitcoin-gray/30 rounded-lg text-white focus:ring-2 focus:ring-bitcoin-orange focus:border-bitcoin-orange"
-                           [class.border-red-500]="addressForm.get('postalCode')?.invalid && addressForm.get('postalCode')?.touched">
+                           class="w-full px-3 py-2 bg-ts-paper border border-ts-line rounded-lg text-ts-ink focus:ring-2 focus:ring-accent focus:border-accent"
+                           [class.border-error]="addressForm.get('postalCode')?.invalid && addressForm.get('postalCode')?.touched">
                     @if (addressForm.get('postalCode')?.invalid && addressForm.get('postalCode')?.touched) {
-                      <p class="text-xs text-red-400 mt-1">Please enter a valid 5-digit ZIP code</p>
+                      <p class="text-xs text-error mt-1">Please enter a valid 5-digit ZIP code</p>
                     }
                   </div>
                   <div>
-                    <label class="block text-sm font-medium text-bitcoin-gray mb-1">Country *</label>
+                    <label class="block text-sm font-medium text-ts-ink-soft mb-1">{{ 'cart.address.country' | translate }} *</label>
                     <select formControlName="country" [disabled]="true"
-                            class="w-full px-3 py-2 bg-bitcoin-dark/50 border border-bitcoin-gray/30 rounded-lg text-white/70 cursor-not-allowed">
+                            class="w-full px-3 py-2 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink-soft cursor-not-allowed">
                       <option value="US">United States</option>
                     </select>
-                    <p class="text-xs text-bitcoin-gray/60 mt-1">Currently shipping to US addresses only</p>
+                    <p class="text-xs text-ts-ink-soft/60 mt-1">{{ 'cart.address.us_only' | translate }}</p>
                   </div>
                 </div>
 
@@ -382,14 +383,14 @@
                   <button type="button"
                           (click)="saveNewAddress()"
                           [disabled]="savingAddress() || addressForm.invalid"
-                          class="flex-1 py-3 px-4 bg-bitcoin-orange hover:bg-bitcoin-orange/90 disabled:bg-bitcoin-gray/30 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-all">
-                    {{ savingAddress() ? 'Saving...' : 'Save Address' }}
+                          class="flex-1 py-3 px-4 bg-primary hover:bg-primary/90 disabled:bg-ts-bg-soft disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-all">
+                    {{ savingAddress() ? ('cart.address.saving' | translate) : ('cart.address.save_address' | translate) }}
                   </button>
                   <button type="button"
                           (click)="cancelAddAddress()"
                           [disabled]="savingAddress()"
-                          class="px-6 py-3 border border-bitcoin-gray/30 hover:bg-bitcoin-gray/10 text-bitcoin-gray rounded-lg transition-all">
-                    Cancel
+                          class="px-6 py-3 border border-ts-line hover:bg-ts-bg-soft text-ts-ink-soft rounded-lg transition-all">
+                    {{ 'cart.address.cancel' | translate }}
                   </button>
                 </div>
               </form>
@@ -398,28 +399,29 @@
         <!-- Close address section div -->
 
         <!-- Shipping Method Section (still inside checkoutForm) -->
-        <div class="rounded-2xl border border-bitcoin-orange/20 p-6 bg-gradient-to-br from-bitcoin-dark/60 to-bitcoin-dark/40 backdrop-blur-sm hover:border-bitcoin-orange/30 transition-all"
+        <div class="rounded-xl border border-ts-line p-6 bg-surface hover:border-ts-accent/50 transition-all"
              *ngIf="shippingMethods().length > 0">
-          <h2 class="font-serif text-2xl text-white mb-6 flex items-center gap-2">
-            <svg class="w-6 h-6 text-bitcoin-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <h2 class="font-serif text-2xl text-ts-ink mb-6 flex items-center gap-2">
+            <svg class="w-6 h-6 text-ts-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"></path>
               <path d="M3 4a1 1 0 00-1 1v10a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0H10a1 1 0 001-1V5a1 1 0 00-1-1H3zM14 7a1 1 0 00-1 1v6.05A2.5 2.5 0 0115.95 16H17a1 1 0 001-1v-5a1 1 0 00-.293-.707l-2-2A1 1 0 0015 7h-1z"></path>
             </svg>
-            Shipping Method
+            {{ 'cart.shipping_method.title' | translate }}
+            <span class="ml-2 text-sm text-error font-normal">*{{ 'cart.address.required' | translate }}</span>
           </h2>
 
-          <div *ngIf="(shippingSettings()?.shippingEnabled ?? true) && calculatingShipping()" class="flex items-center gap-3 text-bitcoin-gray mb-4">
+          <div *ngIf="(shippingSettings()?.shippingEnabled ?? true) && calculatingShipping()" class="flex items-center gap-3 text-ts-ink-soft mb-4">
             <div class="app-spinner" style="--spinner-size: 72px;"><img src="/Logo Clear.png" alt="Loading" width="96" height="96"></div>
-            <span>Calculating shipping rates...</span>
+            <span>{{ 'cart.shipping_method.calculating' | translate }}</span>
           </div>
 
           <!-- Shipping methods are part of the same checkoutForm -->
             <div class="space-y-3">
               <label *ngFor="let method of shippingMethods()"
                      class="block p-4 rounded-lg border-2 cursor-pointer transition-all"
-                     [class.border-bitcoin-orange]="checkoutForm.value.shippingMethodId === method.id"
-                     [class.bg-bitcoin-orange/10]="checkoutForm.value.shippingMethodId === method.id"
-                     [class.border-bitcoin-gray/20]="checkoutForm.value.shippingMethodId !== method.id">
+                     [class.border-primary]="checkoutForm.value.shippingMethodId === method.id"
+                     [class.bg-primary/10]="checkoutForm.value.shippingMethodId === method.id"
+                     [class.border-ts-line]="checkoutForm.value.shippingMethodId !== method.id">
                 <input type="radio"
                        formControlName="shippingMethodId"
                        [value]="method.id"
@@ -427,11 +429,11 @@
                        class="sr-only">
                 <div class="flex items-start justify-between">
                   <div class="flex-1">
-                    <p class="font-semibold text-white mb-1">{{ method.name }}</p>
-                    <p class="text-sm text-bitcoin-gray">{{ method.description }}</p>
+                    <p class="font-semibold text-ts-ink mb-1">{{ method.name }}</p>
+                    <p class="text-sm text-ts-ink-soft">{{ method.description }}</p>
                   </div>
                   <div class="text-right ml-4">
-                    <p class="font-bold text-bitcoin-gold">{{ formatCurrency(method.cost, method.currency) }}</p>
+                    <p class="font-bold text-accent">{{ formatCurrency(method.cost, method.currency) }}</p>
                   </div>
                 </div>
               </label>
@@ -446,9 +448,9 @@
       <!-- Order Summary Below Cart Items -->
       <div class="space-y-6" *ngIf="vm.items.length > 0">
         <!-- Order Summary Card -->
-        <div class="rounded-2xl border border-bitcoin-orange/20 p-6 bg-gradient-to-br from-bitcoin-dark/80 to-bitcoin-dark/60 backdrop-blur-md shadow-bitcoin-lg">
-          <h2 class="font-serif text-2xl bitcoin-gradient-text mb-6 flex items-center gap-2">
-            <svg class="w-6 h-6 text-bitcoin-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="rounded-2xl border border-ts-line p-6 bg-ts-paper shadow-lg">
+          <h2 class="font-serif text-2xl text-accent mb-6 flex items-center gap-2">
+            <svg class="w-6 h-6 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
             </svg>
             {{ 'cart.order_summary' | translate }}
@@ -456,36 +458,36 @@
             
             <div class="space-y-4 mb-6">
               <!-- Subtotal -->
-              <div class="flex justify-between items-center pb-3 border-b border-bitcoin-gray/10">
-                <span class="text-bitcoin-gray">{{ 'cart.subtotal' | translate }} ({{ vm.items.length }} {{ vm.items.length === 1 ? ('cart.item' | translate) : ('cart.items' | translate) }})</span>
-                <span class="text-white font-semibold text-lg">${{ vm.subtotal.toFixed(2) }}</span>
+              <div class="flex justify-between items-center pb-3 border-b border-ts-line">
+                <span class="text-ts-ink-soft">{{ 'cart.subtotal' | translate }} ({{ vm.items.length }} {{ vm.items.length === 1 ? ('cart.item' | translate) : ('cart.items' | translate) }})</span>
+                <span class="text-ts-ink font-semibold text-lg">${{ vm.subtotal.toFixed(2) }}</span>
               </div>
               
               <!-- Shipping -->
               <div class="flex justify-between items-center text-sm" *ngIf="vm.shipping > 0">
-                <span class="text-bitcoin-gray">{{ 'cart.shipping_label' | translate }}</span>
-                <span class="text-white font-medium">${{ vm.shipping.toFixed(2) }}</span>
+                <span class="text-ts-ink-soft">{{ 'cart.shipping_label' | translate }}</span>
+                <span class="text-ts-ink font-medium">${{ vm.shipping.toFixed(2) }}</span>
               </div>
               
               <!-- Tax -->
               <div class="flex justify-between items-center text-sm" *ngIf="vm.tax > 0">
-                <span class="text-bitcoin-gray">{{ 'cart.tax' | translate }}</span>
-                <span class="text-white font-medium">${{ vm.tax.toFixed(2) }}</span>
+                <span class="text-ts-ink-soft">{{ 'cart.tax' | translate }}</span>
+                <span class="text-ts-ink font-medium">${{ vm.tax.toFixed(2) }}</span>
               </div>
               
               <!-- Total -->
-              <div class="pt-4 border-t-2 border-bitcoin-orange/30">
+              <div class="pt-4 border-t-2 border-accent/30">
                 <div class="flex justify-between items-center">
-                  <span class="text-lg font-semibold text-white">{{ 'cart.total' | translate }}</span>
+                  <span class="text-lg font-semibold text-ts-ink">{{ 'cart.total' | translate }}</span>
                   <div class="text-right">
-                    <div class="text-2xl font-bold bitcoin-gradient-text">${{ vm.total.toFixed(2) }}</div>
-                    <div class="text-xs text-bitcoin-gray">{{ vm.currency }}</div>
+                    <div class="text-2xl font-bold text-accent">${{ vm.total.toFixed(2) }}</div>
+                    <div class="text-xs text-ts-ink-soft">{{ vm.currency }}</div>
                   </div>
                 </div>
               </div>
             </div>
             
-            <p class="text-xs text-white/70 text-center mb-5 pb-4 border-b border-white/10">
+            <p class="text-xs text-ts-ink-soft text-center mb-5 pb-4 border-b border-ts-line">
               <svg class="w-4 h-4 inline-block mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
               </svg>
@@ -500,7 +502,7 @@
             <!-- Checkout Button -->
             <button 
               (click)="checkout()" 
-              class="w-full group relative overflow-hidden rounded-xl bg-gradient-to-r from-bitcoin-orange to-bitcoin-gold hover:from-bitcoin-gold hover:to-bitcoin-orange text-white font-bold py-4 px-6 shadow-bitcoin hover:shadow-bitcoin-lg transition-all duration-300 transform hover:scale-[1.02]">
+              class="w-full group relative overflow-hidden rounded-xl bg-primary hover:bg-primary/90 text-white font-bold py-4 px-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]">
               <span class="relative z-10 flex items-center justify-center gap-3">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
@@ -514,24 +516,24 @@
             </button>
             
             <!-- Security Badges -->
-            <div class="mt-6 pt-6 border-t border-bitcoin-gray/10">
-                <div class="flex items-center justify-center gap-6 text-xs text-bitcoin-gray">
+            <div class="mt-6 pt-6 border-t border-ts-line">
+                <div class="flex items-center justify-center gap-6 text-xs text-ts-ink-soft">
                 <div class="flex items-center gap-1.5">
-                  <svg class="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                  <svg class="w-4 h-4 text-success" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path>
                   </svg>
                   <span>{{ 'cart.secure' | translate }}</span>
                 </div>
-                <div class="w-px h-4 bg-bitcoin-gray/20"></div>
+                <div class="w-px h-4 bg-ts-line"></div>
                 <div class="flex items-center gap-1.5">
-                  <svg class="w-4 h-4 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                  <svg class="w-4 h-4 text-info" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                   </svg>
                   <span>{{ 'cart.ssl' | translate }}</span>
                 </div>
-                <div class="w-px h-4 bg-bitcoin-gray/20"></div>
+                <div class="w-px h-4 bg-ts-line"></div>
                 <div class="flex items-center gap-1.5">
-                  <svg class="w-4 h-4 text-bitcoin-orange" fill="currentColor" viewBox="0 0 20 20">
+                  <svg class="w-4 h-4 text-accent" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"></path>
                     <path d="M3 4a1 1 0 00-1 1v10a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0H10a1 1 0 001-1V5a1 1 0 00-1-1H3zM14 7a1 1 0 00-1 1v6.05A2.5 2.5 0 0115.95 16H17a1 1 0 001-1v-5a1 1 0 00-.293-.707l-2-2A1 1 0 0015 7h-1z"></path>
                   </svg>
@@ -544,7 +546,7 @@
           <!-- Continue Shopping -->
           <a 
             routerLink="/productos"
-            class="block text-center py-3 px-6 border-2 border-bitcoin-gray/30 text-bitcoin-gray hover:border-bitcoin-orange/50 hover:text-bitcoin-orange rounded-xl font-medium transition-all">
+            class="block text-center py-3 px-6 border-2 border-ts-line text-ts-ink-soft hover:border-accent hover:text-accent rounded-xl font-medium transition-all">
             <span class="flex items-center justify-center gap-2">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>

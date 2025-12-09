@@ -1,13 +1,14 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 import { Product } from '../../../models/product';
 import { CartService } from '../../../services/cart.service';
 
 @Component({
   standalone: true,
   selector: 'ts-product-card',
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, TranslateModule],
   templateUrl: './product-card.component.html',
   styleUrls: ['./product-card.component.scss']
 })

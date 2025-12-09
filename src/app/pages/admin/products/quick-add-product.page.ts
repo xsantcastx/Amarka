@@ -60,6 +60,7 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
   uploadProgress = 0;
   isEditMode = false;
   editingProductId: string | null = null;
+  isCreatingCollection = false;
 
   // Image upload
   selectedCoverFile: File | null = null;
@@ -67,9 +68,16 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
   galleryFiles: File[] = [];
   galleryPreviews: string[] = [];
   
+  // Video upload
+  selectedVideoFile: File | null = null;
+  videoPreview: string | null = null;
+  uploadingVideo = false;
+  videoUploadProgress = 0;
+  
   // Store existing IDs when editing
   existingCoverImageId: string = '';
   existingGalleryImageIds: string[] = [];
+  existingVideoUrl: string = '';
   
   // Technical Specifications
   newSpecKey = '';
@@ -117,6 +125,7 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
       weight: [0, Validators.min(0)],
       tags: [''],
       vendor: [this.brandConfig.siteName],
+      videoUrl: [''],
       // SEO fields
       metaTitle: [''],
       metaDescription: [''],
@@ -673,8 +682,9 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
 
   async createCollectionInline() {
     const name = this.newCollectionName.trim();
-    if (!name) return;
+    if (!name || this.isCreatingCollection) return;
 
+    this.isCreatingCollection = true;
     const slug = this.newCollectionSlug || this.generateSlug(name);
     let heroImageUrl = '';
 
@@ -717,6 +727,8 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
     } catch (error) {
       console.error('Error creating collection inline:', error);
       this.setError('Failed to create collection');
+    } finally {
+      this.isCreatingCollection = false;
     }
   }
 
@@ -798,5 +810,39 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
 
   onGallerySelected(event: any) {
     this.onGalleryImagesSelected(event);
+  }
+
+  onVideoSelected(event: any) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('video/')) {
+      alert('Please select a valid video file');
+      return;
+    }
+
+    // Validate file size (max 50MB)
+    const maxSize = 50 * 1024 * 1024; // 50MB in bytes
+    if (file.size > maxSize) {
+      alert('Video file is too large. Maximum size is 50MB');
+      return;
+    }
+
+    this.selectedVideoFile = file;
+    
+    // Create preview URL
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      this.videoPreview = e.target?.result as string;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  removeVideo() {
+    this.videoPreview = null;
+    this.selectedVideoFile = null;
+    this.productForm.patchValue({ videoUrl: '' });
+    this.existingVideoUrl = '';
   }
 }

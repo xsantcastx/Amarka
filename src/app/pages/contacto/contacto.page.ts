@@ -54,8 +54,8 @@ export class ContactoPageComponent {
 
   // Hero settings
   heroImage = '/assets/contact/hero-contact.jpg';
-  heroTitle = 'Tell us about your celebration';
-  heroSubtitle = 'Share your date, location, and vision. We respond within one business day to craft a bespoke plan for your event.';
+  heroTitle = 'Let\'s Create Something Meaningful';
+  heroSubtitle = 'Share details about your personalized gift needs. We respond within one business day with custom recommendations and pricing.';
 
   constructor(
     private fb: FormBuilder,
@@ -212,17 +212,21 @@ export class ContactoPageComponent {
   async loadSettings() {
     try {
       const settings = await this.settingsService.getSettings();
-      this.contactEmail = settings.contactEmail || '';
-      this.contactPhone = settings.contactPhone || '';
-      this.contactAddress = settings.contactAddress || '';
-      this.whatsappNumber = settings.whatsappNumber || '';
+      this.contactEmail = settings.contactEmail || 'hello@amarka.com';
+      this.contactPhone = settings.contactPhone || '+1 (305) 555-0100';
+      this.contactAddress = settings.contactAddress || 'Miami & South Florida';
+      this.whatsappNumber = settings.whatsappNumber || settings.contactPhone || '';
       
-      // Load hero settings
+      // Load hero settings if available
       this.heroImage = settings.contactoHeroImage || this.heroImage;
       this.heroTitle = settings.contactoHeroTitle || this.heroTitle;
       this.heroSubtitle = settings.contactoHeroSubtitle || this.heroSubtitle;
     } catch (error) {
       console.error('[Contacto] Error loading settings:', error);
+      // Fallback to defaults
+      this.contactEmail = 'hello@amarka.com';
+      this.contactPhone = '+1 (305) 555-0100';
+      this.contactAddress = 'Miami & South Florida';
     }
   }
 

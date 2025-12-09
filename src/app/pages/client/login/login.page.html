@@ -14,7 +14,7 @@
           {{ 'client.login_subtitle' | translate }}
         </h1>
         <p class="text-lg leading-relaxed text-ts-ink/70 sm:text-xl">
-          Sign in to manage your orders, saved gifts, and personalised settings for Amarka.
+          {{ 'client.login_description' | translate }}
         </p>
       </div>
       <div class="grid gap-6 sm:grid-cols-2">
@@ -24,8 +24,8 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
             </svg>
           </div>
-          <h3 class="text-lg font-semibold text-ts-ink">Unified Dashboard</h3>
-          <p class="mt-2 text-sm text-ts-ink/70">Track orders, manage devices, and unlock premium resources in one beautifully organized console.</p>
+          <h3 class="text-lg font-semibold text-ts-ink">{{ 'client.unified_dashboard_title' | translate }}</h3>
+          <p class="mt-2 text-sm text-ts-ink/70">{{ 'client.unified_dashboard_description' | translate }}</p>
         </div>
         <div class="rounded-2xl border border-ts-accent/30 bg-ts-accent/10 p-5 text-left shadow-soft">
           <div class="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-full bg-ts-ink/70 text-ts-accent-soft">
@@ -34,8 +34,8 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2v2m0 16v2m10-10h-2M4 12H2m15.364 6.364l-1.414-1.414M6.05 6.05 4.636 4.636m12.728 0-1.414 1.414M6.05 17.95l-1.414 1.414"></path>
             </svg>
           </div>
-          <h3 class="text-lg font-semibold text-ts-ink">Enterprise Security</h3>
-          <p class="mt-2 text-sm text-ts-ink/70">Multi-layer authentication, reCAPTCHA, and monitored infrastructure keep your assets protected.</p>
+          <h3 class="text-lg font-semibold text-ts-ink">{{ 'client.secure_account_title' | translate }}</h3>
+          <p class="mt-2 text-sm text-ts-ink/70">{{ 'client.secure_account_description' | translate }}</p>
         </div>
       </div>
       <div class="flex flex-wrap items-center justify-center gap-4 text-sm text-ts-ink/50 lg:justify-start">
@@ -43,19 +43,19 @@
           <svg class="h-4 w-4 text-ts-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
           </svg>
-          24/7 Support
+          {{ 'client.support_24_7' | translate }}
         </span>
         <span class="flex items-center gap-2">
           <svg class="h-4 w-4 text-ts-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
           </svg>
-          Real-time Inventory
+          {{ 'client.fast_shipping' | translate }}
         </span>
         <span class="flex items-center gap-2">
           <svg class="h-4 w-4 text-ts-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
           </svg>
-          Exclusive Drops
+          {{ 'client.exclusive_gifts' | translate }}
         </span>
       </div>
     </div>
@@ -67,7 +67,7 @@
             Access
           </div>
           <h2 class="font-serif text-3xl text-ts-ink">{{ 'client.login' | translate }}</h2>
-          <p class="text-sm text-ts-ink/60">Sign in to continue purchasing, tracking, and managing Lux Mining hardware.</p>
+          <p class="text-sm text-ts-ink/60">{{ 'client.login_form_description' | translate }}</p>
         </div>
 
         @if (sessionExpiredMessage) {

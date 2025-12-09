@@ -13,30 +13,26 @@
       <div class="flex-1 hidden md:flex items-stretch rounded-xl overflow-hidden border border-ts-line bg-ts-paper shadow-lvl1">
         <input
           type="search"
-          placeholder="Search engraved gifts, occasions, recipients..."
+          [placeholder]="'nav.search_placeholder' | translate"
           class="flex-1 px-3 text-ts-ink bg-transparent focus:outline-none"
           #navSearch
           (keydown.enter)="goToSearch(navSearch.value)">
         <button class="px-4 bg-primary text-neutral font-semibold hover:shadow-lvl2 transition" (click)="goToSearch(navSearch.value)">
-          Search
+          {{ 'common.search' | translate }}
         </button>
       </div>
 
-      <!-- Right: account / orders / cart / menu -->
+      <!-- Right: account / cart / menu -->
       <div class="flex items-center gap-4 text-xs text-ts-ink">
         <div class="hidden lg:flex flex-col leading-tight">
-          <span class="text-ts-ink-soft">Hello</span>
-          <a routerLink="/client/profile" class="font-semibold hover:text-ts-accent">Account & Lists</a>
-        </div>
-        <div class="hidden lg:flex flex-col leading-tight">
-          <span class="text-ts-ink-soft">Returns</span>
-          <a routerLink="/client/orders" class="font-semibold hover:text-ts-accent">& Orders</a>
+          <span class="text-ts-ink-soft">{{ 'common.hello' | translate }}</span>
+          <a routerLink="/client/profile" class="font-semibold hover:text-ts-accent">{{ 'nav.account_lists' | translate }}</a>
         </div>
         <a routerLink="/cart" class="relative inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-ts-line bg-ts-bg hover:border-ts-accent transition">
           <svg class="w-5 h-5 text-ts-ink" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2 9h14l-2-9M10 21a1 1 0 11-2 0 1 1 0 012 0zm8 0a1 1 0 11-2 0 1 1 0 012 0z" />
           </svg>
-          <span class="font-semibold">Cart</span>
+          <span class="font-semibold">{{ 'nav.cart' | translate }}</span>
         </a>
         <button
           class="p-2 rounded-lg border border-ts-line bg-ts-bg hover:border-ts-accent transition-colors"
@@ -53,7 +49,7 @@
   <!-- Secondary nav -->
   <div class="bg-ts-bg border-b border-ts-line">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-12 flex items-center gap-4 overflow-x-auto">
-      @for (link of headerLinks; track link.href) {
+      @for (link of navLinks; track link.href) {
         <a
           [routerLink]="link.href"
           routerLinkActive="active"
@@ -62,8 +58,8 @@
           {{ link.label | translate }}
         </a>
       }
-      @if (!headerLinks.length) {
-        <span class="text-sm text-ts-ink-soft">Add links in brand config</span>
+      @if (!navLinks.length) {
+        <span class="text-sm text-ts-ink-soft">{{ 'nav.add_links' | translate }}</span>
       }
     </div>
   </div>
@@ -97,7 +93,7 @@
   <!-- Mobile navigation -->
   <nav class="mobile-drawer__nav">
         <div class="mobile-drawer__links">
-          @for (link of headerLinks; track link.href) {
+          @for (link of navLinks; track link.href) {
             @let children = link.children?.length ? link.children : (link.href === '/collections' ? collectionLinks : []);
             <div class="mobile-drawer__link-block">
               <a [routerLink]="link.href" (click)="closeMobile()" class="mobile-drawer__link">

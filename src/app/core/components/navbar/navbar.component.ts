@@ -1,4 +1,4 @@
-import { Component, HostListener, inject, PLATFORM_ID, EventEmitter, Output, OnInit, signal } from '@angular/core';
+import { Component, HostListener, inject, PLATFORM_ID, EventEmitter, Output, OnInit, OnDestroy, signal } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -21,7 +21,7 @@ type NavLink = { label: string; href: string; exact?: boolean; children?: NavChi
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements OnInit, OnDestroy {
   @Output() toggleCart = new EventEmitter<void>();
 
   private platformId = inject(PLATFORM_ID);
@@ -50,10 +50,13 @@ export class NavbarComponent implements OnInit {
   logoSrc = this.brandConfig.site.brand.logo;
   logoAlt = this.brandConfig.site.brand.logoAlt || this.brandName;
   readonly headerLinks = this.brandConfig.nav.header as NavLink[];
+  navLinks: NavLink[] = [];
   collectionLinks: NavChild[] = [];
   collections: CollectionDoc[] = [];
   readonly exactMatchOption = { exact: true };
   readonly partialMatchOption = { exact: false };
+  private rotateTimer: any = null;
+  private rotateIndex = 0;
 
   readonly totalItems = toSignal(
     this.cartService.count$,
@@ -68,6 +71,8 @@ export class NavbarComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.navLinks = this.headerLinks.map(link => ({ ...link }));
+
     // Set initial scroll state
     if (isPlatformBrowser(this.platformId)) {
       this.scrolled.set(window.scrollY > 8);
@@ -78,6 +83,12 @@ export class NavbarComponent implements OnInit {
 
     // Load dynamic collections for dropdown
     void this.loadCollections();
+  }
+
+  ngOnDestroy() {
+    if (this.rotateTimer) {
+      clearInterval(this.rotateTimer);
+    }
   }
 
   private applySettings(settings: AppSettings): void {
@@ -100,10 +111,57 @@ export class NavbarComponent implements OnInit {
         .sort((a, b) => a.name.localeCompare(b.name))
         .slice(0, 6)
         .map(c => ({ label: c.name, href: `/collections/${c.slug}` }));
+
+      this.startCollectionRotation();
     } catch (error) {
       console.error('Error loading collections for navbar:', error);
       this.collectionLinks = [];
       this.collections = [];
+    }
+  }
+
+  private startCollectionRotation() {
+    if (!this.collections.length) {
+      return;
+    }
+
+    // Apply immediately
+    this.applyRotatingCollection(this.collections[this.rotateIndex]);
+
+    if (this.rotateTimer) {
+      clearInterval(this.rotateTimer);
+    }
+
+    this.rotateTimer = setInterval(() => {
+      this.rotateIndex = (this.rotateIndex + 1) % this.collections.length;
+      this.applyRotatingCollection(this.collections[this.rotateIndex]);
+    }, 6000);
+  }
+
+  private applyRotatingCollection(col: CollectionDoc) {
+    const dynamicLink: NavLink = {
+      label: col.name,
+      href: `/collections/${col.slug}`
+    };
+
+    let replaced = false;
+    this.navLinks = this.headerLinks.map(link => {
+      const isPlaceholder =
+        link.href === '/collections/gifts-for-men' ||
+        link.label?.toLowerCase() === 'gifts for men';
+      if (isPlaceholder) {
+        replaced = true;
+        return { ...dynamicLink };
+      }
+      return { ...link };
+    });
+
+    if (!replaced) {
+      // Append a rotating link if the placeholder isn't in config
+      this.navLinks = [
+        ...this.headerLinks.map(link => ({ ...link })),
+        dynamicLink
+      ];
     }
   }
 

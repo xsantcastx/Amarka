@@ -12,30 +12,30 @@
 
           <div class="flex-1 min-w-0">
             <h3 class="text-lg font-semibold cookie-heading mb-2">
-              🍪 We Use Cookies
+              {{ 'cookie.banner.title' | translate }}
             </h3>
             <p class="text-sm cookie-body mb-4">
-              We use cookies and similar technologies to enhance your experience, analyze site traffic, and personalize content. By clicking "Accept All", you consent to our use of cookies. You can manage your preferences at any time.
+              {{ 'cookie.banner.body' | translate }}
             </p>
             <p class="text-xs cookie-muted">
-              Read our
-              <a href="/privacy-policy" class="cookie-link">Privacy Policy</a>
-              and
-              <a href="/cookie-policy" class="cookie-link">Cookie Policy</a>
-              for more information.
+              {{ 'cookie.banner.read' | translate }}
+              <a href="/privacy-policy" class="cookie-link">{{ 'cookie.banner.privacy' | translate }}</a>
+              {{ 'cookie.banner.and' | translate }}
+              <a href="/cookie-policy" class="cookie-link">{{ 'cookie.banner.cookie' | translate }}</a>
+              {{ 'cookie.banner.more' | translate }}
             </p>
           </div>
         </div>
 
         <div class="mt-6 flex flex-col sm:flex-row gap-3 cookie-banner-actions">
           <button (click)="acceptAll()" class="ts-btn ts-btn-primary w-full sm:w-auto justify-center">
-            Accept All
+            {{ 'cookie.actions.accept_all' | translate }}
           </button>
           <button (click)="rejectAll()" class="ts-btn ts-btn-outline w-full sm:w-auto justify-center">
-            Essential Only
+            {{ 'cookie.actions.essential' | translate }}
           </button>
           <button (click)="openSettings()" class="ts-btn ts-btn-ghost w-full sm:w-auto justify-center">
-            Customize
+            {{ 'cookie.actions.customize' | translate }}
           </button>
         </div>
       </div>
@@ -53,7 +53,7 @@
         <div class="px-6 pt-6 pb-4">
           <div class="flex items-start justify-between mb-4">
             <h3 class="text-2xl font-semibold cookie-heading">
-              Cookie Settings
+              {{ 'cookie.settings.title' | translate }}
             </h3>
             <button (click)="closeSettings()" class="p-2 rounded-lg transition-colors cookie-icon-btn">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -63,7 +63,7 @@
           </div>
 
           <p class="text-sm cookie-body mb-6">
-            Manage your cookie preferences. Some cookies are essential for the site to function and cannot be disabled.
+            {{ 'cookie.settings.body' | translate }}
           </p>
 
           <div class="space-y-4">
@@ -71,15 +71,15 @@
               <div class="flex items-start justify-between">
                 <div class="flex-1">
                   <h4 class="font-semibold cookie-heading mb-1">
-                    🔒 Essential Cookies
+                    {{ 'cookie.settings.essential.title' | translate }}
                   </h4>
                   <p class="text-sm cookie-body">
-                    Required for basic site functionality, including security and access to protected areas.
+                    {{ 'cookie.settings.essential.body' | translate }}
                   </p>
                 </div>
                 <div class="ml-4">
                   <span class="cookie-chip">
-                    Always Active
+                    {{ 'cookie.settings.essential.always' | translate }}
                   </span>
                 </div>
               </div>
@@ -89,10 +89,10 @@
               <div class="flex items-start justify-between">
                 <div class="flex-1">
                   <h4 class="font-semibold cookie-heading mb-1">
-                    📊 Analytics Cookies
+                    {{ 'cookie.settings.analytics.title' | translate }}
                   </h4>
                   <p class="text-sm cookie-body mb-3">
-                    Help us understand how visitors interact with our site by collecting anonymous information (Google Analytics).
+                    {{ 'cookie.settings.analytics.body' | translate }}
                   </p>
                   <label class="flex items-center gap-2 cursor-pointer">
                     <input
@@ -100,7 +100,7 @@
                       [(ngModel)]="analyticsConsent"
                       [ngModelOptions]="{standalone: true}"
                       class="cookie-checkbox">
-                    <span class="text-sm font-medium cookie-heading">Allow analytics cookies</span>
+                    <span class="text-sm font-medium cookie-heading">{{ 'cookie.settings.analytics.allow' | translate }}</span>
                   </label>
                 </div>
               </div>
@@ -110,10 +110,10 @@
               <div class="flex items-start justify-between">
                 <div class="flex-1">
                   <h4 class="font-semibold cookie-heading mb-1">
-                    🎯 Marketing Cookies
+                    {{ 'cookie.settings.marketing.title' | translate }}
                   </h4>
                   <p class="text-sm cookie-body mb-3">
-                    Used to track visitors across websites and display relevant, engaging advertisements.
+                    {{ 'cookie.settings.marketing.body' | translate }}
                   </p>
                   <label class="flex items-center gap-2 cursor-pointer">
                     <input
@@ -121,7 +121,7 @@
                       [(ngModel)]="marketingConsent"
                       [ngModelOptions]="{standalone: true}"
                       class="cookie-checkbox">
-                    <span class="text-sm font-medium cookie-heading">Allow marketing cookies</span>
+                    <span class="text-sm font-medium cookie-heading">{{ 'cookie.settings.marketing.allow' | translate }}</span>
                   </label>
                 </div>
               </div>
@@ -131,10 +131,10 @@
               <div class="flex items-start justify-between">
                 <div class="flex-1">
                   <h4 class="font-semibold cookie-heading mb-1">
-                    🎛️ Preference Cookies
+                    {{ 'cookie.settings.preferences.title' | translate }}
                   </h4>
                   <p class="text-sm cookie-body mb-3">
-                    Allow the website to remember information that changes how it behaves or looks (language, region, theme).
+                    {{ 'cookie.settings.preferences.body' | translate }}
                   </p>
                   <label class="flex items-center gap-2 cursor-pointer">
                     <input
@@ -142,7 +142,7 @@
                       [(ngModel)]="preferencesConsent"
                       [ngModelOptions]="{standalone: true}"
                       class="cookie-checkbox">
-                    <span class="text-sm font-medium cookie-heading">Allow preference cookies</span>
+                    <span class="text-sm font-medium cookie-heading">{{ 'cookie.settings.preferences.allow' | translate }}</span>
                   </label>
                 </div>
               </div>
@@ -152,10 +152,10 @@
 
         <div class="cookie-modal-footer px-6 py-4 flex flex-col sm:flex-row gap-3">
           <button (click)="saveCustomPreferences()" class="ts-btn ts-btn-primary flex-1 justify-center">
-            Save Preferences
+            {{ 'cookie.settings.save' | translate }}
           </button>
           <button (click)="acceptAll()" class="ts-btn ts-btn-outline flex-1 justify-center">
-            Accept All
+            {{ 'cookie.actions.accept_all' | translate }}
           </button>
         </div>
       </div>

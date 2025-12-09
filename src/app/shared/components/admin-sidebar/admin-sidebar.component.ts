@@ -39,6 +39,11 @@ export class AdminSidebarComponent {
       icon: 'M4 6h16M4 12h16M4 18h16'
     },
     {
+      label: 'Models',
+      route: '/admin/models',
+      icon: 'M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01'
+    },
+    {
       label: 'Services',
       route: '/admin/services',
       icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m4-10h6m-6 4h6m-6 4h6'
