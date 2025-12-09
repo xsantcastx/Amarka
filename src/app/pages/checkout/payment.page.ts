@@ -322,7 +322,17 @@ export class PaymentPage implements OnInit, AfterViewInit, OnDestroy {
 
     } catch (err: any) {
       console.error('Payment processing error:', err);
-      this.error.set(err.message || 'Payment failed. Please try again.');
+      const code = err?.code || err?.error?.code;
+      const message = err?.message || err?.error?.message;
+
+      // Friendlier messaging for common backend failures
+      if (code === 'internal') {
+        this.error.set('Payment service is unavailable right now. Please try again in a moment or contact support if this persists.');
+      } else if (code === 'failed-precondition') {
+        this.error.set('Payments are not available. Please check your billing information or try again later.');
+      } else {
+        this.error.set(message || 'Payment failed. Please try again.');
+      }
     } finally {
       this.processing.set(false);
     }

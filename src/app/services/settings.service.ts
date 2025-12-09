@@ -430,7 +430,7 @@ export class SettingsService {
       // Shipping
       shippingEnabled: true,
       freeShippingThreshold: 100,
-      defaultShippingCost: 15,
+      defaultShippingCost: 8,
       shippingEstimate: '3-5 business days',
       
       // Analytics

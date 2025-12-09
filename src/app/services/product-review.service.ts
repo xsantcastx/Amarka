@@ -152,7 +152,29 @@ export class ProductReviewService {
       return snapshot.docs.map(doc => this.convertToReview(doc.id, doc.data()));
     } catch (error) {
       console.error('Error fetching product reviews:', error);
-      return [];
+      // Fallback without index: query by productId only and filter locally
+      try {
+        const reviewsRef = collection(this.firestore, 'productReviews');
+        const qFallback = query(
+          reviewsRef,
+          where('productId', '==', productId),
+          limit(limitCount * 2) // grab extra, filter for approved
+        );
+        const snapshot = await getDocs(qFallback);
+        const reviews = snapshot.docs
+          .map(doc => this.convertToReview(doc.id, doc.data()))
+          .filter(r => r.status === 'approved')
+          .sort((a, b) => {
+            const aTime = (a.createdAt as any)?.toMillis ? (a.createdAt as any).toMillis() : 0;
+            const bTime = (b.createdAt as any)?.toMillis ? (b.createdAt as any).toMillis() : 0;
+            return bTime - aTime;
+          })
+          .slice(0, limitCount);
+        return reviews;
+      } catch (fallbackError) {
+        console.error('Fallback review fetch failed:', fallbackError);
+        return [];
+      }
     }
   }
 

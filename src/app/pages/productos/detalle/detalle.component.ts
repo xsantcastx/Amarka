@@ -341,7 +341,9 @@ export class DetalleComponent implements OnInit, AfterViewInit {
   openLightboxForGalleryImage(image: Media) {
     const index = this.findCarouselIndex({ id: image.id, url: image.url });
     if (index !== -1) {
-      this.openLightboxAt(index);
+      this.currentImageIndex = index;
+      this.syncCurrentLightboxData();
+      this.cdr.detectChanges();
     }
   }
 

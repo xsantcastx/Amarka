@@ -145,6 +145,67 @@
       "heading": "Comprar por colección",
       "view_all": "Ver todas",
       "empty": "Crea colecciones para mostrarlas aquí."
+    },
+    "featured": {
+      "badge": "Selecciones curadas",
+      "title": "Regalos personalizados destacados",
+      "subtitle": "Superventas y novedades listas para grabar.",
+      "cta_all": "Ver todo",
+      "cta_special": "Regalos para hombres",
+      "empty": "Sin productos aún. Agrega productos en admin para mostrarlos aquí."
+    },
+    "bestsellers": {
+      "badge": "Más vendidos",
+      "title": "Lo más popular ahora",
+      "subtitle": "Favoritos de clientes y repetidos.",
+      "cta": "Ver todos los productos"
+    },
+    "new": {
+      "badge": "Nuevos",
+      "title": "Nuevas llegadas",
+      "subtitle": "Piezas personalizadas recién agregadas.",
+      "cta": "Comprar nuevo"
+    },
+    "bundles": {
+      "badge": "Paquetes y sets",
+      "title": "Paquetes de valor y sets de grabado",
+      "subtitle": "Combos curados listos para grabar y regalar.",
+      "cta": "Comprar paquetes"
+    },
+    "story": {
+      "badge": "Por qué Amarka",
+      "title": "Calidad lista para regalo con grabado cuidado",
+      "subtitle": "Personalizamos rápido, empacamos bonito y enviamos con cuidado para impresionar.",
+      "fast": {
+        "title": "Grabado y envío rápido",
+        "copy": "Personalizado y enviado rápido, incluso para regalos de última hora."
+      },
+      "materials": {
+        "title": "Materiales premium",
+        "copy": "Maderas, metales y acabados de calidad que se sienten premium."
+      },
+      "packaging": {
+        "title": "Empaque listo para regalo",
+        "copy": "Llega en caja bonita con instrucciones y notas."
+      },
+      "trust": {
+        "title": "Confiado por clientes",
+        "copy": "Reseñas reales; mira lo que más gusta."
+      }
+    },
+    "gallery": {
+      "badge": "Detalle y oficio",
+      "title": "Una mirada cercana",
+      "subtitle": "Instantáneas de piezas personalizadas recientes.",
+      "cta": "Ver galería completa",
+      "alt": "Galería"
+    },
+    "cta": {
+      "badge": "¿Listo para personalizar?",
+      "title": "Creamos el regalo perfecto juntos",
+      "subtitle": "¿Necesitas consejo sobre sets, grabado o envíos? Aquí estamos.",
+      "primary": "Ver colecciones",
+      "secondary": "Habla con nosotros"
     }
   },
   "collections": {
@@ -263,7 +324,8 @@
       "free_shipping": "Envío Gratis"
     },
     "shipping": {
-      "estimate_default": "$5-15"
+      "estimate_default": "$8",
+      "flat_rate": "Envío de Tarifa Plana"
     },
     "proceed_to_checkout": "Proceder al Pago",
     "secure": "Pago Seguro",
@@ -373,146 +435,6 @@
     "security_ssl": "Cifrado SSL de 256 bits",
     "security_pci": "Cumple con PCI DSS",
     "security_stripe": "Procesado por Stripe"
-  },
-  "nav": {
-    "add_links": "Agrega enlaces en la configuracion de marca",
-    "account_lists": "Cuenta y listas",
-    "search_placeholder": "Busca regalos grabados, ocasiones, destinatarios...",
-    "cart": "Carrito",
-    "follow_us": "Siguenos",
-    "language": "Idioma",
-    "account": "Cuenta"
-  },
-  "home": {
-    "loading": "Cargando contenido...",
-    "hero": {
-      "badge": "Regalos grabados mas queridos",
-      "title": "Regalos grabados premium hechos para durar",
-      "subtitle": "Grabado preciso en vidrio, madera, metal y cuero con empaque listo para regalo. Entrega rapida para momentos, regalos corporativos y mas.",
-      "view_collection": "Ver coleccion",
-      "rush_badge": "Express",
-      "rush_title": "Grabado urgente",
-      "rush_subtitle": "Produccion prioritaria y envio",
-      "cta_collections": "Ver colecciones",
-      "cta_products": "Ver todos los productos",
-      "fast": "Grabado y envio rapido",
-      "packaging": "Empaque listo para regalo",
-      "view_product": "Ver producto"
-    },
-    "collections": {
-      "heading": "Compra por coleccion",
-      "view_all": "Ver todas",
-      "empty": "Crea colecciones para mostrarlas aqui."
-    },
-    "featured": {
-      "badge": "Selecciones curadas",
-      "title": "Regalos personalizados destacados",
-      "subtitle": "Superventas y novedades listas para grabar.",
-      "cta_all": "Ver todo",
-      "cta_special": "Regalos para hombres",
-      "empty": "Sin productos aun. Agrega productos en admin para mostrarlos aqui."
-    },
-    "bestsellers": {
-      "badge": "Mas vendidos",
-      "title": "Lo mas popular ahora",
-      "subtitle": "Favoritos de clientes y repetidos.",
-      "cta": "Ver todos los productos"
-    },
-    "new": {
-      "badge": "Nuevos",
-      "title": "Nuevas llegadas",
-      "subtitle": "Piezas personalizadas recien agregadas.",
-      "cta": "Comprar nuevo"
-    },
-    "bundles": {
-      "badge": "Paquetes y sets",
-      "title": "Paquetes de valor y sets de grabado",
-      "subtitle": "Combos curados listos para grabar y regalar.",
-      "cta": "Comprar paquetes"
-    },
-    "story": {
-      "badge": "Por que Amarka",
-      "title": "Calidad lista para regalo con grabado cuidado",
-      "subtitle": "Personalizamos rapido, empacamos bonito y enviamos con cuidado para impresionar.",
-      "fast": {
-        "title": "Grabado y envio rapido",
-        "copy": "Personalizado y enviado rapido, incluso para regalos de ultima hora."
-      },
-      "materials": {
-        "title": "Materiales premium",
-        "copy": "Maderas, metales y acabados de calidad que se sienten premium."
-      },
-      "packaging": {
-        "title": "Empaque listo para regalo",
-        "copy": "Llega en caja bonita con instrucciones y notas."
-      },
-      "trust": {
-        "title": "Confiado por clientes",
-        "copy": "Resenas reales; mira lo que mas gusta."
-      }
-    },
-    "gallery": {
-      "badge": "Detalle y oficio",
-      "title": "Una mirada cercana",
-      "subtitle": "Instantaneas de piezas personalizadas recientes.",
-      "cta": "Ver galeria completa",
-      "alt": "Galeria"
-    },
-    "cta": {
-      "badge": "Listo para personalizar?",
-      "title": "Creamos el regalo perfecto juntos",
-      "subtitle": "Necesitas consejo sobre sets, grabado o envios? Aqui estamos.",
-      "primary": "Ver colecciones",
-      "secondary": "Habla con nosotros"
-    }
-  },
-  "collections": {
-    "title": "Colecciones",
-    "subtitle": "Selecciones curadas como regalos para hombres, recuerdos de boda y sets grabados a medida.",
-    "loading": "Cargando colecciones...",
-    "empty": {
-      "title": "Sin colecciones aun",
-      "body": "Crea una coleccion en Admin -> Colecciones y aparecera aqui automaticamente."
-    },
-    "card": {
-      "label": "Coleccion",
-      "cta": "Comprar ahora"
-    }
-  },
-  "admin": {
-    "title": "Admin",
-    "collections": {
-      "title": "Colecciones",
-      "back_to_admin": "Admin",
-      "new_collection": "Nueva coleccion",
-      "new_collection_title": "Nueva coleccion",
-      "edit_collection": "Editar coleccion",
-      "loading": "Cargando colecciones...",
-      "form": {
-        "edit": "Editar",
-        "delete": "Eliminar",
-        "name": "Nombre",
-        "slug": "Slug",
-        "description": "Descripcion",
-        "hero_image": "Imagen principal",
-        "choose_image": "Elegir imagen",
-        "max_size": "Max 5MB (JPG, PNG, WebP)",
-        "upload_progress": "Subiendo imagen principal",
-        "seo_title": "Titulo SEO",
-        "seo_description": "Descripcion SEO",
-        "seo_image": "URL de imagen SEO"
-      }
-    }
-  },
-  "common": {
-    "active": "Activo",
-    "inactive": "Inactivo",
-    "edit": "Editar",
-    "delete": "Eliminar",
-    "cancel": "Cancelar",
-    "save": "Guardar",
-    "hello": "Hola",
-    "search": "Buscar"
   },
   "cookie": {
     "banner": {

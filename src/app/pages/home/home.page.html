@@ -3,7 +3,7 @@
   <div class="min-h-screen flex items-center justify-center bg-ts-bg">
     <div class="text-center space-y-4">
       <div class="app-spinner" style="--spinner-size: 72px;"><img src="/Logo Clear.png" alt="Loading" width="96" height="96"></div>
-      <p class="text-ts-ink-soft">{{ 'common.loading_content' | translate }}</p>
+      <p class="text-ts-ink-soft text-lg font-semibold">{{ brandName || ('common.loading_content' | translate) }}</p>
     </div>
   </div>
 }

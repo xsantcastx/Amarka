@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { Firestore, collection, doc, addDoc, updateDoc, deleteDoc, getDocs, getDoc, query, where, orderBy, Timestamp, limit } from '@angular/fire/firestore';
-import { Observable, from, map, firstValueFrom } from 'rxjs';
+import { Observable, from, map, firstValueFrom, catchError, of } from 'rxjs';
 import { Product } from '../models/product';
 import { Product as CatalogProduct, TemplateComposition, ProductFormData } from '../models/catalog';
 import { CategoryService } from './category.service';
@@ -131,10 +131,19 @@ export class ProductsService {
       limit(count)
     );
 
+    // Primary: ordered query (needs composite index); fallback: no orderBy if index missing
     return from(getDocs(tagQuery)).pipe(
-      map(snapshot => {
-        const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Product));
-        return items;
+      map(snapshot => snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Product))),
+      catchError(err => {
+        console.warn('[ProductsService] getProductsByTag index missing, falling back without orderBy:', err?.message);
+        const fallbackQuery = query(
+          productsCol,
+          where('tags', 'array-contains', tag),
+          limit(count)
+        );
+        return from(getDocs(fallbackQuery)).pipe(
+          map(snapshot => snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Product)))
+        );
       })
     );
   }

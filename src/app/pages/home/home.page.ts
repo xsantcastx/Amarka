@@ -12,6 +12,7 @@ import { CollectionsService, CollectionDoc } from '../../services/collections.se
 import { HomeReviewsComponent } from '../../features/home/home-reviews/home-reviews.component';
 import { LoadingComponentBase } from '../../core/classes/loading-component.base';
 import { MetaService } from '../../services/meta.service';
+import { BrandConfigService } from '../../core/services/brand-config.service';
 import { take } from 'rxjs/operators';
 import { ProductCardComponent } from '../../shared/components/product-card/product-card.component';
 import { forkJoin, of } from 'rxjs';
@@ -32,6 +33,7 @@ export class HomePageComponent extends LoadingComponentBase implements OnInit {
   private collectionsService = inject(CollectionsService);
   private metaService = inject(MetaService);
   private router = inject(Router);
+  private brandConfig = inject(BrandConfigService);
   protected override cdr = inject(ChangeDetectorRef);
   
   services: ServiceItem[] = [];
@@ -43,6 +45,7 @@ export class HomePageComponent extends LoadingComponentBase implements OnInit {
   categoryShowcase: CollectionDoc[] = [];
   collectionImages: Record<string, string> = {};
   heroCollections: CollectionDoc[] = [];
+  brandName = this.brandConfig.siteName;
   
   galleryImages: GalleryImage[] = [];
   currentImageIndex = 0;
