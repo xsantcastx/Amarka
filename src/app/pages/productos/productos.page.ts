@@ -63,6 +63,8 @@ export class ProductosPageComponent extends LoadingComponentBase implements OnIn
   selectedModelId = '';
   selectedTags: string[] = [];
   searchTerm = '';
+  addingProductId: string | null = null;
+  recentlyAddedIds = new Set<string>();
 
   async ngOnInit() {
     // Seed search from query param if provided
@@ -305,10 +307,25 @@ export class ProductosPageComponent extends LoadingComponentBase implements OnIn
     }
   }
 
-  addToCart(product: Product, event: Event) {
+  async addToCart(product: Product, event: Event) {
     event.preventDefault();
     event.stopPropagation();
-    this.cartService.add(product, 1);
+    const productKey = product.id || product.slug;
+
+    this.addingProductId = productKey || null;
+    this.forceUpdate();
+
+    try {
+      await this.cartService.add(product, 1);
+      if (productKey) {
+        this.markRecentlyAdded(productKey);
+      }
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+    } finally {
+      this.addingProductId = null;
+      this.forceUpdate();
+    }
   }
 
   get hasFilters(): boolean {
@@ -333,6 +350,20 @@ export class ProductosPageComponent extends LoadingComponentBase implements OnIn
     if (!modelId) return '';
     const model = this.models.find(m => m.id === modelId);
     return model?.name || '';
+  }
+
+  isRecentlyAdded(product: Product): boolean {
+    const key = product.id || product.slug;
+    return !!key && this.recentlyAddedIds.has(key);
+  }
+
+  private markRecentlyAdded(key: string) {
+    this.recentlyAddedIds.add(key);
+    this.forceUpdate();
+    setTimeout(() => {
+      this.recentlyAddedIds.delete(key);
+      this.forceUpdate();
+    }, 2200);
   }
 
   // Filter panel visibility

@@ -74,7 +74,7 @@
                   [disabled]="adding"
                   class="px-6 py-3 bg-primary text-neutral rounded-full font-semibold shadow-lvl1 hover:shadow-lvl2 transition-colors disabled:opacity-50"
                   [class.animate-pulse]="adding">
-            {{ adding ? 'Añadido' : 'Añadir al carrito' }}
+            {{ (adding ? 'product.added' : 'product.add_to_cart') | translate }}
           </button>
         </div>
       </div>

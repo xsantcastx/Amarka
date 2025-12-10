@@ -59,6 +59,7 @@ export class CartPage implements OnInit {
   selectedShippingMethod = signal<ShippingMethod | null>(null);
   cartId = signal<string | null>(null);
   shippingSettings = signal<AppSettings | null>(null);
+  private readonly flatShippingCost = 8;
 
   // Breadcrumbs for navigation
   breadcrumbs: Breadcrumb[] = [
@@ -114,12 +115,23 @@ export class CartPage implements OnInit {
 
   ngOnInit() {
     this.settingsService.settings$.subscribe(settings => {
-      this.shippingSettings.set(settings);
-      if (settings && !settings.shippingEnabled) {
-        this.applyStaticShipping();
+      const updated = this.applyFlatRateSettings(settings);
+      if (updated) {
+        this.shippingSettings.set(updated);
+        if (this.cart.snapshot()?.items?.length) {
+          this.applyStaticShipping(null, true);
+        }
       }
     });
-    this.settingsService.getSettings().then(settings => this.shippingSettings.set(settings));
+    this.settingsService.getSettings().then(settings => {
+      const updated = this.applyFlatRateSettings(settings);
+      if (updated) {
+        this.shippingSettings.set(updated);
+        if (this.cart.snapshot()?.items?.length) {
+          this.applyStaticShipping(null, true);
+        }
+      }
+    });
 
     // Subscribe to cart changes to track cart ID
     this.cart.cart$.subscribe(cart => {
@@ -127,8 +139,8 @@ export class CartPage implements OnInit {
         this.cartId.set(cart.id);
       }
       const settings = this.shippingSettings();
-      if (settings && !settings.shippingEnabled && cart?.items?.length) {
-        this.applyStaticShipping();
+      if (settings && cart?.items?.length) {
+        this.applyStaticShipping(null, true);
       }
     });
     
@@ -302,10 +314,15 @@ export class CartPage implements OnInit {
       return true;
     }
 
-    const subtotal = cartSnapshot.subtotal || 0;
-    const freeThreshold = settings.freeShippingThreshold ?? 0;
-    const baseCost = settings.defaultShippingCost ?? 0;
-    const shippingCost = freeThreshold > 0 && subtotal >= freeThreshold ? 0 : baseCost;
+    if (!cartSnapshot.items || cartSnapshot.items.length === 0) {
+      this.shippingMethods.set([]);
+      this.selectedShippingMethod.set(null);
+      this.calculatingShipping.set(false);
+      return true;
+    }
+
+    const shippingCost = this.flatShippingCost;
+    const description = settings.shippingEstimate || this.translate.instant('cart.shipping.estimate_default');
 
     const currentShipping = cartSnapshot.shipping ?? 0;
     const currentMethod = cartSnapshot.shippingMethodId;
@@ -314,10 +331,10 @@ export class CartPage implements OnInit {
         const methodSnapshot: ShippingMethod = {
           id: 'flat-rate',
           name: this.translate.instant('cart.shipping.flat_rate'),
-          description: settings.shippingEstimate || this.translate.instant('cart.shipping.estimate_default'),
+          description,
           cost: shippingCost,
           currency: cartSnapshot.currency || 'USD',
-          estimatedDays: settings.shippingEstimate || ''
+          estimatedDays: description
         };
         this.shippingMethods.set([methodSnapshot]);
         this.selectedShippingMethod.set(methodSnapshot);
@@ -330,10 +347,10 @@ export class CartPage implements OnInit {
     const method: ShippingMethod = {
       id: 'flat-rate',
       name: this.translate.instant('cart.shipping.flat_rate'),
-      description: settings.shippingEstimate || this.translate.instant('cart.shipping.estimate_default'),
+      description,
       cost: shippingCost,
       currency: cartSnapshot.currency || 'USD',
-      estimatedDays: settings.shippingEstimate || ''
+      estimatedDays: description
     };
 
     this.shippingMethods.set([method]);
@@ -572,6 +589,19 @@ export class CartPage implements OnInit {
       style: 'currency',
       currency
     }).format(amount);
+  }
+
+  private applyFlatRateSettings(settings: AppSettings | null): AppSettings | null {
+    if (!settings) return null;
+
+    const estimate = this.translate.instant('cart.shipping.estimate_default') || `$${this.flatShippingCost} flat shipping`;
+    return {
+      ...settings,
+      shippingEnabled: false,
+      freeShippingThreshold: 0,
+      defaultShippingCost: this.flatShippingCost,
+      shippingEstimate: estimate
+    };
   }
 }
 

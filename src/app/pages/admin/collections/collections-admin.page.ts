@@ -30,6 +30,7 @@ export class CollectionsAdminPageComponent implements OnInit {
   showModal = false;
   editing: CollectionDoc | null = null;
   errorMessage = '';
+  isSaving = false;
   
   // Image upload
   selectedHeroFile: File | null = null;
@@ -37,6 +38,7 @@ export class CollectionsAdminPageComponent implements OnInit {
   uploadingHero = false;
   heroUploadProgress = 0;
   existingHeroUrl = '';
+  private lastGeneratedSlug = '';
 
   form: FormGroup = this.fb.group({
     name: ['', Validators.required],
@@ -54,6 +56,7 @@ export class CollectionsAdminPageComponent implements OnInit {
     if (!isAdmin) {
       return;
     }
+    this.setupSlugSync();
     await this.loadCollections();
   }
 
@@ -104,6 +107,7 @@ export class CollectionsAdminPageComponent implements OnInit {
     this.selectedHeroFile = null;
     this.heroPreview = null;
     this.existingHeroUrl = '';
+    this.lastGeneratedSlug = '';
     this.form.reset({
       name: '',
       slug: '',
@@ -178,10 +182,17 @@ export class CollectionsAdminPageComponent implements OnInit {
   }
 
   async save() {
+    if (this.isSaving) {
+      return;
+    }
+
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
+
+    this.isSaving = true;
+    this.cdr.detectChanges();
 
     let heroImageUrl = this.existingHeroUrl || this.form.value.heroImageUrl || '';
 
@@ -206,6 +217,7 @@ export class CollectionsAdminPageComponent implements OnInit {
         console.error('Error uploading hero image:', error);
         alert('Failed to upload hero image');
         this.uploadingHero = false;
+        this.isSaving = false;
         this.cdr.detectChanges();
         return;
       }
@@ -225,14 +237,23 @@ export class CollectionsAdminPageComponent implements OnInit {
       }
     };
     
-    if (this.editing?.id) {
-      await this.collectionsService.updateCollection(this.editing.id, payload);
-    } else {
-      await this.collectionsService.addCollection(payload);
+    try {
+      if (this.editing?.id) {
+        await this.collectionsService.updateCollection(this.editing.id, payload);
+      } else {
+        await this.collectionsService.addCollection(payload);
+      }
+      
+      this.isSaving = false;
+      this.showModal = false;
+      await this.loadCollections();
+      this.cdr.detectChanges();
+    } catch (error) {
+      console.error('Error saving collection:', error);
+      this.isSaving = false;
+      this.cdr.detectChanges();
+      alert('Failed to save collection');
     }
-    
-    this.showModal = false;
-    await this.loadCollections();
   }
 
   async deleteCollection(col: CollectionDoc) {
@@ -250,5 +271,29 @@ export class CollectionsAdminPageComponent implements OnInit {
       this.errorMessage = 'Failed to delete collection';
       this.cdr.detectChanges();
     }
+  }
+
+  private setupSlugSync() {
+    this.form.get('name')?.valueChanges.subscribe((name: string) => {
+      if (!name) {
+        return;
+      }
+      const slugControl = this.form.get('slug');
+      const currentSlug = slugControl?.value || '';
+      const autoSlug = this.generateSlug(name);
+      if (!currentSlug || currentSlug === this.lastGeneratedSlug) {
+        slugControl?.patchValue(autoSlug, { emitEvent: false });
+        this.lastGeneratedSlug = autoSlug;
+      }
+    });
+  }
+
+  private generateSlug(value: string): string {
+    return (value || '')
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9\\s-]/g, '')
+      .replace(/\\s+/g, '-')
+      .replace(/-+/g, '-');
   }
 }

@@ -135,12 +135,32 @@
           <!-- Add to Cart -->
           <button
             (click)="addToCart()"
-            class="w-full inline-flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-ts-accent to-ts-accent text-black rounded-xl font-bold text-lg hover:shadow-2xl hover:shadow-ts-accent/30 hover:scale-[1.02] transition-all duration-300">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-            </svg>
-            <span>{{ 'product.add_to_cart' | translate }}</span>
+            [disabled]="addInProgress"
+            class="w-full inline-flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-ts-accent to-ts-accent text-black rounded-xl font-bold text-lg hover:shadow-2xl hover:shadow-ts-accent/30 hover:scale-[1.02] transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed">
+            @if (addInProgress) {
+              <span class="flex items-center gap-2">
+                <span class="h-5 w-5 rounded-full border-2 border-black border-t-transparent animate-spin"></span>
+                <span>{{ 'common.loading' | translate }}</span>
+              </span>
+            } @else if (addSuccess) {
+              <span class="flex items-center gap-2 text-green-900">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+                <span>{{ 'product.added' | translate }}</span>
+              </span>
+            } @else {
+              <span class="flex items-center gap-2">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                <span>{{ 'product.add_to_cart' | translate }}</span>
+              </span>
+            }
           </button>
+          @if (addError) {
+            <p class="text-sm text-red-500 text-center">{{ addError }}</p>
+          }
 
           <!-- Request Consultation -->
           <a routerLink="/contacto" 

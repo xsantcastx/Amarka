@@ -23,6 +23,7 @@ export interface Product {
   specs?: ProductSpecs;
   coverImage?: string;     // Media ID or legacy URL
   galleryImageIds?: string[];  // Array of media IDs
+  videoUrl?: string;       // Product video URL
   tags?: string[];
   seo?: {
     title?: string;

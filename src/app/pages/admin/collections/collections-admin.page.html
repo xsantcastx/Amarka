@@ -129,8 +129,11 @@
         </form>
 
         <div class="flex justify-end gap-3 mt-6">
-          <button (click)="closeModal()" class="px-4 py-2 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink hover:bg-ts-paper">{{ 'admin.collections.form.cancel' | translate }}</button>
-          <button (click)="save()" class="px-4 py-2 bg-ts-accent text-ts-ink border border-ts-accent/60 rounded-lg hover:bg-ts-accent/90">{{ 'admin.collections.form.save' | translate }}</button>
+          <button (click)="closeModal()" [disabled]="isSaving" class="px-4 py-2 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink hover:bg-ts-paper disabled:opacity-50 disabled:cursor-not-allowed">{{ 'admin.collections.form.cancel' | translate }}</button>
+          <button (click)="save()" [disabled]="isSaving || form.invalid" class="px-4 py-2 bg-ts-accent text-ts-ink border border-ts-accent/60 rounded-lg hover:bg-ts-accent/90 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
+            <div *ngIf="isSaving" class="app-spinner" style="--spinner-size: 16px;"><img src="/Logo Clear.png" alt="Saving" width="16" height="16"></div>
+            {{ (isSaving ? 'admin.collections.form.saving' : 'admin.collections.form.save') | translate }}
+          </button>
         </div>
       </div>
     </div>

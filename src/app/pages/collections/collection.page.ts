@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -24,6 +24,7 @@ export class CollectionPageComponent implements OnInit {
   private productsService = inject(ProductsService);
   private metaService = inject(MetaService);
   private collectionsService = inject(CollectionsService);
+  private cdr = inject(ChangeDetectorRef);
 
   slug = '';
   collectionId = '';
@@ -68,10 +69,12 @@ export class CollectionPageComponent implements OnInit {
         description: this.subtitle
       });
     }
+    this.cdr.detectChanges();
   }
 
   private async loadProducts() {
     this.isLoading = true;
+    this.cdr.detectChanges();
     try {
       const all = await this.productsService.getAllProductsOnce();
       // Filter by collectionIds if available, else by tag fallback
@@ -97,6 +100,7 @@ export class CollectionPageComponent implements OnInit {
       this.filtered = [];
     } finally {
       this.isLoading = false;
+      this.cdr.detectChanges();
     }
   }
 

@@ -225,6 +225,13 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
         this.existingCoverImageId = product.coverImage || '';
       }
 
+      // Load video preview
+      if (product.videoUrl) {
+        this.existingVideoUrl = product.videoUrl;
+        this.videoPreview = product.videoUrl;
+        this.productForm.patchValue({ videoUrl: product.videoUrl }, { emitEvent: false });
+      }
+
       // Load gallery previews
       if (product.galleryImageIds && product.galleryImageIds.length > 0) {
         this.existingGalleryImageIds = [...product.galleryImageIds];
@@ -527,6 +534,20 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
         }
       }
 
+      // Upload video if provided
+      let videoUrl = this.existingVideoUrl || formValue.videoUrl || '';
+      if (this.selectedVideoFile) {
+        const videoUpload = await lastValueFrom(
+          this.storageService.uploadFile(
+            this.selectedVideoFile,
+            `products/videos/${Date.now()}_${this.selectedVideoFile.name}`
+          )
+        );
+        if (videoUpload.downloadURL) {
+          videoUrl = videoUpload.downloadURL;
+        }
+      }
+
       const productPayload: Omit<Product, 'id'> = {
         name: formValue.title,
         slug: formValue.slug || this.generateSlug(formValue.title),
@@ -546,6 +567,7 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
           weight: formValue.weight || 0,
           ...this.currentSpecs
         },
+        videoUrl,
         seo: {
           title: formValue.metaTitle || '',
           metaDescription: formValue.metaDescription || '',

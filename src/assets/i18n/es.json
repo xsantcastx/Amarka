@@ -1,11 +1,20 @@
 {
   "nav": {
     "home": "Inicio",
-    "profile": "Mi Perfil",
+    "profile": "Mi perfil",
     "collections": "Colecciones",
-    "account_lists": "Cuenta y Listas",
+    "account_lists": "Cuenta y listas",
     "cart": "Carrito",
-    "search_placeholder": "Buscar regalos grabados, ocasiones, destinatarios..."
+    "search_placeholder": "Busca regalos grabados, ocasiones, destinatarios...",
+    "products": "Productos",
+    "contact": "Contacto",
+    "orders": "Pedidos",
+    "soloMiners": "Solo Miners",
+    "get_started": "Comenzar",
+    "account": "Cuenta",
+    "follow_us": "S?guenos",
+    "language": "Idioma",
+    "add_links": "Agrega enlaces en la configuraci?n de la marca"
   },
   "page_titles": {
     "privacy": "Política de Privacidad",
@@ -23,7 +32,22 @@
     "cart": "Carrito",
     "contact": "Contacto",
     "gallery": "Galería",
-    "services": "Servicios"
+    "services": "Servicios",
+    "admin_dashboard": "Panel de administraci?n",
+    "product_management": "Gesti?n de productos",
+    "quick_add_product": "Agregar producto r?pido",
+    "gallery_management": "Gesti?n de galer?a",
+    "order_management": "Gesti?n de pedidos",
+    "collections": "Colecciones",
+    "models": "Modelos",
+    "user_management": "Gesti?n de usuarios",
+    "benefit_templates": "Plantillas de beneficios",
+    "analytics": "Anal?tica",
+    "settings": "Configuraci?n",
+    "email_templates": "Plantillas de correo",
+    "size_groups": "Grupos de tama?os",
+    "reviews": "Rese?as",
+    "not_found": "P?gina no encontrada"
   },
   "client": {
     "login": "Iniciar Sesión",
@@ -211,10 +235,10 @@
   "collections": {
     "title": "Colecciones",
     "subtitle": "Lanzamientos curados como Regalos para Hombres, Recuerdos de Boda y sets grabados personalizados.",
-    "loading": "Cargando colecciones…",
+    "loading": "Cargando colecciones...",
     "empty": {
       "title": "Aún no hay colecciones",
-      "body": "Crea una colección en Admin → Colecciones y aparecerá aquí automáticamente."
+      "body": "Crea una colecci?n en Admin -> Collections y aparecer? aqu? autom?ticamente."
     },
     "card": {
       "label": "Colección",
@@ -320,12 +344,12 @@
     "total": "Total",
     "summary": {
       "shipping_dynamic": "Costo de envío calculado al finalizar la compra según tu dirección",
-      "shipping_flat": "Envío estimado: {{estimate}}",
+      "shipping_flat": "Env?o fijo: {{estimate}}",
       "free_shipping": "Envío Gratis"
     },
     "shipping": {
-      "estimate_default": "$8",
-      "flat_rate": "Envío de Tarifa Plana"
+      "estimate_default": "Tarifa fija de $8",
+      "flat_rate": "Env?o tarifa plana"
     },
     "proceed_to_checkout": "Proceder al Pago",
     "secure": "Pago Seguro",
@@ -554,5 +578,76 @@
       "copy": "Para preguntas sobre estos términos o tu pedido, contacta a soporte.",
       "email": "support@amarka.com"
     }
+  },
+  "products": {
+    "hero": {
+      "title": "Explora todos los productos",
+      "subtitle": "Compra piezas listas para personalizar."
+    },
+    "filters": {
+      "category": "Categor?a",
+      "all_categories": "Todas las categor?as",
+      "model": "Modelo",
+      "all_models": "Todos los modelos",
+      "search": "Buscar",
+      "search_placeholder": "Buscar productos...",
+      "filter_by_tags": "Filtrar por etiquetas"
+    },
+    "results": {
+      "loading": "Cargando productos...",
+      "showing": "Mostrando {{current}} de {{total}} productos"
+    },
+    "empty": {
+      "title": "No se encontraron productos",
+      "message": "Prueba quitando filtros o vuelve pronto.",
+      "clear_button": "Limpiar filtros"
+    },
+    "section": {
+      "title": "Todos los productos",
+      "subtitle": "Selecciona un producto para ver detalles y opciones de personalizaci?n."
+    }
+  },
+  "detalle": {
+    "breadcrumb": {
+      "home": "Inicio",
+      "products": "Productos"
+    },
+    "category": "Categor?a",
+    "model": "Modelo",
+    "description_title": "Descripci?n",
+    "recommended_apps": "Aplicaciones recomendadas",
+    "request_consultation": "Solicitar asesor?a",
+    "in_stock": "Disponible",
+    "units_available": "{{count}} unidades disponibles",
+    "pre_order": "Pre-orden",
+    "back_to_products": "Volver a productos",
+    "warranty_included": "Garant?a incluida",
+    "warranty_coverage": "Incluye garant?a est?ndar del fabricante.",
+    "high_performance": "Alto rendimiento",
+    "enterprise_equipment": "Componentes de nivel empresarial para mayor fiabilidad.",
+    "expert_support": "Soporte experto",
+    "technical_support": "Asistencia en instalaci?n y uso incluida.",
+    "secure_payment": "Pago seguro",
+    "multiple_payment": "Aceptamos m?ltiples m?todos de pago.",
+    "specs_title": "Especificaciones",
+    "hash_rate": "Hash rate",
+    "power_consumption": "Consumo energ?tico",
+    "efficiency": "Eficiencia",
+    "algorithm": "Algoritmo",
+    "chip_type": "Tipo de chip",
+    "cooling": "Refrigeraci?n",
+    "dimensions": "Dimensiones",
+    "weight": "Peso",
+    "operating_temp": "Temperatura de operaci?n",
+    "network": "Red",
+    "voltage": "Voltaje",
+    "warranty": "Garant?a",
+    "benefits_title": "Por qu? te gustar?",
+    "view_details": "Ver detalles",
+    "related_products": "Productos relacionados",
+    "product_not_found": "Producto no encontrado",
+    "product_not_found_message": "El producto que buscas no est? disponible.",
+    "view_all_products": "Ver todos los productos",
+    "loading_product": "Cargando producto..."
   }
 }

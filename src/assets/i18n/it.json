@@ -1,0 +1,122 @@
+{
+  "nav": {
+    "products": "Products",
+    "home": "Home",
+    "profile": "Profilo",
+    "collections": "Collections",
+    "contact": "Contact",
+    "orders": "Orders",
+    "soloMiners": "Solo Miners",
+    "get_started": "Get started",
+    "account": "Account",
+    "follow_us": "Follow us",
+    "language": "Language",
+    "add_links": "Add links in brand config",
+    "account_lists": "Account & Lists",
+    "search_placeholder": "Search engraved gifts, occasions, recipients..."
+  },
+  "page_titles": {
+    "admin_dashboard": "Admin Dashboard",
+    "product_management": "Product Management",
+    "quick_add_product": "Quick Add Product",
+    "gallery_management": "Gallery Management",
+    "order_management": "Order Management",
+    "collections": "Collections",
+    "models": "Models",
+    "user_management": "User Management",
+    "benefit_templates": "Benefit Templates",
+    "analytics": "Analytics",
+    "settings": "Settings",
+    "email_templates": "Email Templates",
+    "size_groups": "Size Groups",
+    "reviews": "Reviews",
+    "not_found": "Page Not Found"
+  },
+  "products": {
+    "hero": {
+      "title": "Browse all products",
+      "subtitle": "Shop engraved pieces ready to personalize."
+    },
+    "filters": {
+      "category": "Category",
+      "all_categories": "All categories",
+      "model": "Model",
+      "all_models": "All models",
+      "search": "Search",
+      "search_placeholder": "Search products...",
+      "filter_by_tags": "Filter by tags"
+    },
+    "results": {
+      "loading": "Loading products...",
+      "showing": "Showing {{current}} of {{total}} products"
+    },
+    "empty": {
+      "title": "No products found",
+      "message": "Try removing filters or check back soon.",
+      "clear_button": "Clear filters"
+    },
+    "section": {
+      "title": "All products",
+      "subtitle": "Select a product to see details and personalization options."
+    }
+  },
+  "detalle": {
+    "breadcrumb": {
+      "home": "Home",
+      "products": "Products"
+    },
+    "category": "Category",
+    "model": "Model",
+    "description_title": "Description",
+    "recommended_apps": "Recommended uses",
+    "request_consultation": "Request consultation",
+    "in_stock": "In stock",
+    "units_available": "{{count}} units available",
+    "pre_order": "Pre-order",
+    "back_to_products": "Back to products",
+    "warranty_included": "Warranty included",
+    "warranty_coverage": "Includes standard manufacturer warranty.",
+    "high_performance": "High performance",
+    "enterprise_equipment": "Enterprise-grade components for reliability.",
+    "expert_support": "Expert support",
+    "technical_support": "Setup and usage assistance included.",
+    "secure_payment": "Secure payment",
+    "multiple_payment": "Multiple payment methods accepted.",
+    "specs_title": "Specifications",
+    "hash_rate": "Hash rate",
+    "power_consumption": "Power consumption",
+    "efficiency": "Efficiency",
+    "algorithm": "Algorithm",
+    "chip_type": "Chip type",
+    "cooling": "Cooling",
+    "dimensions": "Dimensions",
+    "weight": "Weight",
+    "operating_temp": "Operating temperature",
+    "network": "Network",
+    "voltage": "Voltage",
+    "warranty": "Warranty",
+    "benefits_title": "Why you will like it",
+    "view_details": "View details",
+    "related_products": "Related products",
+    "product_not_found": "Product not found",
+    "product_not_found_message": "The product you are looking for is not available.",
+    "view_all_products": "View all products",
+    "loading_product": "Loading product..."
+  },
+  "collections": {
+    "loading": "Loading collections...",
+    "empty": {
+      "title": "No collections yet",
+      "body": "Create a collection in Admin -> Collections and it will appear here automatically."
+    }
+  },
+  "cart": {
+    "shipping": {
+      "estimate_default": "$8 flat rate",
+      "flat_rate": "Flat Rate Shipping"
+    },
+    "summary": {
+      "shipping_flat": "Flat shipping: {{estimate}}"
+    }
+  }
+}

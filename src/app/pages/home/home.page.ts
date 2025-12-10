@@ -80,6 +80,7 @@ export class HomePageComponent extends LoadingComponentBase implements OnInit {
         this.loadNewArrivalsAsync(),
         this.loadHeroProductsAsync()
       ]);
+      this.dedupeHomeProducts();
     } catch (error) {
       console.error('Error loading content:', error);
     } finally {
@@ -165,6 +166,23 @@ export class HomePageComponent extends LoadingComponentBase implements OnInit {
     } catch (error) {
       console.error('Error loading hero products:', error);
     }
+  }
+
+  private dedupeHomeProducts() {
+    const seen = new Set<string>();
+    const keepUnique = (list: Product[]) =>
+      list.filter(p => {
+        const key = p.id || p.slug || p.name;
+        if (!key) return true;
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      });
+
+    this.heroProducts = keepUnique(this.heroProducts);
+    this.featuredProducts = keepUnique(this.featuredProducts);
+    this.bestSellerProducts = keepUnique(this.bestSellerProducts);
+    this.newArrivalProducts = keepUnique(this.newArrivalProducts);
   }
 
   private async loadGalleryPreview() {

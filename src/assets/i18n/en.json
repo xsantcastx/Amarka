@@ -1,11 +1,20 @@
 {
   "nav": {
+    "add_links": "Add links in brand config",
+    "account_lists": "Account & Lists",
+    "search_placeholder": "Search engraved gifts, occasions, recipients...",
+    "cart": "Cart",
+    "follow_us": "Follow us",
+    "language": "Language",
+    "account": "Account",
+    "products": "Products",
     "home": "Home",
     "profile": "My Profile",
     "collections": "Collections",
-    "account_lists": "Account & Lists",
-    "cart": "Cart",
-    "search_placeholder": "Search engraved gifts, occasions, recipients..."
+    "contact": "Contact",
+    "orders": "Orders",
+    "soloMiners": "Solo Miners",
+    "get_started": "Get started"
   },
   "page_titles": {
     "privacy": "Privacy Policy",
@@ -24,7 +33,22 @@
     "cart": "Cart",
     "contact": "Contact",
     "gallery": "Gallery",
-    "services": "Services"
+    "services": "Services",
+    "admin_dashboard": "Admin Dashboard",
+    "product_management": "Product Management",
+    "quick_add_product": "Quick Add Product",
+    "gallery_management": "Gallery Management",
+    "order_management": "Order Management",
+    "collections": "Collections",
+    "models": "Models",
+    "user_management": "User Management",
+    "benefit_templates": "Benefit Templates",
+    "analytics": "Analytics",
+    "settings": "Settings",
+    "email_templates": "Email Templates",
+    "size_groups": "Size Groups",
+    "reviews": "Reviews",
+    "not_found": "Page Not Found"
   },
   "client": {
     "login": "Login",
@@ -111,13 +135,14 @@
     }
   },
   "common": {
-    "loading": "Loading...",
-    "loading_content": "Loading content...",
-    "back": "Back to Home",
-    "search": "Search",
-    "hello": "Hello",
     "active": "Active",
-    "inactive": "Inactive"
+    "inactive": "Inactive",
+    "edit": "Edit",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "save": "Save",
+    "hello": "Hello",
+    "search": "Search"
   },
   "product": {
     "in_stock": "in stock",
@@ -126,264 +151,6 @@
     "view_product": "View product",
     "added": "Added",
     "add_to_cart": "Add to cart"
-  },
-  "home": {
-    "hero": {
-      "badge": "Most-loved engraved gifts",
-      "title": "Premium engraved gifts crafted to keep",
-      "subtitle": "Laser-sharp engraving on glass, wood, metal, and leather with gift-ready packaging. Fast turnaround for milestones, corporate gifts, and everyday wins.",
-      "view_collection": "View collection",
-      "rush_badge": "Rush",
-      "rush_title": "Rush engraving",
-      "rush_subtitle": "Priority production & ship",
-      "cta_collections": "Shop collections",
-      "cta_products": "Browse all products",
-      "fast": "Fast engraving & dispatch",
-      "packaging": "Gift-ready packaging",
-      "view_product": "View product"
-    },
-    "collections": {
-      "heading": "Shop by collection",
-      "view_all": "View all",
-      "empty": "Create collections to feature them here."
-    }
-  },
-  "collections": {
-    "title": "Collections",
-    "subtitle": "Curated drops like Gifts for Men, Wedding Keepsakes, and bespoke engraved sets.",
-    "loading": "Loading collections…",
-    "empty": {
-      "title": "No collections yet",
-      "body": "Create a collection in Admin → Collections and it will appear here automatically."
-    },
-    "card": {
-      "label": "Collection",
-      "cta": "Shop now"
-    }
-  },
-  "admin": {
-    "total_products": "Total Products",
-    "total_orders": "Total Orders",
-    "gallery_images": "Gallery Images",
-    "total_users": "Total Users",
-    "pending_reviews": "Pending Reviews",
-    "total_revenue": "Total Revenue",
-    "quick_actions": "Quick Actions",
-    "add_product": "Add Product",
-    "upload_image": "Upload Image",
-    "manage_products": "Manage Products",
-    "manage_orders": "Manage Orders",
-    "manage_gallery": "Manage Gallery",
-    "manage_users": "Manage Users",
-    "catalog": {
-      "title": "Catalog"
-    },
-    "models": {
-      "title": "Product Models",
-      "subtitle": "Manage product model variants and configurations",
-      "empty": "No models found. Create your first model to get started.",
-      "filters": {
-        "search_placeholder": "Search by name or slug...",
-        "status_label": "Status",
-        "status_all": "All",
-        "status_active": "Active",
-        "status_inactive": "Inactive"
-      },
-      "table": {
-        "name": "Name",
-        "slug": "Slug",
-        "category": "Category",
-        "status": "Status",
-        "actions": "Actions",
-        "active": "Active",
-        "inactive": "Inactive"
-      },
-      "actions": {
-        "add": "Add Model",
-        "edit": "Edit",
-        "delete": "Delete",
-        "create_first": "Create First Model"
-      },
-      "modal": {
-        "new_title": "New Model",
-        "edit_title": "Edit Model"
-      }
-    },
-    "collections": {
-      "title": "Collections",
-      "back_to_admin": "Admin",
-      "new_collection": "+ New Collection",
-      "loading": "Loading collections...",
-      "edit_collection": "Edit Collection",
-      "new_collection_title": "New Collection",
-      "form": {
-        "name": "Name",
-        "slug": "Slug",
-        "description": "Description",
-        "hero_image": "Hero Image",
-        "choose_image": "Choose Image",
-        "max_size": "Max 5MB (JPG, PNG, WebP)",
-        "upload_progress": "Uploading",
-        "active": "Active",
-        "save": "Save",
-        "cancel": "Cancel",
-        "edit": "Edit",
-        "delete": "Delete"
-      }
-    }
-  },
-  "footer": {
-    "description": "Premium engraving and personalized gifts crafted to keep. From corporate awards to milestone keepsakes, we engrave with precision and deliver gift-ready.",
-    "business_hours": "Business Hours",
-    "explore": "Explore",
-    "contact": "Contact",
-    "rights": "All rights reserved.",
-    "privacy": "Privacy",
-    "terms": "Terms"
-  },
-  "cart": {
-    "your": "Your",
-    "title": "Shopping Cart",
-    "subtitle": "Review your items and proceed to checkout",
-    "cart_items": "Cart Items",
-    "item": "item",
-    "items": "items",
-    "quantity": "Quantity",
-    "subtotal": "Subtotal",
-    "clear_cart": "Clear Cart",
-    "empty_title": "Your cart is empty",
-    "empty_message": "Looks like you haven't added anything to your cart yet. Start shopping to fill it up!",
-    "explore_products": "Explore Products",
-    "order_summary": "Order Summary",
-    "shipping_label": "Shipping",
-    "tax": "Tax",
-    "total": "Total",
-    "summary": {
-      "shipping_dynamic": "Shipping cost calculated at checkout based on your address",
-      "shipping_flat": "Estimated shipping: {{estimate}}",
-      "free_shipping": "Free Shipping"
-    },
-    "shipping": {
-      "estimate_default": "$8",
-      "flat_rate": "Flat Rate Shipping"
-    },
-    "proceed_to_checkout": "Proceed to Checkout",
-    "secure": "Secure Checkout",
-    "ssl": "SSL Encrypted",
-    "fast_shipping": "Fast Shipping",
-    "continue_shopping": "Continue Shopping",
-    "address": {
-      "shipping_address": "Shipping Address",
-      "required": "Required",
-      "no_addresses": "No shipping addresses found",
-      "add_shipping_address": "Add Shipping Address",
-      "add_new_address": "Add New Address",
-      "new_shipping_address": "New Shipping Address",
-      "first_name": "First Name",
-      "last_name": "Last Name",
-      "email": "Email",
-      "phone": "Phone",
-      "phone_hint": "Format: +1 (country code) followed by phone number",
-      "address_line1": "Address",
-      "city": "City",
-      "state": "State",
-      "zip_code": "ZIP Code",
-      "country": "Country",
-      "default": "Default",
-      "save_address": "Save Address",
-      "saving": "Saving...",
-      "cancel": "Cancel",
-      "select_state": "Select a state...",
-      "us_only": "Currently shipping to US addresses only"
-    },
-    "shipping_method": {
-      "title": "Shipping Method",
-      "required": "Required",
-      "calculating": "Calculating shipping rates..."
-    }
-  },
-  "checkout": {
-    "breadcrumb": {
-      "home": "Home",
-      "cart": "Cart",
-      "review": "Review",
-      "payment": "Payment"
-    },
-    "review_title": "Review Your",
-    "review_title_highlight": "Order",
-    "review_subtitle": "Please verify your order details before proceeding to payment",
-    "order_items": "Order Items",
-    "sku": "SKU",
-    "qty": "Qty",
-    "each": "each",
-    "edit_cart": "Edit Cart",
-    "shipping_address": "Shipping Address",
-    "default": "Default",
-    "no_addresses": "No shipping addresses found",
-    "no_addresses_message": "Please add a shipping address to continue",
-    "add_shipping_address": "Add Shipping Address",
-    "new_shipping_address": "New Shipping Address",
-    "first_name": "First Name",
-    "last_name": "Last Name",
-    "email": "Email",
-    "phone": "Phone",
-    "phone_hint": "Format: +1 (country code) followed by phone number",
-    "address_line1": "Street Address",
-    "address_line2": "Apartment, suite, etc. (optional)",
-    "city": "City",
-    "state_region": "State/Region",
-    "postal_code": "Postal Code",
-    "country": "Country",
-    "save_address": "Save Address",
-    "saving": "Saving...",
-    "cancel": "Cancel",
-    "add_new_address": "Add Another Address",
-    "shipping_method": "Shipping Method",
-    "calculating_shipping": "Calculating shipping rates...",
-    "order_summary": "Order Summary",
-    "subtotal": "Subtotal",
-    "shipping": "Shipping",
-    "tax": "Tax",
-    "discount": "Discount",
-    "total": "Total",
-    "proceed_to_payment": "Proceed to Payment",
-    "back_to_cart": "Back to Cart",
-    "secure_checkout": "Secure Checkout",
-    "ssl_encrypted": "SSL Encrypted"
-  },
-  "payment": {
-    "title": "Complete Your",
-    "title_highlight": "Payment",
-    "subtitle": "Enter your payment details to complete your order",
-    "payment_information": "Payment Information",
-    "cardholder_name": "Cardholder Name",
-    "cardholder_name_error": "Cardholder name is required",
-    "card_details": "Card Details",
-    "loading_payment_form": "Loading payment form...",
-    "card_secure_message": "Your payment information is secure and encrypted",
-    "billing_address": "Billing Address",
-    "change_billing_address": "Change billing address",
-    "pay": "Pay",
-    "processing": "Processing...",
-    "back": "Back",
-    "order_summary": "Order Summary",
-    "subtotal": "Subtotal",
-    "shipping": "Shipping",
-    "tax": "Tax",
-    "discount": "Discount",
-    "total": "Total",
-    "security_ssl": "256-bit SSL Encryption",
-    "security_pci": "PCI DSS Compliant",
-    "security_stripe": "Powered by Stripe"
-  },
-  "nav": {
-    "add_links": "Add links in brand config",
-    "account_lists": "Account & Lists",
-    "search_placeholder": "Search engraved gifts, occasions, recipients...",
-    "cart": "Cart",
-    "follow_us": "Follow us",
-    "language": "Language",
-    "account": "Account"
   },
   "home": {
     "loading": "Loading content...",
@@ -506,15 +273,149 @@
       }
     }
   },
-  "common": {
-    "active": "Active",
-    "inactive": "Inactive",
-    "edit": "Edit",
-    "delete": "Delete",
+  "footer": {
+    "description": "Premium engraving and personalized gifts crafted to keep. From corporate awards to milestone keepsakes, we engrave with precision and deliver gift-ready.",
+    "business_hours": "Business Hours",
+    "explore": "Explore",
+    "contact": "Contact",
+    "rights": "All rights reserved.",
+    "privacy": "Privacy",
+    "terms": "Terms"
+  },
+  "cart": {
+    "your": "Your",
+    "title": "Shopping Cart",
+    "subtitle": "Review your items and proceed to checkout",
+    "cart_items": "Cart Items",
+    "item": "item",
+    "items": "items",
+    "quantity": "Quantity",
+    "subtotal": "Subtotal",
+    "clear_cart": "Clear Cart",
+    "empty_title": "Your cart is empty",
+    "empty_message": "Looks like you haven't added anything to your cart yet. Start shopping to fill it up!",
+    "explore_products": "Explore Products",
+    "order_summary": "Order Summary",
+    "shipping_label": "Shipping",
+    "tax": "Tax",
+    "total": "Total",
+    "summary": {
+      "shipping_dynamic": "Shipping cost calculated at checkout based on your address",
+      "shipping_flat": "Flat shipping: {{estimate}}",
+      "free_shipping": "Free Shipping"
+    },
+    "shipping": {
+      "estimate_default": "$8 flat rate",
+      "flat_rate": "Flat Rate Shipping"
+    },
+    "proceed_to_checkout": "Proceed to Checkout",
+    "secure": "Secure Checkout",
+    "ssl": "SSL Encrypted",
+    "fast_shipping": "Fast Shipping",
+    "continue_shopping": "Continue Shopping",
+    "address": {
+      "shipping_address": "Shipping Address",
+      "required": "Required",
+      "no_addresses": "No shipping addresses found",
+      "add_shipping_address": "Add Shipping Address",
+      "add_new_address": "Add New Address",
+      "new_shipping_address": "New Shipping Address",
+      "first_name": "First Name",
+      "last_name": "Last Name",
+      "email": "Email",
+      "phone": "Phone",
+      "phone_hint": "Format: +1 (country code) followed by phone number",
+      "address_line1": "Address",
+      "city": "City",
+      "state": "State",
+      "zip_code": "ZIP Code",
+      "country": "Country",
+      "default": "Default",
+      "save_address": "Save Address",
+      "saving": "Saving...",
+      "cancel": "Cancel",
+      "select_state": "Select a state...",
+      "us_only": "Currently shipping to US addresses only"
+    },
+    "shipping_method": {
+      "title": "Shipping Method",
+      "required": "Required",
+      "calculating": "Calculating shipping rates..."
+    }
+  },
+  "checkout": {
+    "breadcrumb": {
+      "home": "Home",
+      "cart": "Cart",
+      "review": "Review",
+      "payment": "Payment"
+    },
+    "review_title": "Review Your",
+    "review_title_highlight": "Order",
+    "review_subtitle": "Please verify your order details before proceeding to payment",
+    "order_items": "Order Items",
+    "sku": "SKU",
+    "qty": "Qty",
+    "each": "each",
+    "edit_cart": "Edit Cart",
+    "shipping_address": "Shipping Address",
+    "default": "Default",
+    "no_addresses": "No shipping addresses found",
+    "no_addresses_message": "Please add a shipping address to continue",
+    "add_shipping_address": "Add Shipping Address",
+    "new_shipping_address": "New Shipping Address",
+    "first_name": "First Name",
+    "last_name": "Last Name",
+    "email": "Email",
+    "phone": "Phone",
+    "phone_hint": "Format: +1 (country code) followed by phone number",
+    "address_line1": "Street Address",
+    "address_line2": "Apartment, suite, etc. (optional)",
+    "city": "City",
+    "state_region": "State/Region",
+    "postal_code": "Postal Code",
+    "country": "Country",
+    "save_address": "Save Address",
+    "saving": "Saving...",
     "cancel": "Cancel",
-    "save": "Save",
-    "hello": "Hello",
-    "search": "Search"
+    "add_new_address": "Add Another Address",
+    "shipping_method": "Shipping Method",
+    "calculating_shipping": "Calculating shipping rates...",
+    "order_summary": "Order Summary",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "tax": "Tax",
+    "discount": "Discount",
+    "total": "Total",
+    "proceed_to_payment": "Proceed to Payment",
+    "back_to_cart": "Back to Cart",
+    "secure_checkout": "Secure Checkout",
+    "ssl_encrypted": "SSL Encrypted"
+  },
+  "payment": {
+    "title": "Complete Your",
+    "title_highlight": "Payment",
+    "subtitle": "Enter your payment details to complete your order",
+    "payment_information": "Payment Information",
+    "cardholder_name": "Cardholder Name",
+    "cardholder_name_error": "Cardholder name is required",
+    "card_details": "Card Details",
+    "loading_payment_form": "Loading payment form...",
+    "card_secure_message": "Your payment information is secure and encrypted",
+    "billing_address": "Billing Address",
+    "change_billing_address": "Change billing address",
+    "pay": "Pay",
+    "processing": "Processing...",
+    "back": "Back",
+    "order_summary": "Order Summary",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "tax": "Tax",
+    "discount": "Discount",
+    "total": "Total",
+    "security_ssl": "256-bit SSL Encryption",
+    "security_pci": "PCI DSS Compliant",
+    "security_stripe": "Powered by Stripe"
   },
   "cookie": {
     "banner": {
@@ -634,5 +535,76 @@
       "copy": "For questions about these terms or your order, contact our support team.",
       "email": "support@amarka.com"
     }
+  },
+  "products": {
+    "hero": {
+      "title": "Browse all products",
+      "subtitle": "Shop engraved pieces ready to personalize."
+    },
+    "filters": {
+      "category": "Category",
+      "all_categories": "All categories",
+      "model": "Model",
+      "all_models": "All models",
+      "search": "Search",
+      "search_placeholder": "Search products...",
+      "filter_by_tags": "Filter by tags"
+    },
+    "results": {
+      "loading": "Loading products...",
+      "showing": "Showing {{current}} of {{total}} products"
+    },
+    "empty": {
+      "title": "No products found",
+      "message": "Try removing filters or check back soon.",
+      "clear_button": "Clear filters"
+    },
+    "section": {
+      "title": "All products",
+      "subtitle": "Select a product to see details and personalization options."
+    }
+  },
+  "detalle": {
+    "breadcrumb": {
+      "home": "Home",
+      "products": "Products"
+    },
+    "category": "Category",
+    "model": "Model",
+    "description_title": "Description",
+    "recommended_apps": "Recommended uses",
+    "request_consultation": "Request consultation",
+    "in_stock": "In stock",
+    "units_available": "{{count}} units available",
+    "pre_order": "Pre-order",
+    "back_to_products": "Back to products",
+    "warranty_included": "Warranty included",
+    "warranty_coverage": "Includes standard manufacturer warranty.",
+    "high_performance": "High performance",
+    "enterprise_equipment": "Enterprise-grade components for reliability.",
+    "expert_support": "Expert support",
+    "technical_support": "Setup and usage assistance included.",
+    "secure_payment": "Secure payment",
+    "multiple_payment": "Multiple payment methods accepted.",
+    "specs_title": "Specifications",
+    "hash_rate": "Hash rate",
+    "power_consumption": "Power consumption",
+    "efficiency": "Efficiency",
+    "algorithm": "Algorithm",
+    "chip_type": "Chip type",
+    "cooling": "Cooling",
+    "dimensions": "Dimensions",
+    "weight": "Weight",
+    "operating_temp": "Operating temperature",
+    "network": "Network",
+    "voltage": "Voltage",
+    "warranty": "Warranty",
+    "benefits_title": "Why you will like it",
+    "view_details": "View details",
+    "related_products": "Related products",
+    "product_not_found": "Product not found",
+    "product_not_found_message": "The product you are looking for is not available.",
+    "view_all_products": "View all products",
+    "loading_product": "Loading product..."
   }
 }

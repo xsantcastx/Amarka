@@ -183,27 +183,6 @@
   </section>
 }
 
-<!-- Deals & bundles -->
-@if (featuredProducts.length) {
-  <section class="section-gap">
-    <div class="page-container">
-      <div class="flex items-center justify-between mb-6">
-        <div>
-          <p class="badge">{{ 'home.bundles.badge' | translate }}</p>
-          <h3 class="heading-display text-3xl text-ts-ink">{{ 'home.bundles.title' | translate }}</h3>
-          <p class="text-ts-ink-soft">{{ 'home.bundles.subtitle' | translate }}</p>
-        </div>
-        <a routerLink="/productos" class="btn-outline">{{ 'home.bundles.cta' | translate }}</a>
-      </div>
-      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        @for (product of featuredProducts.slice(0,4); track product.id) {
-          <ts-product-card [product]="product" />
-        }
-      </div>
-    </div>
-  </section>
-}
-
 <!-- Story + Trust -->
 <section class="section-gap">
   <div class="page-container grid lg:grid-cols-3 gap-8 items-center">

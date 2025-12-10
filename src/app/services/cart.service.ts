@@ -240,6 +240,8 @@ export class CartService {
 
     const cartRef = doc(this.firestore, `carts/${cart.id}`);
     const cartWithTotals = this.calculateTotals(cart);
+    // Optimistically update local state so UI badges react immediately
+    this.cartState$.next(cartWithTotals);
     
     // Filter out undefined values to prevent Firestore errors
     const cleanCart = this.removeUndefinedFields({
@@ -249,7 +251,6 @@ export class CartService {
     
     try {
       await setDoc(cartRef, cleanCart);
-      this.cartState$.next(cartWithTotals);
     } catch (err) {
       console.error('Error saving cart:', err);
       throw err;

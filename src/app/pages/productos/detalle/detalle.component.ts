@@ -18,6 +18,7 @@ import { Model } from '../../../models/catalog';
 import { ReviewSummary } from '../../../models/review';
 import { ImageLightboxComponent, LightboxImage } from '../../../shared/components/image-lightbox/image-lightbox.component';
 import { ProductReviewsComponent } from '../../../shared/components/product-reviews/product-reviews.component';
+import { StorageService } from '../../../services/storage.service';
 import { firstValueFrom } from 'rxjs';
 
 @Component({
@@ -41,6 +42,7 @@ export class DetalleComponent implements OnInit, AfterViewInit {
   private seoSchemaService = inject(SeoSchemaService);
   private brandConfig = inject(BrandConfigService);
   private cdr = inject(ChangeDetectorRef);
+  private storageService = inject(StorageService);
   
   producto: Product | undefined;
   category: Category | undefined;
@@ -57,6 +59,9 @@ export class DetalleComponent implements OnInit, AfterViewInit {
   currentLightboxImage = '';
   currentLightboxAlt = '';
   private dataLoaded = false;
+  addInProgress = false;
+  addSuccess = false;
+  addError = '';
 
   async ngOnInit() {
     const slug = this.route.snapshot.paramMap.get('slug');
@@ -149,20 +154,7 @@ export class DetalleComponent implements OnInit, AfterViewInit {
       }
 
       if (this.producto.galleryImageIds && this.producto.galleryImageIds.length > 0) {
-        // Filter out data URLs and full storage URLs - only use valid Firestore document IDs
-        const validIds = this.producto.galleryImageIds.filter(id => 
-          id && 
-          !id.startsWith('data:') && 
-          !id.startsWith('http://') && 
-          !id.startsWith('https://') &&
-          id.length < 1500 // Firestore doc ID max length
-        );
-        if (validIds.length > 0) {
-          const images = await this.mediaService.getMediaByIds(validIds);
-          this.galleryImages = images.filter((image): image is Media => !!image);
-        } else {
-          this.galleryImages = [];
-        }
+        this.galleryImages = await this.resolveGalleryEntries(this.producto.galleryImageIds);
       } else {
         this.galleryImages = [];
       }
@@ -391,10 +383,27 @@ export class DetalleComponent implements OnInit, AfterViewInit {
     this.lightboxOpen = true;
   }
 
-  addToCart() {
-    if (!this.producto) return;
+  async addToCart() {
+    if (!this.producto || this.addInProgress) return;
     
-    this.cartService.add(this.producto, 1);
+    this.addInProgress = true;
+    this.addError = '';
+    this.cdr.detectChanges();
+
+    try {
+      await this.cartService.add(this.producto, 1);
+      this.addSuccess = true;
+      setTimeout(() => {
+        this.addSuccess = false;
+        this.cdr.detectChanges();
+      }, 2400);
+    } catch (error: any) {
+      console.error('Error adding product to cart:', error);
+      this.addError = error?.message || 'Could not add to cart';
+    } finally {
+      this.addInProgress = false;
+      this.cdr.detectChanges();
+    }
   }
 
   getAdditionalSpecKeys(): string[] {
@@ -554,5 +563,51 @@ export class DetalleComponent implements OnInit, AfterViewInit {
       tags: [],
       altText
     };
+  }
+
+  private async resolveGalleryEntries(entries: string[]): Promise<Media[]> {
+    const resolved: Media[] = [];
+    const productName = this.producto?.name || '';
+
+    for (const raw of entries) {
+      const entry = (raw || '').trim();
+      if (!entry) continue;
+
+      // Direct URL provided
+      if (entry.startsWith('http://') || entry.startsWith('https://')) {
+        resolved.push(this.createMediaFromUrl(entry, productName));
+        continue;
+      }
+
+      // Storage path or gs:// URL
+      if (entry.startsWith('gs://') || entry.includes('/')) {
+        try {
+          const url = await this.storageService.getDownloadUrl(entry);
+          resolved.push(this.createMediaFromUrl(url, productName));
+          continue;
+        } catch (storageError) {
+          console.warn('Unable to resolve storage path for gallery image', entry, storageError);
+        }
+      }
+
+      // Firestore media document ID
+      try {
+        const media = await this.mediaService.getMediaById(entry);
+        if (media?.url) {
+          resolved.push(media);
+        }
+      } catch (mediaError) {
+        console.warn('Unable to load media by ID', entry, mediaError);
+      }
+    }
+
+    // Deduplicate by URL
+    const seen = new Set<string>();
+    return resolved.filter(image => {
+      if (!image?.url) return false;
+      if (seen.has(image.url)) return false;
+      seen.add(image.url);
+      return true;
+    });
   }
 }

@@ -221,12 +221,6 @@
                   }
                 </div>
 
-                @if (producto.description) {
-                  <p class="mb-4 line-clamp-3 text-sm text-ts-ink-soft">
-                    {{producto.description}}
-                  </p>
-                }
-
                 <!-- Stock Badge -->
                 @if (producto.stock !== undefined) {
                   <div class="mb-4">
@@ -254,8 +248,28 @@
                   </div>
                   <button
                     (click)="addToCart(producto, $event)"
-                    class="inline-flex items-center justify-center rounded-lg border border-ts-accent/50 bg-ts-accent px-4 py-2 text-sm font-semibold text-ts-ink transition-colors hover:bg-ts-accent/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ts-accent">
-                    Add to Cart
+                    [disabled]="addingProductId === (producto.id || producto.slug)"
+                    class="inline-flex items-center justify-center rounded-lg border border-ts-accent/50 bg-ts-accent px-4 py-2 text-sm font-semibold text-ts-ink transition-colors hover:bg-ts-accent/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ts-accent disabled:opacity-70 disabled:cursor-not-allowed">
+                    @if (addingProductId === (producto.id || producto.slug)) {
+                      <span class="flex items-center gap-2">
+                        <span class="h-4 w-4 rounded-full border-2 border-ts-ink border-t-transparent animate-spin"></span>
+                        <span>{{ 'common.loading' | translate }}</span>
+                      </span>
+                    } @else if (isRecentlyAdded(producto)) {
+                      <span class="flex items-center gap-2 text-green-900">
+                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span>{{ 'product.added' | translate }}</span>
+                      </span>
+                    } @else {
+                      <span class="flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                        <span>{{ 'product.add_to_cart' | translate }}</span>
+                      </span>
+                    }
                   </button>
                 </div>
               </div>
@@ -287,4 +301,3 @@
     </div>
   }
 </section>
-
