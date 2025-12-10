@@ -82,6 +82,21 @@
               <div class="aspect-square rounded-lg bg-ts-bg-soft/20 border border-ts-line/20 opacity-40"></div>
             }
           </div>
+
+          @if (producto.videoUrl) {
+            <div class="mt-6">
+              <h4 class="text-sm font-semibold text-ts-ink mb-2">{{ 'detalle.video' | translate }}</h4>
+              <div class="rounded-2xl overflow-hidden border border-ts-line bg-ts-bg-soft aspect-video">
+                <video
+                  [src]="producto.videoUrl"
+                  [poster]="coverImage?.url || producto.imageUrl || ''"
+                  controls
+                  playsinline
+                  class="w-full h-full object-cover">
+                </video>
+              </div>
+            </div>
+          }
         </div>
       
       <!-- Product Information -->

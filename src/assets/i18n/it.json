@@ -101,7 +101,8 @@
     "product_not_found": "Product not found",
     "product_not_found_message": "The product you are looking for is not available.",
     "view_all_products": "View all products",
-    "loading_product": "Loading product..."
+    "loading_product": "Loading product...",
+    "video": "Product video"
   },
   "collections": {
     "loading": "Loading collections...",

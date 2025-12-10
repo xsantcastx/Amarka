@@ -73,6 +73,7 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
   videoPreview: string | null = null;
   uploadingVideo = false;
   videoUploadProgress = 0;
+  videoUploadComplete = false;
   
   // Store existing IDs when editing
   existingCoverImageId: string = '';
@@ -478,6 +479,7 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
     }
 
     this.isSaving = true;
+    this.cdr.detectChanges();
     this.errorMessage = '';
     try {
       const formValue = this.productForm.value;
@@ -534,17 +536,43 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
         }
       }
 
-      // Upload video if provided
+      // Upload video if provided (with progress feedback)
       let videoUrl = this.existingVideoUrl || formValue.videoUrl || '';
       if (this.selectedVideoFile) {
-        const videoUpload = await lastValueFrom(
-          this.storageService.uploadFile(
-            this.selectedVideoFile,
-            `products/videos/${Date.now()}_${this.selectedVideoFile.name}`
-          )
-        );
-        if (videoUpload.downloadURL) {
-          videoUrl = videoUpload.downloadURL;
+        this.uploadingVideo = true;
+        this.videoUploadProgress = 0;
+        this.videoUploadComplete = false;
+        this.cdr.detectChanges();
+
+        try {
+          await new Promise<void>((resolve, reject) => {
+            this.storageService.uploadFile(
+              this.selectedVideoFile!,
+              `products/videos/${Date.now()}_${this.selectedVideoFile!.name}`
+            ).subscribe({
+              next: (res) => {
+                if (typeof res.progress === 'number') {
+                  this.videoUploadProgress = Math.round(res.progress);
+                  this.cdr.detectChanges();
+                }
+                if (res.downloadURL) {
+                  videoUrl = res.downloadURL;
+                }
+              },
+              error: (err) => reject(err),
+              complete: () => resolve()
+            });
+          });
+          this.videoUploadComplete = true;
+          this.videoPreview = videoUrl;
+          this.selectedVideoFile = null;
+        } catch (error) {
+          console.error('Error uploading video:', error);
+          this.errorMessage = 'Failed to upload video';
+          throw error;
+        } finally {
+          this.uploadingVideo = false;
+          this.cdr.detectChanges();
         }
       }
 
@@ -593,6 +621,7 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
       this.setError('Failed to save product');
     } finally {
       this.isSaving = false;
+      this.cdr.detectChanges();
     }
   }
 
@@ -866,5 +895,7 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
     this.selectedVideoFile = null;
     this.productForm.patchValue({ videoUrl: '' });
     this.existingVideoUrl = '';
+    this.videoUploadProgress = 0;
+    this.videoUploadComplete = false;
   }
 }

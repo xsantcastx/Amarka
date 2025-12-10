@@ -648,6 +648,7 @@
     "product_not_found": "Producto no encontrado",
     "product_not_found_message": "El producto que buscas no est? disponible.",
     "view_all_products": "Ver todos los productos",
-    "loading_product": "Cargando producto..."
+    "loading_product": "Cargando producto...",
+    "video": "Video del producto"
   }
 }
