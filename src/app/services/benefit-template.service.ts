@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Firestore, collection, collectionData, doc, setDoc, updateDoc, deleteDoc, query, where, orderBy } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { BenefitTemplate } from '../models/benefit-template';
 
 @Injectable({
@@ -39,12 +40,24 @@ export class BenefitTemplateService {
    * Get active templates only
    */
   getActiveTemplates(): Observable<BenefitTemplate[]> {
-    const q = query(
+    const ordered = query(
       this.templatesCollection,
       where('isActive', '==', true),
       orderBy('order', 'asc')
     );
-    return collectionData(q, { idField: 'id' }) as Observable<BenefitTemplate[]>;
+
+    // If Firestore index is missing, fall back to a simpler query without orderBy
+    return (collectionData(ordered, { idField: 'id' }) as Observable<BenefitTemplate[]>)
+      .pipe(
+        catchError(err => {
+          console.warn('[BenefitTemplateService] Missing index for ordered active templates, falling back without orderBy:', err?.message);
+          const fallback = query(
+            this.templatesCollection,
+            where('isActive', '==', true)
+          );
+          return collectionData(fallback, { idField: 'id' }) as Observable<BenefitTemplate[]>;
+        })
+      );
   }
 
   /**

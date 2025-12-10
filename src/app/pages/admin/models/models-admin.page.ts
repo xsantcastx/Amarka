@@ -1,8 +1,9 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { AdminQuickActionsComponent } from '../../../shared/components/admin-quick-actions/admin-quick-actions.component';
+import { AdminSidebarComponent } from '../../../shared/components/admin-sidebar/admin-sidebar.component';
 import { ModelService } from '../../../services/model.service';
 import { CategoryService } from '../../../services/category.service';
 import { Model, Category } from '../../../models/catalog';
@@ -14,7 +15,7 @@ type MessageType = 'success' | 'error' | 'info';
 @Component({
   selector: 'app-models-admin',
   standalone: true,
-  imports: [CommonModule, FormsModule, TranslateModule, AdminQuickActionsComponent],
+  imports: [CommonModule, RouterLink, FormsModule, TranslateModule, AdminSidebarComponent],
   templateUrl: './models-admin.page.html',
   styleUrls: ['./models-admin.page.scss']
 })
@@ -28,6 +29,8 @@ export class ModelsAdminComponent extends LoadingComponentBase implements OnInit
 
   filterTerm = '';
   statusFilter: 'all' | 'active' | 'inactive' = 'all';
+  categoryFilter = 'all';
+  selectedModels: Set<string> = new Set();
 
   showModal = false;
   isEditMode = false;
@@ -49,13 +52,99 @@ export class ModelsAdminComponent extends LoadingComponentBase implements OnInit
         (this.statusFilter === 'active' && model.active !== false) ||
         (this.statusFilter === 'inactive' && model.active === false);
 
+      const matchesCategory =
+        this.categoryFilter === 'all' ||
+        model.categoryId === this.categoryFilter;
+
       const matchesTerm =
         !term ||
         model.name.toLowerCase().includes(term) ||
         (model.slug ?? '').toLowerCase().includes(term);
 
-      return matchesStatus && matchesTerm;
+      return matchesStatus && matchesCategory && matchesTerm;
     });
+  }
+
+  get allSelected(): boolean {
+    return this.filteredModels.length > 0 && this.filteredModels.every(m => m.id && this.selectedModels.has(m.id));
+  }
+
+  toggleSelectAll() {
+    if (this.allSelected) {
+      this.filteredModels.forEach(m => m.id && this.selectedModels.delete(m.id));
+    } else {
+      this.filteredModels.forEach(m => m.id && this.selectedModels.add(m.id));
+    }
+  }
+
+  toggleSelect(modelId: string) {
+    if (this.selectedModels.has(modelId)) {
+      this.selectedModels.delete(modelId);
+    } else {
+      this.selectedModels.add(modelId);
+    }
+  }
+
+  async bulkDelete() {
+    if (this.selectedModels.size === 0) return;
+    
+    if (!confirm(`Delete ${this.selectedModels.size} selected model(s)? This cannot be undone.`)) {
+      return;
+    }
+
+    try {
+      await Promise.all(
+        Array.from(this.selectedModels).map(id => this.modelService.deleteModel(id))
+      );
+      this.selectedModels.clear();
+      await this.loadModels();
+      this.showMessage('admin.models.messages.bulk_deleted', 'success', { count: this.selectedModels.size });
+    } catch (error) {
+      console.error('Bulk delete error:', error);
+      this.setError('Failed to delete models');
+    }
+  }
+
+  async bulkActivate() {
+    if (this.selectedModels.size === 0) return;
+
+    try {
+      const updates = Array.from(this.selectedModels).map(id => {
+        const model = this.models.find(m => m.id === id);
+        if (model) {
+          return this.modelService.updateModel(id, { ...model, active: true });
+        }
+        return Promise.resolve();
+      });
+      await Promise.all(updates);
+      this.selectedModels.clear();
+      await this.loadModels();
+      this.showMessage('admin.models.messages.bulk_activated', 'success');
+    } catch (error) {
+      console.error('Bulk activate error:', error);
+      this.setError('Failed to activate models');
+    }
+  }
+
+  async bulkDeactivate() {
+    if (this.selectedModels.size === 0) return;
+
+    try {
+      const updates = Array.from(this.selectedModels).map(id => {
+        const model = this.models.find(m => m.id === id);
+        if (model) {
+          return this.modelService.updateModel(id, { ...model, active: false });
+        }
+        return Promise.resolve();
+      });
+      await Promise.all(updates);
+      this.selectedModels.clear();
+      await this.loadModels();
+      this.showMessage('admin.models.messages.bulk_deactivated', 'success');
+    } catch (error) {
+      console.error('Bulk deactivate error:', error);
+      this.setError('Failed to deactivate models');
+    }
   }
 
   async ngOnInit() {

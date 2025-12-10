@@ -557,6 +557,10 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
                 }
                 if (res.downloadURL) {
                   videoUrl = res.downloadURL;
+                  this.videoPreview = videoUrl;
+                  this.productForm.patchValue({ videoUrl });
+                  this.existingVideoUrl = videoUrl;
+                  this.cdr.detectChanges();
                 }
               },
               error: (err) => reject(err),
@@ -565,6 +569,8 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
           });
           this.videoUploadComplete = true;
           this.videoPreview = videoUrl;
+          this.productForm.patchValue({ videoUrl });
+          this.existingVideoUrl = videoUrl;
           this.selectedVideoFile = null;
         } catch (error) {
           console.error('Error uploading video:', error);
@@ -606,6 +612,8 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
         updatedAt: Timestamp.now()
       };
 
+      console.log('💾 Saving product with video:', { videoUrl, hasVideo: !!videoUrl });
+
       if (this.isEditMode && this.editingProductId) {
         await this.productsService.updateProduct(this.editingProductId, productPayload);
         this.successMessage = 'admin.product_updated';
@@ -613,6 +621,7 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
         const newId = await this.productsService.addProduct(productPayload);
         this.editingProductId = newId;
         this.successMessage = 'admin.product_created';
+        console.log('✅ Product created with ID:', newId, 'videoUrl:', videoUrl);
       }
 
       this.forceUpdate();
@@ -886,8 +895,10 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
     const reader = new FileReader();
     reader.onload = (e) => {
       this.videoPreview = e.target?.result as string;
+      this.cdr.detectChanges();
     };
     reader.readAsDataURL(file);
+    this.cdr.detectChanges();
   }
 
   removeVideo() {
