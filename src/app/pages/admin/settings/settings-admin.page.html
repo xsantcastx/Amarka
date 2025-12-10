@@ -31,9 +31,10 @@
 
   <!-- Main Content -->
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <app-theme-manager class="mb-8 block"></app-theme-manager>
-
     <div class="space-y-6">
+      <!-- General Settings (Theme Manager) -->
+      <app-theme-manager></app-theme-manager>
+
       @for (section of sections; track section.title) {
         <div class="bg-ts-paper border border-ts-line rounded-xl overflow-hidden shadow-sm">
           <!-- Section Header (Clickable) -->
@@ -217,13 +218,13 @@
                             <input
                               type="color"
                               [(ngModel)]="setting.value"
-                              (ngModelChange)="onSettingValueChange(); applyThemeVariables(currentSettings!)"
+                              (ngModelChange)="onSettingValueChange()"
                               [ngModelOptions]="{ standalone: true }"
                               class="h-10 w-16 rounded border border-ts-line cursor-pointer">
                             <input
                               type="text"
                               [(ngModel)]="setting.value"
-                              (ngModelChange)="onSettingValueChange(); applyThemeVariables(currentSettings!)"
+                              (ngModelChange)="onSettingValueChange()"
                               [ngModelOptions]="{ standalone: true }"
                               [attr.id]="getFieldId(section.title, setting.key)"
                               [attr.name]="getFieldId(section.title, setting.key)"

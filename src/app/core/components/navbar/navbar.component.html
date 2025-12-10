@@ -25,7 +25,9 @@
       <!-- Right: account / cart / menu -->
       <div class="flex items-center gap-4 text-xs text-ts-ink">
         <div class="hidden lg:flex flex-col leading-tight">
-          <span class="text-ts-ink-soft">{{ 'common.hello' | translate }}</span>
+          @if (('common.hello' | translate) !== 'common.hello') {
+            <span class="text-ts-ink-soft">{{ 'common.hello' | translate }}</span>
+          }
           <a routerLink="/client/profile" class="font-semibold hover:text-ts-accent">{{ 'nav.account_lists' | translate }}</a>
         </div>
         <a routerLink="/cart" class="relative inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-ts-line bg-ts-bg hover:border-ts-accent transition">

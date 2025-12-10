@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, inject, signal } from '@angular/core';
+import { Component, Input, OnInit, inject, signal, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
@@ -22,6 +22,7 @@ export class ProductReviewsComponent implements OnInit {
   private auth = inject(Auth);
   private reviewService = inject(ProductReviewService);
   private authService = inject(AuthService);
+  private cdr = inject(ChangeDetectorRef);
 
   reviews = signal<ProductReview[]>([]);
   summary = signal<ReviewSummary | null>(null);
@@ -43,6 +44,7 @@ export class ProductReviewsComponent implements OnInit {
   async ngOnInit() {
     await this.loadReviews();
     await this.checkReviewEligibility();
+    this.cdr.detectChanges();
   }
 
   private async loadReviews() {
@@ -60,6 +62,7 @@ export class ProductReviewsComponent implements OnInit {
       this.error.set('Failed to load reviews');
     } finally {
       this.loading.set(false);
+      this.cdr.detectChanges();
     }
   }
 
@@ -82,6 +85,7 @@ export class ProductReviewsComponent implements OnInit {
       if (result.reason) {
         this.canReviewReason.set(result.reason);
       }
+      this.cdr.detectChanges();
     } catch (err) {
       console.error('Error checking review eligibility:', err);
     }

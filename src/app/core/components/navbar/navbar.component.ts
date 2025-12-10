@@ -1,4 +1,4 @@
-import { Component, HostListener, inject, PLATFORM_ID, EventEmitter, Output, OnInit, OnDestroy, signal } from '@angular/core';
+import { Component, HostListener, inject, PLATFORM_ID, EventEmitter, Output, OnInit, OnDestroy, signal, ChangeDetectorRef } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -30,6 +30,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   private readonly settingsService = inject(SettingsService);
   private readonly brandConfig = inject(BrandConfigService);
   private readonly collectionsService = inject(CollectionsService);
+  private readonly cdr = inject(ChangeDetectorRef);
   
   scrolled = signal(false);
   mobileOpen = false;
@@ -125,8 +126,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
       return;
     }
 
-    // Apply immediately
-    this.applyRotatingCollection(this.collections[this.rotateIndex]);
+    // Apply immediately on next tick to avoid expression-changed during initial check
+    queueMicrotask(() => {
+      this.applyRotatingCollection(this.collections[this.rotateIndex]);
+    });
 
     if (this.rotateTimer) {
       clearInterval(this.rotateTimer);
@@ -145,7 +148,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     };
 
     let replaced = false;
-    this.navLinks = this.headerLinks.map(link => {
+    const nextNav = this.headerLinks.map(link => {
       const isPlaceholder =
         link.href === '/collections/gifts-for-men' ||
         link.label?.toLowerCase() === 'gifts for men';
@@ -156,13 +159,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
       return { ...link };
     });
 
-    if (!replaced) {
-      // Append a rotating link if the placeholder isn't in config
-      this.navLinks = [
-        ...this.headerLinks.map(link => ({ ...link })),
-        dynamicLink
-      ];
-    }
+    this.navLinks = replaced
+      ? nextNav
+      : [...this.headerLinks.map(link => ({ ...link })), dynamicLink];
+    this.cdr.markForCheck();
   }
 
   @HostListener('window:scroll')

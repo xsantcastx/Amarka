@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, effect, inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, effect, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
   ButtonStyle,
@@ -20,10 +20,12 @@ type ThemeScope = 'global' | 'user';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './theme-manager.component.html',
-  styleUrl: './theme-manager.component.scss'
+  styleUrl: './theme-manager.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ThemeManagerComponent {
+export class ThemeManagerComponent implements OnDestroy {
   private themeService = inject(ThemeService);
+  private cdr = inject(ChangeDetectorRef);
 
   paletteKeys: Array<{ key: keyof ThemePalette; label: string }> = [
     { key: 'primary', label: 'Primary' },
@@ -49,51 +51,85 @@ export class ThemeManagerComponent {
     { key: 'footer', label: 'Footer' }
   ];
 
+  expanded = false;
   scope: ThemeScope = 'global';
   draft: ThemeDocument = this.themeService.activeThemeSnapshot();
   isSaving = false;
   autoSave = true;
   private autoSaveTimer: ReturnType<typeof setTimeout> | null = null;
+  private isApplyingPreset = false;
   private syncDraftEffect = effect(() => {
-    this.draft = this.clone(this.themeService.activeTheme());
+    if (this.isApplyingPreset) {
+      return;
+    }
+    const nextDraft = this.clone(this.themeService.activeTheme());
+    // Defer draft sync to next task to avoid expression-changed errors
+    queueMicrotask(() => {
+      this.draft = nextDraft;
+      this.cdr.markForCheck();
+    });
   });
   presetName = '';
   presets: ThemePalettePreset[] = [];
 
   constructor() {
-    // Enable preview mode while this component is alive
-    this.themeService.setPreviewMode(true);
+    // Enable preview mode while this component is alive and ignore personal overrides when editing global
+    this.themeService.setPreviewMode(true, { ignoreUserTheme: this.scope === 'global' });
+  }
+
+  ngOnDestroy(): void {
+    // Disable preview mode and clear transient preview when leaving
+    this.themeService.setPreviewMode(false);
+    this.themeService.previewThemeUpdate(null);
+    this.cdr.markForCheck();
+  }
+
+  toggleExpanded(): void {
+    this.expanded = !this.expanded;
+  }
+
+  setScope(scope: ThemeScope): void {
+    this.scope = scope;
+    // While editing the global theme, ignore any personal override so preview matches site-wide visitors
+    this.themeService.setPreviewMode(true, { ignoreUserTheme: scope === 'global' });
+    this.cdr.markForCheck();
   }
 
   updatePalette(key: keyof ThemePalette, value: string): void {
     const normalized = this.normalizeColor(value);
     this.draft.palette[key] = normalized;
     this.previewDraft();
+    this.cdr.markForCheck();
   }
 
   updateRadius(level: RadiusLevel): void {
     this.draft.radiusLevel = level;
     this.previewDraft();
+    this.cdr.markForCheck();
   }
 
   updateShadow(level: ShadowLevel): void {
     this.draft.shadowLevel = level;
     this.previewDraft();
+    this.cdr.markForCheck();
   }
 
   updateFontScale(scale: FontScale): void {
     this.draft.fontScale = scale;
     this.previewDraft();
+    this.cdr.markForCheck();
   }
 
   updateButtonStyle(style: ButtonStyle): void {
     this.draft.buttonStyle = style;
     this.previewDraft();
+    this.cdr.markForCheck();
   }
 
   updateSpacing(spacing: SpacingScale): void {
     this.draft.spacing = spacing;
     this.previewDraft();
+    this.cdr.markForCheck();
   }
 
   updateOverride(component: string, key: keyof ThemePalette, value: string): void {
@@ -106,70 +142,90 @@ export class ThemeManagerComponent {
     };
     this.draft.overrides = overrides;
     this.previewDraft();
+    this.cdr.markForCheck();
   }
 
   async save(scope: ThemeScope): Promise<void> {
-    this.isSaving = true;
+    this.setSaving(true);
     try {
       await this.themeService.saveTheme(this.draft, scope);
       this.themeService.previewThemeUpdate(null);
     } catch (error) {
       console.error('Failed to save theme', error);
     } finally {
-      this.isSaving = false;
+      this.setSaving(false);
     }
   }
 
   async reset(scope: ThemeScope): Promise<void> {
-    this.isSaving = true;
+    this.setSaving(true);
     try {
       await this.themeService.resetTheme(scope);
       this.themeService.previewThemeUpdate(null);
     } catch (error) {
       console.error('Failed to reset theme', error);
     } finally {
-      this.isSaving = false;
+      this.setSaving(false);
     }
   }
 
   previewDraft(): void {
     this.themeService.previewThemeUpdate(this.draft);
     this.queueAutoSave();
+    this.cdr.markForCheck();
   }
 
   clearPreview(): void {
     this.themeService.previewThemeUpdate(null);
+    this.cdr.markForCheck();
   }
 
   async savePreset(scope: ThemeScope): Promise<void> {
     if (!this.presetName.trim()) {
       return;
     }
-    this.isSaving = true;
+    this.setSaving(true);
     try {
       await this.themeService.savePalettePreset(this.presetName.trim(), this.draft.palette, scope);
       this.presetName = '';
     } catch (error) {
       console.error('Failed to save preset', error);
     } finally {
-      this.isSaving = false;
+      this.setSaving(false);
     }
   }
 
   async deletePreset(preset: ThemePalettePreset, scope: ThemeScope): Promise<void> {
-    this.isSaving = true;
+    this.setSaving(true);
     try {
       await this.themeService.deletePalettePreset(preset.id, scope);
     } catch (error) {
       console.error('Failed to delete preset', error);
     } finally {
-      this.isSaving = false;
+      this.setSaving(false);
     }
   }
 
   applyPreset(preset: ThemePalettePreset): void {
-    this.draft.palette = { ...preset.palette };
+    this.isApplyingPreset = true;
+    // Clear any pending auto-save
+    if (this.autoSaveTimer) {
+      clearTimeout(this.autoSaveTimer);
+      this.autoSaveTimer = null;
+    }
+    
+    this.draft = {
+      ...this.draft,
+      palette: { ...preset.palette }
+    };
     this.previewDraft();
+    this.cdr.detectChanges();
+
+    // Re-enable syncing on next microtask so effects can run again
+    queueMicrotask(() => {
+      this.isApplyingPreset = false;
+      this.cdr.markForCheck();
+    });
   }
 
   scopeLabel(scope: ThemeScope): string {
@@ -226,17 +282,25 @@ export class ThemeManagerComponent {
   }
 
   private queueAutoSave(): void {
-    if (!this.autoSave) {
+    if (!this.autoSave || this.isApplyingPreset) {
       return;
     }
     if (this.autoSaveTimer) {
       clearTimeout(this.autoSaveTimer);
     }
     this.autoSaveTimer = setTimeout(() => {
-      if (this.isSaving) {
+      if (this.isSaving || this.isApplyingPreset) {
         return;
       }
       this.save(this.scope).catch(error => console.error('Theme auto-save failed', error));
     }, 750);
+  }
+
+  private setSaving(state: boolean): void {
+    // Defer flag change to avoid ExpressionChanged errors in OnPush
+    queueMicrotask(() => {
+      this.isSaving = state;
+      this.cdr.markForCheck();
+    });
   }
 }

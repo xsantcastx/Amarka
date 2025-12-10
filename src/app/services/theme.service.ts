@@ -146,6 +146,150 @@ const DEFAULT_THEME: ThemeDocument = {
         warning: '251 191 36',
         error: '248 113 113'
       }
+    },
+    {
+      id: 'electric-blue',
+      name: 'Electric Blue',
+      scope: 'global',
+      palette: {
+        primary: '14 165 233',
+        secondary: '125 211 252',
+        accent: '3 105 161',
+        neutral: '15 23 42',
+        surface: '255 255 255',
+        background: '248 250 252',
+        success: '34 197 94',
+        warning: '251 146 60',
+        error: '239 68 68'
+      }
+    },
+    {
+      id: 'crypto-orange',
+      name: 'Crypto Orange',
+      scope: 'global',
+      palette: {
+        primary: '251 146 60',
+        secondary: '254 215 170',
+        accent: '194 65 12',
+        neutral: '28 25 23',
+        surface: '255 255 255',
+        background: '250 250 249',
+        success: '34 197 94',
+        warning: '234 179 8',
+        error: '239 68 68'
+      }
+    },
+    {
+      id: 'emerald-tech',
+      name: 'Emerald Tech',
+      scope: 'global',
+      palette: {
+        primary: '16 185 129',
+        secondary: '167 243 208',
+        accent: '6 95 70',
+        neutral: '17 24 39',
+        surface: '255 255 255',
+        background: '249 250 251',
+        success: '34 197 94',
+        warning: '251 191 36',
+        error: '239 68 68'
+      }
+    },
+    {
+      id: 'violet-power',
+      name: 'Violet Power',
+      scope: 'global',
+      palette: {
+        primary: '139 92 246',
+        secondary: '196 181 253',
+        accent: '88 28 135',
+        neutral: '23 23 23',
+        surface: '255 255 255',
+        background: '250 250 250',
+        success: '34 197 94',
+        warning: '251 191 36',
+        error: '239 68 68'
+      }
+    },
+    {
+      id: 'dark-slate',
+      name: 'Dark Slate',
+      scope: 'global',
+      palette: {
+        primary: '100 116 139',
+        secondary: '148 163 184',
+        accent: '51 65 85',
+        neutral: '241 245 249',
+        surface: '30 41 59',
+        background: '15 23 42',
+        success: '34 197 94',
+        warning: '251 191 36',
+        error: '248 113 113'
+      }
+    },
+    {
+      id: 'mining-green',
+      name: 'Mining Green',
+      scope: 'global',
+      palette: {
+        primary: '74 222 128',
+        secondary: '187 247 208',
+        accent: '21 128 61',
+        neutral: '20 20 20',
+        surface: '255 255 255',
+        background: '247 254 231',
+        success: '34 197 94',
+        warning: '234 179 8',
+        error: '220 38 38'
+      }
+    },
+    {
+      id: 'bitcoin-gold',
+      name: 'Bitcoin Gold',
+      scope: 'global',
+      palette: {
+        primary: '247 147 26',
+        secondary: '253 224 71',
+        accent: '161 98 7',
+        neutral: '23 23 23',
+        surface: '255 255 255',
+        background: '254 252 232',
+        success: '34 197 94',
+        warning: '234 179 8',
+        error: '220 38 38'
+      }
+    },
+    {
+      id: 'deep-ocean',
+      name: 'Deep Ocean',
+      scope: 'global',
+      palette: {
+        primary: '6 182 212',
+        secondary: '103 232 249',
+        accent: '8 51 68',
+        neutral: '240 249 255',
+        surface: '12 74 110',
+        background: '8 47 73',
+        success: '52 211 153',
+        warning: '251 191 36',
+        error: '248 113 113'
+      }
+    },
+    {
+      id: 'rose-tech',
+      name: 'Rose Tech',
+      scope: 'global',
+      palette: {
+        primary: '244 63 94',
+        secondary: '251 207 232',
+        accent: '159 18 57',
+        neutral: '23 23 23',
+        surface: '255 255 255',
+        background: '255 250 250',
+        success: '34 197 94',
+        warning: '251 191 36',
+        error: '220 38 38'
+      }
     }
   ]
 };
@@ -166,13 +310,14 @@ export class ThemeService {
   private globalTheme = signal<ThemeDocument>(DEFAULT_THEME);
   private userTheme = signal<ThemeDocument | null>(null);
   private previewTheme = signal<Partial<ThemeDocument> | null>(null);
+  private ignoreUserTheme = signal<boolean>(false);
 
   readonly activeTheme = computed(() => {
     // Live preview is applied only while viewing the settings page; otherwise use persisted theme
     return this.mergeTheme(
       DEFAULT_THEME,
       this.globalTheme(),
-      this.userTheme() ?? null,
+      this.ignoreUserTheme() ? null : this.userTheme() ?? null,
       this.isPreviewMode() ? this.previewTheme() : null
     );
   });
@@ -209,8 +354,9 @@ export class ThemeService {
     this.previewTheme.set(partial);
   }
 
-  setPreviewMode(enabled: boolean): void {
+  setPreviewMode(enabled: boolean, opts?: { ignoreUserTheme?: boolean }): void {
     this.previewEnabled.set(enabled);
+    this.ignoreUserTheme.set(enabled && !!opts?.ignoreUserTheme);
   }
 
   async saveTheme(theme: ThemeDocument, scope: 'global' | 'user' = 'global'): Promise<void> {
@@ -221,12 +367,16 @@ export class ThemeService {
       }
       const userThemeRef = doc(this.firestore, `users/${user.uid}/themes/custom`);
       await setDoc(userThemeRef, theme, { merge: true });
+      // Optimistically update local state to avoid flicker back to old theme
+      this.userTheme.set(theme);
       this.previewTheme.set(null);
       return;
     }
 
     const globalRef = doc(this.firestore, 'themes', 'global');
     await setDoc(globalRef, theme, { merge: true });
+    // Optimistically update local state to avoid flicker back to old theme
+    this.globalTheme.set(theme);
     this.previewTheme.set(null);
   }
 
@@ -245,6 +395,7 @@ export class ThemeService {
 
     const globalRef = doc(this.firestore, 'themes', 'global');
     await setDoc(globalRef, DEFAULT_THEME);
+    this.globalTheme.set(DEFAULT_THEME);
     this.previewTheme.set(null);
   }
 
@@ -541,6 +692,9 @@ export class ThemeService {
       if (!cached) return;
       const parsed = JSON.parse(cached) as ThemeDocument;
       if (parsed && parsed.palette) {
+        const merged = this.mergeTheme(DEFAULT_THEME, parsed);
+        // Hydrate immediately so we don't flash the default palette while Firestore loads
+        this.globalTheme.set(merged);
         this.previewTheme.set(parsed);
       }
     } catch (error) {

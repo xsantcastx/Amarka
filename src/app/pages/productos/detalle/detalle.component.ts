@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, PLATFORM_ID, inject, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit, PLATFORM_ID, inject, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
@@ -19,7 +19,7 @@ import { ReviewSummary } from '../../../models/review';
 import { ImageLightboxComponent, LightboxImage } from '../../../shared/components/image-lightbox/image-lightbox.component';
 import { ProductReviewsComponent } from '../../../shared/components/product-reviews/product-reviews.component';
 import { StorageService } from '../../../services/storage.service';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-detalle',
@@ -27,7 +27,7 @@ import { firstValueFrom } from 'rxjs';
   imports: [CommonModule, RouterLink, TranslateModule, ImageLightboxComponent, ProductReviewsComponent],
   templateUrl: './detalle.component.html'
 })
-export class DetalleComponent implements OnInit, AfterViewInit {
+export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
   private platformId = inject(PLATFORM_ID);
   private productsService = inject(ProductsService);
   private mediaService = inject(MediaService);
@@ -62,15 +62,22 @@ export class DetalleComponent implements OnInit, AfterViewInit {
   addInProgress = false;
   addSuccess = false;
   addError = '';
+  private routeSubscription?: Subscription;
 
   async ngOnInit() {
-    const slug = this.route.snapshot.paramMap.get('slug');
-    
-    if (slug) {
-      await this.loadProducto(slug);
-    } else {
-      this.loading = false;
-    }
+    // Subscribe to route param changes to reload when navigating between products
+    this.routeSubscription = this.route.paramMap.subscribe(async (params) => {
+      const slug = params.get('slug');
+      if (slug) {
+        // Scroll to top when loading new product
+        if (isPlatformBrowser(this.platformId)) {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        await this.loadProducto(slug);
+      } else {
+        this.loading = false;
+      }
+    });
   }
 
   async ngAfterViewInit() {
@@ -609,5 +616,12 @@ export class DetalleComponent implements OnInit, AfterViewInit {
       seen.add(image.url);
       return true;
     });
+  }
+
+  ngOnDestroy() {
+    // Clean up route subscription
+    if (this.routeSubscription) {
+      this.routeSubscription.unsubscribe();
+    }
   }
 }

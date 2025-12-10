@@ -62,7 +62,7 @@
           
           <!-- Gallery thumbnails -->
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
-            @for (galleryImage of galleryImages; track galleryImage.id) {
+            @for (galleryImage of galleryImages; track $index) {
               @let isActive = isCurrentCarouselImage(galleryImage);
               <div
                 class="aspect-square rounded-lg bg-ts-bg-soft/40 overflow-hidden cursor-pointer transition-all border"
@@ -84,16 +84,28 @@
           </div>
 
           @if (producto.videoUrl) {
-            <div class="mt-6">
-              <h4 class="text-sm font-semibold text-ts-ink mb-2">{{ 'detalle.video' | translate }}</h4>
-              <div class="rounded-2xl overflow-hidden border border-ts-line bg-ts-bg-soft aspect-video">
-                <video
-                  [src]="producto.videoUrl"
-                  [poster]="coverImage?.url || producto.imageUrl || ''"
-                  controls
-                  playsinline
-                  class="w-full h-full object-cover">
-                </video>
+            <div class="mt-6 rounded-2xl overflow-hidden border-2 border-ts-accent/30 bg-gradient-to-br from-ts-bg-soft/60 to-ts-bg-soft/40 p-1 shadow-xl shadow-ts-accent/10">
+              <div class="bg-ts-bg-soft rounded-xl overflow-hidden">
+                <div class="px-4 py-3 border-b border-ts-line flex items-center gap-3">
+                  <div class="flex items-center justify-center w-8 h-8 rounded-lg bg-ts-accent/20">
+                    <svg class="w-5 h-5 text-ts-accent" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"/>
+                    </svg>
+                  </div>
+                  <h4 class="text-sm font-semibold text-ts-ink">{{ 'detalle.product_video' | translate }}</h4>
+                </div>
+                <div class="relative aspect-video bg-black">
+                  <video
+                    [src]="producto.videoUrl"
+                    [poster]="coverImage?.url || producto.imageUrl || ''"
+                    controls
+                    controlsList="nodownload"
+                    playsinline
+                    preload="metadata"
+                    class="w-full h-full">
+                    <p class="text-ts-ink-soft p-4">{{ 'detalle.video_not_supported' | translate }}</p>
+                  </video>
+                </div>
               </div>
             </div>
           }
@@ -523,7 +535,7 @@
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
         @for (relacionado of productosRelacionados; track relacionado.slug) {
           <article class="group rounded-2xl overflow-hidden bg-ts-bg-soft/40 border border-ts-accent/20 hover:border-ts-accent/40 shadow-lg hover:shadow-2xl hover:shadow-ts-accent/10 transition-all duration-300">
-            <div class="aspect-[4/3] overflow-hidden bg-ts-bg-soft/60">
+            <a [routerLink]="['/products', relacionado.slug]" class="block aspect-[4/3] overflow-hidden bg-ts-bg-soft/60 cursor-pointer">
               @if (relacionado.imageUrl) {
                 <img [src]="relacionado.imageUrl" 
                      [alt]="relacionado.name"
@@ -536,7 +548,7 @@
                   </svg>
                 </div>
               }
-            </div>
+            </a>
             <div class="p-6">
               <h3 class="font-serif text-xl text-ts-ink mb-2">{{relacionado.name}}</h3>
               @if (relacionado.specs && relacionado.specs['hashRate']) {

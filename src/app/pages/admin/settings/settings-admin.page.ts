@@ -174,9 +174,6 @@ export class SettingsAdminComponent extends LoadingComponentBase implements OnIn
     await this.withLoading(async () => {
       this.currentSettings = await this.settingsService.getSettings();
       
-      // Apply theme variables to DOM on load
-      this.applyThemeVariables(this.currentSettings);
-      
       // Load theme profiles
       this.loadThemeProfiles();
       
@@ -751,9 +748,6 @@ export class SettingsAdminComponent extends LoadingComponentBase implements OnIn
       await this.settingsService.saveSettings(updatedSettings);
       this.currentSettings = updatedSettings;
       
-      // Apply theme variables to DOM
-      this.applyThemeVariables(updatedSettings);
-      
       this.buildSections();
       this.loadThemeProfiles(); // Reload theme profiles after save
       this.updateNotificationSummary();
@@ -1032,48 +1026,9 @@ export class SettingsAdminComponent extends LoadingComponentBase implements OnIn
    * Apply theme CSS variables to the document root
    */
   applyThemeVariables(settings: AppSettings): void {
-    if (typeof document === 'undefined') {
-      return; // SSR safety
-    }
-
-    const root = document.documentElement;
-    
-    // Apply each theme variable if it exists
-    if (settings.themeAccentColor) {
-      root.style.setProperty('--ts-accent', settings.themeAccentColor);
-    }
-    if (settings.themeAccentSoft) {
-      root.style.setProperty('--ts-accent-soft', settings.themeAccentSoft);
-    }
-    if (settings.themeAccentDark) {
-      root.style.setProperty('--ts-accent-dark', settings.themeAccentDark);
-    }
-    if (settings.themeInkColor) {
-      root.style.setProperty('--ts-ink', settings.themeInkColor);
-    }
-    if (settings.themeInkSoft) {
-      root.style.setProperty('--ts-ink-soft', settings.themeInkSoft);
-    }
-    if (settings.themeBgColor) {
-      root.style.setProperty('--ts-bg', settings.themeBgColor);
-    }
-    if (settings.themePaperColor) {
-      root.style.setProperty('--ts-paper', settings.themePaperColor);
-    }
-    if (settings.themeLineColor) {
-      root.style.setProperty('--ts-line', settings.themeLineColor);
-    }
-
-    console.log('✅ Theme variables applied:', {
-      accent: settings.themeAccentColor,
-      accentSoft: settings.themeAccentSoft,
-      accentDark: settings.themeAccentDark,
-      ink: settings.themeInkColor,
-      inkSoft: settings.themeInkSoft,
-      bg: settings.themeBgColor,
-      paper: settings.themePaperColor,
-      line: settings.themeLineColor
-    });
+    // Legacy theme overrides were handled here. The new ThemeService owns CSS variables,
+    // so this is intentionally a no-op to avoid fighting live previews and saves.
+    return;
   }
 
   // Theme Profile Management
@@ -1206,7 +1161,6 @@ export class SettingsAdminComponent extends LoadingComponentBase implements OnIn
     }
 
     this.activeProfileId = profileId;
-    this.applyThemeVariables(this.currentSettings);
     this.onSettingValueChange();
     
     const profileName = profileId === 'custom' ? 'Custom' : this.themeProfiles[parseInt(profileId.replace('profile', '')) - 1].name;
