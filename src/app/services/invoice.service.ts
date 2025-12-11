@@ -39,9 +39,10 @@ export class InvoiceService {
   private brandConfig = inject(BrandConfigService);
   private brandName = this.brandConfig.siteName;
   private brandTagline = this.brandConfig.site.brand.tagline || 'Premium commerce storefront';
-  private contactEmail = this.brandConfig.site.contact?.email || 'support@amarka.com';
-  private contactPhone = this.brandConfig.site.contact?.phone || '';
-  private brandAddress = this.brandConfig.site.contact?.address || '';
+  private contactEmail = 'jessica@amarka.co';
+  private contactPhone = '2035546224';
+  private brandAddress = '100 Greyrock Pl F119\nStamford, CT 06901';
+  private supportHours = 'Mon-Mon 10AM-7PM EDT';
   
   // Amarka theme colors (warm terracotta/orange)
   private primaryColor = { r: 199, g: 104, b: 59 }; // ts-accent #C7683B
@@ -49,27 +50,35 @@ export class InvoiceService {
   private inkColor = { r: 23, g: 19, b: 15 }; // ts-ink #17130F
   private softInkColor = { r: 75, g: 59, b: 47 }; // ts-ink-soft #4B3B2F
 
-  generateInvoice(order: InvoiceOrder): void {
+  async generateInvoice(order: InvoiceOrder): Promise<void> {
     const doc = new jsPDF();
     
-    // Company/Logo Header - Using Amarka branding
-    doc.setFontSize(28);
-    doc.setTextColor(this.primaryColor.r, this.primaryColor.g, this.primaryColor.b);
-    doc.text(this.brandName, 20, 22);
+    // Brand + logo
+    const logo = await this.getLogoDataUrl();
+    if (logo) {
+      try {
+        doc.addImage(logo, 'PNG', 20, 12, 42, 16);
+      } catch (err) {
+        console.warn('[Invoice] Logo render failed, using text fallback', err);
+        doc.setFontSize(24);
+        doc.setTextColor(this.primaryColor.r, this.primaryColor.g, this.primaryColor.b);
+        doc.text(this.brandName, 20, 22);
+      }
+    } else {
+      doc.setFontSize(24);
+      doc.setTextColor(this.primaryColor.r, this.primaryColor.g, this.primaryColor.b);
+      doc.text(this.brandName, 20, 22);
+    }
     
-    doc.setFontSize(10);
+    doc.setFontSize(11);
     doc.setTextColor(this.softInkColor.r, this.softInkColor.g, this.softInkColor.b);
-    doc.text(this.brandTagline, 20, 29);
+    doc.text(this.brandTagline, 20, 32);
     
-    // Add decorative line under brand
+    // Decorative line under brand
     doc.setDrawColor(this.secondaryColor.r, this.secondaryColor.g, this.secondaryColor.b);
     doc.setLineWidth(0.5);
-    doc.line(20, 32, 80, 32);
+    doc.line(20, 35, 80, 35);
     
-    // Invoice Title
-    doc.setFontSize(22);
-    doc.setTextColor(this.inkColor.r, this.inkColor.g, this.inkColor.b);
-    doc.text('INVOICE', 150, 22);
     // Invoice Title
     doc.setFontSize(22);
     doc.setTextColor(this.inkColor.r, this.inkColor.g, this.inkColor.b);
@@ -99,7 +108,6 @@ export class InvoiceService {
     } else {
       doc.setTextColor(this.softInkColor.r, this.softInkColor.g, this.softInkColor.b);
     }
-    doc.text(status, 192, 45, { align: 'right' });
     doc.text(status, 192, 45, { align: 'right' });
     
     // Shipping Address with styled header
@@ -184,9 +192,10 @@ export class InvoiceService {
           doc.text(line, 25, currentY + (lineIndex * 5));
         });
         
+        const currSymbol = this.getCurrencySymbol(order.currency);
         doc.text(quantity.toString(), 135, currentY, { align: 'right' });
-        doc.text(`$${unitPrice.toFixed(2)}`, 165, currentY, { align: 'right' });
-        doc.text(`$${total.toFixed(2)}`, 185, currentY, { align: 'right' });
+        doc.text(`${currSymbol}${unitPrice.toFixed(2)}`, 165, currentY, { align: 'right' });
+        doc.text(`${currSymbol}${total.toFixed(2)}`, 185, currentY, { align: 'right' });
         
         currentY += Math.max(5, lines.length * 5);
         
@@ -198,6 +207,9 @@ export class InvoiceService {
           currentY += 7;
         }
       });
+    } else {
+      doc.text('No items found for this order.', 25, currentY);
+      currentY += 12;
     }
     
     // Totals Section with warm background
@@ -216,19 +228,20 @@ export class InvoiceService {
     doc.setFontSize(9);
     doc.setTextColor(this.softInkColor.r, this.softInkColor.g, this.softInkColor.b);
     
+    const currSymbol = this.getCurrencySymbol(order.currency);
     doc.text('Subtotal:', totalsX, currentY);
-    doc.text(`$${subtotal.toFixed(2)}`, 188, currentY, { align: 'right' });
+    doc.text(`${currSymbol}${subtotal.toFixed(2)}`, 188, currentY, { align: 'right' });
     
     if (shipping > 0) {
       currentY += 6;
       doc.text('Shipping:', totalsX, currentY);
-      doc.text(`$${shipping.toFixed(2)}`, 188, currentY, { align: 'right' });
+      doc.text(`${currSymbol}${shipping.toFixed(2)}`, 188, currentY, { align: 'right' });
     }
     
     if (tax > 0) {
       currentY += 6;
       doc.text('Tax:', totalsX, currentY);
-      doc.text(`$${tax.toFixed(2)}`, 188, currentY, { align: 'right' });
+      doc.text(`${currSymbol}${tax.toFixed(2)}`, 188, currentY, { align: 'right' });
     }
     
     // Total with emphasis
@@ -238,39 +251,85 @@ export class InvoiceService {
     doc.setTextColor(this.inkColor.r, this.inkColor.g, this.inkColor.b);
     doc.text('Total:', totalsX, currentY);
     doc.setTextColor(this.primaryColor.r, this.primaryColor.g, this.primaryColor.b);
-    doc.text(`$${order.total.toFixed(2)}`, 188, currentY, { align: 'right' });
+    doc.text(`${currSymbol}${order.total.toFixed(2)}`, 188, currentY, { align: 'right' });
     doc.setFont('helvetica', 'normal');
     
     // Footer with Amarka contact info
-    const footerY = 268;
+    const footerY = 248;
     
-    // Thank you message
     doc.setFontSize(11);
     doc.setTextColor(this.primaryColor.r, this.primaryColor.g, this.primaryColor.b);
     doc.text('Thank you for your order!', 105, footerY, { align: 'center' });
     
-    // Contact information
     doc.setFontSize(8);
     doc.setTextColor(this.softInkColor.r, this.softInkColor.g, this.softInkColor.b);
-    doc.text(`Questions? Contact us at ${this.contactEmail}`, 105, footerY + 5, { align: 'center' });
-    
-    if (this.contactPhone) {
-      doc.text(`Phone: ${this.contactPhone}`, 105, footerY + 9, { align: 'center' });
-    }
-    
-    // Brand tagline at bottom
-    doc.setFontSize(7);
-    doc.setTextColor(this.secondaryColor.r, this.secondaryColor.g, this.secondaryColor.b);
-    doc.text(this.brandTagline, 105, footerY + 14, { align: 'center' });
+    doc.text(this.brandAddress, 105, footerY + 5, { align: 'center' });
+    doc.text(`Email: ${this.contactEmail}`, 105, footerY + 10, { align: 'center' });
+    doc.text(`Phone: ${this.contactPhone}`, 105, footerY + 15, { align: 'center' });
+    doc.text(`Hours: ${this.supportHours}`, 105, footerY + 20, { align: 'center' });
     
     // Add border with Amarka colors
     doc.setDrawColor(this.primaryColor.r, this.primaryColor.g, this.primaryColor.b);
     doc.setLineWidth(0.8);
-    doc.roundedRect(15, 15, 180, 267, 3, 3);
+    doc.roundedRect(15, 15, 180, 270, 3, 3);
     
     // Save the PDF
     const fileName = `invoice-${order.orderNumber}.pdf`;
     doc.save(fileName);
+  }
+  
+  private async getLogoDataUrl(): Promise<string | null> {
+    if (typeof window === 'undefined') {
+      return null;
+    }
+
+    const preferred = '/Logo Clear.png';
+    const brandLogo = this.brandConfig.site.brand.logo || '';
+
+    const tryLoad = async (url: string): Promise<string | null> => {
+      try {
+        const absolute = url.startsWith('http') ? url : `${window.location.origin}${url}`;
+        const response = await fetch(absolute);
+        if (!response.ok) return null;
+        const blob = await response.blob();
+        const base64 = await new Promise<string>((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result as string);
+          reader.onerror = reject;
+          reader.readAsDataURL(blob);
+        });
+        if (blob.type.includes('svg')) {
+          return await this.convertSvgToPng(base64);
+        }
+        return base64;
+      } catch (error) {
+        return null;
+      }
+    };
+
+    return (await tryLoad(preferred)) || (await tryLoad(brandLogo)) || null;
+  }
+
+  private async convertSvgToPng(svgDataUrl: string): Promise<string> {
+    return await new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const width = img.naturalWidth || 240;
+        const height = img.naturalHeight || 80;
+        canvas.width = width * 2;
+        canvas.height = height * 2;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) {
+          reject(new Error('Canvas not supported'));
+          return;
+        }
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        resolve(canvas.toDataURL('image/png'));
+      };
+      img.onerror = reject;
+      img.src = svgDataUrl;
+    });
   }
   
   private formatDate(date: Date | any): string {
@@ -305,5 +364,18 @@ export class InvoiceService {
       const price = item.unitPrice || item.price || 0;
       return sum + (quantity * price);
     }, 0);
+  }
+
+  private getCurrencySymbol(currency?: string): string {
+    const curr = (currency || 'USD').toUpperCase();
+    const symbols: { [key: string]: string } = {
+      'USD': '$',
+      'EUR': '€',
+      'GBP': '£',
+      'JPY': '¥',
+      'CAD': 'CA$',
+      'AUD': 'A$'
+    };
+    return symbols[curr] || '$';
   }
 }

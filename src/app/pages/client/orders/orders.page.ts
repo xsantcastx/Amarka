@@ -152,7 +152,7 @@ export class OrdersPageComponent implements OnInit {
     window.open(`https://www.google.com/search?q=track+package+${trackingNumber}`, '_blank');
   }
 
-  downloadInvoice(orderId?: string, orderNumber?: string) {
+  async downloadInvoice(orderId?: string, orderNumber?: string) {
     console.log('[downloadInvoice] Called with:', { orderId, orderNumber });
     
     if (!orderId) {
@@ -173,7 +173,7 @@ export class OrdersPageComponent implements OnInit {
       
       // Generate and download the PDF invoice
       console.log(`[downloadInvoice] Generating invoice for order ${order.orderNumber}`);
-      this.invoiceService.generateInvoice(order);
+      await this.invoiceService.generateInvoice(order);
       
     } catch (error) {
       console.error('[downloadInvoice] Error generating invoice:', error);

@@ -225,7 +225,7 @@ export class ConfirmationPage implements OnInit {
     this.router.navigate(['/client/orders']);
   }
 
-  downloadInvoice() {
+  async downloadInvoice() {
     const order = this.order();
     if (!order) {
       alert('Order information not found.');
@@ -234,7 +234,7 @@ export class ConfirmationPage implements OnInit {
     
     try {
       console.log(`Downloading invoice for order ${order.orderNumber}`);
-      this.invoiceService.generateInvoice(order);
+      await this.invoiceService.generateInvoice(order);
     } catch (error) {
       console.error('Error generating invoice:', error);
       alert('Failed to generate invoice. Please try again.');

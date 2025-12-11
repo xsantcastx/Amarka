@@ -119,5 +119,30 @@
     "summary": {
       "shipping_flat": "Flat shipping: {{estimate}}"
     }
+  },
+  "client": {
+    "orders": "Mes Commandes",
+    "orders_subtitle": "Suivez et gérez vos commandes",
+    "all_orders": "Toutes les Commandes",
+    "order": "Commande",
+    "pending": "En Attente",
+    "processing": "En Traitement",
+    "shipped": "Expédié",
+    "delivered": "Livré",
+    "cancelled": "Annulé",
+    "no_orders": "Aucune commande pour le moment",
+    "no_orders_description": "Vous n'avez pas encore passé de commande. Commencez vos achats pour voir vos commandes ici.",
+    "start_shopping": "Commencer les Achats",
+    "tracking": "Suivi",
+    "shipping_address": "Adresse de Livraison",
+    "quantity": "Quantité",
+    "reorder": "Commander à Nouveau",
+    "leave_review": "Laisser un Avis",
+    "track_shipment": "Suivre l'Expédition",
+    "cancel_order": "Annuler la Commande",
+    "contact_support": "Contacter le Support",
+    "download_invoice": "Télécharger la Facture",
+    "my_profile": "Mon Profil",
+    "logout": "Déconnexion"
   }
 }
