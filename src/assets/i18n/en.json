@@ -141,7 +141,8 @@
     "cancel": "Cancel",
     "save": "Save",
     "hello": "Hello",
-    "search": "Search"
+    "search": "Search",
+    "loading": "Loading..."
   },
   "product": {
     "in_stock": "in stock",

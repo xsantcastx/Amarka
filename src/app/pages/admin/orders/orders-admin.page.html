@@ -62,12 +62,12 @@
         </div>
       </div>
 
-      <div *ngIf="isLoading" class="bg-ts-paper border border-ts-line rounded-2xl shadow-sm p-12 text-center text-ts-ink-soft">
+      <div *ngIf="isLoading()" class="bg-ts-paper border border-ts-line rounded-2xl shadow-sm p-12 text-center text-ts-ink-soft">
         <div class="app-spinner" style="--spinner-size: 72px;"><img src="/Logo Clear.png" alt="Loading" width="96" height="96"></div>
         <p class="mt-4">{{ 'common.loading' | translate }}</p>
       </div>
 
-      <div *ngIf="!isLoading" class="bg-ts-paper border border-ts-line rounded-2xl shadow-sm overflow-hidden">
+      <div *ngIf="!isLoading()" class="bg-ts-paper border border-ts-line rounded-2xl shadow-sm overflow-hidden">
         <div class="overflow-x-auto">
           <table class="w-full">
             <thead class="bg-ts-bg-soft border-b border-ts-line">
