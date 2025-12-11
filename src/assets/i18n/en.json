@@ -304,8 +304,8 @@
       "free_shipping": "Free Shipping"
     },
     "shipping": {
-      "estimate_default": "$8 flat rate",
-      "flat_rate": "Flat Rate Shipping"
+      "estimate_default": "Standard shipping",
+      "flat_rate": "Standard Shipping"
     },
     "proceed_to_checkout": "Proceed to Checkout",
     "secure": "Secure Checkout",
