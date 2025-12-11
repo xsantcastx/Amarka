@@ -464,7 +464,7 @@
               </div>
               
               <!-- Shipping -->
-              <div class="flex justify-between items-center text-sm" *ngIf="vm.shipping > 0">
+              <div class="flex justify-between items-center text-sm" *ngIf="vm.shipping > 0 && selectedShippingMethod()">
                 <span class="text-ts-ink-soft">{{ 'cart.shipping_label' | translate }}</span>
                 <span class="text-ts-ink font-medium">${{ vm.shipping.toFixed(2) }}</span>
               </div>
