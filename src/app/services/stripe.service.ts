@@ -75,11 +75,11 @@ export class StripeService {
     // Create Elements instance
     const elements = stripe.elements({
       appearance: {
-        theme: 'night', // Dark theme to match Bitcoin aesthetic
+        theme: 'stripe', // Light theme to match Amarka aesthetic
         variables: {
-          colorPrimary: '#f7931a', // Bitcoin orange
-          colorBackground: '#0a0b0d',
-          colorText: '#ffffff',
+          colorPrimary: '#C7683B', // Amarka terracotta
+          colorBackground: '#FEFCF8',
+          colorText: '#17130F', // ts-ink
           colorDanger: '#ef4444',
           fontFamily: 'system-ui, sans-serif',
           spacingUnit: '4px',
@@ -87,16 +87,16 @@ export class StripeService {
         },
         rules: {
           '.Input': {
-            backgroundColor: '#13151a',
-            border: '1px solid rgba(247, 147, 26, 0.2)',
+            backgroundColor: '#FEFCF8',
+            border: '1px solid rgba(199, 104, 59, 0.2)',
             padding: '12px',
           },
           '.Input:focus': {
-            border: '2px solid rgba(247, 147, 26, 0.5)',
-            boxShadow: '0 0 0 3px rgba(247, 147, 26, 0.1)',
+            border: '2px solid rgba(199, 104, 59, 0.5)',
+            boxShadow: '0 0 0 3px rgba(199, 104, 59, 0.1)',
           },
           '.Label': {
-            color: '#9ca3af',
+            color: '#4B3B2F', // ts-ink-soft
             fontSize: '14px',
             fontWeight: '600',
           },
@@ -110,14 +110,14 @@ export class StripeService {
     const cardElement = elements.create('card', {
       style: {
         base: {
-          iconColor: '#f7931a',
-          color: '#fff',
+          iconColor: '#C7683B', // Amarka terracotta
+          color: '#17130F', // ts-ink
           fontWeight: '500',
           fontFamily: 'system-ui, sans-serif',
           fontSize: '16px',
           fontSmoothing: 'antialiased',
           '::placeholder': {
-            color: '#6b7280',
+            color: '#9ca3af',
           },
         },
         invalid: {
