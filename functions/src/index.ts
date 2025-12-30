@@ -862,8 +862,6 @@ export const createCustomOrderPaymentLink = functions.https.onCall(
       );
     }
 
-    // Convert amount to cents (Stripe requires integer cents)
-    const amount = Math.round(order.total * 100);
     const currency = (order.currency || "usd").toLowerCase();
 
     // Get Stripe instance
