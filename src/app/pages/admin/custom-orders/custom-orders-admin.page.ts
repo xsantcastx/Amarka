@@ -7,6 +7,7 @@ import { Firestore, collection, addDoc, query, orderBy, onSnapshot, serverTimest
 import { Functions, httpsCallable } from '@angular/fire/functions';
 import { AdminSidebarComponent } from '../../../shared/components/admin-sidebar/admin-sidebar.component';
 import { AuthService } from '../../../services/auth.service';
+import { InvoiceService } from '../../../services/invoice.service';
 
 interface CustomOrderItem {
   name: string;
@@ -57,6 +58,7 @@ export class CustomOrdersAdminComponent implements OnInit {
   private functions = inject(Functions);
   private authService = inject(AuthService);
   private router = inject(Router);
+  private invoiceService = inject(InvoiceService);
 
   // State
   customOrders = signal<CustomOrder[]>([]);
@@ -349,5 +351,55 @@ export class CustomOrdersAdminComponent implements OnInit {
 
   async logout(): Promise<void> {
     await this.authService.signOutUser('/client/login');
+  }
+
+  /**
+   * Download invoice for custom order
+   */
+  async downloadInvoice(order: CustomOrder): Promise<void> {
+    try {
+      // Convert custom order to invoice format
+      const invoiceOrder = {
+        id: order.id,
+        orderNumber: order.invoiceNumber,
+        date: order.createdAt?.toDate ? order.createdAt.toDate() : new Date(order.createdAt),
+        createdAt: order.createdAt,
+        status: order.status,
+        total: order.total,
+        subtotal: order.subtotal,
+        tax: order.tax,
+        shipping: 0,
+        currency: order.currency,
+        itemCount: order.items.length,
+        items: order.items.map(item => ({
+          name: item.name,
+          productName: item.name,
+          qty: item.quantity,
+          quantity: item.quantity,
+          unitPrice: item.unitPrice,
+          price: item.unitPrice
+        })),
+        shippingAddress: {
+          firstName: order.clientName.split(' ')[0] || order.clientName,
+          lastName: order.clientName.split(' ').slice(1).join(' ') || '',
+          line1: '',
+          city: '',
+          region: '',
+          postalCode: '',
+          country: '',
+          phone: order.clientPhone || '',
+          email: order.clientEmail
+        }
+      };
+
+      await this.invoiceService.generateInvoice(invoiceOrder);
+      
+      this.successMessage.set('Invoice downloaded successfully!');
+      setTimeout(() => this.successMessage.set(''), 3000);
+    } catch (error) {
+      console.error('Error downloading invoice:', error);
+      this.errorMessage.set('Failed to download invoice');
+      setTimeout(() => this.errorMessage.set(''), 3000);
+    }
   }
 }
