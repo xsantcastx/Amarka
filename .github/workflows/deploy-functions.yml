@@ -7,7 +7,6 @@ on:
       - main
     paths:
       - 'functions/**'
-      - '.github/workflows/deploy-functions.yml'
   
   # Allow manual workflow dispatch from GitHub UI
   workflow_dispatch:

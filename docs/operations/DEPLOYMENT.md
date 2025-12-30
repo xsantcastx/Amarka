@@ -94,7 +94,7 @@ Since you're working from a phone, here's how to add secrets using GitHub Mobile
 
 1. **Open GitHub Mobile App**
 2. **Navigate to Repository**:
-   - Find and open the Amarka repository
+   - Find and open your repository
    
 3. **Access Settings** (if available in mobile):
    - Look for repository settings/options
