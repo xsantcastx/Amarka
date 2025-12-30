@@ -16,6 +16,8 @@ jobs:
   deploy:
     name: Deploy Cloud Functions to Firebase
     runs-on: ubuntu-latest
+    permissions:
+      contents: read  # Required to checkout repository code
     
     steps:
       - name: Checkout repository
