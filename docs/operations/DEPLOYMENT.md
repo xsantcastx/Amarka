@@ -51,7 +51,7 @@ The Firebase CI token allows GitHub Actions to deploy on your behalf without req
    ```
    ✔ Success! Use this token to login on a CI server:
 
-   1//0gABCDEFGHIJ1234567890-abcdefghijklmnopqrstuvwxyz1234567890
+   1//0example-firebase-ci-token-here-replace-with-actual-token
 
    Example: firebase deploy --token "$FIREBASE_TOKEN"
    ```
@@ -100,7 +100,7 @@ Since you're working from a phone, here's how to add secrets using GitHub Mobile
    - Look for repository settings/options
    
 4. **Alternative - Use GitHub Web on Mobile Browser**:
-   - Open browser and go to: `https://github.com/[username]/Amarka/settings/secrets/actions`
+   - Open browser and go to: `https://github.com/[username]/[repository]/settings/secrets/actions`
    - Tap **New repository secret**
    - Add `FIREBASE_TOKEN` and `STRIPE_SECRET_KEY` as described above
 

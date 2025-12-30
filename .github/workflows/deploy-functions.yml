@@ -42,6 +42,7 @@ jobs:
       - name: Configure Stripe secret key
         run: |
           echo "Setting Stripe configuration..."
+          # Firebase CLI doesn't log secret values in output
           firebase functions:config:set stripe.secret_key="${STRIPE_SECRET_KEY}" --token "$FIREBASE_TOKEN"
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
