@@ -1,7 +1,7 @@
 import { Component, OnInit, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormArray, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { Firestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, getDoc } from '@angular/fire/firestore';
 import { Functions, httpsCallable } from '@angular/fire/functions';
@@ -45,7 +45,6 @@ interface CustomOrder {
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    RouterLink,
     TranslateModule,
     AdminSidebarComponent
   ],
@@ -258,7 +257,7 @@ export class CustomOrdersAdminComponent implements OnInit {
         notes: formValue.notes || '',
         status: 'pending',
         createdAt: serverTimestamp(),
-        createdBy: this.authService.currentUser?.uid || 'admin'
+        createdBy: this.authService.getCurrentUser()?.uid || 'admin'
       };
 
       const ordersRef = collection(this.firestore, 'customOrders');
@@ -322,7 +321,7 @@ export class CustomOrdersAdminComponent implements OnInit {
       paid: 'bg-bitcoin-gold/30 text-bitcoin-gold border border-bitcoin-gold/30',
       cancelled: 'bg-red-500/30 text-red-400 border border-red-500/30'
     };
-    return classes[status] || classes.pending;
+    return classes[status] || classes['pending'];
   }
 
   formatCurrency(amount: number, currency: string = 'USD'): string {
