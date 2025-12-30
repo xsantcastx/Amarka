@@ -803,3 +803,245 @@ async function handlePaymentCanceled(paymentIntent: Stripe.PaymentIntent, webhoo
 
   console.log(`Payment canceled: ${paymentIntent.id}`);
 }
+
+/**
+ * Create a Stripe Payment Link for a custom order
+ * POST /custom-orders/create-payment-link
+ * Body: { customOrderId: string }
+ */
+export const createCustomOrderPaymentLink = functions.https.onCall(
+  withFlag("payments", async (data: any, context: any) => {
+  try {
+    // Verify user authentication and admin role
+    if (!context.auth) {
+      throw new functions.https.HttpsError(
+        "unauthenticated",
+        "User must be authenticated to create payment link"
+      );
+    }
+
+    // Check if user is admin
+    const userDoc = await db.collection("users").doc(context.auth.uid).get();
+    const userData = userDoc.data();
+    
+    if (!userData || userData.role !== "admin") {
+      throw new functions.https.HttpsError(
+        "permission-denied",
+        "Only admins can create custom order payment links"
+      );
+    }
+
+    const { customOrderId } = data;
+
+    // Validate input
+    if (!customOrderId || typeof customOrderId !== "string") {
+      throw new functions.https.HttpsError(
+        "invalid-argument",
+        "customOrderId is required and must be a string"
+      );
+    }
+
+    // Fetch custom order from Firestore
+    const orderRef = db.collection("customOrders").doc(customOrderId);
+    const orderDoc = await orderRef.get();
+
+    if (!orderDoc.exists) {
+      throw new functions.https.HttpsError("not-found", "Custom order not found");
+    }
+
+    const order = orderDoc.data();
+    if (!order) {
+      throw new functions.https.HttpsError("not-found", "Custom order data is invalid");
+    }
+
+    // Validate order has required fields
+    if (!order.total || order.total <= 0) {
+      throw new functions.https.HttpsError(
+        "invalid-argument",
+        "Order total must be greater than zero"
+      );
+    }
+
+    // Convert amount to cents (Stripe requires integer cents)
+    const amount = Math.round(order.total * 100);
+    const currency = (order.currency || "usd").toLowerCase();
+
+    // Get Stripe instance
+    const stripe = await getStripe();
+
+    // Create line items for Stripe
+    const lineItems = order.items.map((item: any) => ({
+      price_data: {
+        currency: currency,
+        product_data: {
+          name: item.name,
+          description: item.description || undefined,
+        },
+        unit_amount: Math.round(item.unitPrice * 100),
+      },
+      quantity: item.quantity,
+    }));
+
+    // Add tax as a separate line item if applicable
+    if (order.tax && order.tax > 0) {
+      lineItems.push({
+        price_data: {
+          currency: currency,
+          product_data: {
+            name: `Tax (${order.taxRate}%)`,
+          },
+          unit_amount: Math.round(order.tax * 100),
+        },
+        quantity: 1,
+      });
+    }
+
+    // Create Stripe Payment Link
+    const paymentLink = await stripe.paymentLinks.create({
+      line_items: lineItems,
+      metadata: {
+        customOrderId,
+        invoiceNumber: order.invoiceNumber,
+        clientName: order.clientName,
+        clientEmail: order.clientEmail,
+      },
+      after_completion: {
+        type: "redirect",
+        redirect: {
+          url: `${functions.config().app?.url || "https://amarka.com"}/checkout/confirmation?custom_order=${customOrderId}`,
+        },
+      },
+      // Allow promotion codes
+      allow_promotion_codes: false,
+      // Billing address collection
+      billing_address_collection: "auto",
+      // Customer email prefill
+      custom_text: {
+        submit: {
+          message: `Payment for Invoice ${order.invoiceNumber}`,
+        },
+      },
+    });
+
+    // Update custom order with payment link
+    await orderRef.update({
+      paymentLinkUrl: paymentLink.url,
+      paymentLinkId: paymentLink.id,
+      updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+    });
+
+    console.log(`Payment link created for custom order ${customOrderId}: ${paymentLink.url}`);
+
+    // Return payment link to frontend
+    return {
+      success: true,
+      paymentLinkUrl: paymentLink.url,
+      paymentLinkId: paymentLink.id,
+    };
+  } catch (error: any) {
+    console.error("Error in createCustomOrderPaymentLink:", error);
+
+    // Re-throw HttpsError as-is
+    if (error instanceof functions.https.HttpsError) {
+      throw error;
+    }
+
+    // Wrap Stripe errors
+    if (error.type === "StripeError") {
+      throw new functions.https.HttpsError(
+        "internal",
+        `Stripe error: ${error.message}`
+      );
+    }
+
+    // Wrap other errors
+    throw new functions.https.HttpsError(
+      "internal",
+      error.message || "Failed to create payment link"
+    );
+  }
+  })
+);
+
+/**
+ * Handle webhook events for custom order payment links
+ * This is called automatically when Stripe Payment Link checkout completes
+ */
+export const handleCustomOrderPayment = functions.https.onRequest(
+  withFlag("payments", async (req, res) => {
+  // Only accept POST requests
+  if (req.method !== "POST") {
+    res.status(405).send("Method Not Allowed");
+    return;
+  }
+
+  // Get webhook signature
+  const sig = req.headers["stripe-signature"];
+  
+  if (!sig || typeof sig !== "string") {
+    console.error("No Stripe signature found in headers");
+    res.status(400).send("Missing Stripe signature");
+    return;
+  }
+
+  // Get webhook secret
+  const config = await getStripeConfig();
+  const webhookSecret = config.webhookSecret;
+
+  if (!webhookSecret) {
+    console.error("Stripe webhook secret not configured");
+    res.status(500).send("Webhook secret not configured");
+    return;
+  }
+
+  // Get Stripe instance
+  const stripe = await getStripe();
+
+  let event: Stripe.Event;
+
+  try {
+    // Verify webhook signature
+    event = stripe.webhooks.constructEvent(
+      req.rawBody,
+      sig,
+      webhookSecret
+    );
+  } catch (err: any) {
+    console.error("Webhook signature verification failed:", err.message);
+    res.status(400).send(`Webhook Error: ${err.message}`);
+    return;
+  }
+
+  // Handle checkout.session.completed event for Payment Links
+  try {
+    if (event.type === "checkout.session.completed") {
+      const session = event.data.object as Stripe.Checkout.Session;
+      
+      // Check if this is a custom order payment
+      const customOrderId = session.metadata?.customOrderId;
+      
+      if (customOrderId) {
+        console.log(`Processing custom order payment: ${customOrderId}`);
+        
+        // Update custom order status to paid
+        const orderRef = db.collection("customOrders").doc(customOrderId);
+        await orderRef.update({
+          status: "paid",
+          paidAt: admin.firestore.FieldValue.serverTimestamp(),
+          paymentSessionId: session.id,
+          paymentStatus: session.payment_status,
+          updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+        });
+        
+        console.log(`Custom order ${customOrderId} marked as paid`);
+      }
+    }
+
+    res.json({ received: true });
+  } catch (error: any) {
+    console.error("Error processing custom order webhook:", error);
+    res.status(500).send("Webhook processing failed");
+  }
+  })
+);
+

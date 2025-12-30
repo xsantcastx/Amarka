@@ -168,6 +168,12 @@ export const routes: Routes = [
     title: routeTitle('page_titles.order_management')
   },
   {
+    path: 'admin/custom-orders',
+    loadComponent: () => import('./pages/admin/custom-orders/custom-orders-admin.page').then(m => m.CustomOrdersAdminComponent),
+    canActivate: [adminGuard],
+    title: routeTitle('Custom Orders')
+  },
+  {
     path: 'admin/collections',
     loadComponent: () => import('./pages/admin/collections/collections-admin.page').then(m => m.CollectionsAdminPageComponent),
     canActivate: [adminGuard],

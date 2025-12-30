@@ -297,6 +297,31 @@ service cloud.firestore {
       allow update, delete: if false;
     }
 
+    // Custom Orders - Admin only (for creating custom invoices with payment links)
+    match /customOrders/{orderId} {
+      // Only admins can read custom orders
+      allow read: if isAdmin();
+      // Only admins can create custom orders
+      allow create: if isAdmin()
+        && request.resource.data.keys().hasAll(['invoiceNumber', 'clientName', 'clientEmail', 'items', 'subtotal', 'tax', 'taxRate', 'total', 'currency', 'status', 'createdAt', 'createdBy'])
+        && request.resource.data.invoiceNumber is string
+        && request.resource.data.clientName is string
+        && request.resource.data.clientEmail is string
+        && request.resource.data.items is list
+        && request.resource.data.items.size() > 0
+        && request.resource.data.subtotal is number
+        && request.resource.data.tax is number
+        && request.resource.data.taxRate is number
+        && request.resource.data.total is number
+        && request.resource.data.currency is string
+        && request.resource.data.status in ['pending', 'paid', 'cancelled']
+        && request.resource.data.createdBy == request.auth.uid;
+      // Only admins can update custom orders
+      allow update: if isAdmin();
+      // Only admins can delete custom orders
+      allow delete: if isAdmin();
+    }
+
     // Deny all other access
     match /{document=**} {
       allow read, write: if false;
