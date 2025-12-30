@@ -401,19 +401,4 @@ export class CustomOrdersAdminComponent implements OnInit {
       setTimeout(() => this.errorMessage.set(''), 3000);
     }
   }
-
-  /**
-   * Copy payment link to clipboard
-   */
-  async copyPaymentLink(url: string): Promise<void> {
-    try {
-      await navigator.clipboard.writeText(url);
-      this.successMessage.set('Payment link copied to clipboard!');
-      setTimeout(() => this.successMessage.set(''), 3000);
-    } catch (error) {
-      console.error('Error copying to clipboard:', error);
-      this.errorMessage.set('Failed to copy link');
-      setTimeout(() => this.errorMessage.set(''), 3000);
-    }
-  }
 }
