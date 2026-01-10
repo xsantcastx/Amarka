@@ -84,9 +84,12 @@ export class ProductsService {
   /**
    * Get all products
    */
-  getAllProducts(): Observable<Product[]> {
+  getAllProducts(includeAll: boolean = false): Observable<Product[]> {
     const productsCol = collection(this.firestore, 'products');
-    const q = query(productsCol, orderBy('name', 'asc'));
+    // If includeAll is true (admin), get all products. Otherwise, only get published.
+    const q = includeAll 
+      ? query(productsCol, orderBy('name', 'asc'))
+      : query(productsCol, where('status', '==', 'published'), orderBy('name', 'asc'));
     return from(getDocs(q)).pipe(
       map(snapshot => snapshot.docs.map(doc => ({
         id: doc.id,
@@ -110,7 +113,12 @@ export class ProductsService {
    */
   getFeaturedProducts(count: number = 8): Observable<Product[]> {
     const productsCol = collection(this.firestore, 'products');
-    const q = query(productsCol, orderBy('createdAt', 'desc'), limit(count));
+    const q = query(
+      productsCol, 
+      where('status', '==', 'published'),
+      orderBy('createdAt', 'desc'), 
+      limit(count)
+    );
     return from(getDocs(q)).pipe(
       map(snapshot => snapshot.docs.map(doc => ({
         id: doc.id,
@@ -126,6 +134,7 @@ export class ProductsService {
     const productsCol = collection(this.firestore, 'products');
     const tagQuery = query(
       productsCol,
+      where('status', '==', 'published'),
       where('tags', 'array-contains', tag),
       orderBy('createdAt', 'desc'),
       limit(count)

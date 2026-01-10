@@ -268,7 +268,7 @@ export class ProductsAdminComponent extends LoadingComponentBase implements OnIn
   private async loadProducts() {
     await this.withLoading(async () => {
       const products = await new Promise<Product[]>((resolve, reject) => {
-        this.productsService.getAllProducts().subscribe({
+        this.productsService.getAllProducts(true).subscribe({
           next: (products) => resolve(products),
           error: (error) => reject(error)
         });
@@ -1279,8 +1279,10 @@ export class ProductsAdminComponent extends LoadingComponentBase implements OnIn
   }
 
   openDeleteConfirm(product: Product) {
+    console.log('Opening delete confirm for product:', product);
     this.productToDelete = product;
     this.showDeleteConfirm = true;
+    console.log('showDeleteConfirm set to:', this.showDeleteConfirm);
   }
 
   closeDeleteConfirm() {
@@ -1289,24 +1291,39 @@ export class ProductsAdminComponent extends LoadingComponentBase implements OnIn
   }
 
   async confirmDelete() {
-    if (!this.productToDelete || !this.productToDelete.id) return;
+    console.log('Confirm delete called for:', this.productToDelete);
+    if (!this.productToDelete || !this.productToDelete.id) {
+      console.error('No product to delete or missing ID');
+      return;
+    }
+
+    this.isLoading = true;
 
     try {
+      console.log('Attempting to delete product ID:', this.productToDelete.id);
+      
       // Delete image from storage
       if (this.productToDelete.imageUrl) {
         try {
+          console.log('Deleting image:', this.productToDelete.imageUrl);
           await this.storageService.deleteFile(this.productToDelete.imageUrl);
+          console.log('Image deleted successfully');
         } catch (error) {
           console.warn('Could not delete image:', error);
         }
       }
 
       // Delete product from Firestore
+      console.log('Deleting product from Firestore...');
       await this.productsService.deleteProduct(this.productToDelete.id);
+      console.log('Product deleted successfully from Firestore');
       
       this.successMessage = 'admin.deleted_successfully';
       this.closeDeleteConfirm();
+      
+      console.log('Reloading products list...');
       await this.loadProducts();
+      console.log('Products reloaded');
 
       setTimeout(() => {
         this.successMessage = '';
@@ -1314,6 +1331,11 @@ export class ProductsAdminComponent extends LoadingComponentBase implements OnIn
     } catch (error) {
       console.error('Error deleting product:', error);
       this.errorMessage = 'admin.error_occurred';
+      setTimeout(() => {
+        this.errorMessage = '';
+      }, 5000);
+    } finally {
+      this.isLoading = false;
     }
   }
 
