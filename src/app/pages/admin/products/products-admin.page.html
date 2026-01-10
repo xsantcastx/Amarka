@@ -273,4 +273,37 @@
       }
     </div>
   </div>
+
+  <!-- Delete Confirmation Modal -->
+  @if (showDeleteConfirm) {
+    <div class="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50" (click)="closeDeleteConfirm()">
+      <div class="bg-ts-paper border border-red-500/30 rounded-2xl shadow-lg max-w-md w-full p-6" (click)="$event.stopPropagation()">
+        <div class="flex items-center gap-4 mb-4">
+          <div class="w-12 h-12 bg-red-500/20 rounded-full flex items-center justify-center">
+            <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+            </svg>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold text-ts-ink">{{ 'admin.delete_product' | translate }}</h3>
+            <p class="text-sm text-ts-ink-soft mt-1">{{ 'admin.confirm_delete' | translate }}</p>
+          </div>
+        </div>
+        @if (productToDelete) {
+          <div class="mb-6 p-4 bg-ts-bg-soft border border-ts-line rounded-xl">
+            <p class="text-sm font-medium text-ts-ink">{{ productToDelete.name }}</p>
+            <p class="text-xs text-ts-ink-soft mt-1">{{ productToDelete.size }} - {{ productToDelete.grosor }}</p>
+          </div>
+        }
+        <div class="flex gap-3">
+          <button (click)="confirmDelete()" class="flex-1 px-4 py-2 bg-red-500/20 hover:bg-red-500/30 border border-red-500/30 text-red-600 hover:text-red-700 rounded-xl transition-all duration-300 font-semibold">
+            {{ 'admin.delete' | translate }}
+          </button>
+          <button (click)="closeDeleteConfirm()" class="flex-1 px-4 py-2 bg-ts-bg-soft hover:bg-ts-line border border-ts-line text-ts-ink rounded-xl transition-all duration-300">
+            {{ 'admin.cancel' | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  }
 </div>
