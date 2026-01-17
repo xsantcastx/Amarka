@@ -107,14 +107,14 @@
                     <option [value]="category.id">{{ category.name }}</option>
                   }
                 </select>
-                <div class="mt-2 flex items-center gap-2">
+                <div class="mt-2">
                   <button type="button" class="text-sm text-ts-accent underline" (click)="showNewCategoryInput = !showNewCategoryInput">
                     + New category
                   </button>
                   @if (showNewCategoryInput) {
-                    <div class="flex items-center gap-2 w-full">
+                    <div class="flex items-center gap-2 mt-2 relative z-20">
                       <input type="text" [(ngModel)]="newCategoryName" [ngModelOptions]="{standalone: true}" placeholder="Category name" class="flex-1 px-3 py-2 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink focus:ring-2 focus:ring-ts-accent focus:border-ts-accent" />
-                      <button type="button" class="px-3 py-2 bg-ts-accent text-ts-ink rounded-lg border border-ts-accent/60 hover:bg-ts-accent/90" (click)="createCategoryInline()">Add</button>
+                      <button type="button" class="px-3 py-2 bg-ts-accent text-ts-ink rounded-lg border border-ts-accent/60 hover:bg-ts-accent/90 relative z-30" (click)="createCategoryInline()">Add</button>
                     </div>
                   }
                 </div>
@@ -127,14 +127,14 @@
                     <option [value]="model.id">{{ model.name }}</option>
                   }
                 </select>
-                <div class="mt-2 flex items-center gap-2">
+                <div class="mt-2">
                   <button type="button" class="text-sm text-ts-accent underline" (click)="showNewModelInput = !showNewModelInput">
                     + New model
                   </button>
                   @if (showNewModelInput) {
-                    <div class="flex items-center gap-2 w-full">
+                    <div class="flex items-center gap-2 mt-2 relative z-20">
                       <input type="text" [(ngModel)]="newModelName" [ngModelOptions]="{standalone: true}" placeholder="Model name" class="flex-1 px-3 py-2 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink focus:ring-2 focus:ring-ts-accent focus:border-ts-accent" />
-                      <button type="button" class="px-3 py-2 bg-ts-accent text-ts-ink rounded-lg border border-ts-accent/60 hover:bg-ts-accent/90" (click)="createModelInline()">Add</button>
+                      <button type="button" class="px-3 py-2 bg-ts-accent text-ts-ink rounded-lg border border-ts-accent/60 hover:bg-ts-accent/90 relative z-30" (click)="createModelInline()">Add</button>
                     </div>
                   }
                 </div>
