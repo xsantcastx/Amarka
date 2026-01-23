@@ -129,8 +129,50 @@
           }
         </div>
         
-        @if (producto.price) {
-          <p class="text-3xl font-semibold text-ts-accent mb-4">{{producto.price | currency:'USD':'symbol':'1.2-2'}}</p>
+        @if (displayPrice) {
+          <p class="text-3xl font-semibold text-ts-accent mb-2">
+            {{ displayPrice | currency:'USD':'symbol':'1.2-2' }}
+          </p>
+          @if (bulkPricingTiers.length) {
+            <p class="text-sm text-ts-ink-soft mb-4">{{ 'product.bulk_pricing_hint' | translate }}</p>
+          }
+        }
+
+        @if (hasVariants) {
+          <div class="mb-6">
+            <h3 class="text-lg font-semibold text-ts-ink mb-3">{{ 'product.variant' | translate }}</h3>
+            <div class="flex flex-wrap gap-2">
+              @for (variant of getActiveVariants(); track variant.id ?? variant.sku ?? variant.label ?? $index) {
+                @let variantLabel = getVariantDisplayLabel(variant, $index);
+                <button
+                  type="button"
+                  (click)="selectVariant(variant, $index)"
+                  class="px-4 py-2 rounded-lg border text-sm font-semibold transition-all"
+                  [class.border-ts-accent]="selectedVariantId === (variant.id || variant.sku || variant.label || ('variant-' + $index))"
+                  [class.bg-ts-accent]="selectedVariantId === (variant.id || variant.sku || variant.label || ('variant-' + $index))"
+                  [class.text-black]="selectedVariantId === (variant.id || variant.sku || variant.label || ('variant-' + $index))"
+                  [class.border-ts-line]="selectedVariantId !== (variant.id || variant.sku || variant.label || ('variant-' + $index))"
+                  [class.text-ts-ink]="selectedVariantId !== (variant.id || variant.sku || variant.label || ('variant-' + $index))"
+                  [class.bg-ts-bg-soft]="selectedVariantId !== (variant.id || variant.sku || variant.label || ('variant-' + $index))">
+                  {{ variantLabel }}
+                </button>
+              }
+            </div>
+          </div>
+        }
+
+        @if (bulkPricingTiers.length) {
+          <div class="mb-6 rounded-xl border border-ts-accent/20 bg-ts-bg-soft/40 p-4">
+            <h3 class="text-sm font-semibold text-ts-ink mb-3">{{ 'product.bulk_pricing' | translate }}</h3>
+            <div class="space-y-2">
+              @for (tier of bulkPricingTiers; track tier.minQty) {
+                <div class="flex items-center justify-between text-sm text-ts-ink">
+                  <span>{{ 'product.from' | translate }} {{ tier.minQty }}</span>
+                  <span class="font-semibold text-ts-accent">{{ tier.unitPrice | currency:'USD':'symbol':'1.2-2' }}</span>
+                </div>
+              }
+            </div>
+          </div>
         }
         
         <!-- Description Section -->

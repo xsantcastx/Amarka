@@ -170,7 +170,12 @@
     "view_details": "Ver detalles",
     "view_product": "Ver producto",
     "added": "Añadido",
-    "add_to_cart": "Añadir"
+    "add_to_cart": "Añadir",
+    "select_variant": "Seleccionar variante",
+    "variant": "Variante",
+    "bulk_pricing": "Precios por volumen",
+    "bulk_pricing_hint": "Precios por volumen disponibles. Se actualizan en el carrito.",
+    "from": "Desde"
   },
   "home": {
     "hero": {

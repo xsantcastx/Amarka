@@ -65,6 +65,7 @@
               <div class="flex-1">
                 <h3 class="font-semibold text-ts-ink mb-1">{{ item.name }}</h3>
                 <p class="text-sm text-ts-ink-soft mb-2" *ngIf="item.sku">{{ 'checkout.sku' | translate }}: {{ item.sku }}</p>
+                <p class="text-sm text-ts-ink-soft mb-2" *ngIf="item.variantLabel">{{ item.variantLabel }}</p>
                 <div class="flex items-center justify-between">
                   <span class="text-sm text-ts-ink-soft">{{ 'checkout.qty' | translate }}: {{ item.qty }}</span>
                   <div class="text-right">

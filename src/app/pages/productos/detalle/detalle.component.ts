@@ -11,7 +11,7 @@ import { ModelService } from '../../../services/model.service';
 import { SeoSchemaService } from '../../../services/seo-schema.service';
 import { BrandConfigService } from '../../../core/services/brand-config.service';
 import { ProductReviewService } from '../../../services/product-review.service';
-import { Product } from '../../../models/product';
+import { BulkPricingTier, Product, ProductVariant } from '../../../models/product';
 import { Media } from '../../../models/media';
 import { Category } from '../../../models/catalog';
 import { Model } from '../../../models/catalog';
@@ -47,6 +47,10 @@ export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
   producto: Product | undefined;
   category: Category | undefined;
   model: Model | undefined;
+  selectedVariant: ProductVariant | null = null;
+  selectedVariantId: string | null = null;
+  selectedVariantImageUrl: string | null = null;
+  private variantImageCache: Record<string, string> = {};
   reviewSummary: ReviewSummary | null = null;
   productosRelacionados: Product[] = [];
   coverImage: Media | undefined;
@@ -117,6 +121,8 @@ export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
       this.reviewSummary = reviewSummary;
 
       await this.loadProductMediaAssets();
+      await this.resolveVariantImages();
+      this.initVariantSelection();
 
       this.updatePlaceholderSlots();
       this.prepareCarouselImages();
@@ -169,6 +175,140 @@ export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
       console.error('Error loading product media:', error);
       if (!this.coverImage && this.producto.imageUrl) {
         this.coverImage = this.createMediaFromUrl(this.producto.imageUrl, this.producto.name);
+      }
+    }
+  }
+
+  getActiveVariants(): ProductVariant[] {
+    return (this.producto?.variants || []).filter(variant => variant.active !== false);
+  }
+
+  private getVariantKey(variant: ProductVariant, index: number): string {
+    return variant.id || variant.sku || variant.label || `variant-${index}`;
+  }
+
+  private getVariantImageUrl(variant: ProductVariant, index: number): string | null {
+    if (variant.imageUrl) {
+      return variant.imageUrl;
+    }
+    const key = this.getVariantKey(variant, index);
+    return this.variantImageCache[key] || null;
+  }
+
+  private initVariantSelection(): void {
+    const variants = this.getActiveVariants();
+    if (!variants.length) {
+      this.selectedVariant = null;
+      this.selectedVariantId = null;
+      this.selectedVariantImageUrl = null;
+      return;
+    }
+
+    const existingIndex = variants.findIndex((variant, index) => this.getVariantKey(variant, index) === this.selectedVariantId);
+    const targetIndex = existingIndex >= 0 ? existingIndex : 0;
+    const variant = variants[targetIndex];
+    this.selectedVariant = variant;
+    this.selectedVariantId = this.getVariantKey(variant, targetIndex);
+    this.selectedVariantImageUrl = this.getVariantImageUrl(variant, targetIndex);
+  }
+
+  async selectVariant(variant: ProductVariant, index: number): Promise<void> {
+    this.selectedVariant = variant;
+    this.selectedVariantId = this.getVariantKey(variant, index);
+    this.selectedVariantImageUrl = this.getVariantImageUrl(variant, index);
+    this.prepareCarouselImages();
+    this.cdr.detectChanges();
+  }
+
+  private normalizeBulkPricingTiers(tiers?: BulkPricingTier[]): BulkPricingTier[] {
+    if (!tiers || !Array.isArray(tiers)) {
+      return [];
+    }
+
+    return tiers
+      .map(tier => ({
+        minQty: Math.max(1, Math.floor(Number(tier.minQty || 0))),
+        unitPrice: Number(tier.unitPrice || 0),
+        label: tier.label
+      }))
+      .filter(tier => Number.isFinite(tier.minQty) && Number.isFinite(tier.unitPrice) && tier.unitPrice >= 0)
+      .sort((a, b) => a.minQty - b.minQty);
+  }
+
+  get bulkPricingTiers(): BulkPricingTier[] {
+    return this.normalizeBulkPricingTiers(this.producto?.bulkPricingTiers);
+  }
+
+  get hasVariants(): boolean {
+    return this.getActiveVariants().length > 0;
+  }
+
+  getVariantDisplayLabel(variant: ProductVariant, index: number): string {
+    return variant.label || variant.finish || variant.sku || `Variant ${index + 1}`;
+  }
+
+  get displayPrice(): number {
+    const basePrice = this.selectedVariant?.price ?? this.producto?.price ?? 0;
+    if (!this.bulkPricingTiers.length) {
+      return basePrice;
+    }
+    if (basePrice > 0) {
+      const applicable = this.bulkPricingTiers.filter(tier => 1 >= tier.minQty);
+      if (!applicable.length) {
+        return basePrice;
+      }
+      return applicable[applicable.length - 1].unitPrice;
+    }
+    return this.bulkPricingTiers[0].unitPrice;
+  }
+
+  get minTierPrice(): number | null {
+    if (!this.bulkPricingTiers.length) {
+      return null;
+    }
+    return this.bulkPricingTiers.reduce((min, tier) => Math.min(min, tier.unitPrice), this.bulkPricingTiers[0].unitPrice);
+  }
+
+  private async resolveVariantImages(): Promise<void> {
+    if (!this.producto?.variants?.length) {
+      return;
+    }
+
+    const variants = this.producto.variants;
+    for (let index = 0; index < variants.length; index += 1) {
+      const variant = variants[index];
+      const key = this.getVariantKey(variant, index);
+
+      if (variant.imageUrl) {
+        this.variantImageCache[key] = variant.imageUrl;
+        continue;
+      }
+
+      if (!variant.imageId) {
+        continue;
+      }
+
+      try {
+        if (variant.imageId.startsWith('http')) {
+          this.variantImageCache[key] = variant.imageId;
+          variant.imageUrl = variant.imageId;
+          continue;
+        }
+
+        if (variant.imageId.startsWith('gs://') || variant.imageId.startsWith('products/')) {
+          const url = await this.storageService.getDownloadUrl(variant.imageId);
+          this.variantImageCache[key] = url;
+          variant.imageUrl = url;
+          continue;
+        }
+
+        const media = await this.mediaService.getMediaById(variant.imageId);
+        if (media?.url) {
+          this.variantImageCache[key] = media.url;
+          variant.imageUrl = media.url;
+        }
+      } catch (error) {
+        console.error('Error resolving variant image:', error);
       }
     }
   }
@@ -392,13 +532,20 @@ export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
 
   async addToCart() {
     if (!this.producto || this.addInProgress) return;
+
+    const variants = this.getActiveVariants();
+    if (variants.length > 0 && !this.selectedVariant) {
+      this.addError = 'Please select a variant';
+      this.cdr.detectChanges();
+      return;
+    }
     
     this.addInProgress = true;
     this.addError = '';
     this.cdr.detectChanges();
 
     try {
-      await this.cartService.add(this.producto, 1);
+      await this.cartService.add(this.producto, 1, this.selectedVariant || undefined);
       this.addSuccess = true;
       setTimeout(() => {
         this.addSuccess = false;
@@ -456,6 +603,14 @@ export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
   private prepareCarouselImages() {
     const images: LightboxImage[] = [];
     const productName = this.producto?.name || '';
+
+    if (this.selectedVariantImageUrl) {
+      images.push({
+        id: `variant-${this.selectedVariantId || 'selected'}`,
+        url: this.selectedVariantImageUrl,
+        altText: this.selectedVariant?.label || productName
+      });
+    }
 
     if (this.coverImage?.url) {
       images.push({

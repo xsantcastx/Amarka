@@ -32,6 +32,19 @@
     "reviews": "Reviews",
     "not_found": "Page Not Found"
   },
+  "product": {
+    "in_stock": "In stock",
+    "out_of_stock": "Out of stock",
+    "view_details": "View details",
+    "view_product": "View product",
+    "added": "Added",
+    "add_to_cart": "Add to cart",
+    "select_variant": "Select variant",
+    "variant": "Variant",
+    "bulk_pricing": "Bulk pricing",
+    "bulk_pricing_hint": "Bulk pricing available. Prices update in the cart.",
+    "from": "From"
+  },
   "products": {
     "hero": {
       "title": "Browse all products",

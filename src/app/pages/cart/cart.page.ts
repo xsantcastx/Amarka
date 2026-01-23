@@ -23,6 +23,8 @@ interface CartViewModel {
       grosor?: string;
       price: number;
     };
+    variantId?: string;
+    variantLabel?: string;
     qty: number;
   }>;
   subtotal: number;
@@ -102,6 +104,8 @@ export class CartPage implements OnInit {
           sku: item.sku,
           price: item.unitPrice
         },
+        variantId: item.variantId,
+        variantLabel: item.variantLabel,
         qty: item.qty
       })) || [],
       subtotal: cart?.subtotal || 0,
@@ -477,12 +481,12 @@ export class CartPage implements OnInit {
     }
   }
 
-  async updateQty(id: string, q: string) { 
-    await this.cart.updateQty(id, +q); 
+  async updateQty(id: string, q: string, variantId?: string) { 
+    await this.cart.updateQty(id, +q, variantId); 
   }
   
-  async remove(id: string) { 
-    await this.cart.remove(id); 
+  async remove(id: string, variantId?: string) { 
+    await this.cart.remove(id, variantId); 
   }
   
   async clear() { 

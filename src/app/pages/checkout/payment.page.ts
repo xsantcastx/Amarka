@@ -449,26 +449,73 @@ export class PaymentPage implements OnInit, AfterViewInit, OnDestroy {
         // The webhook version uses transactions for atomicity
         const productDoc = await import('@angular/fire/firestore').then(m => m.getDoc(productRef));
         if (productDoc.exists()) {
-          const currentStock = productDoc.data()?.['stock'] || 0;
-          const newStock = Math.max(0, currentStock - item.qty);
-          
-          await updateDoc(productRef, {
-            stock: newStock,
-            updatedAt: serverTimestamp(),
-          });
-          
-          // Log stock change
-          const stockLogRef = doc(collection(this.firestore, 'stock_log'));
-          await setDoc(stockLogRef, {
-            productId: item.productId,
-            orderId,
-            orderNumber,
-            change: -item.qty,
-            previousStock: currentStock,
-            newStock,
-            reason: 'order_placed_fallback',
-            createdAt: serverTimestamp(),
-          });
+          const productData = productDoc.data() || {};
+          const variants = Array.isArray(productData['variants']) ? productData['variants'] : [];
+          const rawVariantId = item.variantId || null;
+          const normalizedVariantId = rawVariantId
+            ? rawVariantId.replace(/^sku:/, '').replace(/^label:/, '').replace(/^finish:/, '')
+            : null;
+          let updatedVariant = false;
+
+          if (rawVariantId && variants.length) {
+            const variantIndex = variants.findIndex((variant: any) =>
+              variant?.id === rawVariantId
+              || variant?.id === normalizedVariantId
+              || variant?.sku === normalizedVariantId
+              || variant?.label === normalizedVariantId
+              || variant?.finish === normalizedVariantId
+            );
+
+            if (variantIndex >= 0) {
+              const variant = variants[variantIndex] || {};
+              const currentVariantStock = Number(variant.stock || 0);
+              const newVariantStock = Math.max(0, currentVariantStock - item.qty);
+              variants[variantIndex] = { ...variant, stock: newVariantStock };
+
+              await updateDoc(productRef, {
+                variants,
+                updatedAt: serverTimestamp(),
+              });
+
+              const stockLogRef = doc(collection(this.firestore, 'stock_log'));
+              await setDoc(stockLogRef, {
+                productId: item.productId,
+                variantId: rawVariantId,
+                orderId,
+                orderNumber,
+                change: -item.qty,
+                previousStock: currentVariantStock,
+                newStock: newVariantStock,
+                reason: 'order_placed_variant_fallback',
+                createdAt: serverTimestamp(),
+              });
+
+              updatedVariant = true;
+            }
+          }
+
+          if (!updatedVariant) {
+            const currentStock = productData['stock'] || 0;
+            const newStock = Math.max(0, currentStock - item.qty);
+            
+            await updateDoc(productRef, {
+              stock: newStock,
+              updatedAt: serverTimestamp(),
+            });
+            
+            // Log stock change
+            const stockLogRef = doc(collection(this.firestore, 'stock_log'));
+            await setDoc(stockLogRef, {
+              productId: item.productId,
+              orderId,
+              orderNumber,
+              change: -item.qty,
+              previousStock: currentStock,
+              newStock,
+              reason: 'order_placed_fallback',
+              createdAt: serverTimestamp(),
+            });
+          }
         }
       } catch (err) {
         console.error(`Failed to update stock for product ${item.productId}:`, err);

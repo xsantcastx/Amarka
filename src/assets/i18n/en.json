@@ -172,7 +172,12 @@
     "view_details": "View details",
     "view_product": "View product",
     "added": "Added",
-    "add_to_cart": "Add to cart"
+    "add_to_cart": "Add to cart",
+    "select_variant": "Select variant",
+    "variant": "Variant",
+    "bulk_pricing": "Bulk pricing",
+    "bulk_pricing_hint": "Bulk pricing available. Prices update in the cart.",
+    "from": "From"
   },
   "home": {
     "loading": "Loading content...",

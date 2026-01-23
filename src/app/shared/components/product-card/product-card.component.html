@@ -21,10 +21,10 @@
           {{ 'product.view_details' | translate }} →
         </a>
         <button (click)="add()"
-                [disabled]="adding"
+                [disabled]="adding && !hasVariants()"
                 class="px-4 py-2 rounded-md bg-primary text-neutral shadow-lvl1 hover:shadow-lvl2 transition disabled:opacity-50"
                 [class.animate-pulse]="adding">
-          {{ (adding ? 'product.added' : 'product.add_to_cart') | translate }}
+          {{ (hasVariants() ? 'product.select_variant' : (adding ? 'product.added' : 'product.add_to_cart')) | translate }}
         </button>
       </div>
     </div>
@@ -53,10 +53,10 @@
             </svg>
           </a>
           <button (click)="add()"
-                  [disabled]="adding"
+                  [disabled]="adding && !hasVariants()"
                   class="px-6 py-3 bg-primary text-neutral rounded-full font-semibold shadow-lvl1 hover:shadow-lvl2 transition-colors disabled:opacity-50"
                   [class.animate-pulse]="adding">
-            {{ (adding ? 'product.added' : 'product.add_to_cart') | translate }}
+            {{ (hasVariants() ? 'product.select_variant' : (adding ? 'product.added' : 'product.add_to_cart')) | translate }}
           </button>
         </div>
       </div>

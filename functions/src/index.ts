@@ -713,26 +713,76 @@ async function handlePaymentSuccess(paymentIntent: Stripe.PaymentIntent, webhook
     const productDoc = await productRef.get();
     
     if (productDoc.exists) {
-      const currentStock = productDoc.data()?.stock || 0;
-      const newStock = Math.max(0, currentStock - item.qty);
-      
-      batch.update(productRef, {
-        stock: newStock,
-        updatedAt: admin.firestore.FieldValue.serverTimestamp(),
-      });
-      
-      // Log stock change
-      const stockLogRef = db.collection("stock_log").doc();
-      batch.set(stockLogRef, {
-        productId: item.productId,
-        orderId,
-        orderNumber,
-        change: -item.qty,
-        previousStock: currentStock,
-        newStock,
-        reason: "order_placed",
-        createdAt: admin.firestore.FieldValue.serverTimestamp(),
-      });
+      const productData = productDoc.data() || {};
+      const variants = Array.isArray(productData.variants) ? productData.variants : [];
+      const rawVariantId = item.variantId || null;
+      const normalizedVariantId = rawVariantId
+        ? rawVariantId.replace(/^sku:/, "").replace(/^label:/, "").replace(/^finish:/, "")
+        : null;
+      let updatedVariant = false;
+
+      if (rawVariantId && variants.length > 0) {
+        const variantIndex = variants.findIndex((variant: any) => {
+          return variant?.id === rawVariantId
+            || variant?.id === normalizedVariantId
+            || variant?.sku === normalizedVariantId
+            || variant?.label === normalizedVariantId
+            || variant?.finish === normalizedVariantId;
+        });
+
+        if (variantIndex >= 0) {
+          const variant = variants[variantIndex] || {};
+          const currentVariantStock = Number(variant.stock || 0);
+          const newVariantStock = Math.max(0, currentVariantStock - item.qty);
+          variants[variantIndex] = {
+            ...variant,
+            stock: newVariantStock
+          };
+
+          batch.update(productRef, {
+            variants,
+            updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+          });
+
+          const stockLogRef = db.collection("stock_log").doc();
+          batch.set(stockLogRef, {
+            productId: item.productId,
+            variantId: rawVariantId,
+            orderId,
+            orderNumber,
+            change: -item.qty,
+            previousStock: currentVariantStock,
+            newStock: newVariantStock,
+            reason: "order_placed_variant",
+            createdAt: admin.firestore.FieldValue.serverTimestamp(),
+          });
+
+          updatedVariant = true;
+        }
+      }
+
+      if (!updatedVariant) {
+        const currentStock = Number(productData.stock || 0);
+        const newStock = Math.max(0, currentStock - item.qty);
+        
+        batch.update(productRef, {
+          stock: newStock,
+          updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+        });
+        
+        // Log stock change
+        const stockLogRef = db.collection("stock_log").doc();
+        batch.set(stockLogRef, {
+          productId: item.productId,
+          orderId,
+          orderNumber,
+          change: -item.qty,
+          previousStock: currentStock,
+          newStock,
+          reason: "order_placed",
+          createdAt: admin.firestore.FieldValue.serverTimestamp(),
+        });
+      }
     }
   }
   

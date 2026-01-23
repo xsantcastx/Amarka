@@ -18,6 +18,7 @@ interface CartItemDisplay {
   name: string;
   imageUrl?: string;
   sku?: string;
+  variantLabel?: string;
   qty: number;
   unitPrice: number;
   subtotal: number;
@@ -96,6 +97,7 @@ export class CheckoutReviewPage implements OnInit {
         name: item.name,
         imageUrl: item.imageUrl,
         sku: item.sku,
+        variantLabel: item.variantLabel,
         qty: item.qty,
         unitPrice: item.unitPrice,
         subtotal: item.unitPrice * item.qty

@@ -87,6 +87,38 @@ export class ProductosPageComponent extends LoadingComponentBase implements OnIn
     }
   }
 
+  hasVariants(product: Product): boolean {
+    return (product.variants || []).some(variant => variant.active !== false);
+  }
+
+  getDisplayPrice(product: Product): { price: number; isFrom: boolean } | null {
+    const variantPrices = (product.variants || [])
+      .map(variant => Number(variant.price))
+      .filter(price => Number.isFinite(price) && price > 0);
+    const baseCandidates = [
+      Number(product.price)
+    ].filter(price => Number.isFinite(price) && price > 0);
+    const basePrice = [...baseCandidates, ...variantPrices].length
+      ? Math.min(...baseCandidates, ...variantPrices)
+      : 0;
+    const tiers = (product.bulkPricingTiers || [])
+      .map(tier => ({
+        minQty: Math.max(1, Math.floor(Number(tier.minQty || 0))),
+        unitPrice: Number(tier.unitPrice || 0)
+      }))
+      .filter(tier => Number.isFinite(tier.minQty) && Number.isFinite(tier.unitPrice) && tier.unitPrice >= 0)
+      .sort((a, b) => a.minQty - b.minQty);
+
+    const isFromByVariants = variantPrices.length > 0;
+    if (!tiers.length) {
+      return basePrice ? { price: basePrice, isFrom: isFromByVariants } : null;
+    }
+
+    const minTierPrice = tiers.reduce((min, tier) => Math.min(min, tier.unitPrice), tiers[0].unitPrice);
+    const price = basePrice > 0 ? Math.min(basePrice, minTierPrice) : minTierPrice;
+    return { price, isFrom: true };
+  }
+
   private async loadFilterOptions(): Promise<void> {
     try {
       const [categoriesResult, modelsResult, tagsResult] = await Promise.allSettled([
@@ -311,6 +343,11 @@ export class ProductosPageComponent extends LoadingComponentBase implements OnIn
     event.preventDefault();
     event.stopPropagation();
     const productKey = product.id || product.slug;
+
+    if (this.hasVariants(product)) {
+      this.goToProduct(product, event);
+      return;
+    }
 
     this.addingProductId = productKey || null;
     this.forceUpdate();

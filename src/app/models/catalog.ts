@@ -5,6 +5,12 @@ export type Id = string;
 
 // ===== Product & Variants =====
 
+export interface BulkPricingTier {
+  minQty: number;
+  unitPrice: number;
+  label?: string;
+}
+
 export interface Product {
   id?: Id;
   name: string;
@@ -17,6 +23,7 @@ export interface Product {
   specs?: Specs;
   variantMode: 'embedded' | 'subcollection';
   variants?: ProductVariant[];
+  bulkPricingTiers?: BulkPricingTier[];
   coverImage?: string;                 // gs:// path or https
   galleryImageIds?: Id[];
   tags?: string[]; // Array of tag slugs or IDs
@@ -46,10 +53,13 @@ export interface Specs {
 export interface ProductVariant {
   id?: Id;
   sku?: string;
+  label?: string;
   sizeGroupId?: Id;
   finish?: string;
   colorId?: Id;
   images?: string[];                   // gs:// or media ids
+  imageId?: Id;
+  imageUrl?: string;
   price?: number | null;
   stock?: number;
   active?: boolean;

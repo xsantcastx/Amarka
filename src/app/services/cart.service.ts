@@ -1,8 +1,8 @@
 import { Injectable, inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { BehaviorSubject, map, Observable, of, combineLatest } from 'rxjs';
-import { Product } from '../models/product';
-import { Cart, CartItem } from '../models/cart';
+import { BulkPricingTier, Product, ProductVariant } from '../models/product';
+import { BulkPricingTierSnapshot, Cart, CartItem } from '../models/cart';
 import { Firestore, doc, docData, setDoc, Timestamp, serverTimestamp, updateDoc } from '@angular/fire/firestore';
 import { Auth } from '@angular/fire/auth';
 import { switchMap, catchError, tap } from 'rxjs/operators';
@@ -196,6 +196,14 @@ export class CartService {
    */
   private calculateTotals(cart: Cart): Cart {
     const subtotal = cart.items.reduce((sum, item) => {
+      if (item.bulkPricingTiers?.length) {
+        const { unitPrice } = this.getUnitPriceForQty(
+          item.basePrice ?? item.unitPrice,
+          item.qty,
+          item.bulkPricingTiers
+        );
+        item.unitPrice = unitPrice;
+      }
       const itemTotal = (item.unitPrice * item.qty);
       return sum + itemTotal;
     }, 0);
@@ -280,27 +288,102 @@ export class CartService {
     return cleaned;
   }
 
+  private normalizeBulkPricingTiers(tiers?: BulkPricingTier[]): BulkPricingTierSnapshot[] {
+    if (!tiers || !Array.isArray(tiers)) {
+      return [];
+    }
+
+    return tiers
+      .map(tier => ({
+        minQty: Math.max(1, Math.floor(Number(tier.minQty || 0))),
+        unitPrice: Number(tier.unitPrice || 0),
+        label: tier.label
+      }))
+      .filter(tier => Number.isFinite(tier.minQty) && Number.isFinite(tier.unitPrice) && tier.unitPrice >= 0)
+      .sort((a, b) => a.minQty - b.minQty);
+  }
+
+  private resolveVariantKey(variant?: ProductVariant): string | undefined {
+    if (!variant) {
+      return undefined;
+    }
+    if (variant.id) {
+      return variant.id;
+    }
+    if (variant.sku) {
+      return `sku:${variant.sku}`;
+    }
+    if (variant.label) {
+      return `label:${variant.label}`;
+    }
+    if (variant.finish) {
+      return `finish:${variant.finish}`;
+    }
+    return undefined;
+  }
+
+  private resolveVariantLabel(variant?: ProductVariant): string | undefined {
+    if (!variant) {
+      return undefined;
+    }
+    return variant.label || variant.finish || variant.sku;
+  }
+
+  private resolveVariantImageUrl(variant?: ProductVariant): string | undefined {
+    if (!variant) {
+      return undefined;
+    }
+    return variant.imageUrl;
+  }
+
+  private getUnitPriceForQty(
+    basePrice: number,
+    qty: number,
+    tiers?: BulkPricingTierSnapshot[]
+  ): { unitPrice: number; appliedTier?: BulkPricingTierSnapshot } {
+    if (!tiers || tiers.length === 0) {
+      return { unitPrice: basePrice };
+    }
+
+    const applicable = tiers.filter(tier => qty >= tier.minQty);
+    if (applicable.length === 0) {
+      return { unitPrice: basePrice };
+    }
+
+    const appliedTier = applicable[applicable.length - 1];
+    return { unitPrice: appliedTier.unitPrice, appliedTier };
+  }
+
   /**
    * Add product to cart
    */
-  async add(product: Product, qty = 1): Promise<void> {
+  async add(product: Product, qty = 1, variant?: ProductVariant): Promise<void> {
     // Get inventory settings
     const settings = await this.settingsService.getSettings();
+
+    const variantKey = this.resolveVariantKey(variant);
+    const variantLabel = this.resolveVariantLabel(variant);
+    const variantImageUrl = this.resolveVariantImageUrl(variant);
+    const bulkPricingTiers = this.normalizeBulkPricingTiers(product.bulkPricingTiers);
+    const basePrice = (variant?.price ?? product.price ?? 0);
     
     // Check inventory if tracking is enabled
     if (settings.trackInventory) {
-      const productStock = product.stock || 0;
+      const stockSource = (variant && typeof variant.stock === 'number')
+        ? variant.stock
+        : (product.stock || 0);
+      const stockLabel = variantLabel ? `${product.name} (${variantLabel})` : product.name;
       
       // Check if product is out of stock and backorders are disabled
-      if (productStock <= 0 && !settings.allowBackorders) {
-        console.warn('[CartService] Product out of stock and backorders disabled:', product.name);
-        throw new Error(`Product "${product.name}" is out of stock`);
+      if (stockSource <= 0 && !settings.allowBackorders) {
+        console.warn('[CartService] Product out of stock and backorders disabled:', stockLabel);
+        throw new Error(`Product "${stockLabel}" is out of stock`);
       }
       
       // Check if requested quantity exceeds available stock (when backorders disabled)
-      if (!settings.allowBackorders && qty > productStock) {
-        console.warn('[CartService] Requested quantity exceeds stock:', { requested: qty, available: productStock });
-        throw new Error(`Only ${productStock} units available for "${product.name}"`);
+      if (!settings.allowBackorders && qty > stockSource) {
+        console.warn('[CartService] Requested quantity exceeds stock:', { requested: qty, available: stockSource });
+        throw new Error(`Only ${stockSource} units available for "${stockLabel}"`);
       }
     }
 
@@ -333,39 +416,63 @@ export class CartService {
     
     // Check if item already exists
     const existingItemIndex = currentCart.items.findIndex(
-      item => item.productId === product.id
+      item => item.productId === product.id && item.variantId === variantKey
     );
 
     if (existingItemIndex >= 0) {
       // Check total quantity if inventory tracking enabled
       if (settings.trackInventory && !settings.allowBackorders) {
         const newTotalQty = currentCart.items[existingItemIndex].qty + qty;
-        const productStock = product.stock || 0;
-        if (newTotalQty > productStock) {
+        const stockSource = (variant && typeof variant.stock === 'number')
+          ? variant.stock
+          : (product.stock || 0);
+        if (newTotalQty > stockSource) {
           console.warn('[CartService] Total cart quantity would exceed stock:', { 
             currentQty: currentCart.items[existingItemIndex].qty, 
             adding: qty, 
             total: newTotalQty, 
-            available: productStock 
+            available: stockSource 
           });
-          throw new Error(`Cannot add more. Only ${productStock} units available for "${product.name}"`);
+          const stockLabel = variantLabel ? `${product.name} (${variantLabel})` : product.name;
+          throw new Error(`Cannot add more. Only ${stockSource} units available for "${stockLabel}"`);
         }
       }
       
       // Update quantity
-      currentCart.items[existingItemIndex].qty += qty;
+      const existingItem = currentCart.items[existingItemIndex];
+      const updatedQty = existingItem.qty + qty;
+      existingItem.qty = updatedQty;
+      if (!existingItem.basePrice) {
+        existingItem.basePrice = basePrice;
+      }
+      if (!existingItem.bulkPricingTiers?.length && bulkPricingTiers.length) {
+        existingItem.bulkPricingTiers = bulkPricingTiers;
+      }
+      const { unitPrice } = this.getUnitPriceForQty(
+        existingItem.basePrice ?? basePrice,
+        updatedQty,
+        existingItem.bulkPricingTiers || bulkPricingTiers
+      );
+      existingItem.unitPrice = unitPrice;
 
     } else {
       // Add new item
+      const { unitPrice } = this.getUnitPriceForQty(basePrice, qty, bulkPricingTiers);
       const newItem: CartItem = {
         productId: product.id!,
+        ...(variantKey && { variantId: variantKey }),
         name: product.name,
+        ...(variantLabel && { variantLabel }),
         qty,
-        unitPrice: product.price || 0,
+        unitPrice,
+        basePrice,
         currency: 'USD',
-        priceSnapshotAtAdd: product.price || 0,
-        ...(product.imageUrl && { imageUrl: product.imageUrl }),
-        ...(product.sku && { sku: product.sku })
+        priceSnapshotAtAdd: unitPrice,
+        ...(variantImageUrl && { imageUrl: variantImageUrl, variantImageUrl }),
+        ...(!variantImageUrl && product.imageUrl && { imageUrl: product.imageUrl }),
+        ...(variant?.sku && { sku: variant.sku }),
+        ...(!variant?.sku && product.sku && { sku: product.sku }),
+        ...(bulkPricingTiers.length > 0 && { bulkPricingTiers })
       };
 
       currentCart.items.push(newItem);
@@ -378,24 +485,32 @@ export class CartService {
   /**
    * Remove item from cart
    */
-  async remove(productId: string): Promise<void> {
+  async remove(productId: string, variantId?: string): Promise<void> {
     const currentCart = this.cartState$.value;
     if (!currentCart) return;
 
-    currentCart.items = currentCart.items.filter(item => item.productId !== productId);
+    currentCart.items = currentCart.items.filter(item => !(item.productId === productId && item.variantId === variantId));
     await this.saveCart(currentCart);
   }
 
   /**
    * Update item quantity
    */
-  async updateQty(productId: string, qty: number): Promise<void> {
+  async updateQty(productId: string, qty: number, variantId?: string): Promise<void> {
     const currentCart = this.cartState$.value;
     if (!currentCart) return;
 
-    const item = currentCart.items.find(i => i.productId === productId);
+    const item = currentCart.items.find(i => i.productId === productId && i.variantId === variantId);
     if (item) {
       item.qty = Math.max(1, Math.floor(qty));
+      if (item.bulkPricingTiers?.length) {
+        const { unitPrice } = this.getUnitPriceForQty(
+          item.basePrice ?? item.unitPrice,
+          item.qty,
+          item.bulkPricingTiers
+        );
+        item.unitPrice = unitPrice;
+      }
       await this.saveCart(currentCart);
     }
   }
@@ -494,6 +609,7 @@ export class CartService {
           name: legacyItem.product.name,
           qty: legacyItem.qty,
           unitPrice: legacyItem.product.price || 0,
+          basePrice: legacyItem.product.price || 0,
           currency: 'USD',
           priceSnapshotAtAdd: legacyItem.product.price || 0,
           imageUrl: legacyItem.product.imageUrl,

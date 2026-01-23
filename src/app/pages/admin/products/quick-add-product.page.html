@@ -142,6 +142,106 @@
             </div>
           </div>
 
+          <!-- Variants -->
+          <div class="bg-ts-paper border border-ts-line rounded-xl p-6 shadow-sm">
+            <div class="flex items-center justify-between mb-4">
+              <h2 class="text-lg font-semibold text-ts-ink">Variants</h2>
+              <button type="button" class="px-3 py-2 text-sm bg-ts-accent/20 border border-ts-accent/30 text-ts-ink rounded-lg hover:bg-ts-accent/30 transition-colors" (click)="addVariant()">
+                + Add variant
+              </button>
+            </div>
+            <p class="text-xs text-ts-ink-soft mb-4">Create options like color or finish. Customers must choose one on the product page.</p>
+            @if (!variantDrafts.length) {
+              <div class="text-sm text-ts-ink-soft bg-ts-bg-soft/60 border border-ts-line rounded-lg p-4">
+                No variants yet. Add one if this product has multiple options.
+              </div>
+            } @else {
+              @for (variant of variantDrafts; track variant.tempId; let i = $index) {
+                <div class="border border-ts-line rounded-xl p-4 mb-4">
+                  <div class="flex items-center justify-between mb-3">
+                    <span class="text-sm font-semibold text-ts-ink">Variant {{ i + 1 }}</span>
+                    <button type="button" class="text-xs text-red-600 hover:text-red-700" (click)="removeVariant(i)">Remove</button>
+                  </div>
+                  <div class="grid sm:grid-cols-2 gap-4">
+                    <div>
+                      <label class="block text-xs font-medium text-ts-ink mb-1">Label</label>
+                      <input type="text" [(ngModel)]="variant.label" [ngModelOptions]="{standalone: true}" class="w-full px-3 py-2 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink" placeholder="e.g. Red">
+                    </div>
+                    <div>
+                      <label class="block text-xs font-medium text-ts-ink mb-1">SKU</label>
+                      <input type="text" [(ngModel)]="variant.sku" [ngModelOptions]="{standalone: true}" class="w-full px-3 py-2 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink" placeholder="Optional">
+                    </div>
+                    <div>
+                      <label class="block text-xs font-medium text-ts-ink mb-1">Price (USD)</label>
+                      <input type="number" [(ngModel)]="variant.price" [ngModelOptions]="{standalone: true}" class="w-full px-3 py-2 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink" placeholder="Optional">
+                    </div>
+                    <div>
+                      <label class="block text-xs font-medium text-ts-ink mb-1">Stock</label>
+                      <input type="number" [(ngModel)]="variant.stock" [ngModelOptions]="{standalone: true}" class="w-full px-3 py-2 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink" placeholder="Optional">
+                    </div>
+                    <div class="sm:col-span-2 flex items-center gap-2">
+                      <input type="checkbox" [(ngModel)]="variant.active" [ngModelOptions]="{standalone: true}" class="w-4 h-4 text-ts-accent border-ts-line rounded">
+                      <span class="text-xs text-ts-ink">Active</span>
+                    </div>
+                  </div>
+
+                  <div class="mt-4">
+                    <label class="block text-xs font-medium text-ts-ink mb-2">Variant Image</label>
+                    <input type="file" accept="image/*" (change)="onVariantImageSelected($event, variant)" class="block w-full text-xs text-ts-ink file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-ts-accent/20 file:text-ts-ink hover:file:bg-ts-accent/30">
+                    @if (variant.imagePreview) {
+                      <div class="mt-3 w-full md:w-56 aspect-video bg-ts-bg-soft border border-ts-line rounded-xl overflow-hidden flex items-center justify-center relative group">
+                        <img [src]="variant.imagePreview" alt="Variant preview" class="w-full h-full object-cover">
+                        <button type="button"
+                                (click)="clearVariantImage(variant)"
+                                class="absolute top-2 right-2 p-1.5 rounded-lg bg-error text-white opacity-0 group-hover:opacity-100 transition-opacity shadow-lg hover:bg-error/90">
+                          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                          </svg>
+                        </button>
+                      </div>
+                    }
+                  </div>
+                </div>
+              }
+            }
+          </div>
+
+          <!-- Bulk Pricing -->
+          <div class="bg-ts-paper border border-ts-line rounded-xl p-6 shadow-sm">
+            <div class="flex items-center justify-between mb-4">
+              <h2 class="text-lg font-semibold text-ts-ink">Bulk Pricing</h2>
+              <button type="button" class="px-3 py-2 text-sm bg-ts-accent/20 border border-ts-accent/30 text-ts-ink rounded-lg hover:bg-ts-accent/30 transition-colors" (click)="addBulkPricingTier()">
+                + Add tier
+              </button>
+            </div>
+            <p class="text-xs text-ts-ink-soft mb-4">Set unit price by minimum quantity. Applied at checkout and in the cart.</p>
+            @if (!bulkPricingTiers.length) {
+              <div class="text-sm text-ts-ink-soft bg-ts-bg-soft/60 border border-ts-line rounded-lg p-4">
+                No bulk tiers yet.
+              </div>
+            } @else {
+              @for (tier of bulkPricingTiers; track $index; let i = $index) {
+                <div class="grid sm:grid-cols-3 gap-3 items-end border border-ts-line rounded-lg p-3 mb-3">
+                  <div>
+                    <label class="block text-xs font-medium text-ts-ink mb-1">Min Qty</label>
+                    <input type="number" [(ngModel)]="tier.minQty" [ngModelOptions]="{standalone: true}" class="w-full px-3 py-2 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink">
+                  </div>
+                  <div>
+                    <label class="block text-xs font-medium text-ts-ink mb-1">Unit Price</label>
+                    <input type="number" [(ngModel)]="tier.unitPrice" [ngModelOptions]="{standalone: true}" class="w-full px-3 py-2 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink">
+                  </div>
+                  <div>
+                    <label class="block text-xs font-medium text-ts-ink mb-1">Label (optional)</label>
+                    <input type="text" [(ngModel)]="tier.label" [ngModelOptions]="{standalone: true}" class="w-full px-3 py-2 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink" placeholder="e.g. 10+ discount">
+                  </div>
+                  <div class="sm:col-span-3 flex justify-end">
+                    <button type="button" class="text-xs text-red-600 hover:text-red-700" (click)="removeBulkPricingTier(i)">Remove</button>
+                  </div>
+                </div>
+              }
+            }
+          </div>
+
           <!-- Media -->
           <div class="bg-ts-paper border border-ts-line rounded-xl p-6 shadow-sm">
             <h2 class="text-lg font-semibold text-ts-ink mb-4">Media</h2>

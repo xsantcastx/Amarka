@@ -2,6 +2,12 @@ import { Timestamp } from '@angular/fire/firestore';
 
 export type Id = string;
 
+export interface BulkPricingTierSnapshot {
+  minQty: number;
+  unitPrice: number;
+  label?: string;
+}
+
 // ===== Cart Item =====
 
 export interface CartItem {
@@ -11,14 +17,19 @@ export interface CartItem {
   variantLabel?: string;       // e.g., "Black / 128GB" - for display
   qty: number;
   unitPrice: number;           // Price at time of adding to cart
+  basePrice?: number;          // Base unit price before tiering
   currency: string;            // e.g., "USD"
   priceSnapshotAtAdd: number;  // Historical record of price when added
   imageUrl?: string;           // Product image for cart display
+  variantImageUrl?: string;    // Variant image if selected
   sku?: string;                // Product/variant SKU
   grosor?: string;             // Category/model identifier
   
   // Stock validation
   stockAvailable?: number;     // Current stock level (for validation)
+  
+  // Pricing tiers snapshot (for bulk pricing)
+  bulkPricingTiers?: BulkPricingTierSnapshot[];
 }
 
 // ===== Cart =====

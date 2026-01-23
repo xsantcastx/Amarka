@@ -20,6 +20,7 @@ export interface Product {
   search_name?: string;    // Lowercase name for search (auto-generated)
   variantMode?: 'embedded' | 'referenced';
   variants?: ProductVariant[];
+  bulkPricingTiers?: BulkPricingTier[];
   specs?: ProductSpecs;
   coverImage?: string;     // Media ID or legacy URL
   galleryImageIds?: string[];  // Array of media IDs
@@ -37,12 +38,22 @@ export interface Product {
   updatedAt?: Timestamp;   // Last update timestamp
 }
 
+export interface BulkPricingTier {
+  minQty: number;
+  unitPrice: number;
+  label?: string;
+}
+
 export interface ProductVariant {
+  id?: string;
   sku?: string;
+  label?: string;
   finish?: string;
   price?: number | null;
   stock?: number;
   active?: boolean;
+  imageId?: string;
+  imageUrl?: string;
 }
 
 export interface CartItem {

@@ -13,7 +13,7 @@ import { TagService } from '../../../services/tag.service';
 import { StorageService, UploadProgress } from '../../../services/storage.service';
 import { MediaService } from '../../../services/media.service';
 import { BenefitTemplateService } from '../../../services/benefit-template.service';
-import { Product, ProductBenefit } from '../../../models/product';
+import { BulkPricingTier, Product, ProductBenefit, ProductVariant } from '../../../models/product';
 import { Category, Model, Tag } from '../../../models/catalog';
 import { BenefitTemplate } from '../../../models/benefit-template';
 import { MediaCreateInput, MEDIA_VALIDATION } from '../../../models/media';
@@ -21,6 +21,12 @@ import { LoadingComponentBase } from '../../../core/classes/loading-component.ba
 import { BrandConfigService } from '../../../core/services/brand-config.service';
 import { AdminSidebarComponent } from '../../../shared/components/admin-sidebar/admin-sidebar.component';
 import { CollectionsService, CollectionDoc } from '../../../services/collections.service';
+
+interface VariantDraft extends ProductVariant {
+  tempId: string;
+  imageFile?: File | null;
+  imagePreview?: string | null;
+}
 
 @Component({
   selector: 'app-quick-add-product',
@@ -101,6 +107,10 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
   // Tag selection
   selectedTags: string[] = [];
   selectedCatalogOption: any = null;
+
+  // Variants & bulk pricing
+  variantDrafts: VariantDraft[] = [];
+  bulkPricingTiers: BulkPricingTier[] = [];
   
   // SEO Preview
   seoPreviewTitle = '';
@@ -268,6 +278,39 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
         }
       }
 
+      this.bulkPricingTiers = (product.bulkPricingTiers || []).map(tier => ({
+        minQty: tier.minQty,
+        unitPrice: tier.unitPrice,
+        label: tier.label
+      }));
+
+      this.variantDrafts = (product.variants || []).map((variant) => this.createVariantDraft(variant));
+      for (const draft of this.variantDrafts) {
+        if (draft.imagePreview || !draft.imageId) {
+          continue;
+        }
+        try {
+          if (draft.imageId.startsWith('http')) {
+            draft.imagePreview = draft.imageId;
+            draft.imageUrl = draft.imageId;
+            continue;
+          }
+          if (draft.imageId.startsWith('gs://') || draft.imageId.startsWith('products/')) {
+            const url = await this.storageService.getDownloadUrl(draft.imageId);
+            draft.imagePreview = url;
+            draft.imageUrl = url;
+            continue;
+          }
+          const media = await this.mediaService.getMediaById(draft.imageId);
+          if (media?.url) {
+            draft.imagePreview = media.url;
+            draft.imageUrl = media.url;
+          }
+        } catch (error) {
+          console.error('Error loading variant image preview:', error);
+        }
+      }
+
       // Update SEO preview
       this.updateSEOPreview();
       
@@ -390,6 +433,148 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
     const prefix = modelName.substring(0, 3).toUpperCase();
     const random = Math.floor(Math.random() * 100000).toString().padStart(5, '0');
     return `${prefix}-${random}`;
+  }
+
+  private generateTempId(): string {
+    if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) {
+      return crypto.randomUUID();
+    }
+    return `${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  }
+
+  private createVariantDraft(data?: Partial<ProductVariant>): VariantDraft {
+    return {
+      tempId: this.generateTempId(),
+      id: data?.id,
+      label: data?.label ?? data?.finish,
+      sku: data?.sku,
+      price: data?.price ?? null,
+      stock: data?.stock ?? 0,
+      active: data?.active !== false,
+      finish: data?.finish,
+      imageId: data?.imageId,
+      imageUrl: data?.imageUrl,
+      imagePreview: data?.imageUrl || null
+    };
+  }
+
+  addVariant() {
+    this.variantDrafts.push(this.createVariantDraft());
+  }
+
+  removeVariant(index: number) {
+    const [removed] = this.variantDrafts.splice(index, 1);
+    if (removed?.imagePreview && removed.imagePreview.startsWith('blob:')) {
+      URL.revokeObjectURL(removed.imagePreview);
+    }
+  }
+
+  onVariantImageSelected(event: Event, variant: VariantDraft) {
+    const input = event.target as HTMLInputElement;
+    if (!input.files || input.files.length === 0) {
+      return;
+    }
+    const file = input.files[0];
+    variant.imageFile = file;
+    variant.imagePreview = URL.createObjectURL(file);
+  }
+
+  clearVariantImage(variant: VariantDraft) {
+    if (variant.imagePreview && variant.imagePreview.startsWith('blob:')) {
+      URL.revokeObjectURL(variant.imagePreview);
+    }
+    variant.imageFile = null;
+    variant.imagePreview = null;
+    variant.imageId = '';
+    variant.imageUrl = '';
+  }
+
+  addBulkPricingTier() {
+    this.bulkPricingTiers.push({ minQty: 2, unitPrice: 0 });
+  }
+
+  removeBulkPricingTier(index: number) {
+    this.bulkPricingTiers.splice(index, 1);
+  }
+
+  private normalizeBulkPricingTiers(): BulkPricingTier[] {
+    if (!this.bulkPricingTiers.length) {
+      return [];
+    }
+    return this.bulkPricingTiers
+      .map(tier => ({
+        minQty: Math.max(1, Math.floor(Number(tier.minQty || 0))),
+        unitPrice: Number(tier.unitPrice || 0),
+        label: tier.label
+      }))
+      .filter(tier => Number.isFinite(tier.minQty) && Number.isFinite(tier.unitPrice) && tier.unitPrice >= 0)
+      .sort((a, b) => a.minQty - b.minQty);
+  }
+
+  private ensureVariantId(seed: string, usedIds: Set<string>, index: number): string {
+    let base = this.generateSlug(seed || `variant-${index + 1}`);
+    if (!base) {
+      base = `variant-${index + 1}`;
+    }
+    let id = base;
+    let counter = 1;
+    while (usedIds.has(id)) {
+      id = `${base}-${counter}`;
+      counter += 1;
+    }
+    usedIds.add(id);
+    return id;
+  }
+
+  private async buildVariantsPayload(slug: string): Promise<ProductVariant[]> {
+    if (!this.variantDrafts.length) {
+      return [];
+    }
+
+    const usedIds = new Set<string>();
+    const variants: ProductVariant[] = [];
+
+    for (let index = 0; index < this.variantDrafts.length; index += 1) {
+      const draft = this.variantDrafts[index];
+      const label = (draft.label || '').trim();
+      const sku = (draft.sku || '').trim();
+      const hasContent = !!(label || sku || draft.price !== null || draft.stock !== null || draft.imageFile || draft.imageUrl || draft.imageId);
+      if (!hasContent) {
+        continue;
+      }
+
+      const variantId = draft.id || this.ensureVariantId(label || sku || `variant-${index + 1}`, usedIds, index);
+      const price = (draft.price === null || draft.price === undefined) ? null : Number(draft.price);
+      const stock = (draft.stock === null || draft.stock === undefined) ? undefined : Math.max(0, Math.floor(Number(draft.stock)));
+
+      let imageUrl = draft.imageUrl || '';
+      let imageId = draft.imageId || '';
+
+      if (draft.imageFile) {
+        const storagePath = `products/variants/${slug}/${variantId}-${Date.now()}_${draft.imageFile.name}`;
+        const uploadResult = await lastValueFrom(
+          this.storageService.uploadFile(draft.imageFile, storagePath)
+        );
+        if (uploadResult.downloadURL) {
+          imageUrl = uploadResult.downloadURL;
+          imageId = storagePath;
+        }
+      }
+
+      variants.push({
+        id: variantId,
+        label: label || undefined,
+        sku: sku || undefined,
+        finish: draft.finish || label || undefined,
+        price,
+        stock,
+        active: draft.active !== false,
+        imageId: imageId || undefined,
+        imageUrl: imageUrl || undefined
+      });
+    }
+
+    return variants;
   }
 
   private updateSEOPreview() {
@@ -582,9 +767,13 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
         }
       }
 
+      const slug = formValue.slug || this.generateSlug(formValue.title);
+      const variants = await this.buildVariantsPayload(slug);
+      const bulkPricingTiers = this.normalizeBulkPricingTiers();
+
       const productPayload: Omit<Product, 'id'> = {
         name: formValue.title,
-        slug: formValue.slug || this.generateSlug(formValue.title),
+        slug,
         description: formValue.description || '',
         categoryId: formValue.categoryId,
         modelId: formValue.modelId,
@@ -597,6 +786,9 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
         tags: (formValue.tags || '').split(',').map((t: string) => t.trim()).filter((t: string) => t),
         collectionIds: [...this.selectedCollections],
         status: formValue.status || 'draft',
+        variantMode: variants.length ? 'embedded' : undefined,
+        variants: variants.length ? variants : undefined,
+        bulkPricingTiers: bulkPricingTiers.length ? bulkPricingTiers : undefined,
         specs: {
           weight: formValue.weight || 0,
           ...this.currentSpecs
