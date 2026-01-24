@@ -787,7 +787,7 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
         collectionIds: [...this.selectedCollections],
         status: formValue.status || 'draft',
         variantMode: variants.length ? 'embedded' : undefined,
-        variants: variants.length ? variants : undefined,
+        variants,
         bulkPricingTiers: bulkPricingTiers.length ? bulkPricingTiers : undefined,
         specs: {
           weight: formValue.weight || 0,
