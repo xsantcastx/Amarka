@@ -42,23 +42,11 @@ export const appConfig: ApplicationConfig = {
       // Ensure auth persistence is set to LOCAL (keeps users signed in across sessions)
       // This prevents unexpected logouts on page refresh
       if (typeof window !== 'undefined') {
-        import('firebase/auth').then(({ setPersistence, browserLocalPersistence, onAuthStateChanged }) => {
+        import('firebase/auth').then(({ setPersistence, browserLocalPersistence }) => {
           setPersistence(auth, browserLocalPersistence)
-            .then(() => {
-              console.log('[Auth] Persistence set to LOCAL - sessions will persist across page refreshes');
-            })
             .catch((error) => {
               console.error('[Auth] Error setting persistence:', error);
             });
-          
-          // Monitor auth state for debugging
-          onAuthStateChanged(auth, (user) => {
-            if (user) {
-              console.log('[Auth] Auth state changed - user logged in:', user.email);
-            } else {
-              console.log('[Auth] Auth state changed - no user (logged out or not authenticated)');
-            }
-          });
         });
       }
       return auth;
@@ -70,9 +58,6 @@ export const appConfig: ApplicationConfig = {
     // App Check for security (browser only, only when enabled)
     ...(environment.recaptcha?.enabled && typeof window !== 'undefined' ? [
       provideAppCheck(() => {
-        console.log('[AppCheck] Initializing App Check with reCAPTCHA v3');
-        console.log('[AppCheck] Note: App Check failures will NOT sign out users');
-        
         // Use reCAPTCHA v3 provider
         const provider = new ReCaptchaV3Provider(
           'siteKey' in environment.appCheck 

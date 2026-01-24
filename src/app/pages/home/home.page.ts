@@ -13,6 +13,7 @@ import { HomeReviewsComponent } from '../../features/home/home-reviews/home-revi
 import { LoadingComponentBase } from '../../core/classes/loading-component.base';
 import { MetaService } from '../../services/meta.service';
 import { BrandConfigService } from '../../core/services/brand-config.service';
+import { LoggerService } from '../../services/logger.service';
 import { take } from 'rxjs/operators';
 import { ProductCardComponent } from '../../shared/components/product-card/product-card.component';
 import { forkJoin, of } from 'rxjs';
@@ -34,6 +35,7 @@ export class HomePageComponent extends LoadingComponentBase implements OnInit {
   private metaService = inject(MetaService);
   private router = inject(Router);
   private brandConfig = inject(BrandConfigService);
+  private logger = inject(LoggerService);
   protected override cdr = inject(ChangeDetectorRef);
   
   services: ServiceItem[] = [];
@@ -82,7 +84,7 @@ export class HomePageComponent extends LoadingComponentBase implements OnInit {
       ]);
       this.dedupeHomeProducts();
     } catch (error) {
-      console.error('Error loading content:', error);
+      this.logger.error('HomePage error loading content', error);
     } finally {
       this.setLoading(false);
       this.cdr.detectChanges();
@@ -95,7 +97,7 @@ export class HomePageComponent extends LoadingComponentBase implements OnInit {
       this.services = services?.slice(0, 6) || [];
       this.cdr.detectChanges();
     } catch (error) {
-      console.error('Error loading services:', error);
+      this.logger.error('HomePage error loading services', error);
     }
   }
 
@@ -120,7 +122,7 @@ export class HomePageComponent extends LoadingComponentBase implements OnInit {
       );
       this.cdr.detectChanges();
     } catch (error) {
-      console.error('Error loading collections:', error);
+      this.logger.error('HomePage error loading collections', error);
       this.collections = [];
       this.categoryShowcase = [];
       this.heroCollections = [];
@@ -134,7 +136,7 @@ export class HomePageComponent extends LoadingComponentBase implements OnInit {
       this.featuredProducts = products || [];
       this.cdr.detectChanges();
     } catch (error) {
-      console.error('Error loading featured products:', error);
+      this.logger.error('HomePage error loading featured products', error);
     }
   }
 
@@ -144,7 +146,7 @@ export class HomePageComponent extends LoadingComponentBase implements OnInit {
       this.bestSellerProducts = products || [];
       this.cdr.detectChanges();
     } catch (error) {
-      console.error('Error loading best sellers:', error);
+      this.logger.error('HomePage error loading best sellers', error);
     }
   }
 
@@ -154,7 +156,7 @@ export class HomePageComponent extends LoadingComponentBase implements OnInit {
       this.newArrivalProducts = products || [];
       this.cdr.detectChanges();
     } catch (error) {
-      console.error('Error loading new arrivals:', error);
+      this.logger.error('HomePage error loading new arrivals', error);
     }
   }
 
@@ -164,7 +166,7 @@ export class HomePageComponent extends LoadingComponentBase implements OnInit {
       this.heroProducts = products || [];
       this.cdr.detectChanges();
     } catch (error) {
-      console.error('Error loading hero products:', error);
+      this.logger.error('HomePage error loading hero products', error);
     }
   }
 
@@ -186,7 +188,6 @@ export class HomePageComponent extends LoadingComponentBase implements OnInit {
   }
 
   private async loadGalleryPreview() {
-    console.log('Starting to load gallery images...');
     // Load from media collection (same as gallery page)
     const mediaQuery = query(
       collection(this.firestore, 'media'),
@@ -201,9 +202,6 @@ export class HomePageComponent extends LoadingComponentBase implements OnInit {
         ...doc.data()
       })) as any[];
       
-      console.log('Gallery images loaded:', mediaItems.length);
-      console.log('First image:', mediaItems[0]);
-      
       // Convert media items to GalleryImage format for display
       this.galleryImages = mediaItems.map(media => ({
         id: media.id,
@@ -212,8 +210,6 @@ export class HomePageComponent extends LoadingComponentBase implements OnInit {
         uploadedAt: media.uploadedAt
       })) as GalleryImage[];
       
-      console.log('galleryImages set to:', this.galleryImages);
-      
       // Start auto-rotation if we have multiple images
       if (this.galleryImages.length > 1) {
         this.startImageRotation();
@@ -221,12 +217,7 @@ export class HomePageComponent extends LoadingComponentBase implements OnInit {
       
       this.setLoading(false);
     } catch (error: any) {
-      console.error('Error loading gallery:', error);
-      console.error('Error details:', {
-        code: error.code,
-        message: error.message,
-        stack: error.stack
-      });
+      this.logger.error('HomePage error loading gallery', error);
       this.setLoading(false);
     }
   }
@@ -240,7 +231,7 @@ export class HomePageComponent extends LoadingComponentBase implements OnInit {
           this.setLoading(false);
         },
         error: (error: any) => {
-          console.error('Error loading gallery:', error);
+          this.logger.error('HomePage error loading gallery', error);
           this.setLoading(false);
         }
       });

@@ -1,5 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { SettingsService } from './settings.service';
+import { environment } from '../../environments/environment';
 
 type LogLevel = 'error' | 'warn' | 'info' | 'debug';
 
@@ -21,7 +22,7 @@ export class LoggerService {
 
   private shouldLog(level: LogLevel): boolean {
     if (!this.settings) {
-      return true; // Default to showing all logs if settings not loaded
+      return !environment.production || level === 'error';
     }
 
     // If debug mode is off, only show errors

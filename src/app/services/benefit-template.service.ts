@@ -3,6 +3,7 @@ import { Firestore, collection, collectionData, doc, setDoc, updateDoc, deleteDo
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { BenefitTemplate } from '../models/benefit-template';
+import { LoggerService } from './logger.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +11,7 @@ import { BenefitTemplate } from '../models/benefit-template';
 export class BenefitTemplateService {
   private firestore = inject(Firestore);
   private templatesCollection = collection(this.firestore, 'benefitTemplates');
+  private logger = inject(LoggerService);
 
   /**
    * Get all benefit templates
@@ -50,7 +52,7 @@ export class BenefitTemplateService {
     return (collectionData(ordered, { idField: 'id' }) as Observable<BenefitTemplate[]>)
       .pipe(
         catchError(err => {
-          console.warn('[BenefitTemplateService] Missing index for ordered active templates, falling back without orderBy:', err?.message);
+          this.logger.debug('BenefitTemplateService missing index for ordered active templates, falling back without orderBy', err?.message);
           const fallback = query(
             this.templatesCollection,
             where('isActive', '==', true)

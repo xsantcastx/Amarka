@@ -24,6 +24,7 @@ import { Observable, from, of, switchMap } from 'rxjs';
 import { SettingsService } from './settings.service';
 import { EmailService } from './email.service';
 import { BrandConfigService } from '../core/services/brand-config.service';
+import { LoggerService } from './logger.service';
 
 export interface UserProfile {
   uid: string;
@@ -51,6 +52,7 @@ export class AuthService {
   private emailService = inject(EmailService);
   private brandConfig = inject(BrandConfigService);
   private router = inject(Router);
+  private logger = inject(LoggerService);
   
   // Observable of current user
   user$ = user(this.auth);
@@ -66,17 +68,6 @@ export class AuthService {
   constructor() {
     // Note: Firebase persistence is configured during provideAuth in app.config.ts.
     // Leaving constructor empty keeps this service tree-shakable and avoids duplicate init.
-    
-    // Monitor auth state changes for debugging
-    if (typeof window !== 'undefined') {
-      this.user$.subscribe(user => {
-        if (user) {
-          console.log('[Auth] User signed in:', user.email);
-        } else {
-          console.log('[Auth] User signed out or not authenticated');
-        }
-      });
-    }
   }
 
   // Register new user
@@ -93,11 +84,11 @@ export class AuthService {
         .filter(d => d.length > 0);
       
       if (allowedDomains.length > 0 && !allowedDomains.includes(emailDomain)) {
-        console.warn(`[AuthService] Email domain ${emailDomain} not in allowed list:`, allowedDomains);
+        this.logger.warn(`AuthService email domain ${emailDomain} not in allowed list`, allowedDomains);
         throw new Error(`Registration is restricted to the following email domains: ${settings.allowedDomains}`);
       }
       
-      console.log(`[AuthService] Email domain ${emailDomain} is allowed`);
+      this.logger.debug(`AuthService email domain ${emailDomain} is allowed`);
     }
     
     // Validate password length
@@ -187,7 +178,7 @@ export class AuthService {
         updatedAt: new Date()
       });
       
-      console.log('[AuthService] Successful login, reset attempts for:', user.email);
+      this.logger.debug('AuthService successful login, reset attempts for', user.email);
       return user;
       
     } catch (error: any) {
@@ -202,7 +193,7 @@ export class AuthService {
           const userData = userDocs[0].data() as UserProfile;
           const currentAttempts = (userData.loginAttempts || 0) + 1;
           
-          console.log(`[AuthService] Failed login attempt ${currentAttempts}/${settings.maxLoginAttempts} for:`, email);
+          this.logger.debug(`AuthService failed login attempt ${currentAttempts}/${settings.maxLoginAttempts} for`, email);
           
           const updateData: any = {
             loginAttempts: currentAttempts,
@@ -216,7 +207,7 @@ export class AuthService {
             const lockedUntil = new Date(Date.now() + lockDuration * 60000);
             updateData.lockedUntil = lockedUntil;
             
-            console.warn(`[AuthService] Account locked until ${lockedUntil} for:`, email);
+            this.logger.warn(`AuthService account locked until ${lockedUntil} for`, email);
             await updateDoc(doc(this.firestore, `users/${userData.uid}`), updateData);
             
             throw new Error(`Too many failed login attempts. Account locked for ${lockDuration} minutes.`);
@@ -363,12 +354,12 @@ export class AuthService {
       const settings = await this.settingsService.getSettings();
       
       if (!settings.newUserNotifications) {
-        console.log('[AuthService] New user notifications disabled, skipping email');
+        this.logger.debug('AuthService new user notifications disabled, skipping email');
         return;
       }
       
       const recipientEmail = settings.notificationEmail || settings.contactEmail;
-      console.log('[AuthService] Sending new user notification to:', recipientEmail);
+      this.logger.debug('AuthService sending new user notification to', recipientEmail);
       
       const emailData = {
         to: recipientEmail,
@@ -393,10 +384,10 @@ export class AuthService {
       
       const result = await this.emailService.queueEmail(emailData);
       if (result.success) {
-        console.log('[AuthService] New user notification email queued successfully');
+        this.logger.debug('AuthService new user notification email queued successfully');
       }
     } catch (error) {
-      console.error('[AuthService] Error sending new user notification:', error);
+      this.logger.error('AuthService error sending new user notification', error);
       // Don't throw - notification failure shouldn't break registration
     }
   }

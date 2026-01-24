@@ -12,9 +12,7 @@
     </a>
     <div class="p-6 space-y-3 flex flex-col flex-1">
       <h3 class="font-serif text-xl text-ts-ink">{{ product.name }}</h3>
-      <p class="text-sm text-ts-ink-soft">
-        <span *ngIf="product.sku">{{ product.sku }}</span>
-      </p>
+      <p class="text-sm text-ts-ink-soft"></p>
       <div class="flex items-center justify-between pt-2 mt-auto">
         <a [routerLink]="getProductRoute()"
            class="text-accent hover:underline font-medium transition-colors">
@@ -41,9 +39,7 @@
       </a>
       <div class="flex-1 p-6 space-y-3">
         <h3 class="font-serif text-2xl text-ts-ink">{{ product.name }}</h3>
-        <p class="text-ts-ink-soft">
-          <span *ngIf="product.sku">{{ product.sku }}</span>
-        </p>
+        <p class="text-ts-ink-soft"></p>
         <div class="flex items-center justify-between">
           <a [routerLink]="getProductRoute()"
              class="inline-flex items-center px-6 py-3 ring-2 ring-primary text-accent rounded-full font-semibold hover:bg-primary hover:text-neutral transition-colors">

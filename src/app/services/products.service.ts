@@ -8,6 +8,7 @@ import { ModelService } from './model.service';
 import { TemplateService } from './template.service';
 import { SettingsService } from './settings.service';
 import { EmailService } from './email.service';
+import { LoggerService } from './logger.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +20,7 @@ export class ProductsService {
   private templateService = inject(TemplateService);
   private settingsService = inject(SettingsService);
   private emailService = inject(EmailService);
+  private logger = inject(LoggerService);
 
   /**
    * Generate auto-filled data for a product based on templates
@@ -123,7 +125,21 @@ export class ProductsService {
       map(snapshot => snapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
-      } as Product)))
+      } as Product))),
+      catchError(err => {
+        this.logger.debug('ProductsService getFeaturedProducts index missing, falling back without orderBy', err?.message);
+        const fallbackQuery = query(
+          productsCol,
+          where('status', '==', 'published'),
+          limit(count)
+        );
+        return from(getDocs(fallbackQuery)).pipe(
+          map(snapshot => snapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+          } as Product)))
+        );
+      })
     );
   }
 
@@ -144,7 +160,7 @@ export class ProductsService {
     return from(getDocs(tagQuery)).pipe(
       map(snapshot => snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Product))),
       catchError(err => {
-        console.warn('[ProductsService] getProductsByTag index missing, falling back without orderBy:', err?.message);
+        this.logger.debug('ProductsService getProductsByTag index missing, falling back without orderBy', err?.message);
         const fallbackQuery = query(
           productsCol,
           where('tags', 'array-contains', tag),
