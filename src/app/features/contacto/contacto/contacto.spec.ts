@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { EmailService } from '../../../services/email.service';
 
 import { ContactoComponent } from './contacto';
 
@@ -8,7 +9,15 @@ describe('ContactoComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ContactoComponent]
+      imports: [ContactoComponent],
+      providers: [
+        {
+          provide: EmailService,
+          useValue: {
+            sendContactForm: () => Promise.resolve()
+          }
+        }
+      ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(ContactoComponent);

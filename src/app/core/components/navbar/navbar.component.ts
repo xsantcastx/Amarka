@@ -31,24 +31,24 @@ export class NavbarComponent implements OnInit, OnDestroy {
   private readonly brandConfig = inject(BrandConfigService);
   private readonly collectionsService = inject(CollectionsService);
   private readonly cdr = inject(ChangeDetectorRef);
-  
+
   scrolled = signal(false);
   mobileOpen = false;
   showUserMenu = false;
-  
+
   // Social media URLs from settings
   facebookUrl = '';
   twitterUrl = '';
   instagramUrl = '';
   linkedinUrl = '';
   youtubeUrl = '';
-  
+
   // Auth state
   user$ = this.authService.user$;
   userProfile$ = this.authService.userProfile$;
 
   brandName = this.brandConfig.siteName;
-  logoSrc = this.brandConfig.site.brand.logo;
+  logoSrc = this.brandConfig.site.brand.logo || 'assets/Logo.jpg';
   logoAlt = this.brandConfig.site.brand.logoAlt || this.brandName;
   readonly headerLinks = this.brandConfig.nav.header as NavLink[];
   navLinks: NavLink[] = [];
@@ -78,7 +78,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     if (isPlatformBrowser(this.platformId)) {
       this.scrolled.set(window.scrollY > 8);
     }
-    
+
     // Load settings
     this.settingsService.getSettings().then(settings => this.applySettings(settings));
 
@@ -94,7 +94,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   private applySettings(settings: AppSettings): void {
     this.brandName = settings.siteName || this.brandName;
-    this.logoSrc = settings.brandLogo || this.logoSrc;
+    this.logoSrc = settings.brandLogo || this.logoSrc || 'assets/Logo.jpg';
     this.logoAlt = this.brandName;
     this.facebookUrl = settings.facebookUrl || '';
     this.twitterUrl = settings.twitterUrl || '';

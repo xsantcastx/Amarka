@@ -54,6 +54,8 @@ export class ThemeManagerComponent implements OnDestroy {
   expanded = false;
   scope: ThemeScope = 'global';
   draft: ThemeDocument = this.themeService.activeThemeSnapshot();
+  paletteHex: Record<string, string> = {};
+  overrideHex: Record<string, { accent: string; neutral: string }> = {};
   isSaving = false;
   autoSave = true;
   private autoSaveTimer: ReturnType<typeof setTimeout> | null = null;
@@ -66,6 +68,7 @@ export class ThemeManagerComponent implements OnDestroy {
     // Defer draft sync to next task to avoid expression-changed errors
     queueMicrotask(() => {
       this.draft = nextDraft;
+      this.syncHexInputs(nextDraft);
       this.cdr.markForCheck();
     });
   });
@@ -75,6 +78,7 @@ export class ThemeManagerComponent implements OnDestroy {
   constructor() {
     // Enable preview mode while this component is alive and ignore personal overrides when editing global
     this.themeService.setPreviewMode(true, { ignoreUserTheme: this.scope === 'global' });
+    this.syncHexInputs(this.draft);
   }
 
   ngOnDestroy(): void {
@@ -96,8 +100,12 @@ export class ThemeManagerComponent implements OnDestroy {
   }
 
   updatePalette(key: keyof ThemePalette, value: string): void {
-    const normalized = this.normalizeColor(value);
+    const normalized = this.normalizeHex(value);
+    if (!normalized) {
+      return;
+    }
     this.draft.palette[key] = normalized;
+    this.paletteHex[key] = this.toHex(normalized);
     this.previewDraft();
     this.cdr.markForCheck();
   }
@@ -133,7 +141,10 @@ export class ThemeManagerComponent implements OnDestroy {
   }
 
   updateOverride(component: string, key: keyof ThemePalette, value: string): void {
-    const normalized = this.normalizeColor(value);
+    const normalized = this.normalizeHex(value);
+    if (!normalized) {
+      return;
+    }
     const overrides = this.draft.overrides ?? {};
     const existing = overrides[component] ?? { palette: {} };
     overrides[component] = {
@@ -141,6 +152,11 @@ export class ThemeManagerComponent implements OnDestroy {
       palette: { ...(existing.palette ?? {}), [key]: normalized }
     };
     this.draft.overrides = overrides;
+    const current = this.overrideHex[component] ?? { accent: '', neutral: '' };
+    this.overrideHex[component] = {
+      ...current,
+      [key]: this.toHex(normalized)
+    };
     this.previewDraft();
     this.cdr.markForCheck();
   }
@@ -218,6 +234,7 @@ export class ThemeManagerComponent implements OnDestroy {
       ...this.draft,
       palette: { ...preset.palette }
     };
+    this.syncHexInputs(this.draft);
     this.previewDraft();
     this.cdr.detectChanges();
 
@@ -252,16 +269,18 @@ export class ThemeManagerComponent implements OnDestroy {
     return value.includes(' ') ? `rgb(${value})` : value;
   }
 
-  private normalizeColor(value: string): string {
-    if (!value) return '';
+  private normalizeHex(value: string): string | null {
+    if (!value) return null;
     const trimmed = value.trim();
-    if (/^\d+\s+\d+\s+\d+/.test(trimmed)) {
-      return trimmed;
+    if (!this.isValidHex(trimmed)) {
+      return null;
     }
-    if (trimmed.startsWith('#')) {
-      return this.hexToRgbString(trimmed);
-    }
-    return trimmed;
+    const normalized = trimmed.startsWith('#') ? trimmed : `#${trimmed}`;
+    return this.hexToRgbString(normalized);
+  }
+
+  private isValidHex(value: string): boolean {
+    return /^#?[0-9a-fA-F]{3}([0-9a-fA-F]{3})?$/.test(value.trim());
   }
 
   private hexToRgbString(hex: string): string {
@@ -279,6 +298,20 @@ export class ThemeManagerComponent implements OnDestroy {
 
   private clone(theme: ThemeDocument): ThemeDocument {
     return JSON.parse(JSON.stringify(theme));
+  }
+
+  private syncHexInputs(theme: ThemeDocument): void {
+    this.paletteKeys.forEach(({ key }) => {
+      this.paletteHex[key] = this.toHex(theme.palette[key]);
+    });
+
+    this.componentOverrides.forEach(({ key }) => {
+      const palette = theme.overrides?.[key]?.palette ?? {};
+      this.overrideHex[key] = {
+        accent: this.toHex(palette.accent || theme.palette.accent),
+        neutral: this.toHex(palette.neutral || theme.palette.neutral)
+      };
+    });
   }
 
   private queueAutoSave(): void {

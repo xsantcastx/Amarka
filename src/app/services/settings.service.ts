@@ -99,29 +99,6 @@ export interface AppSettings {
   hideOutOfStock: boolean;
   stockReserveTime: number;
 
-  // Theme Customization
-  themeAccentColor: string;
-  themeAccentSoft: string;
-  themeAccentDark: string;
-  themeInkColor: string;
-  themeInkSoft: string;
-  themeBgColor: string;
-  themePaperColor: string;
-  themeLineColor: string;
-
-  // Theme Profiles
-  activeThemeProfile: string; // 'profile1' | 'profile2' | 'profile3' | 'profile4' | 'profile5' | 'custom'
-  themeProfile1Name: string;
-  themeProfile1Data: string; // JSON string of theme colors
-  themeProfile2Name: string;
-  themeProfile2Data: string;
-  themeProfile3Name: string;
-  themeProfile3Data: string;
-  themeProfile4Name: string;
-  themeProfile4Data: string;
-  themeProfile5Name: string;
-  themeProfile5Data: string;
-
   // Home Hero Images
   heroImagesJson: string; // JSON string of HeroImage[]
 
@@ -146,17 +123,6 @@ export interface HeroImage {
   description: string;
   order: number;
   active: boolean;
-}
-
-export interface ThemeProfile {
-  themeAccentColor: string;
-  themeAccentSoft: string;
-  themeAccentDark: string;
-  themeInkColor: string;
-  themeInkSoft: string;
-  themeBgColor: string;
-  themePaperColor: string;
-  themeLineColor: string;
 }
 
 // Sensitive fields that should never be sent to frontend
@@ -509,73 +475,6 @@ export class SettingsService {
       contactoHeroTitle: 'Tell us about your celebration',
       contactoHeroSubtitle: 'Share your date, location, and vision. We respond within one business day to craft a bespoke plan for your event.',
 
-      // Theme Customization
-      themeAccentColor: '#a8c5a4',
-      themeAccentSoft: '#c1d5be',
-      themeAccentDark: '#8aab85',
-      themeInkColor: '#1d2a39',
-      themeInkSoft: '#3f5f47',
-      themeBgColor: '#f8f9fa',
-      themePaperColor: '#ffffff',
-      themeLineColor: '#e5e7eb',
-
-      // Theme Profiles
-      activeThemeProfile: 'custom',
-      themeProfile1Name: 'Spring Bloom',
-      themeProfile1Data: JSON.stringify({
-        themeAccentColor: '#ff69b4',
-        themeAccentSoft: '#ffb3d9',
-        themeAccentDark: '#d5578f',
-        themeInkColor: '#2d1b2e',
-        themeInkSoft: '#5a4a5e',
-        themeBgColor: '#fff5f8',
-        themePaperColor: '#ffffff',
-        themeLineColor: '#ffe0ec'
-      }),
-      themeProfile2Name: 'Summer Sunshine',
-      themeProfile2Data: JSON.stringify({
-        themeAccentColor: '#ffa500',
-        themeAccentSoft: '#ffc04d',
-        themeAccentDark: '#e69500',
-        themeInkColor: '#2c1810',
-        themeInkSoft: '#6b4423',
-        themeBgColor: '#fffbf0',
-        themePaperColor: '#ffffff',
-        themeLineColor: '#ffe8c5'
-      }),
-      themeProfile3Name: 'Autumn Harvest',
-      themeProfile3Data: JSON.stringify({
-        themeAccentColor: '#d2691e',
-        themeAccentSoft: '#e89b5e',
-        themeAccentDark: '#a0501a',
-        themeInkColor: '#3d2817',
-        themeInkSoft: '#6b4a2f',
-        themeBgColor: '#fdf8f3',
-        themePaperColor: '#ffffff',
-        themeLineColor: '#f0dcc8'
-      }),
-      themeProfile4Name: 'Winter Frost',
-      themeProfile4Data: JSON.stringify({
-        themeAccentColor: '#4a90e2',
-        themeAccentSoft: '#7eb2f5',
-        themeAccentDark: '#3a75c4',
-        themeInkColor: '#1a2f4a',
-        themeInkSoft: '#3d5a7a',
-        themeBgColor: '#f5f9ff',
-        themePaperColor: '#ffffff',
-        themeLineColor: '#d6e8ff'
-      }),
-      themeProfile5Name: 'Sage Garden (Default)',
-      themeProfile5Data: JSON.stringify({
-        themeAccentColor: '#a8c5a4',
-        themeAccentSoft: '#c1d5be',
-        themeAccentDark: '#8aab85',
-        themeInkColor: '#1d2a39',
-        themeInkSoft: '#3f5f47',
-        themeBgColor: '#f8f9fa',
-        themePaperColor: '#ffffff',
-        themeLineColor: '#e5e7eb'
-      })
     };
   }
 

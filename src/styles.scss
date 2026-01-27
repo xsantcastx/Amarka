@@ -78,15 +78,41 @@
   --shadow-soft: 0 28px 60px -35px rgba(29, 42, 57, 0.25);
   --shadow-hover: 0 18px 40px -30px rgba(29, 42, 57, 0.28);
   --shadow-focus: 0 0 0 1px color-mix(in srgb, var(--ts-accent) 45%, transparent), 0 18px 42px -30px rgba(29, 42, 57, 0.32);
-  --nav-height: 6.5rem;
+  --nav-height: 11rem;
   --content-offset: clamp(2.5rem, 6vw, 3.75rem);
   --section-spacing: clamp(3rem, 8vw, 5rem);
   --container-inline-padding: clamp(1.25rem, 5vw, 2.5rem);
+
+  /* Button tokens (driven by theme manager button style) */
+  --btn-primary-bg: var(--ts-accent);
+  --btn-primary-text: var(--on-primary, #1d2a39);
+  --btn-primary-border: color-mix(in srgb, var(--ts-accent) 45%, transparent);
+  --btn-primary-shadow: 0 12px 30px -22px rgba(29, 42, 57, 0.35);
+  --btn-primary-hover-bg: color-mix(in srgb, var(--ts-accent) 88%, #000 12%);
+  --btn-primary-hover-shadow: 0 14px 32px -20px rgba(29, 42, 57, 0.4);
+}
+
+:root[data-theme-button-style="outline"] {
+  --btn-primary-bg: transparent;
+  --btn-primary-text: var(--ts-accent);
+  --btn-primary-border: var(--ts-accent);
+  --btn-primary-shadow: none;
+  --btn-primary-hover-bg: color-mix(in srgb, var(--ts-accent) 12%, transparent);
+  --btn-primary-hover-shadow: none;
+}
+
+:root[data-theme-button-style="ghost"] {
+  --btn-primary-bg: transparent;
+  --btn-primary-text: var(--ts-accent);
+  --btn-primary-border: transparent;
+  --btn-primary-shadow: none;
+  --btn-primary-hover-bg: color-mix(in srgb, var(--ts-accent) 12%, transparent);
+  --btn-primary-hover-shadow: none;
 }
 
 @media (max-width: 768px) {
   :root {
-    --nav-height: 6rem;
+    --nav-height: 8.5rem;
     --content-offset: clamp(2rem, 7vw, 3rem);
     --section-spacing: clamp(2.75rem, 10vw, 4.25rem);
     --container-inline-padding: clamp(1.1rem, 6vw, 1.9rem);
@@ -95,7 +121,7 @@
 
 @media (max-width: 480px) {
   :root {
-    --nav-height: 5.5rem;
+    --nav-height: 8.5rem;
     --content-offset: clamp(1.75rem, 9vw, 2.6rem);
     --section-spacing: clamp(2.25rem, 12vw, 3.75rem);
   }
@@ -488,6 +514,11 @@ a:hover {
     --ts-accent-soft: color-mix(in srgb, var(--ts-accent) 55%, var(--accent-warm) 45%);
   }
 
+  :where(button, a, [role="button"])[class*="bg-gradient-to-"] {
+    background-image: none !important;
+    background-color: var(--tw-gradient-from, var(--ts-accent)) !important;
+  }
+
   button,
   input[type="button"],
   input[type="submit"] {
@@ -546,7 +577,8 @@ a:hover {
     @apply focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ts-accent;
     letter-spacing: 0.01em;
     border: 1px solid transparent;
-    background: linear-gradient(135deg, color-mix(in srgb, #111827 85%, #1b2532 15%), color-mix(in srgb, #1f2937 80%, #111827 20%));
+    background-color: #111827;
+    background-image: none;
     color: #f9fafb;
     box-shadow: 0 12px 26px -20px rgba(10, 14, 22, 0.45);
     cursor: pointer;
@@ -563,17 +595,17 @@ a:hover {
   }
 
   .ts-btn-primary {
-    background: linear-gradient(135deg, color-mix(in srgb, var(--ts-accent) 82%, var(--accent-warm) 18%), color-mix(in srgb, var(--ts-accent) 65%, var(--accent-warm) 35%));
-    color: #ffffff;
+    background-color: var(--btn-primary-bg);
+    background-image: none;
+    color: var(--btn-primary-text);
     font-weight: 600;
-    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
-    box-shadow: 0 18px 36px -26px color-mix(in srgb, var(--ts-accent) 35%, transparent);
-    border: 1px solid color-mix(in srgb, var(--ts-accent) 45%, transparent);
+    box-shadow: var(--btn-primary-shadow);
+    border: 1px solid var(--btn-primary-border);
   }
 
   .ts-btn-primary:hover {
-    filter: brightness(1.1);
-    box-shadow: 0 22px 44px -28px color-mix(in srgb, var(--ts-accent) 45%, transparent);
+    background-color: var(--btn-primary-hover-bg);
+    box-shadow: var(--btn-primary-hover-shadow);
     transform: translateY(-2px);
   }
 
@@ -601,7 +633,8 @@ a:hover {
   }
 
   .ts-btn-danger {
-    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    background-color: #dc2626;
+    background-image: none;
     color: var(--on-primary);
     box-shadow: 0 16px 32px -24px color-mix(in srgb, #ef4444 34%, transparent);
   }
@@ -611,7 +644,8 @@ a:hover {
   }
 
   .ts-btn-success {
-    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+    background-color: #16a34a;
+    background-image: none;
     color: var(--on-primary);
     box-shadow: 0 16px 32px -24px color-mix(in srgb, #22c55e 28%, transparent);
   }

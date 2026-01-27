@@ -100,8 +100,8 @@ const DEFAULT_THEME: ThemeDocument = {
   },
   presets: [
     {
-      id: 'sage-blush',
-      name: 'Sage & Blush',
+      id: 'default',
+      name: 'Default',
       scope: 'global',
       palette: {
         primary: '168 197 164',
@@ -116,104 +116,8 @@ const DEFAULT_THEME: ThemeDocument = {
       }
     },
     {
-      id: 'noir-gold',
-      name: 'Noir & Gold',
-      scope: 'global',
-      palette: {
-        primary: '215 180 88',
-        secondary: '255 235 200',
-        accent: '38 38 38',
-        neutral: '24 24 27',
-        surface: '255 255 255',
-        background: '245 242 235',
-        success: '46 204 113',
-        warning: '245 158 11',
-        error: '239 68 68'
-      }
-    },
-    {
-      id: 'midnight-luxe',
-      name: 'Midnight Luxe',
-      scope: 'global',
-      palette: {
-        primary: '92 106 196',
-        secondary: '147 197 253',
-        accent: '15 23 42',
-        neutral: '24 33 54',
-        surface: '19 26 45',
-        background: '13 19 34',
-        success: '52 211 153',
-        warning: '251 191 36',
-        error: '248 113 113'
-      }
-    },
-    {
-      id: 'electric-blue',
-      name: 'Electric Blue',
-      scope: 'global',
-      palette: {
-        primary: '14 165 233',
-        secondary: '125 211 252',
-        accent: '3 105 161',
-        neutral: '15 23 42',
-        surface: '255 255 255',
-        background: '248 250 252',
-        success: '34 197 94',
-        warning: '251 146 60',
-        error: '239 68 68'
-      }
-    },
-    {
-      id: 'crypto-orange',
-      name: 'Crypto Orange',
-      scope: 'global',
-      palette: {
-        primary: '251 146 60',
-        secondary: '254 215 170',
-        accent: '194 65 12',
-        neutral: '28 25 23',
-        surface: '255 255 255',
-        background: '250 250 249',
-        success: '34 197 94',
-        warning: '234 179 8',
-        error: '239 68 68'
-      }
-    },
-    {
-      id: 'emerald-tech',
-      name: 'Emerald Tech',
-      scope: 'global',
-      palette: {
-        primary: '16 185 129',
-        secondary: '167 243 208',
-        accent: '6 95 70',
-        neutral: '17 24 39',
-        surface: '255 255 255',
-        background: '249 250 251',
-        success: '34 197 94',
-        warning: '251 191 36',
-        error: '239 68 68'
-      }
-    },
-    {
-      id: 'violet-power',
-      name: 'Violet Power',
-      scope: 'global',
-      palette: {
-        primary: '139 92 246',
-        secondary: '196 181 253',
-        accent: '88 28 135',
-        neutral: '23 23 23',
-        surface: '255 255 255',
-        background: '250 250 250',
-        success: '34 197 94',
-        warning: '251 191 36',
-        error: '239 68 68'
-      }
-    },
-    {
-      id: 'dark-slate',
-      name: 'Dark Slate',
+      id: 'dark',
+      name: 'Dark',
       scope: 'global',
       palette: {
         primary: '100 116 139',
@@ -228,67 +132,35 @@ const DEFAULT_THEME: ThemeDocument = {
       }
     },
     {
-      id: 'mining-green',
-      name: 'Mining Green',
+      id: 'high-contrast',
+      name: 'High Contrast',
       scope: 'global',
       palette: {
-        primary: '74 222 128',
-        secondary: '187 247 208',
-        accent: '21 128 61',
-        neutral: '20 20 20',
+        primary: '0 0 0',
+        secondary: '255 255 0',
+        accent: '0 0 0',
+        neutral: '0 0 0',
         surface: '255 255 255',
-        background: '247 254 231',
-        success: '34 197 94',
-        warning: '234 179 8',
-        error: '220 38 38'
+        background: '255 255 255',
+        success: '0 128 0',
+        warning: '255 204 0',
+        error: '204 0 0'
       }
     },
     {
-      id: 'bitcoin-gold',
-      name: 'Bitcoin Gold',
+      id: 'brand',
+      name: 'Brand preset',
       scope: 'global',
       palette: {
-        primary: '247 147 26',
-        secondary: '253 224 71',
-        accent: '161 98 7',
-        neutral: '23 23 23',
+        primary: '199 104 59',
+        secondary: '229 155 115',
+        accent: '75 59 47',
+        neutral: '23 19 15',
         surface: '255 255 255',
-        background: '254 252 232',
-        success: '34 197 94',
-        warning: '234 179 8',
-        error: '220 38 38'
-      }
-    },
-    {
-      id: 'deep-ocean',
-      name: 'Deep Ocean',
-      scope: 'global',
-      palette: {
-        primary: '6 182 212',
-        secondary: '103 232 249',
-        accent: '8 51 68',
-        neutral: '240 249 255',
-        surface: '12 74 110',
-        background: '8 47 73',
-        success: '52 211 153',
-        warning: '251 191 36',
-        error: '248 113 113'
-      }
-    },
-    {
-      id: 'rose-tech',
-      name: 'Rose Tech',
-      scope: 'global',
-      palette: {
-        primary: '244 63 94',
-        secondary: '251 207 232',
-        accent: '159 18 57',
-        neutral: '23 23 23',
-        surface: '255 255 255',
-        background: '255 250 250',
-        success: '34 197 94',
-        warning: '251 191 36',
-        error: '220 38 38'
+        background: '247 240 231',
+        success: '46 204 113',
+        warning: '241 196 15',
+        error: '231 76 60'
       }
     }
   ]
@@ -537,6 +409,18 @@ export class ThemeService {
     root.style.setProperty('--bitcoin-gold', mix(primary, 80, surface));
     root.style.setProperty('--luxury-gold', mix(primary, 75, accent));
 
+    // Legacy layout tokens to keep older styles in sync
+    const muted = mix(neutral, 70, primary);
+    const onPrimary = this.pickReadableTextColor(palette.primary);
+    root.style.setProperty('--bg-surface', background);
+    root.style.setProperty('--bg-elevated', surface);
+    root.style.setProperty('--text', neutral);
+    root.style.setProperty('--muted', muted);
+    root.style.setProperty('--primary', primary);
+    root.style.setProperty('--on-primary', onPrimary);
+    root.style.setProperty('--border', mix(primary, 35, 'transparent'));
+    root.style.setProperty('--overlay', mix(neutral, 8, 'transparent'));
+
     const radiusTokens: Record<RadiusLevel, string> = {
       xs: '4px',
       sm: '6px',
@@ -591,6 +475,7 @@ export class ThemeService {
     root.style.setProperty('--container-inline-padding', pagePadding);
     root.style.setProperty('--theme-button-style', theme.buttonStyle);
     root.setAttribute('data-theme-mode', theme.mode);
+    root.setAttribute('data-theme-button-style', theme.buttonStyle);
 
     const overrides = theme.overrides ?? {};
     Object.entries(overrides).forEach(([componentKey, override]) => {
@@ -700,5 +585,39 @@ export class ThemeService {
     } catch (error) {
       console.warn('[theme] Failed to load cached theme', error);
     }
+  }
+
+  private parseColor(value: string): [number, number, number] | null {
+    if (!value) return null;
+    const trimmed = value.trim();
+    if (trimmed.startsWith('rgb')) {
+      const parts = trimmed.match(/\d+/g)?.map(Number) ?? [];
+      if (parts.length >= 3) return [parts[0], parts[1], parts[2]];
+      return null;
+    }
+    if (trimmed.includes(' ')) {
+      const parts = trimmed.split(/\s+/).map(part => parseInt(part, 10));
+      if (parts.length >= 3 && parts.every(n => !Number.isNaN(n))) {
+        return [parts[0], parts[1], parts[2]];
+      }
+      return null;
+    }
+    const hex = trimmed.startsWith('#') ? trimmed.slice(1) : trimmed;
+    if (!/^[0-9a-fA-F]{3}([0-9a-fA-F]{3})?$/.test(hex)) {
+      return null;
+    }
+    const expanded = hex.length === 3 ? hex.split('').map(c => c + c).join('') : hex;
+    const r = parseInt(expanded.slice(0, 2), 16);
+    const g = parseInt(expanded.slice(2, 4), 16);
+    const b = parseInt(expanded.slice(4, 6), 16);
+    return [r, g, b];
+  }
+
+  private pickReadableTextColor(value: string): string {
+    const rgb = this.parseColor(value);
+    if (!rgb) return '#ffffff';
+    const [r, g, b] = rgb;
+    const luminance = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
+    return luminance > 0.6 ? '#1d2a39' : '#ffffff';
   }
 }

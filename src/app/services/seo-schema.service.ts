@@ -196,7 +196,7 @@ export class SeoSchemaService {
         name: this.brandConfig.siteName,
         logo: {
           '@type': 'ImageObject',
-          url: 'https://amarka.com/assets/brand/amarka-logo.svg'
+          url: this.getAbsoluteLogoUrl()
         }
       },
       mainEntityOfPage: {
@@ -306,6 +306,13 @@ export class SeoSchemaService {
     const date = new Date();
     date.setFullYear(date.getFullYear() + 1);
     return date.toISOString().split('T')[0];
+  }
+
+  private getAbsoluteLogoUrl(): string {
+    const logo = this.brandConfig.site.brand.logo || '/Logo Clear.png';
+    const siteUrl = this.brandConfig.siteUrl.replace(/\/$/, '');
+    const path = logo.startsWith('/') ? logo : `/${logo}`;
+    return `${siteUrl}${path}`;
   }
 
   /**

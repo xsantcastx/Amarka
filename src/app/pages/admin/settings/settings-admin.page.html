@@ -66,114 +66,6 @@
                 <app-hero-images-manager></app-hero-images-manager>
               } @else {
               
-              <!-- Theme Profiles Section -->
-              @if (section.title === 'Theme Customization') {
-                <div class="mb-6 p-5 bg-ts-accent/5 border border-ts-accent/20 rounded-xl">
-                  <div class="flex items-center gap-2 mb-4">
-                    <svg class="w-5 h-5 text-ts-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path>
-                    </svg>
-                    <h3 class="text-lg font-semibold text-ts-ink">Theme Profiles</h3>
-                  </div>
-                  <p class="text-sm text-ts-ink/70 mb-4">Save and switch between different color themes</p>
-                  
-                  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                    @for (profile of themeProfiles; track profile.id) {
-                      <div class="relative p-4 rounded-lg border transition-all"
-                           [class.border-ts-accent]="activeProfileId === profile.id"
-                           [class.bg-ts-accent/10]="activeProfileId === profile.id"
-                           [class.border-ts-line]="activeProfileId !== profile.id"
-                           [class.bg-ts-paper]="activeProfileId !== profile.id">
-                        
-                        <!-- Profile Name -->
-                        <div class="flex items-center justify-between mb-3">
-                          @if (editingProfileId === profile.id) {
-                            <input
-                              type="text"
-                              [(ngModel)]="editingProfileName"
-                              (keyup.enter)="saveProfileName(profile.id)"
-                              (keyup.escape)="cancelEditingProfileName()"
-                              class="flex-1 px-2 py-1 text-sm font-medium bg-ts-bg border border-ts-accent rounded focus:outline-none focus:ring-2 focus:ring-ts-accent/50"
-                              [attr.autofocus]="true">
-                          } @else {
-                            <span class="text-sm font-medium" 
-                                  [class.text-ts-accent]="activeProfileId === profile.id"
-                                  [class.text-ts-ink]="activeProfileId !== profile.id">
-                              {{ profile.name }}
-                            </span>
-                          }
-                          
-                          @if (editingProfileId === profile.id) {
-                            <div class="flex gap-1">
-                              <button (click)="saveProfileName(profile.id)" 
-                                      class="p-1 text-green-600 hover:bg-green-500/10 rounded">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                </svg>
-                              </button>
-                              <button (click)="cancelEditingProfileName()" 
-                                      class="p-1 text-red-600 hover:bg-red-500/10 rounded">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                </svg>
-                              </button>
-                            </div>
-                          } @else {
-                            <button (click)="startEditingProfileName(profile.id)" 
-                                    class="p-1 text-ts-ink/50 hover:text-ts-accent hover:bg-ts-accent/10 rounded">
-                              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
-                              </svg>
-                            </button>
-                          }
-                        </div>
-
-                        <!-- Color Preview -->
-                        @if (profile.colors) {
-                          <div class="flex gap-1.5 mb-3">
-                            <div class="w-6 h-6 rounded border border-ts-line" [style.background-color]="profile.colors.themeAccentColor"></div>
-                            <div class="w-6 h-6 rounded border border-ts-line" [style.background-color]="profile.colors.themeInkColor"></div>
-                            <div class="w-6 h-6 rounded border border-ts-line" [style.background-color]="profile.colors.themeBgColor"></div>
-                            <div class="w-6 h-6 rounded border border-ts-line" [style.background-color]="profile.colors.themePaperColor"></div>
-                          </div>
-                        } @else {
-                          <div class="mb-3 text-xs text-ts-ink/50 italic">Empty slot</div>
-                        }
-
-                        <!-- Actions -->
-                        <div class="flex gap-2">
-                          @if (profile.colors) {
-                            <button (click)="loadProfile(profile.id)" 
-                                    [disabled]="activeProfileId === profile.id"
-                                    class="flex-1 px-3 py-1.5 text-xs font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                                    [class.bg-ts-accent]="activeProfileId === profile.id"
-                                    [class.text-white]="activeProfileId === profile.id"
-                                    [class.bg-ts-bg]="activeProfileId !== profile.id"
-                                    [class.text-ts-ink]="activeProfileId !== profile.id"
-                                    [class.hover:bg-ts-accent/20]="activeProfileId !== profile.id">
-                              {{ activeProfileId === profile.id ? 'Active' : 'Load' }}
-                            </button>
-                            <button (click)="clearProfile(profile.id)" 
-                                    class="px-3 py-1.5 text-xs font-medium bg-red-500/10 text-red-600 rounded-lg hover:bg-red-500/20 transition-colors">
-                              Clear
-                            </button>
-                          } @else {
-                            <button (click)="saveToProfile(profile.id)" 
-                                    class="flex-1 px-3 py-1.5 text-xs font-medium bg-ts-accent/20 text-ts-accent rounded-lg hover:bg-ts-accent/30 transition-colors">
-                              Save Current
-                            </button>
-                          }
-                        </div>
-                      </div>
-                    }
-                  </div>
-                  
-                  <div class="mt-4 text-sm text-ts-ink/70">
-                    <p class="mb-2">💡 <strong>Tip:</strong> Make changes to the color fields below, then click "Save Current" on any profile card to save your custom theme.</p>
-                  </div>
-                </div>
-              }
-              
               @for (setting of section.settings; track setting.key) {
               @if (!setting.hidden) {
               <div>
@@ -211,86 +103,27 @@
                         readonly
                         class="w-full px-4 py-2 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink placeholder-ts-ink/50 opacity-60 cursor-not-allowed">
                     } @else {
-                      <!-- Check if this is a theme color field -->
-                      @if (setting.key.toString().includes('theme')) {
-                        <div class="space-y-3">
-                          <div class="flex gap-2 items-center">
-                            <input
-                              type="color"
-                              [(ngModel)]="setting.value"
-                              (ngModelChange)="onSettingValueChange()"
-                              [ngModelOptions]="{ standalone: true }"
-                              class="h-10 w-16 rounded border border-ts-line cursor-pointer">
-                            <input
-                              type="text"
-                              [(ngModel)]="setting.value"
-                              (ngModelChange)="onSettingValueChange()"
-                              [ngModelOptions]="{ standalone: true }"
-                              [attr.id]="getFieldId(section.title, setting.key)"
-                              [attr.name]="getFieldId(section.title, setting.key)"
-                              [disabled]="isDisabled(setting)"
-                              [placeholder]="setting.placeholder || ''"
-                              class="flex-1 px-4 py-2 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink placeholder-ts-ink/50 focus:border-ts-accent focus:ring-2 focus:ring-ts-accent/50 transition-all disabled:opacity-60 disabled:cursor-not-allowed font-mono text-sm">
-                          </div>
-                          <!-- Color Preview -->
-                          <div class="p-4 bg-ts-bg border border-ts-line rounded-lg">
-                            <div class="text-xs font-medium text-ts-ink/70 mb-3">Preview:</div>
-                            @if (setting.key.toString().includes('Accent')) {
-                              <div class="flex flex-wrap gap-2">
-                                <button class="btn-primary text-white" [style.background-color]="setting.value" [style.border-color]="setting.value">
-                                  Primary Button
-                                </button>
-                                <button class="btn-secondary" [style.background-color]="setting.value + '20'" [style.border-color]="setting.value + '40'" [style.color]="setting.value">
-                                  Secondary Button
-                                </button>
-                                <span class="badge" [style.background-color]="setting.value + '20'" [style.color]="setting.value">Badge</span>
-                              </div>
-                            } @else if (setting.key.toString().includes('Ink')) {
-                              <div class="space-y-2 p-3 bg-white rounded">
-                                <h4 class="text-lg font-semibold" [style.color]="setting.value">Heading Text</h4>
-                                <p class="text-sm" [style.color]="setting.value">Body text example</p>
-                              </div>
-                            } @else if (setting.key.toString().includes('Bg')) {
-                              <div class="p-3 rounded border border-ts-line" [style.background-color]="setting.value">
-                                <div class="text-ts-ink text-sm font-medium">Background color preview</div>
-                              </div>
-                            } @else if (setting.key.toString().includes('Paper')) {
-                              <div class="p-3 rounded border-2 border-ts-accent/30" [style.background-color]="setting.value">
-                                <div class="text-ts-ink text-sm font-medium">Card/Paper background</div>
-                              </div>
-                            } @else if (setting.key.toString().includes('Line')) {
-                              <div class="space-y-2">
-                                <div class="h-px" [style.background-color]="setting.value"></div>
-                                <div class="p-3 rounded border-2 bg-white" [style.border-color]="setting.value">
-                                  <div class="text-ts-ink text-sm font-medium">Border color preview</div>
-                                </div>
-                              </div>
-                            }
-                          </div>
+                      <input
+                        type="text"
+                        [(ngModel)]="setting.value"
+                        (ngModelChange)="onSettingValueChange()"
+                        [ngModelOptions]="{ standalone: true }"
+                        [attr.id]="getFieldId(section.title, setting.key)"
+                        [attr.name]="getFieldId(section.title, setting.key)"
+                        [disabled]="isDisabled(setting)"
+                        [placeholder]="setting.placeholder || ''"
+                        class="w-full px-4 py-2 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink placeholder-ts-ink/50 focus:border-ts-accent focus:ring-2 focus:ring-ts-accent/50 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+                        (input)="setting.sensitive ? onSensitiveInput(setting, $event) : null">
+                      <!-- Preview for site title and description -->
+                      @if (setting.key.toString() === 'siteTitle' || setting.key.toString() === 'siteDescription') {
+                        <div class="mt-3 p-4 bg-ts-bg border border-ts-line rounded-lg">
+                          <div class="text-xs font-medium text-ts-ink/70 mb-2">Preview:</div>
+                          @if (setting.key.toString() === 'siteTitle') {
+                            <h3 class="text-xl font-bold text-ts-ink">{{ setting.value || 'Site Title' }}</h3>
+                          } @else {
+                            <p class="text-sm text-ts-ink/70">{{ setting.value || 'Site description will appear here...' }}</p>
+                          }
                         </div>
-                      } @else {
-                        <input
-                          type="text"
-                          [(ngModel)]="setting.value"
-                          (ngModelChange)="onSettingValueChange()"
-                          [ngModelOptions]="{ standalone: true }"
-                          [attr.id]="getFieldId(section.title, setting.key)"
-                          [attr.name]="getFieldId(section.title, setting.key)"
-                          [disabled]="isDisabled(setting)"
-                          [placeholder]="setting.placeholder || ''"
-                          class="w-full px-4 py-2 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink placeholder-ts-ink/50 focus:border-ts-accent focus:ring-2 focus:ring-ts-accent/50 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
-                          (input)="setting.sensitive ? onSensitiveInput(setting, $event) : null">
-                        <!-- Preview for site title and description -->
-                        @if (setting.key.toString() === 'siteTitle' || setting.key.toString() === 'siteDescription') {
-                          <div class="mt-3 p-4 bg-ts-bg border border-ts-line rounded-lg">
-                            <div class="text-xs font-medium text-ts-ink/70 mb-2">Preview:</div>
-                            @if (setting.key.toString() === 'siteTitle') {
-                              <h3 class="text-xl font-bold text-ts-ink">{{ setting.value || 'Site Title' }}</h3>
-                            } @else {
-                              <p class="text-sm text-ts-ink/70">{{ setting.value || 'Site description will appear here...' }}</p>
-                            }
-                          </div>
-                        }
                       }
                     }
                   }
@@ -635,7 +468,7 @@
       <button
         (click)="saveSettings()"
         [disabled]="isSaving"
-        class="px-8 py-3 bg-bitcoin-orange text-white rounded-xl font-semibold hover:bg-bitcoin-orange/90 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
+        class="ts-btn ts-btn-primary ts-btn-lg flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
         @if (isSaving) {
           <div class="app-spinner" style="--spinner-size: 72px;"><img src="/Logo Clear.png" alt="Loading" width="96" height="96"></div>
           {{ 'admin.settings.actions.saving' | translate }}

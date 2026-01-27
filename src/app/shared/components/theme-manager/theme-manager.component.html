@@ -9,7 +9,7 @@
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path>
       </svg>
     </div>
-    <h2 class="text-xl font-bold text-ts-ink flex-1 text-left">Webpage Layout</h2>
+    <h2 class="text-xl font-bold text-ts-ink flex-1 text-left">Theme &amp; Layout Manager</h2>
     <!-- Chevron Icon -->
     <svg 
       class="w-5 h-5 text-ts-ink opacity-70 transition-transform duration-200"
@@ -26,7 +26,7 @@
     <div class="p-6 space-y-6">
       <div class="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <p class="text-sm text-ts-ink/60">Live preview writes CSS variables; saving persists to Firestore.</p>
+          <p class="text-sm text-ts-ink/60">Live preview writes CSS variables; saving persists to Firestore. Hex colors only.</p>
           <p class="text-xs text-ts-ink/50">Paths: themes/global and users/&lt;uid&gt;/themes/custom.</p>
         </div>
         <div class="flex flex-wrap gap-3 items-center justify-end">
@@ -76,14 +76,14 @@
           <input
             type="color"
             class="h-10 w-16 rounded border border-ts-line cursor-pointer"
-            [value]="toHex(draft.palette[palette.key])"
-            (input)="updatePalette(palette.key, $any($event.target).value)">
+            [(ngModel)]="paletteHex[palette.key]"
+            (ngModelChange)="updatePalette(palette.key, $any($event))">
           <input
             type="text"
             class="flex-1 px-3 py-2 border border-ts-line rounded-lg text-sm font-mono bg-ts-paper focus:border-primary focus:ring-2 focus:ring-primary/30"
-            [value]="draft.palette[palette.key]"
-            (input)="updatePalette(palette.key, $any($event.target).value)"
-            placeholder="168 197 164">
+            [(ngModel)]="paletteHex[palette.key]"
+            (ngModelChange)="updatePalette(palette.key, $any($event))"
+            placeholder="#a8c5a4">
         </div>
       </div>
     }
@@ -166,9 +166,9 @@
         </span>
       </div>
       <div class="flex gap-2">
-        <button class="px-3 py-2 rounded-md text-xs font-semibold bg-primary text-neutral shadow-lvl1">Primary</button>
-        <button class="px-3 py-2 rounded-md text-xs font-semibold ring-1 ring-primary text-accent">Ghost</button>
-        <button class="px-3 py-2 rounded-md text-xs font-semibold bg-surface border border-ts-line text-ts-ink shadow-lvl0">Surface</button>
+        <button class="ts-btn ts-btn-primary ts-btn-sm text-xs">Primary</button>
+        <button class="ts-btn ts-btn-ghost ts-btn-sm text-xs">Ghost</button>
+        <button class="ts-btn ts-btn-outline ts-btn-sm text-xs">Surface</button>
       </div>
       <div class="h-20 rounded-xl bg-surface border border-ts-line shadow-lvl1 flex items-center justify-between px-4">
         <div class="space-y-1">
@@ -216,13 +216,13 @@
             <input
               type="color"
               class="h-9 w-12 rounded border border-ts-line"
-              [value]="toHex(draft.overrides?.[override.key]?.palette?.accent || draft.palette.accent)"
-              (input)="updateOverride(override.key, 'accent', $any($event.target).value)">
+              [(ngModel)]="overrideHex[override.key].accent"
+              (ngModelChange)="updateOverride(override.key, 'accent', $any($event))">
             <input
               type="text"
               class="flex-1 px-2 py-1 border border-ts-line rounded text-xs font-mono bg-ts-paper"
-              [value]="draft.overrides?.[override.key]?.palette?.accent || draft.palette.accent"
-              (input)="updateOverride(override.key, 'accent', $any($event.target).value)">
+              [(ngModel)]="overrideHex[override.key].accent"
+              (ngModelChange)="updateOverride(override.key, 'accent', $any($event))">
           </div>
 
           <div class="flex items-center gap-2">
@@ -230,13 +230,13 @@
             <input
               type="color"
               class="h-9 w-12 rounded border border-ts-line"
-              [value]="toHex(draft.overrides?.[override.key]?.palette?.neutral || draft.palette.neutral)"
-              (input)="updateOverride(override.key, 'neutral', $any($event.target).value)">
+              [(ngModel)]="overrideHex[override.key].neutral"
+              (ngModelChange)="updateOverride(override.key, 'neutral', $any($event))">
             <input
               type="text"
               class="flex-1 px-2 py-1 border border-ts-line rounded text-xs font-mono bg-ts-paper"
-              [value]="draft.overrides?.[override.key]?.palette?.neutral || draft.palette.neutral"
-              (input)="updateOverride(override.key, 'neutral', $any($event.target).value)">
+              [(ngModel)]="overrideHex[override.key].neutral"
+              (ngModelChange)="updateOverride(override.key, 'neutral', $any($event))">
           </div>
         </div>
       }
@@ -247,33 +247,33 @@
     <div class="flex gap-2">
       <button
         type="button"
-        class="px-3 py-2 text-sm rounded-lg border border-ts-line bg-ts-bg hover:border-primary transition-colors"
+        class="ts-btn ts-btn-outline ts-btn-sm text-sm"
         (click)="clearPreview()">
         Clear preview
       </button>
       <button
         type="button"
-        class="px-3 py-2 text-sm rounded-lg border border-ts-line bg-ts-bg hover:border-primary transition-colors disabled:opacity-60"
+        class="ts-btn ts-btn-outline ts-btn-sm text-sm disabled:opacity-60"
         [disabled]="isSaving"
         (click)="reset(scope)">
-        Reset {{ scopeLabel(scope) }}
+        Reset to default
       </button>
     </div>
 
     <div class="flex gap-2">
       <button
         type="button"
-        class="px-4 py-2 text-sm rounded-lg border border-accent text-accent bg-accent/10 hover:bg-accent/20 transition-colors disabled:opacity-60"
+        class="ts-btn ts-btn-outline ts-btn-sm text-sm disabled:opacity-60"
         [disabled]="isSaving"
         (click)="save('user')">
-        Save to my account
+        Save &amp; apply (mine)
       </button>
       <button
         type="button"
-        class="px-4 py-2 text-sm rounded-lg bg-primary text-white shadow-lvl2 hover:shadow-lvl3 transition disabled:opacity-60"
+        class="ts-btn ts-btn-primary ts-btn-sm text-sm disabled:opacity-60"
         [disabled]="isSaving"
         (click)="save('global')">
-        Save for everyone
+        Save &amp; apply
       </button>
     </div>
   </div>
@@ -293,7 +293,7 @@
           [(ngModel)]="presetName">
         <button
           type="button"
-          class="px-3 py-2 text-sm rounded-lg bg-primary text-white shadow-lvl1 disabled:opacity-60"
+          class="ts-btn ts-btn-primary ts-btn-sm text-sm disabled:opacity-60"
           [disabled]="isSaving || !presetName.trim()"
           (click)="savePreset(scope)">
           Save preset ({{ scope }})

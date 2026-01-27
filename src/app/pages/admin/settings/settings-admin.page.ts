@@ -7,7 +7,7 @@ import { ImagePickerComponent } from '../../../shared/components/image-picker/im
 import { HeroImagesManagerComponent } from '../../../shared/components/hero-images-manager/hero-images-manager.component';
 import { ThemeManagerComponent } from '../../../shared/components/theme-manager/theme-manager.component';
 import { LoadingComponentBase } from '../../../core/classes/loading-component.base';
-import { SettingsService, AppSettings, ThemeProfile } from '../../../services/settings.service';
+import { SettingsService, AppSettings } from '../../../services/settings.service';
 import { StatsService, SiteStats } from '../../../services/stats.service';
 import { AdminDashboardService, AdminActivityItem } from '../../../services/admin-dashboard.service';
 import { firstValueFrom } from 'rxjs';
@@ -100,18 +100,6 @@ export class SettingsAdminComponent extends LoadingComponentBase implements OnIn
   currentSettings: AppSettings | null = null;
   private messageTimeout: any = null;
 
-  // Theme Profiles
-  themeProfiles: { id: string; name: string; colors: ThemeProfile | null }[] = [
-    { id: 'profile1', name: 'Profile 1', colors: null },
-    { id: 'profile2', name: 'Profile 2', colors: null },
-    { id: 'profile3', name: 'Profile 3', colors: null },
-    { id: 'profile4', name: 'Profile 4', colors: null },
-    { id: 'profile5', name: 'Profile 5', colors: null }
-  ];
-  activeProfileId: string = 'custom';
-  editingProfileId: string | null = null;
-  editingProfileName: string = '';
-
   private readonly notificationDefinitions: Array<Omit<NotificationSummaryCard, 'enabled' | 'meta'>> = [
     {
       key: 'orderEmailEnabled',
@@ -173,9 +161,6 @@ export class SettingsAdminComponent extends LoadingComponentBase implements OnIn
   async loadSettings() {
     await this.withLoading(async () => {
       this.currentSettings = await this.settingsService.getSettings();
-      
-      // Load theme profiles
-      this.loadThemeProfiles();
       
       this.buildSections();
       this.updateNotificationSummary();
@@ -646,73 +631,7 @@ export class SettingsAdminComponent extends LoadingComponentBase implements OnIn
         galeriaHeroSubtitle: freshSettings.galeriaHeroSubtitle || 'Explore weddings, brand activations, private celebrations, and botanical styling crafted with our ivory and gold aesthetic.',
         contactoHeroImage: freshSettings.contactoHeroImage || '/assets/contact/hero-contact.jpg',
         contactoHeroTitle: freshSettings.contactoHeroTitle || 'Tell us about your celebration',
-        contactoHeroSubtitle: freshSettings.contactoHeroSubtitle || 'Share your date, location, and vision. We respond within one business day to craft a bespoke plan for your event.',
-        // Theme Customization
-        themeAccentColor: '#a8c5a4',
-        themeAccentSoft: '#c1d5be',
-        themeAccentDark: '#8aab85',
-        themeInkColor: '#1d2a39',
-        themeInkSoft: '#3f5f47',
-        themeBgColor: '#f8f9fa',
-        themePaperColor: '#ffffff',
-        themeLineColor: '#e5e7eb',
-        // Theme Profiles
-        activeThemeProfile: 'custom',
-        themeProfile1Name: 'Spring Bloom',
-        themeProfile1Data: JSON.stringify({
-          themeAccentColor: '#ff69b4',
-          themeAccentSoft: '#ffb3d9',
-          themeAccentDark: '#d5578f',
-          themeInkColor: '#2d1b2e',
-          themeInkSoft: '#5a4a5e',
-          themeBgColor: '#fff5f8',
-          themePaperColor: '#ffffff',
-          themeLineColor: '#ffe0ec'
-        }),
-        themeProfile2Name: 'Summer Sunshine',
-        themeProfile2Data: JSON.stringify({
-          themeAccentColor: '#ffa500',
-          themeAccentSoft: '#ffc04d',
-          themeAccentDark: '#e69500',
-          themeInkColor: '#2c1810',
-          themeInkSoft: '#6b4423',
-          themeBgColor: '#fffbf0',
-          themePaperColor: '#ffffff',
-          themeLineColor: '#ffe8c5'
-        }),
-        themeProfile3Name: 'Autumn Harvest',
-        themeProfile3Data: JSON.stringify({
-          themeAccentColor: '#d2691e',
-          themeAccentSoft: '#e89b5e',
-          themeAccentDark: '#a0501a',
-          themeInkColor: '#3d2817',
-          themeInkSoft: '#6b4a2f',
-          themeBgColor: '#fdf8f3',
-          themePaperColor: '#ffffff',
-          themeLineColor: '#f0dcc8'
-        }),
-        themeProfile4Name: 'Winter Frost',
-        themeProfile4Data: JSON.stringify({
-          themeAccentColor: '#4a90e2',
-          themeAccentSoft: '#7eb2f5',
-          themeAccentDark: '#3a75c4',
-          themeInkColor: '#1a2f4a',
-          themeInkSoft: '#3d5a7a',
-          themeBgColor: '#f5f9ff',
-          themePaperColor: '#ffffff',
-          themeLineColor: '#d6e8ff'
-        }),
-        themeProfile5Name: 'Sage Garden (Default)',
-        themeProfile5Data: JSON.stringify({
-          themeAccentColor: '#a8c5a4',
-          themeAccentSoft: '#c1d5be',
-          themeAccentDark: '#8aab85',
-          themeInkColor: '#1d2a39',
-          themeInkSoft: '#3f5f47',
-          themeBgColor: '#f8f9fa',
-          themePaperColor: '#ffffff',
-          themeLineColor: '#e5e7eb'
-        })
+        contactoHeroSubtitle: freshSettings.contactoHeroSubtitle || 'Share your date, location, and vision. We respond within one business day to craft a bespoke plan for your event.'
       };
 
       this.sections.forEach(section => {
@@ -749,7 +668,6 @@ export class SettingsAdminComponent extends LoadingComponentBase implements OnIn
       this.currentSettings = updatedSettings;
       
       this.buildSections();
-      this.loadThemeProfiles(); // Reload theme profiles after save
       this.updateNotificationSummary();
       this.showMessage('admin.settings.feedback.success', 'success');
     } catch (error: any) {
@@ -1022,213 +940,6 @@ export class SettingsAdminComponent extends LoadingComponentBase implements OnIn
     return this.activityAccentMap[type] ?? 'bg-white/10 border-white/20 text-white/70';
   }
 
-  /**
-   * Apply theme CSS variables to the document root
-   */
-  applyThemeVariables(settings: AppSettings): void {
-    // Legacy theme overrides were handled here. The new ThemeService owns CSS variables,
-    // so this is intentionally a no-op to avoid fighting live previews and saves.
-    return;
-  }
-
-  // Theme Profile Management
-  loadThemeProfiles(): void {
-    if (!this.currentSettings) return;
-
-    this.activeProfileId = this.currentSettings.activeThemeProfile || 'custom';
-
-    for (let i = 1; i <= 5; i++) {
-      const profileId = `profile${i}`;
-      const nameKey = `themeProfile${i}Name` as keyof AppSettings;
-      const dataKey = `themeProfile${i}Data` as keyof AppSettings;
-      
-      const profile = this.themeProfiles[i - 1];
-      profile.name = (this.currentSettings[nameKey] as string) || `Theme ${i}`;
-      
-      const dataStr = this.currentSettings[dataKey] as string;
-      if (dataStr) {
-        try {
-          profile.colors = JSON.parse(dataStr);
-        } catch (e) {
-          profile.colors = null;
-        }
-      }
-    }
-  }
-
-  getCurrentThemeColors(): ThemeProfile {
-    if (!this.currentSettings) {
-      return this.getDefaultThemeColors();
-    }
-    return {
-      themeAccentColor: this.currentSettings.themeAccentColor,
-      themeAccentSoft: this.currentSettings.themeAccentSoft,
-      themeAccentDark: this.currentSettings.themeAccentDark,
-      themeInkColor: this.currentSettings.themeInkColor,
-      themeInkSoft: this.currentSettings.themeInkSoft,
-      themeBgColor: this.currentSettings.themeBgColor,
-      themePaperColor: this.currentSettings.themePaperColor,
-      themeLineColor: this.currentSettings.themeLineColor
-    };
-  }
-
-  getDefaultThemeColors(): ThemeProfile {
-    return {
-      themeAccentColor: '#a8c5a4',
-      themeAccentSoft: '#c1d5be',
-      themeAccentDark: '#8aab85',
-      themeInkColor: '#1d2a39',
-      themeInkSoft: '#3f5f47',
-      themeBgColor: '#f8f9fa',
-      themePaperColor: '#ffffff',
-      themeLineColor: '#e5e7eb'
-    };
-  }
-
-  async saveToProfile(profileId: string): Promise<void> {
-    if (!this.currentSettings) return;
-
-    const currentColors = this.getCurrentThemeColors();
-    const profileIndex = parseInt(profileId.replace('profile', '')) - 1;
-    
-    if (profileIndex < 0 || profileIndex >= 5) return;
-
-    const dataKey = `themeProfile${profileIndex + 1}Data` as keyof AppSettings;
-    (this.currentSettings[dataKey] as any) = JSON.stringify(currentColors);
-    
-    // Update local profile
-    this.themeProfiles[profileIndex].colors = currentColors;
-
-    // Update the section data
-    const section = this.sections.find(s => s.title === 'Theme Customization');
-    if (section) {
-      const setting = section.settings.find(s => s.key === dataKey);
-      if (setting) {
-        setting.value = JSON.stringify(currentColors);
-      }
-    }
-
-    this.onSettingValueChange();
-    this.showMessage('Theme saved to ' + this.themeProfiles[profileIndex].name, 'success');
-  }
-
-  async loadProfile(profileId: string): Promise<void> {
-    if (!this.currentSettings) return;
-
-    let colors: ThemeProfile;
-
-    if (profileId === 'custom') {
-      // Keep current colors
-      return;
-    } else {
-      const profileIndex = parseInt(profileId.replace('profile', '')) - 1;
-      if (profileIndex < 0 || profileIndex >= 5) return;
-
-      const profile = this.themeProfiles[profileIndex];
-      if (!profile.colors) {
-        this.showMessage('This profile is empty', 'error');
-        return;
-      }
-
-      colors = profile.colors;
-    }
-
-    // Apply colors to current settings
-    this.currentSettings.themeAccentColor = colors.themeAccentColor;
-    this.currentSettings.themeAccentSoft = colors.themeAccentSoft;
-    this.currentSettings.themeAccentDark = colors.themeAccentDark;
-    this.currentSettings.themeInkColor = colors.themeInkColor;
-    this.currentSettings.themeInkSoft = colors.themeInkSoft;
-    this.currentSettings.themeBgColor = colors.themeBgColor;
-    this.currentSettings.themePaperColor = colors.themePaperColor;
-    this.currentSettings.themeLineColor = colors.themeLineColor;
-    this.currentSettings.activeThemeProfile = profileId;
-
-    // Update sections
-    const section = this.sections.find(s => s.title === 'Theme Customization');
-    if (section) {
-      section.settings.forEach(setting => {
-        if (setting.key.toString().includes('theme') && !setting.key.toString().includes('Profile')) {
-          const colorKey = setting.key as keyof ThemeProfile;
-          if (colorKey in colors) {
-            setting.value = colors[colorKey];
-          }
-        }
-        if (setting.key === 'activeThemeProfile') {
-          setting.value = profileId;
-        }
-      });
-    }
-
-    this.activeProfileId = profileId;
-    this.onSettingValueChange();
-    
-    const profileName = profileId === 'custom' ? 'Custom' : this.themeProfiles[parseInt(profileId.replace('profile', '')) - 1].name;
-    this.showMessage(`Loaded ${profileName} theme`, 'success');
-  }
-
-  startEditingProfileName(profileId: string): void {
-    const profileIndex = parseInt(profileId.replace('profile', '')) - 1;
-    this.editingProfileId = profileId;
-    this.editingProfileName = this.themeProfiles[profileIndex].name;
-  }
-
-  async saveProfileName(profileId: string): Promise<void> {
-    if (!this.currentSettings || !this.editingProfileName.trim()) return;
-
-    const profileIndex = parseInt(profileId.replace('profile', '')) - 1;
-    const nameKey = `themeProfile${profileIndex + 1}Name` as keyof AppSettings;
-    
-    (this.currentSettings[nameKey] as any) = this.editingProfileName.trim();
-    this.themeProfiles[profileIndex].name = this.editingProfileName.trim();
-
-    // Update the section data
-    const section = this.sections.find(s => s.title === 'Theme Customization');
-    if (section) {
-      const setting = section.settings.find(s => s.key === nameKey);
-      if (setting) {
-        setting.value = this.editingProfileName.trim();
-      }
-    }
-
-    this.editingProfileId = null;
-    this.editingProfileName = '';
-    this.onSettingValueChange();
-  }
-
-  cancelEditingProfileName(): void {
-    this.editingProfileId = null;
-    this.editingProfileName = '';
-  }
-
-  async clearProfile(profileId: string): Promise<void> {
-    if (!this.currentSettings) return;
-    
-    const profileIndex = parseInt(profileId.replace('profile', '')) - 1;
-    if (profileIndex < 0 || profileIndex >= 5) return;
-
-    const dataKey = `themeProfile${profileIndex + 1}Data` as keyof AppSettings;
-    (this.currentSettings[dataKey] as any) = '';
-    
-    this.themeProfiles[profileIndex].colors = null;
-
-    // Update the section data
-    const section = this.sections.find(s => s.title === 'Theme Customization');
-    if (section) {
-      const setting = section.settings.find(s => s.key === dataKey);
-      if (setting) {
-        setting.value = '';
-      }
-    }
-
-    if (this.activeProfileId === profileId) {
-      this.activeProfileId = 'custom';
-      this.currentSettings.activeThemeProfile = 'custom';
-    }
-
-    this.onSettingValueChange();
-    this.showMessage('Profile cleared', 'info');
-  }
 }
 
 
