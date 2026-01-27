@@ -204,6 +204,9 @@
       "badge": "Curated picks",
       "title": "Featured personalised gifts",
       "subtitle": "Best sellers and new arrivals, ready to engrave.",
+      "valentine_badge": "Valentine favorites",
+      "valentine_title": "Love-ready gifts for February",
+      "valentine_subtitle": "Engrave something unforgettable for the people you love.",
       "cta_all": "Browse all",
       "cta_special": "Gifts for men",
       "empty": "No products yet. Add products in the admin to showcase them here."
@@ -566,7 +569,22 @@
   "products": {
     "hero": {
       "title": "Browse all products",
-      "subtitle": "Shop engraved pieces ready to personalize."
+      "subtitle": "Shop engraved pieces ready to personalize.",
+      "valentine_title": "Valentine gifts, ready to engrave",
+      "valentine_subtitle": "Romantic keepsakes with premium engraving and gift-ready packaging."
+    },
+    "valentine_banner": {
+      "badge": "Limited-time",
+      "title": "Valentine edit: engraved gifts with heart",
+      "subtitle": "Order by February 10 to ensure on-time delivery."
+    },
+    "cta": {
+      "title": "Need personalized consultation?",
+      "subtitle": "Our team will help you personalize the perfect gift for your occasion.",
+      "button": "Request consultation",
+      "valentine_title": "Need help choosing the perfect Valentine gift?",
+      "valentine_subtitle": "We will guide you on engraving, packaging, and delivery windows.",
+      "valentine_button": "Get gifting help"
     },
     "filters": {
       "category": "Category",
@@ -588,7 +606,9 @@
     },
     "section": {
       "title": "All products",
-      "subtitle": "Select a product to see details and personalization options."
+      "subtitle": "Select a product to see details and personalization options.",
+      "valentine_title": "Valentine-ready engraving",
+      "valentine_subtitle": "Personalize gifts that feel thoughtful and timeless."
     }
   },
   "detalle": {

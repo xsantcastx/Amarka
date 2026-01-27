@@ -11,6 +11,7 @@ import { TagService } from '../../services/tag.service';
 import { CartService } from '../../services/cart.service';
 import { SettingsService } from '../../services/settings.service';
 import { MetaService } from '../../services/meta.service';
+import { ThemeService } from '../../services/theme.service';
 import { Product } from '../../models/product';
 import { Category, Model, Tag } from '../../models/catalog';
 import { Media } from '../../models/media';
@@ -36,6 +37,7 @@ export class ProductosPageComponent extends LoadingComponentBase implements OnIn
   private cartService = inject(CartService);
   private settingsService = inject(SettingsService);
   private metaService = inject(MetaService);
+  private themeService = inject(ThemeService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   
@@ -65,8 +67,27 @@ export class ProductosPageComponent extends LoadingComponentBase implements OnIn
   searchTerm = '';
   addingProductId: string | null = null;
   recentlyAddedIds = new Set<string>();
+  isValentineSeason = false;
+  heroTitleKey = 'products.hero.title';
+  heroSubtitleKey = 'products.hero.subtitle';
+  sectionTitleKey = 'products.section.title';
+  sectionSubtitleKey = 'products.section.subtitle';
+  ctaTitleKey = 'products.cta.title';
+  ctaSubtitleKey = 'products.cta.subtitle';
+  ctaButtonKey = 'products.cta.button';
 
   async ngOnInit() {
+    this.isValentineSeason = this.themeService.isSeasonActive('valentine');
+    if (this.isValentineSeason) {
+      this.heroTitleKey = 'products.hero.valentine_title';
+      this.heroSubtitleKey = 'products.hero.valentine_subtitle';
+      this.sectionTitleKey = 'products.section.valentine_title';
+      this.sectionSubtitleKey = 'products.section.valentine_subtitle';
+      this.ctaTitleKey = 'products.cta.valentine_title';
+      this.ctaSubtitleKey = 'products.cta.valentine_subtitle';
+      this.ctaButtonKey = 'products.cta.valentine_button';
+    }
+
     // Seed search from query param if provided
     this.route.queryParamMap.subscribe(params => {
       const search = params.get('search');

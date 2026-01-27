@@ -14,9 +14,10 @@ import { LoadingComponentBase } from '../../core/classes/loading-component.base'
 import { MetaService } from '../../services/meta.service';
 import { BrandConfigService } from '../../core/services/brand-config.service';
 import { LoggerService } from '../../services/logger.service';
+import { ThemeService } from '../../services/theme.service';
+import type { SeasonalThemeConfig } from '@config';
 import { take } from 'rxjs/operators';
 import { ProductCardComponent } from '../../shared/components/product-card/product-card.component';
-import { forkJoin, of } from 'rxjs';
 
 @Component({
   selector: 'app-home-page',
@@ -36,10 +37,12 @@ export class HomePageComponent extends LoadingComponentBase implements OnInit {
   private router = inject(Router);
   private brandConfig = inject(BrandConfigService);
   private logger = inject(LoggerService);
+  private themeService = inject(ThemeService);
   protected override cdr = inject(ChangeDetectorRef);
   
   services: ServiceItem[] = [];
   featuredProducts: Product[] = [];
+  featuredProductsAll: Product[] = [];
   bestSellerProducts: Product[] = [];
   newArrivalProducts: Product[] = [];
   heroProducts: Product[] = [];
@@ -52,8 +55,20 @@ export class HomePageComponent extends LoadingComponentBase implements OnInit {
   galleryImages: GalleryImage[] = [];
   currentImageIndex = 0;
   private imageRotationInterval?: any;
+  private featuredRotationInterval?: any;
+  private featuredRotationIndex = 0;
+  private featuredRotationWindow = 8;
+  private featuredRotationSeconds = 6;
+  activeSeasonalTheme: SeasonalThemeConfig | null = null;
+  isSeasonalFeatured = false;
+  isValentineSeason = false;
 
   ngOnInit() {
+    this.activeSeasonalTheme = this.themeService.activeSeasonalThemeSnapshot();
+    this.isSeasonalFeatured = !!this.activeSeasonalTheme?.featuredProductsTag;
+    this.isValentineSeason = this.activeSeasonalTheme?.id === 'valentine';
+    this.featuredRotationSeconds = this.activeSeasonalTheme?.featuredRotationSeconds ?? this.featuredRotationSeconds;
+
     // Set page meta tags from settings
     this.metaService.setPageMeta({
       title: 'page_titles.home',
@@ -132,8 +147,25 @@ export class HomePageComponent extends LoadingComponentBase implements OnInit {
 
   private async loadFeaturedProductsAsync() {
     try {
-      const products = await this.productsService.getFeaturedProducts(8).pipe(take(1)).toPromise();
-      this.featuredProducts = products || [];
+      const seasonalTag = this.activeSeasonalTheme?.featuredProductsTag;
+      let products: Product[] | undefined;
+
+      if (seasonalTag) {
+        products = await this.productsService
+          .getProductsByTag(seasonalTag, Math.max(this.featuredRotationWindow + 4, 8))
+          .pipe(take(1))
+          .toPromise();
+        this.isSeasonalFeatured = !!products?.length;
+      }
+
+      if (!products || products.length === 0) {
+        this.isSeasonalFeatured = false;
+        products = await this.productsService.getFeaturedProducts(8).pipe(take(1)).toPromise();
+      }
+
+      this.featuredProductsAll = products || [];
+      this.featuredRotationIndex = 0;
+      this.refreshFeaturedRotation();
       this.cdr.detectChanges();
     } catch (error) {
       this.logger.error('HomePage error loading featured products', error);
@@ -182,9 +214,13 @@ export class HomePageComponent extends LoadingComponentBase implements OnInit {
       });
 
     this.heroProducts = keepUnique(this.heroProducts);
-    this.featuredProducts = keepUnique(this.featuredProducts);
+    this.featuredProductsAll = keepUnique(
+      this.featuredProductsAll.length ? this.featuredProductsAll : this.featuredProducts
+    );
     this.bestSellerProducts = keepUnique(this.bestSellerProducts);
     this.newArrivalProducts = keepUnique(this.newArrivalProducts);
+    this.featuredRotationIndex = 0;
+    this.refreshFeaturedRotation();
   }
 
   private async loadGalleryPreview() {
@@ -251,11 +287,55 @@ export class HomePageComponent extends LoadingComponentBase implements OnInit {
     }, 5000);
   }
 
+  private refreshFeaturedRotation() {
+    this.stopFeaturedRotation();
+    this.featuredProducts = this.buildFeaturedWindow();
+
+    if (!this.shouldRotateFeatured()) {
+      return;
+    }
+
+    const intervalMs = Math.max(3, this.featuredRotationSeconds) * 1000;
+    this.featuredRotationInterval = setInterval(() => {
+      if (!this.featuredProductsAll.length) {
+        return;
+      }
+      this.featuredRotationIndex = (this.featuredRotationIndex + 1) % this.featuredProductsAll.length;
+      this.featuredProducts = this.buildFeaturedWindow();
+      this.cdr.detectChanges();
+    }, intervalMs);
+  }
+
+  private buildFeaturedWindow(): Product[] {
+    if (!this.featuredProductsAll.length) {
+      return [];
+    }
+
+    if (!this.shouldRotateFeatured()) {
+      return this.featuredProductsAll.slice(0, this.featuredRotationWindow);
+    }
+
+    const doubled = [...this.featuredProductsAll, ...this.featuredProductsAll];
+    return doubled.slice(this.featuredRotationIndex, this.featuredRotationIndex + this.featuredRotationWindow);
+  }
+
+  private shouldRotateFeatured(): boolean {
+    return this.isSeasonalFeatured && this.featuredProductsAll.length > this.featuredRotationWindow;
+  }
+
+  private stopFeaturedRotation() {
+    if (this.featuredRotationInterval) {
+      clearInterval(this.featuredRotationInterval);
+      this.featuredRotationInterval = undefined;
+    }
+  }
+
   ngOnDestroy() {
     // Clean up interval when component is destroyed
     if (this.imageRotationInterval) {
       clearInterval(this.imageRotationInterval);
     }
+    this.stopFeaturedRotation();
   }
 
   goToSearch(searchTerm: string) {
@@ -264,6 +344,18 @@ export class HomePageComponent extends LoadingComponentBase implements OnInit {
         queryParams: { search: searchTerm.trim() } 
       });
     }
+  }
+
+  get featuredBadgeKey(): string {
+    return this.isValentineSeason ? 'home.featured.valentine_badge' : 'home.featured.badge';
+  }
+
+  get featuredTitleKey(): string {
+    return this.isValentineSeason ? 'home.featured.valentine_title' : 'home.featured.title';
+  }
+
+  get featuredSubtitleKey(): string {
+    return this.isValentineSeason ? 'home.featured.valentine_subtitle' : 'home.featured.subtitle';
   }
 
 }

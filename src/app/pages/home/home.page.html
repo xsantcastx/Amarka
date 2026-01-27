@@ -47,13 +47,13 @@
 </section>
 
 <!-- Featured Products -->
-<section class="section-gap bg-ts-bg-soft">
+<section class="section-gap bg-ts-bg-soft home-featured">
   <div class="page-container">
     <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-8">
       <div>
-        <p class="badge">{{ 'home.featured.badge' | translate }}</p>
-        <h2 class="heading-display text-4xl lg:text-5xl text-ts-ink">{{ 'home.featured.title' | translate }}</h2>
-        <p class="text-ts-ink-soft">{{ 'home.featured.subtitle' | translate }}</p>
+        <p class="badge">{{ featuredBadgeKey | translate }}</p>
+        <h2 class="heading-display text-4xl lg:text-5xl text-ts-ink">{{ featuredTitleKey | translate }}</h2>
+        <p class="text-ts-ink-soft">{{ featuredSubtitleKey | translate }}</p>
       </div>
       <div class="flex gap-2">
         <button class="btn-outline" routerLink="/productos">{{ 'home.featured.cta_all' | translate }}</button>

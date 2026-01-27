@@ -12,6 +12,8 @@ import {
 } from '@angular/fire/firestore';
 import { catchError } from 'rxjs/operators';
 import { Subscription, of } from 'rxjs';
+import { BrandConfigService } from '../core/services/brand-config.service';
+import type { SeasonalThemeConfig } from '@config';
 
 export type RadiusLevel = 'xs' | 'sm' | 'md' | 'lg' | 'full';
 export type ShadowLevel = 0 | 1 | 2 | 3 | 4;
@@ -174,6 +176,7 @@ const THEME_CACHE_KEY = 'theme:last-applied';
 export class ThemeService {
   private firestore = inject(Firestore);
   private auth = inject(Auth);
+  private brandConfig = inject(BrandConfigService);
 
   private initialized = false;
   private globalSub?: Subscription;
@@ -183,6 +186,8 @@ export class ThemeService {
   private userTheme = signal<ThemeDocument | null>(null);
   private previewTheme = signal<Partial<ThemeDocument> | null>(null);
   private ignoreUserTheme = signal<boolean>(false);
+  private seasonalTheme = signal<SeasonalThemeConfig | null>(null);
+  private seasonalTokensApplied: string[] = [];
 
   readonly activeTheme = computed(() => {
     // Live preview is applied only while viewing the settings page; otherwise use persisted theme
@@ -190,13 +195,17 @@ export class ThemeService {
       DEFAULT_THEME,
       this.globalTheme(),
       this.ignoreUserTheme() ? null : this.userTheme() ?? null,
-      this.isPreviewMode() ? this.previewTheme() : null
+      this.isPreviewMode() ? this.previewTheme() : null,
+      this.getSeasonalThemeOverride()
     );
   });
   readonly isPreviewing = computed(() => this.isPreviewMode() && !!this.previewTheme());
   private readonly previewEnabled = signal<boolean>(false);
+  readonly activeSeasonalTheme = computed(() => this.seasonalTheme());
 
   constructor() {
+    this.refreshSeasonalTheme();
+
     // Keep CSS variables in sync with the active theme (global -> user -> preview priority)
     effect(() => {
       this.applyThemeToCss(this.activeTheme());
@@ -220,6 +229,14 @@ export class ThemeService {
 
   activeThemeSnapshot(): ThemeDocument {
     return this.cloneTheme(this.activeTheme());
+  }
+
+  activeSeasonalThemeSnapshot(): SeasonalThemeConfig | null {
+    return this.seasonalTheme();
+  }
+
+  isSeasonActive(id: string): boolean {
+    return this.seasonalTheme()?.id === id;
   }
 
   previewThemeUpdate(partial: Partial<ThemeDocument> | null): void {
@@ -361,6 +378,55 @@ export class ThemeService {
     }
   }
 
+  private getSeasonalThemeOverride(): Partial<ThemeDocument> | null {
+    const seasonal = this.seasonalTheme();
+    if (!seasonal) {
+      return null;
+    }
+
+    const palette = seasonal.palette ?? {};
+    const overrides = seasonal.overrides as Record<string, ThemeComponentOverride> | undefined;
+
+    const mergedPalette: ThemePalette = {
+      ...DEFAULT_THEME.palette,
+      ...(palette as Partial<ThemePalette>)
+    };
+
+    return {
+      mode: seasonal.mode ?? undefined,
+      palette: mergedPalette,
+      overrides
+    };
+  }
+
+  private refreshSeasonalTheme(): void {
+    this.seasonalTheme.set(this.resolveSeasonalTheme());
+  }
+
+  private resolveSeasonalTheme(date: Date = new Date()): SeasonalThemeConfig | null {
+    const themes = this.brandConfig.site.seasonalThemes ?? [];
+    if (!themes.length) {
+      return null;
+    }
+
+    const today = this.formatDate(date);
+    return themes.find(theme => {
+      const start = theme.startDate?.trim();
+      const end = theme.endDate?.trim();
+      if (!start && !end) return false;
+      if (start && today < start) return false;
+      if (end && today > end) return false;
+      return true;
+    }) ?? null;
+  }
+
+  private formatDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = `${date.getMonth() + 1}`.padStart(2, '0');
+    const day = `${date.getDate()}`.padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
   private applyThemeToCss(theme: ThemeDocument): void {
     if (typeof document === 'undefined') {
       return;
@@ -495,14 +561,38 @@ export class ThemeService {
       }
     });
 
+    this.applySeasonalDecorTokens(root);
+
     // Cache last applied theme for fast boot when offline or before Firestore responds
-    if (typeof localStorage !== 'undefined') {
+    if (typeof localStorage !== 'undefined' && !this.seasonalTheme()) {
       try {
         localStorage.setItem(THEME_CACHE_KEY, JSON.stringify(theme));
       } catch (error) {
         console.warn('[theme] Unable to cache theme', error);
       }
     }
+  }
+
+  private applySeasonalDecorTokens(root: HTMLElement): void {
+    const seasonal = this.seasonalTheme();
+    if (seasonal?.id) {
+      root.setAttribute('data-season', seasonal.id);
+    } else {
+      root.removeAttribute('data-season');
+    }
+
+    if (this.seasonalTokensApplied.length) {
+      this.seasonalTokensApplied.forEach(token => root.style.removeProperty(`--${token}`));
+      this.seasonalTokensApplied = [];
+    }
+
+    const tokens = seasonal?.tokens ?? {};
+    Object.entries(tokens).forEach(([token, value]) => {
+      if (value) {
+        root.style.setProperty(`--${token}`, value);
+        this.seasonalTokensApplied.push(token);
+      }
+    });
   }
 
   private mergeTheme(

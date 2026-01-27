@@ -1,3 +1,65 @@
 :host {
   display: block;
 }
+
+:host-context([data-season='valentine']) .products-page {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(180deg, var(--season-cream, #fdf6f8) 0%, var(--ts-bg) 55%, var(--ts-bg-soft) 100%);
+}
+
+:host-context([data-season='valentine']) .products-page::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 12% 18%, var(--season-rose-soft, rgba(225, 104, 136, 0.18)) 0%, transparent 38%),
+    radial-gradient(circle at 88% 12%, color-mix(in srgb, var(--season-rose, #e16888) 12%, transparent) 0%, transparent 40%),
+    radial-gradient(circle at 78% 70%, color-mix(in srgb, var(--season-rose, #e16888) 10%, transparent) 0%, transparent 52%),
+    radial-gradient(circle at 22% 78%, color-mix(in srgb, var(--season-berry, #782440) 8%, transparent) 0%, transparent 55%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+:host-context([data-season='valentine']) .products-page > * {
+  position: relative;
+  z-index: 1;
+}
+
+:host-context([data-season='valentine']) .valentine-banner {
+  display: grid;
+  gap: 0.35rem;
+  padding: 1.25rem 1.5rem;
+  border-radius: 1.5rem;
+  border: 1px solid color-mix(in srgb, var(--ts-accent) 30%, transparent);
+  background: linear-gradient(135deg, var(--ts-paper), color-mix(in srgb, var(--season-rose, #e16888) 8%, var(--ts-paper) 92%));
+  box-shadow: 0 18px 40px -32px color-mix(in srgb, var(--ts-accent) 35%, transparent);
+}
+
+:host-context([data-season='valentine']) .valentine-banner__eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: color-mix(in srgb, var(--season-berry, #782440) 70%, var(--ts-ink));
+}
+
+:host-context([data-season='valentine']) .valentine-banner__title {
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 2.6vw, 1.75rem);
+  color: var(--ts-ink);
+}
+
+:host-context([data-season='valentine']) .valentine-banner__copy {
+  color: var(--ts-ink-soft);
+}
+
+:host-context([data-season='valentine']) .products-page article {
+  border-color: color-mix(in srgb, var(--ts-accent) 32%, transparent);
+  box-shadow: 0 18px 40px -32px color-mix(in srgb, var(--ts-accent) 35%, transparent);
+}
+
+:host-context([data-season='valentine']) .products-page article:hover {
+  border-color: color-mix(in srgb, var(--ts-accent) 55%, transparent);
+  box-shadow: 0 22px 46px -34px color-mix(in srgb, var(--ts-accent) 45%, transparent);
+}

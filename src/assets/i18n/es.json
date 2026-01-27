@@ -201,6 +201,9 @@
       "badge": "Selecciones curadas",
       "title": "Regalos personalizados destacados",
       "subtitle": "Superventas y novedades listas para grabar.",
+      "valentine_badge": "Favoritos de San ValentÃ­n",
+      "valentine_title": "Regalos con amor para febrero",
+      "valentine_subtitle": "Graba algo inolvidable para quien amas.",
       "cta_all": "Ver todo",
       "cta_special": "Regalos para hombres",
       "empty": "Sin productos aún. Agrega productos en admin para mostrarlos aquí."
@@ -609,7 +612,22 @@
   "products": {
     "hero": {
       "title": "Explora todos los productos",
-      "subtitle": "Compra piezas listas para personalizar."
+      "subtitle": "Compra piezas listas para personalizar.",
+      "valentine_title": "Regalos de San ValentÃ­n listos para grabar",
+      "valentine_subtitle": "Recuerdos romÃ¡nticos con grabado premium y empaque listo para regalo."
+    },
+    "valentine_banner": {
+      "badge": "Tiempo limitado",
+      "title": "EdiciÃ³n San ValentÃ­n: regalos grabados con corazÃ³n",
+      "subtitle": "Pide antes del 10 de febrero para asegurar la entrega a tiempo."
+    },
+    "cta": {
+      "title": "Â¿Necesitas asesorÃ­a personalizada?",
+      "subtitle": "Nuestro equipo te ayudarÃ¡ a personalizar el regalo perfecto para tu ocasiÃ³n.",
+      "button": "Solicitar asesorÃ­a",
+      "valentine_title": "Â¿Necesitas ayuda para elegir el regalo perfecto?",
+      "valentine_subtitle": "Te guiamos en grabado, empaque y tiempos de entrega.",
+      "valentine_button": "Recibe ayuda para regalar"
     },
     "filters": {
       "category": "Categor?a",
@@ -631,7 +649,9 @@
     },
     "section": {
       "title": "Todos los productos",
-      "subtitle": "Selecciona un producto para ver detalles y opciones de personalizaci?n."
+      "subtitle": "Selecciona un producto para ver detalles y opciones de personalizaci?n.",
+      "valentine_title": "Grabados listos para San ValentÃ­n",
+      "valentine_subtitle": "Personaliza regalos que se sienten pensados y atemporales."
     }
   },
   "detalle": {

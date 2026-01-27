@@ -14,6 +14,19 @@ export interface CtaLink {
   href: string;
 }
 
+export interface SeasonalThemeConfig {
+  id: string;
+  label?: string;
+  startDate: string;
+  endDate: string;
+  mode?: 'light' | 'dark' | 'custom';
+  palette?: Record<string, string>;
+  overrides?: Record<string, Record<string, unknown>>;
+  tokens?: Record<string, string>;
+  featuredProductsTag?: string;
+  featuredRotationSeconds?: number;
+}
+
 export interface SiteConfig {
   brand: {
     key: string;
@@ -38,6 +51,7 @@ export interface SiteConfig {
     tokens?: Record<string, string>;
     fonts?: Record<string, string>;
   };
+  seasonalThemes?: SeasonalThemeConfig[];
   hero?: {
     eyebrow?: string;
     title: string;

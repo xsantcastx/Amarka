@@ -37,6 +37,34 @@
       "mono": "'JetBrains Mono', Menlo, Monaco, Consolas, monospace"
     }
   },
+  "seasonalThemes": [
+    {
+      "id": "valentine",
+      "label": "Valentine 2026",
+      "startDate": "2026-01-01",
+      "endDate": "2026-02-28",
+      "mode": "light",
+      "palette": {
+        "primary": "225 104 136",
+        "secondary": "241 176 196",
+        "accent": "120 36 64",
+        "neutral": "31 22 28",
+        "surface": "255 255 255",
+        "background": "252 244 247",
+        "success": "46 204 113",
+        "warning": "241 196 15",
+        "error": "231 76 60"
+      },
+      "tokens": {
+        "season-rose": "#e16888",
+        "season-rose-soft": "rgba(225, 104, 136, 0.2)",
+        "season-berry": "#782440",
+        "season-cream": "#FDF6F8"
+      },
+      "featuredProductsTag": "valentine",
+      "featuredRotationSeconds": 6
+    }
+  ],
   "hero": {
     "eyebrow": "Engraved gifts, made personal",
     "title": "Amarka creates warm, lasting keepsakes for every milestone",

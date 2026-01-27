@@ -2,6 +2,29 @@
   display: block;
 }
 
+:host-context([data-season='valentine']) .home-featured {
+  position: relative;
+  background: linear-gradient(135deg, var(--season-cream, #fdf6f8), var(--ts-bg-soft));
+  overflow: hidden;
+}
+
+:host-context([data-season='valentine']) .home-featured::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 18% 18%, var(--season-rose-soft, rgba(225, 104, 136, 0.18)) 0%, transparent 45%),
+    radial-gradient(circle at 82% 28%, color-mix(in srgb, var(--season-rose, #e16888) 12%, transparent) 0%, transparent 50%),
+    radial-gradient(circle at 50% 80%, color-mix(in srgb, var(--season-rose, #e16888) 10%, transparent) 0%, transparent 55%);
+  pointer-events: none;
+}
+
+:host-context([data-season='valentine']) .home-featured .badge {
+  border-color: color-mix(in srgb, var(--ts-accent) 35%, transparent);
+  background: color-mix(in srgb, var(--ts-paper) 85%, var(--season-rose-soft, rgba(225, 104, 136, 0.12)) 15%);
+  box-shadow: 0 14px 32px -26px color-mix(in srgb, var(--ts-accent) 45%, transparent);
+}
+
 // Hero section parallax effect
 .hero-image {
   transition: transform 0.6s ease-out;

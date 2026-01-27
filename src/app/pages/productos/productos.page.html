@@ -1,12 +1,24 @@
 <!-- Productos Overview Page -->
-<section class="section-stack bg-ts-bg min-h-screen">
+<section class="section-stack bg-ts-bg min-h-screen products-page">
   <!-- Page Header Component -->
   <app-page-header
-    title="{{ 'products.hero.title' | translate }}"
-    subtitle="{{ 'products.hero.subtitle' | translate }}"
+    title="{{ heroTitleKey | translate }}"
+    subtitle="{{ heroSubtitleKey | translate }}"
     [breadcrumbs]="breadcrumbs"
     icon="products">
   </app-page-header>
+
+  @if (isValentineSeason) {
+    <div class="page-container pb-6">
+      <div class="valentine-banner">
+        <div>
+          <p class="valentine-banner__eyebrow">{{ 'products.valentine_banner.badge' | translate }}</p>
+          <h3 class="valentine-banner__title">{{ 'products.valentine_banner.title' | translate }}</h3>
+          <p class="valentine-banner__copy">{{ 'products.valentine_banner.subtitle' | translate }}</p>
+        </div>
+      </div>
+    </div>
+  }
 
   <!-- Filters Section -->
   <div class="page-container pb-12">
@@ -175,8 +187,8 @@
       <!-- All Filtered Products -->
       <section class="mb-20">
         <div class="mb-8">
-          <h2 class="font-serif text-4xl text-ts-ink mb-2">{{ 'products.section.title' | translate }}</h2>
-          <p class="text-lg text-ts-ink-soft">{{ 'products.section.subtitle' | translate }}</p>
+          <h2 class="font-serif text-4xl text-ts-ink mb-2">{{ sectionTitleKey | translate }}</h2>
+          <p class="text-lg text-ts-ink-soft">{{ sectionSubtitleKey | translate }}</p>
         </div>
         
         <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -287,19 +299,15 @@
       <!-- Call to Action -->
       <section class="text-center py-16">
         <div class="max-w-3xl mx-auto">
-          <h2 class="font-serif text-3xl text-ts-ink mb-4">
-            Need Personalized Consultation?
-          </h2>
-          <p class="text-lg text-ts-ink-soft mb-8">
-            Our team will help you personalize the perfect gift for your occasion.
-          </p>
+          <h2 class="font-serif text-3xl text-ts-ink mb-4">{{ ctaTitleKey | translate }}</h2>
+          <p class="text-lg text-ts-ink-soft mb-8">{{ ctaSubtitleKey | translate }}</p>
           <div class="flex justify-center">
             <a routerLink="/contacto" 
                class="inline-flex items-center gap-2 px-8 py-4 bg-ts-accent/20 hover:bg-ts-accent/30 border border-ts-accent/30 text-ts-ink rounded-full font-semibold transition-colors shadow-sm">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-3.582 8-8 8a8.955 8.955 0 01-3.793-.793L3 21l1.793-6.207A8.955 8.955 0 013 12a8 8 0 018-8c4.418 0 8 3.582 8 8z"/>
               </svg>
-              Request Consultation
+              {{ ctaButtonKey | translate }}
             </a>
           </div>
         </div>
