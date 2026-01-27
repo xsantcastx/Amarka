@@ -1,36 +1,48 @@
 <!-- Loading State -->
 @if (isLoading) {
-  <div class="min-h-screen flex items-center justify-center bg-ts-bg">
-    <div class="text-center space-y-4">
-      <div class="app-spinner" style="--spinner-size: 72px;"><img src="/Logo Clear.png" alt="Loading" width="96" height="96"></div>
-      <p class="text-ts-ink-soft text-lg font-semibold">{{ brandName || ('common.loading_content' | translate) }}</p>
-    </div>
+<div class="min-h-screen flex items-center justify-center bg-ts-bg">
+  <div class="text-center space-y-4">
+    <div class="app-spinner" style="--spinner-size: 72px;"><img src="/Logo Clear.png" alt="Loading" width="96"
+        height="96"></div>
+    <p class="text-ts-ink-soft text-lg font-semibold">{{ brandName || ('common.loading_content' | translate) }}</p>
   </div>
+</div>
 }
 
 <!-- Content -->
 @if (!isLoading) {
 <!-- Collections Strip -->
 <section class="page-container py-8">
-    <div class="flex items-center justify-between mb-4">
-      <h2 class="text-xl font-semibold text-ts-ink">{{ 'home.collections.heading' | translate }}</h2>
-      <a routerLink="/collections" class="text-sm text-ts-accent hover:underline">{{ 'home.collections.view_all' | translate }}</a>
-    </div>
+  <!-- Brand Header -->
+  <div class="flex justify-center mb-8">
+    <img src="/Logo Clear.png" alt="Amarka"
+      class="h-64 md:h-[500px] w-auto mix-blend-multiply transition-all duration-300" loading="eager" />
+  </div>
+
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="text-xl font-semibold text-ts-ink">{{ 'home.collections.heading' | translate }}</h2>
+    <a routerLink="/collections" class="text-sm text-ts-accent hover:underline">{{ 'home.collections.view_all' |
+      translate }}</a>
+  </div>
   <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
     @for (col of categoryShowcase; track col.slug) {
-      <a [routerLink]="['/collections', col.slug]"
-         class="group relative rounded-xl border border-ts-line bg-surface shadow-lvl1 overflow-hidden hover:shadow-lvl2 transition">
-        <div class="aspect-[4/3] bg-ts-bg-soft">
-          <img [src]="collectionImages[col.slug] || 'assets/placeholder-product.jpg'" [alt]="col.name" class="w-full h-full object-cover" loading="eager">
-        </div>
-        <div class="p-3 flex items-center justify-between gap-2">
-          <div class="text-sm font-semibold text-ts-ink">{{ col.name }}</div>
-          <svg class="w-4 h-4 text-ts-ink/60 group-hover:text-ts-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-        </div>
-      </a>
+    <a [routerLink]="['/collections', col.slug]"
+      class="group relative rounded-xl border border-ts-line bg-surface shadow-lvl1 overflow-hidden hover:shadow-lvl2 transition">
+      <div class="aspect-[4/3] bg-ts-bg-soft">
+        <img [src]="collectionImages[col.slug] || 'assets/placeholder-product.jpg'" [alt]="col.name"
+          class="w-full h-full object-cover" loading="eager">
+      </div>
+      <div class="p-3 flex items-center justify-between gap-2">
+        <div class="text-sm font-semibold text-ts-ink">{{ col.name }}</div>
+        <svg class="w-4 h-4 text-ts-ink/60 group-hover:text-ts-accent" fill="none" stroke="currentColor"
+          viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+      </div>
+    </a>
     }
     @if (!categoryShowcase.length) {
-      <span class="text-ts-ink-soft text-sm">{{ 'home.collections.empty' | translate }}</span>
+    <span class="text-ts-ink-soft text-sm">{{ 'home.collections.empty' | translate }}</span>
     }
   </div>
 </section>
@@ -46,18 +58,19 @@
       </div>
       <div class="flex gap-2">
         <button class="btn-outline" routerLink="/productos">{{ 'home.featured.cta_all' | translate }}</button>
-        <button class="btn-secondary" routerLink="/collections/gifts-for-men">{{ 'home.featured.cta_special' | translate }}</button>
+        <button class="btn-secondary" routerLink="/collections/gifts-for-men">{{ 'home.featured.cta_special' | translate
+          }}</button>
       </div>
     </div>
     <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
       @if (featuredProducts.length === 0) {
-        <div class="sm:col-span-2 lg:col-span-4 text-center text-ts-ink-soft">
-          {{ 'home.featured.empty' | translate }}
-        </div>
+      <div class="sm:col-span-2 lg:col-span-4 text-center text-ts-ink-soft">
+        {{ 'home.featured.empty' | translate }}
+      </div>
       } @else {
-        @for (product of featuredProducts; track product.id) {
-          <ts-product-card [product]="product" />
-        }
+      @for (product of featuredProducts; track product.id) {
+      <ts-product-card [product]="product" />
+      }
       }
     </div>
   </div>
@@ -65,44 +78,44 @@
 
 <!-- Best sellers -->
 @if (bestSellerProducts.length) {
-  <section class="section-gap">
-    <div class="page-container">
-      <div class="flex items-center justify-between mb-6">
-        <div>
-          <p class="badge">{{ 'home.bestsellers.badge' | translate }}</p>
-          <h3 class="heading-display text-3xl text-ts-ink">{{ 'home.bestsellers.title' | translate }}</h3>
-          <p class="text-ts-ink-soft">{{ 'home.bestsellers.subtitle' | translate }}</p>
-        </div>
-        <a routerLink="/productos" class="btn-outline">{{ 'home.bestsellers.cta' | translate }}</a>
+<section class="section-gap">
+  <div class="page-container">
+    <div class="flex items-center justify-between mb-6">
+      <div>
+        <p class="badge">{{ 'home.bestsellers.badge' | translate }}</p>
+        <h3 class="heading-display text-3xl text-ts-ink">{{ 'home.bestsellers.title' | translate }}</h3>
+        <p class="text-ts-ink-soft">{{ 'home.bestsellers.subtitle' | translate }}</p>
       </div>
-      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        @for (product of bestSellerProducts; track product.id) {
-          <ts-product-card [product]="product" />
-        }
-      </div>
+      <a routerLink="/productos" class="btn-outline">{{ 'home.bestsellers.cta' | translate }}</a>
     </div>
-  </section>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      @for (product of bestSellerProducts; track product.id) {
+      <ts-product-card [product]="product" />
+      }
+    </div>
+  </div>
+</section>
 }
 
 <!-- New arrivals -->
 @if (newArrivalProducts.length) {
-  <section class="section-gap bg-ts-bg-soft">
-    <div class="page-container">
-      <div class="flex items-center justify-between mb-6">
-        <div>
-          <p class="badge">{{ 'home.new.badge' | translate }}</p>
-          <h3 class="heading-display text-3xl text-ts-ink">{{ 'home.new.title' | translate }}</h3>
-          <p class="text-ts-ink-soft">{{ 'home.new.subtitle' | translate }}</p>
-        </div>
-        <a routerLink="/productos" class="btn-outline">{{ 'home.new.cta' | translate }}</a>
+<section class="section-gap bg-ts-bg-soft">
+  <div class="page-container">
+    <div class="flex items-center justify-between mb-6">
+      <div>
+        <p class="badge">{{ 'home.new.badge' | translate }}</p>
+        <h3 class="heading-display text-3xl text-ts-ink">{{ 'home.new.title' | translate }}</h3>
+        <p class="text-ts-ink-soft">{{ 'home.new.subtitle' | translate }}</p>
       </div>
-      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        @for (product of newArrivalProducts; track product.id) {
-          <ts-product-card [product]="product" />
-        }
-      </div>
+      <a routerLink="/productos" class="btn-outline">{{ 'home.new.cta' | translate }}</a>
     </div>
-  </section>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      @for (product of newArrivalProducts; track product.id) {
+      <ts-product-card [product]="product" />
+      }
+    </div>
+  </div>
+</section>
 }
 
 <!-- Story + Trust -->
@@ -136,25 +149,26 @@
 
 <!-- Gallery Preview -->
 @if (galleryImages.length > 0) {
-  <section class="section-gap bg-ts-bg-soft">
-    <div class="page-container">
-      <div class="flex items-center justify-between mb-6">
-        <div>
-          <p class="badge">{{ 'home.gallery.badge' | translate }}</p>
-          <h3 class="heading-display text-3xl text-ts-ink">{{ 'home.gallery.title' | translate }}</h3>
-          <p class="text-ts-ink-soft">{{ 'home.gallery.subtitle' | translate }}</p>
-        </div>
-        <a routerLink="/galeria" class="btn-outline">{{ 'home.gallery.cta' | translate }}</a>
+<section class="section-gap bg-ts-bg-soft">
+  <div class="page-container">
+    <div class="flex items-center justify-between mb-6">
+      <div>
+        <p class="badge">{{ 'home.gallery.badge' | translate }}</p>
+        <h3 class="heading-display text-3xl text-ts-ink">{{ 'home.gallery.title' | translate }}</h3>
+        <p class="text-ts-ink-soft">{{ 'home.gallery.subtitle' | translate }}</p>
       </div>
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        @for (image of galleryImages; track image.id) {
-          <div class="rounded-2xl overflow-hidden border border-ts-line bg-white shadow-sm aspect-[4/3]">
-            <img [src]="image.thumbnailUrl || image.imageUrl" [alt]="image.title || ('home.gallery.alt' | translate)" class="w-full h-full object-cover" loading="lazy">
-          </div>
-        }
-      </div>
+      <a routerLink="/galeria" class="btn-outline">{{ 'home.gallery.cta' | translate }}</a>
     </div>
-  </section>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      @for (image of galleryImages; track image.id) {
+      <div class="rounded-2xl overflow-hidden border border-ts-line bg-white shadow-sm aspect-[4/3]">
+        <img [src]="image.thumbnailUrl || image.imageUrl" [alt]="image.title || ('home.gallery.alt' | translate)"
+          class="w-full h-full object-cover" loading="lazy">
+      </div>
+      }
+    </div>
+  </div>
+</section>
 }
 
 <!-- Reviews -->
@@ -162,7 +176,8 @@
 
 <!-- CTA band -->
 <section class="section-gap">
-  <div class="page-container rounded-3xl border border-ts-line bg-white shadow-lg p-10 flex flex-col lg:flex-row items-center justify-between gap-6">
+  <div
+    class="page-container rounded-3xl border border-ts-line bg-white shadow-lg p-10 flex flex-col lg:flex-row items-center justify-between gap-6">
     <div>
       <p class="badge">{{ 'home.cta.badge' | translate }}</p>
       <h3 class="text-3xl font-serif text-ts-ink">{{ 'home.cta.title' | translate }}</h3>

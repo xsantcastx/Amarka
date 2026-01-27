@@ -1,88 +1,55 @@
 <header class="app-navbar fixed inset-x-0 top-0 z-50">
   <!-- Top rail -->
   <div class="bg-ts-paper border-b border-ts-line shadow-sm">
-    <div
-      class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-[1fr_auto_1fr] items-center gap-4 transition-all duration-300 ease-in-out"
-      [class.py-2]="scrolled()" [class.py-4]="!scrolled()" [class.md:py-6]="!scrolled()">
-
-      <!-- Left: Menu (Mobile) & Search (Desktop) -->
-      <div class="flex items-center justify-start gap-4">
-        <!-- Mobile Menu Button -->
-        <button class="lg:hidden p-2 -ml-2 rounded-lg text-ts-ink hover:bg-ts-bg-soft transition-colors"
-          (click)="toggleMobile(); $event.stopPropagation()" aria-label="Open navigation">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-          </svg>
-        </button>
-
-        <!-- Desktop Search -->
-        <div
-          class="hidden lg:flex items-stretch rounded-xl overflow-hidden border border-ts-line bg-ts-paper shadow-lvl1 w-full max-w-xs transition-all duration-300 focus-within:ring-2 focus-within:ring-ts-accent/20">
-          <input type="search" [placeholder]="'nav.search_placeholder' | translate"
-            class="flex-1 px-3 py-1.5 text-sm text-ts-ink bg-transparent focus:outline-none placeholder-ts-ink-soft/70"
-            #navSearch (keydown.enter)="goToSearch(navSearch.value)">
-          <button
-            class="px-3 bg-ts-bg-soft text-ts-ink-soft hover:text-ts-accent transition-colors border-l border-ts-line"
-            (click)="goToSearch(navSearch.value)">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-          </button>
-        </div>
-      </div>
-
-      <!-- Center: Logo -->
-      <div class="flex items-center justify-center">
-        <a routerLink="/" class="group relative flex items-center justify-center">
-          <div
-            class="absolute inset-0 bg-ts-accent/10 rounded-xl blur-xl transition-opacity opacity-0 group-hover:opacity-100 duration-500">
-          </div>
-          <img [src]="logoSrc" [alt]="logoAlt"
-            class="relative w-auto object-contain transition-all duration-300 ease-in-out group-hover:scale-105"
-            [class.h-10]="scrolled()" [class.md:h-12]="scrolled()" [class.h-14]="!scrolled()"
-            [class.md:h-20]="!scrolled()" />
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 flex items-center gap-4">
+      <!-- Left: logo -->
+      <div class="flex items-center gap-3 flex-shrink-0">
+        <a routerLink="/">
+          <img [src]="logoSrc" [alt]="logoAlt" class="h-9 w-9 rounded-lg shadow-sm" />
         </a>
       </div>
 
-      <!-- Right: Account / Cart -->
-      <div class="flex items-center justify-end gap-3 md:gap-5 text-xs text-ts-ink">
-        <div class="hidden lg:flex flex-col items-end leading-tight">
+      <!-- Center: search -->
+      <div
+        class="flex-1 hidden md:flex items-stretch rounded-xl overflow-hidden border border-ts-line bg-ts-paper shadow-lvl1">
+        <input type="search" [placeholder]="'nav.search_placeholder' | translate"
+          class="flex-1 px-3 text-ts-ink bg-transparent focus:outline-none" #navSearch
+          (keydown.enter)="goToSearch(navSearch.value)">
+        <button class="px-4 bg-primary text-neutral font-semibold hover:shadow-lvl2 transition"
+          (click)="goToSearch(navSearch.value)">
+          {{ 'common.search' | translate }}
+        </button>
+      </div>
+
+      <!-- Right: account / cart / menu -->
+      <div class="flex items-center gap-4 text-xs text-ts-ink">
+        <div class="hidden lg:flex flex-col leading-tight">
           @if (('common.hello' | translate) !== 'common.hello') {
           <span class="text-ts-ink-soft">{{ 'common.hello' | translate }}</span>
           }
-          <a routerLink="/client/profile" class="font-semibold hover:text-ts-accent transition-colors">{{
-            'nav.account_lists' | translate }}</a>
+          <a routerLink="/client/profile" class="font-semibold hover:text-ts-accent">{{ 'nav.account_lists' | translate
+            }}</a>
         </div>
-
-        <!-- Search Icon (Mobile) -->
-        <button class="lg:hidden p-2 rounded-lg text-ts-ink hover:bg-ts-bg-soft transition-colors"
-          (click)="goToSearch('')">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <a routerLink="/cart"
+          class="relative inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-ts-line bg-ts-bg hover:border-ts-accent transition">
+          <svg class="w-5 h-5 text-ts-ink" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2 9h14l-2-9M10 21a1 1 0 11-2 0 1 1 0 012 0zm8 0a1 1 0 11-2 0 1 1 0 012 0z" />
+          </svg>
+          <span class="font-semibold">{{ 'nav.cart' | translate }}</span>
+          @if (totalItems() > 0) {
+          <span
+            class="absolute -top-2 -right-2 flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-ts-accent rounded-full border-2 border-ts-paper">{{
+            totalItems() }}</span>
+          }
+        </a>
+        <button class="p-2 rounded-lg border border-ts-line bg-ts-bg hover:border-ts-accent transition-colors"
+          (click)="toggleMobile(); $event.stopPropagation()" aria-label="Open navigation">
+          <svg class="w-5 h-5 text-ts-ink" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
           </svg>
         </button>
-
-        <a routerLink="/cart"
-          class="group relative inline-flex items-center justify-center p-2 rounded-lg hover:bg-ts-bg-soft transition-colors">
-          <div class="relative">
-            <svg class="w-6 h-6 text-ts-ink group-hover:text-ts-accent transition-colors" fill="none"
-              stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-            </svg>
-            @if (totalItems() > 0) {
-            <span
-              class="absolute -top-1.5 -right-1.5 flex items-center justify-center min-w-[18px] h-[18px] px-1 text-[10px] font-bold text-white bg-ts-accent rounded-full border-2 border-ts-paper ring-2 ring-ts-paper">{{
-              totalItems() }}</span>
-            }
-          </div>
-          <span class="hidden md:inline-block ml-2 font-semibold group-hover:text-ts-accent transition-colors">{{
-            'nav.cart' | translate }}</span>
-        </a>
       </div>
-
     </div>
   </div>
 

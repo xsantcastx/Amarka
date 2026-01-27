@@ -23,12 +23,17 @@
   --font-mono: "JetBrains Mono", "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 
   /* Core Colors (space-separated RGB for Tailwind variable support) */
-  --color-primary: 168 197 164; /* sage */
-  --color-secondary: 232 184 200; /* blush */
-  --color-accent: 63 95 71; /* forest */
-  --color-neutral: 29 42 57; /* ink */
+  --color-primary: 168 197 164;
+  /* sage */
+  --color-secondary: 232 184 200;
+  /* blush */
+  --color-accent: 63 95 71;
+  /* forest */
+  --color-neutral: 29 42 57;
+  /* ink */
   --color-surface: 255 255 255;
-  --color-background: 250 246 240; /* ivory */
+  --color-background: 250 246 240;
+  /* ivory */
 
   /* Semantic */
   --color-success: 46 204 113;
@@ -67,10 +72,12 @@
   --ts-paper: rgb(var(--color-surface));
 
   /* Brand aliases */
-  --bitcoin-orange: var(--ts-accent); /* compatibility with legacy styles */
+  --bitcoin-orange: var(--ts-accent);
+  /* compatibility with legacy styles */
   --bitcoin-gold: color-mix(in srgb, rgb(var(--color-primary)) 80%, rgb(var(--color-surface)) 20%);
   --luxury-gold: color-mix(in srgb, rgb(var(--color-primary)) 75%, rgb(var(--color-accent)) 25%);
-  --accent-warm: rgb(var(--color-secondary)); /* rose blush accent */
+  --accent-warm: rgb(var(--color-secondary));
+  /* rose blush accent */
   --forest-green: rgb(var(--color-accent));
 
   --surface-glass: color-mix(in srgb, var(--ts-paper) 92%, rgba(0, 0, 0, 0.02));
@@ -78,7 +85,7 @@
   --shadow-soft: 0 28px 60px -35px rgba(29, 42, 57, 0.25);
   --shadow-hover: 0 18px 40px -30px rgba(29, 42, 57, 0.28);
   --shadow-focus: 0 0 0 1px color-mix(in srgb, var(--ts-accent) 45%, transparent), 0 18px 42px -30px rgba(29, 42, 57, 0.32);
-  --nav-height: 11rem;
+  --nav-height: 6.5rem;
   --content-offset: clamp(2.5rem, 6vw, 3.75rem);
   --section-spacing: clamp(3rem, 8vw, 5rem);
   --container-inline-padding: clamp(1.25rem, 5vw, 2.5rem);
@@ -112,7 +119,7 @@
 
 @media (max-width: 768px) {
   :root {
-    --nav-height: 8.5rem;
+    --nav-height: 6rem;
     --content-offset: clamp(2rem, 7vw, 3rem);
     --section-spacing: clamp(2.75rem, 10vw, 4.25rem);
     --container-inline-padding: clamp(1.1rem, 6vw, 1.9rem);
@@ -121,7 +128,7 @@
 
 @media (max-width: 480px) {
   :root {
-    --nav-height: 8.5rem;
+    --nav-height: 5.5rem;
     --content-offset: clamp(1.75rem, 9vw, 2.6rem);
     --section-spacing: clamp(2.25rem, 12vw, 3.75rem);
   }
@@ -138,18 +145,57 @@
 }
 
 /* Legacy "bitcoin-" class mappings to Amarka theme tokens */
-[class*="bg-bitcoin-dark"] { background-color: var(--ts-bg-soft) !important; color: var(--ts-ink) !important; }
-[class*="bg-bitcoin-orange"] { background-color: color-mix(in srgb, var(--ts-accent) 85%, #fff 15%) !important; color: var(--ts-ink) !important; }
-[class*="bg-bitcoin-gold"] { background-color: color-mix(in srgb, var(--ts-accent) 70%, #fff 30%) !important; color: var(--ts-ink) !important; }
-[class*="bg-bitcoin-gray"] { background-color: color-mix(in srgb, var(--ts-ink-soft) 10%, #fff 90%) !important; color: var(--ts-ink) !important; }
-[class*="border-bitcoin-orange"] { border-color: var(--ts-accent) !important; }
-[class*="border-bitcoin-gold"] { border-color: color-mix(in srgb, var(--ts-accent) 80%, #fff 20%) !important; }
-[class*="border-bitcoin-gray"] { border-color: color-mix(in srgb, var(--ts-ink) 12%, #000 0%) !important; }
-[class*="text-bitcoin-orange"] { color: var(--ts-accent) !important; }
-[class*="text-bitcoin-gold"] { color: color-mix(in srgb, var(--ts-accent) 80%, #000 20%) !important; }
-[class*="text-bitcoin-gray"] { color: var(--ts-ink-soft) !important; }
-[class*="shadow-bitcoin"] { box-shadow: var(--shadow-soft) !important; }
-[class*="shadow-bitcoin-lg"] { box-shadow: var(--shadow-hover) !important; }
+[class*="bg-bitcoin-dark"] {
+  background-color: var(--ts-bg-soft) !important;
+  color: var(--ts-ink) !important;
+}
+
+[class*="bg-bitcoin-orange"] {
+  background-color: color-mix(in srgb, var(--ts-accent) 85%, #fff 15%) !important;
+  color: var(--ts-ink) !important;
+}
+
+[class*="bg-bitcoin-gold"] {
+  background-color: color-mix(in srgb, var(--ts-accent) 70%, #fff 30%) !important;
+  color: var(--ts-ink) !important;
+}
+
+[class*="bg-bitcoin-gray"] {
+  background-color: color-mix(in srgb, var(--ts-ink-soft) 10%, #fff 90%) !important;
+  color: var(--ts-ink) !important;
+}
+
+[class*="border-bitcoin-orange"] {
+  border-color: var(--ts-accent) !important;
+}
+
+[class*="border-bitcoin-gold"] {
+  border-color: color-mix(in srgb, var(--ts-accent) 80%, #fff 20%) !important;
+}
+
+[class*="border-bitcoin-gray"] {
+  border-color: color-mix(in srgb, var(--ts-ink) 12%, #000 0%) !important;
+}
+
+[class*="text-bitcoin-orange"] {
+  color: var(--ts-accent) !important;
+}
+
+[class*="text-bitcoin-gold"] {
+  color: color-mix(in srgb, var(--ts-accent) 80%, #000 20%) !important;
+}
+
+[class*="text-bitcoin-gray"] {
+  color: var(--ts-ink-soft) !important;
+}
+
+[class*="shadow-bitcoin"] {
+  box-shadow: var(--shadow-soft) !important;
+}
+
+[class*="shadow-bitcoin-lg"] {
+  box-shadow: var(--shadow-hover) !important;
+}
 
 @media (max-width: 768px) {
   .page-container {
@@ -356,7 +402,12 @@ body {
 }
 
 /* Ensure all text is readable on dark background */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   color: var(--ts-ink) !important;
   font-family: var(--font-display);
   font-weight: 700;
@@ -389,7 +440,9 @@ h1, h2, h3, h4, h5, h6 {
   color: color-mix(in srgb, var(--ts-ink-soft) 85%, transparent);
 }
 
-p, span, div {
+p,
+span,
+div {
   color: inherit;
 }
 
@@ -416,7 +469,7 @@ body::before {
   left: 0;
   width: 100%;
   height: 100%;
-  background: 
+  background:
     radial-gradient(circle at 18% 42%, color-mix(in srgb, var(--ts-accent-soft) 14%, transparent) 0%, transparent 52%),
     radial-gradient(circle at 78% 78%, color-mix(in srgb, var(--accent-warm) 12%, transparent) 0%, transparent 55%),
     radial-gradient(circle at 46% 18%, color-mix(in srgb, #4a9eff 8%, transparent) 0%, transparent 50%);
@@ -522,7 +575,8 @@ a:hover {
   button,
   input[type="button"],
   input[type="submit"] {
-    color: #f5f5f7; /* Light text for buttons on dark theme */
+    color: #f5f5f7;
+    /* Light text for buttons on dark theme */
   }
 
   .body-dark button,
@@ -548,6 +602,7 @@ a:hover {
 }
 
 @layer components {
+
   /* Surface Styles */
   .ts-surface {
     @apply bg-white text-ts-bg shadow-lg;
@@ -717,6 +772,7 @@ a:hover {
   .ts-btn-icon.is-info:hover {
     background: color-mix(in srgb, #2563eb 18%, var(--bg-elevated));
   }
+
   .ts-btn-sm {
     @apply px-4 py-2 text-sm;
   }
@@ -728,10 +784,7 @@ a:hover {
 
   /* Form Field Styles */
   .form-field {
-    @apply w-full px-4 py-3 rounded-xl border border-gray-300
-      bg-white text-gray-900 placeholder:text-gray-400
-      focus:border-ts-accent focus:ring-2 focus:ring-ts-accent
-      focus-visible:outline-none transition-colors;
+    @apply w-full px-4 py-3 rounded-xl border border-gray-300 bg-white text-gray-900 placeholder:text-gray-400 focus:border-ts-accent focus:ring-2 focus:ring-ts-accent focus-visible:outline-none transition-colors;
   }
 
   .form-label {
@@ -748,60 +801,40 @@ a:hover {
 
   /* Tab Styles */
   .tab-button {
-    @apply inline-flex items-center justify-center gap-2 px-6 py-3
-      rounded-xl font-semibold transition-all;
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all;
   }
 
   .tab-button-inactive {
-    @apply bg-white border-2 border-gray-300 text-gray-700
-      hover:bg-gray-50 hover:border-gray-400;
+    @apply bg-white border-2 border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400;
   }
 
   .tab-button-active {
-    @apply bg-ts-accent border-2 border-ts-accent text-white
-      shadow-sm;
+    @apply bg-ts-accent border-2 border-ts-accent text-white shadow-sm;
   }
 
   /* Action Buttons (Edit/Delete in tables) */
   .btn-edit {
-    @apply inline-flex items-center justify-center gap-1.5 px-3 py-2
-      rounded-lg font-medium text-sm text-white bg-blue-600
-      hover:bg-blue-700 focus-visible:outline focus-visible:outline-2
-      focus-visible:outline-offset-2 focus-visible:outline-blue-600
-      transition-colors shadow-sm;
+    @apply inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg font-medium text-sm text-white bg-blue-600 hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 transition-colors shadow-sm;
   }
 
   .btn-delete {
-    @apply inline-flex items-center justify-center gap-1.5 px-3 py-2
-      rounded-lg font-medium text-sm text-white bg-red-600
-      hover:bg-red-700 focus-visible:outline focus-visible:outline-2
-      focus-visible:outline-offset-2 focus-visible:outline-red-600
-      transition-colors shadow-sm;
+    @apply inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg font-medium text-sm text-white bg-red-600 hover:bg-red-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 transition-colors shadow-sm;
   }
 
   .btn-view {
-    @apply inline-flex items-center justify-center gap-1.5 px-3 py-2
-      rounded-lg font-medium text-sm text-white bg-gray-600
-      hover:bg-gray-700 focus-visible:outline focus-visible:outline-2
-      focus-visible:outline-offset-2 focus-visible:outline-gray-600
-      transition-colors shadow-sm;
+    @apply inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg font-medium text-sm text-white bg-gray-600 hover:bg-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600 transition-colors shadow-sm;
   }
 
   .btn-icon {
-    @apply inline-flex items-center justify-center w-8 h-8
-      rounded-lg transition-colors;
+    @apply inline-flex items-center justify-center w-8 h-8 rounded-lg transition-colors;
   }
 
   .btn-icon-edit {
-    @apply btn-icon text-white bg-blue-600 hover:bg-blue-700
-      focus-visible:outline focus-visible:outline-2
-      focus-visible:outline-offset-2 focus-visible:outline-blue-600;
+    @apply btn-icon text-white bg-blue-600 hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600;
   }
 
   .btn-icon-delete {
-    @apply btn-icon text-white bg-red-600 hover:bg-red-700
-      focus-visible:outline focus-visible:outline-2
-      focus-visible:outline-offset-2 focus-visible:outline-red-600;
+    @apply btn-icon text-white bg-red-600 hover:bg-red-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600;
   }
 }
 
@@ -810,8 +843,8 @@ a:hover {
 }
 
 /* DO NOT CLIP THE HEADER */
-header { 
-  overflow: visible !important; 
+header {
+  overflow: visible !important;
 }
 
 /* Component utilities for pill and navigation */
@@ -924,6 +957,7 @@ header {
   color: var(--ts-accent);
   font-weight: 500;
 }
+
 /* Global styles */
 * {
   box-sizing: border-box;
@@ -965,7 +999,11 @@ select:focus-visible {
 }
 
 /* Smooth transitions for all interactive elements */
-a, button, input, textarea, select {
+a,
+button,
+input,
+textarea,
+select {
   transition: all 0.25s ease-out;
 }
 
@@ -993,7 +1031,8 @@ label {
 /* Enhanced button styles */
 button {
   cursor: pointer;
-  color: inherit; /* Keep button text color as defined */
+  color: inherit;
+  /* Keep button text color as defined */
 }
 
 button:disabled {
@@ -1042,7 +1081,8 @@ button:disabled {
   padding-left: 1.5rem;
   padding-right: 1.5rem;
   max-width: 1280px;
-  color: var(--ts-ink); /* Ensure container text is light */
+  color: var(--ts-ink);
+  /* Ensure container text is light */
 }
 
 /* Custom scrollbar for webkit browsers */
@@ -1091,7 +1131,7 @@ img {
   .no-print {
     display: none !important;
   }
-  
+
   body {
     background: white !important;
     color: black !important;
@@ -1105,7 +1145,7 @@ img {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-  
+
   html {
     scroll-behavior: auto;
   }
@@ -1168,14 +1208,22 @@ img {
 }
 
 /* Additional text readability fixes */
-article, section, main, aside, header, nav {
+article,
+section,
+main,
+aside,
+header,
+nav {
   color: var(--ts-ink);
 }
 
 /* Ensure readable text in cards and surfaces */
-.card, [class*='card'], 
-.surface, [class*='surface'],
-.panel, [class*='panel'] {
+.card,
+[class*='card'],
+.surface,
+[class*='surface'],
+.panel,
+[class*='panel'] {
   color: var(--ts-ink);
 }
 
@@ -1185,7 +1233,9 @@ li {
 }
 
 /* Table text */
-table, th, td {
+table,
+th,
+td {
   color: var(--ts-ink);
 }
 
@@ -1195,7 +1245,9 @@ table, th, td {
 }
 
 /* Override any remaining dark text */
-.text-gray-900, .text-gray-800, .text-gray-700 {
+.text-gray-900,
+.text-gray-800,
+.text-gray-700 {
   color: #f5f5f7 !important;
 }
 
@@ -1218,7 +1270,7 @@ img {
 }
 
 /* Prevent pixelation during transitions and animations */
-img, 
+img,
 picture,
 video {
   will-change: transform;
@@ -1250,6 +1302,7 @@ img[loading="lazy"] {
   perspective: 1000px;
   -webkit-perspective: 1000px;
 }
+
 .app-spinner,
 .ts-spinner {
   position: relative;
@@ -1304,10 +1357,13 @@ button .app-spinner::before,
 }
 
 @keyframes appSpinnerGlow {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: scale(0.92);
     opacity: 0.7;
   }
+
   50% {
     transform: scale(1);
     opacity: 1;
@@ -1315,10 +1371,13 @@ button .app-spinner::before,
 }
 
 @keyframes subtlePulse {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: scale(1);
     opacity: 0.92;
   }
+
   50% {
     transform: scale(1.06);
     opacity: 1;

@@ -1,64 +1,62 @@
 <section class="bg-ts-bg min-h-screen">
-  <app-page-header
-    title="collections.title"
-    subtitle="collections.subtitle"
-    [breadcrumbs]="breadcrumbs"
+  <app-page-header title="collections.title" subtitle="collections.subtitle" [breadcrumbs]="breadcrumbs"
     icon="collections">
   </app-page-header>
 
   <div class="page-container py-10 space-y-8 relative">
     @if (isLoading) {
-      <div class="absolute inset-0 flex items-center justify-center bg-ts-bg/80 backdrop-blur-sm z-10">
-        <div class="text-center space-y-3">
-          <div class="app-spinner" style="--spinner-size: 64px;"><img src="/Logo Clear.png" alt="Loading" width="80" height="80"></div>
-          <p class="text-ts-ink-soft text-sm">{{ 'collections.loading' | translate }}</p>
-        </div>
+    <div class="absolute inset-0 flex items-center justify-center bg-ts-bg/80 backdrop-blur-sm z-10">
+      <div class="text-center space-y-3">
+        <div class="app-spinner" style="--spinner-size: 64px;"><img src="/Logo Clear.png" alt="Loading" width="80"
+            height="80"></div>
+        <p class="text-ts-ink-soft text-sm">{{ 'collections.loading' | translate }}</p>
       </div>
+    </div>
     }
     @if (isLoading) {
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        @for (i of [1,2,3,4,5,6]; track i) {
-          <div class="h-72 rounded-2xl bg-ts-paper border border-ts-line animate-pulse"></div>
-        }
-      </div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      @for (i of [1,2,3,4,5,6]; track i) {
+      <div class="h-72 rounded-2xl bg-ts-paper border border-ts-line animate-pulse"></div>
+      }
+    </div>
     } @else if (!collections.length) {
-      <div class="rounded-2xl bg-ts-paper border border-ts-line p-10 text-center">
-        <h3 class="text-xl font-semibold text-ts-ink mb-2">{{ 'collections.empty.title' | translate }}</h3>
-        <p class="text-ts-ink-soft">{{ 'collections.empty.body' | translate }}</p>
-      </div>
+    <div class="rounded-2xl bg-ts-paper border border-ts-line p-10 text-center">
+      <h3 class="text-xl font-semibold text-ts-ink mb-2">{{ 'collections.empty.title' | translate }}</h3>
+      <p class="text-ts-ink-soft">{{ 'collections.empty.body' | translate }}</p>
+    </div>
     } @else {
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        @for (collection of collections; track collection.slug) {
-          <a
-            [routerLink]="['/collections', collection.slug]"
-            class="block group rounded-2xl bg-ts-paper border border-ts-line shadow-sm overflow-hidden hover:border-ts-accent/50 hover:shadow-lg transition-all duration-300">
-            <div class="aspect-[4/3] bg-ts-bg-soft overflow-hidden">
-              @if (collection.heroImageUrl) {
-                <img [src]="collection.heroImageUrl" [alt]="collection.name" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
-              } @else {
-                <div class="w-full h-full flex items-center justify-center text-ts-ink-soft">
-                  <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-                  </svg>
-                </div>
-              }
-            </div>
-            <div class="p-5 space-y-2">
-              <div class="text-sm uppercase tracking-wide text-ts-ink-soft">{{ 'collections.card.label' | translate }}</div>
-              <h3 class="text-xl font-semibold text-ts-ink">{{ collection.name }}</h3>
-              @if (collection.description) {
-                <p class="text-sm text-ts-ink-soft line-clamp-2">{{ collection.description }}</p>
-              }
-              <div class="flex items-center gap-2 text-sm font-semibold text-ts-accent group-hover:text-ts-ink">
-                <span>{{ 'collections.card.cta' | translate }}</span>
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                </svg>
-              </div>
-            </div>
-          </a>
-        }
-      </div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      @for (collection of collections; track collection.slug) {
+      <a [routerLink]="['/collections', collection.slug]"
+        class="block group rounded-2xl bg-ts-paper border border-ts-line shadow-sm overflow-hidden hover:border-ts-accent/50 hover:shadow-lg transition-all duration-300">
+        <div class="aspect-[4/3] bg-ts-bg-soft overflow-hidden">
+          @if (collection.heroImageUrl) {
+          <img [src]="collection.heroImageUrl" [alt]="collection.name"
+            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
+          } @else {
+          <div class="w-full h-full flex items-center justify-center text-ts-ink-soft">
+            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </div>
+          }
+        </div>
+        <div class="p-5 space-y-2">
+          <div class="text-sm uppercase tracking-wide text-ts-ink-soft">{{ 'collections.card.label' | translate }}</div>
+          <h3 class="text-xl font-semibold text-ts-ink">{{ collection.name }}</h3>
+          @if (collection.description) {
+          <p class="text-sm text-ts-ink-soft line-clamp-2">{{ collection.description }}</p>
+          }
+          <div class="flex items-center gap-2 text-sm font-semibold text-ts-accent group-hover:text-ts-ink">
+            <span>{{ 'collections.card.cta' | translate }}</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </div>
+        </div>
+      </a>
+      }
+    </div>
     }
   </div>
 </section>

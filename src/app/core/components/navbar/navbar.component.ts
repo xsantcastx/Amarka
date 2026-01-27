@@ -48,7 +48,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   userProfile$ = this.authService.userProfile$;
 
   brandName = this.brandConfig.siteName;
-  logoSrc = this.brandConfig.site.brand.logo || 'assets/Logo.jpg';
+  logoSrc = this.brandConfig.site.brand.logo;
   logoAlt = this.brandConfig.site.brand.logoAlt || this.brandName;
   readonly headerLinks = this.brandConfig.nav.header as NavLink[];
   navLinks: NavLink[] = [];
@@ -94,7 +94,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   private applySettings(settings: AppSettings): void {
     this.brandName = settings.siteName || this.brandName;
-    this.logoSrc = settings.brandLogo || this.logoSrc || 'assets/Logo.jpg';
+    this.logoSrc = settings.brandLogo || this.logoSrc;
     this.logoAlt = this.brandName;
     this.facebookUrl = settings.facebookUrl || '';
     this.twitterUrl = settings.twitterUrl || '';
