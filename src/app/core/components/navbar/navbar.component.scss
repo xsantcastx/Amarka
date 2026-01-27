@@ -360,8 +360,10 @@
 
   &__logo {
     height: 2.5rem;
-    width: 2.5rem;
+    width: auto;
+    max-width: 8.5rem;
     border-radius: 0.75rem;
+    object-fit: contain;
   }
 
   &__title {

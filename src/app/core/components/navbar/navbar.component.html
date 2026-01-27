@@ -5,13 +5,13 @@
       <!-- Left: logo -->
       <div class="flex items-center gap-3 flex-shrink-0">
         <a routerLink="/">
-          <img [src]="logoSrc" [alt]="logoAlt" class="h-9 w-9 rounded-lg shadow-sm" />
+          <img [src]="logoSrc" [alt]="logoAlt" class="h-11 w-auto max-w-[200px] object-contain" />
         </a>
       </div>
 
       <!-- Center: search -->
       <div
-        class="flex-1 hidden md:flex items-stretch rounded-xl overflow-hidden border border-ts-line bg-ts-paper shadow-lvl1">
+        class="hidden md:flex items-stretch w-full max-w-[420px] rounded-xl overflow-hidden border border-ts-line bg-ts-paper shadow-lvl1">
         <input type="search" [placeholder]="'nav.search_placeholder' | translate"
           class="flex-1 px-3 text-ts-ink bg-transparent focus:outline-none" #navSearch
           (keydown.enter)="goToSearch(navSearch.value)">
