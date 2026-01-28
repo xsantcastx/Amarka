@@ -135,6 +135,7 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
       sku: [''],
       weight: [0, Validators.min(0)],
       tags: [''],
+      homeFeatured: [false],
       vendor: [this.brandConfig.siteName],
       videoUrl: [''],
       // SEO fields
@@ -222,6 +223,7 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
         sku: product.sku || '',
         weight: product.specs?.['weight'] || 0,
         tags: (product.tags || []).join(', '),
+        homeFeatured: !!product.homeFeatured,
         vendor: this.brandName,
         metaTitle: product.seo?.title || '',
         metaDescription: product.seo?.metaDescription || '',
@@ -786,6 +788,7 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
         tags: (formValue.tags || '').split(',').map((t: string) => t.trim()).filter((t: string) => t),
         collectionIds: [...this.selectedCollections],
         status: formValue.status || 'draft',
+        homeFeatured: !!formValue.homeFeatured,
         variantMode: variants.length ? 'embedded' : undefined,
         variants,
         bulkPricingTiers: bulkPricingTiers.length ? bulkPricingTiers : undefined,

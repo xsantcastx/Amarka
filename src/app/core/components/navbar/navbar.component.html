@@ -1,28 +1,30 @@
 <header class="app-navbar fixed inset-x-0 top-0 z-50">
   <!-- Top rail -->
   <div class="bg-ts-paper border-b border-ts-line shadow-sm">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 flex items-center gap-4">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 flex items-center justify-between gap-4">
       <!-- Left: logo -->
-      <div class="flex items-center gap-3 flex-shrink-0">
+      <div class="flex items-center gap-3 flex-shrink-0 min-w-[180px]">
         <a routerLink="/">
           <img [src]="logoSrc" [alt]="logoAlt" class="h-11 w-auto max-w-[200px] object-contain" />
         </a>
       </div>
 
       <!-- Center: search -->
-      <div
-        class="hidden md:flex items-stretch w-full max-w-[420px] rounded-xl overflow-hidden border border-ts-line bg-ts-paper shadow-lvl1">
-        <input type="search" [placeholder]="'nav.search_placeholder' | translate"
-          class="flex-1 px-3 text-ts-ink bg-transparent focus:outline-none" #navSearch
-          (keydown.enter)="goToSearch(navSearch.value)">
-        <button class="px-4 bg-primary text-neutral font-semibold hover:shadow-lvl2 transition"
-          (click)="goToSearch(navSearch.value)">
-          {{ 'common.search' | translate }}
-        </button>
+      <div class="hidden md:flex flex-1 justify-center px-4">
+        <div
+          class="w-full max-w-[520px] items-stretch rounded-xl overflow-hidden border border-ts-line bg-ts-paper shadow-lvl1 flex">
+          <input type="search" [placeholder]="'nav.search_placeholder' | translate"
+            class="flex-1 px-3 text-ts-ink bg-transparent focus:outline-none" #navSearch
+            (keydown.enter)="goToSearch(navSearch.value)">
+          <button class="px-4 bg-primary text-neutral font-semibold hover:shadow-lvl2 transition"
+            (click)="goToSearch(navSearch.value)">
+            {{ 'common.search' | translate }}
+          </button>
+        </div>
       </div>
 
       <!-- Right: account / cart / menu -->
-      <div class="flex items-center gap-4 text-xs text-ts-ink">
+      <div class="flex items-center gap-4 text-xs text-ts-ink justify-end min-w-[220px]">
         <div class="hidden lg:flex flex-col leading-tight">
           @if (('common.hello' | translate) !== 'common.hello') {
           <span class="text-ts-ink-soft">{{ 'common.hello' | translate }}</span>

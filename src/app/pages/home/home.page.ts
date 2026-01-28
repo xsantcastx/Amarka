@@ -150,6 +150,38 @@ export class HomePageComponent extends LoadingComponentBase implements OnInit {
       const seasonalTag = this.activeSeasonalTheme?.featuredProductsTag;
       let products: Product[] | undefined;
 
+      // Always prioritize Valentine collection/tag products for the featured section
+      const all = await this.productsService.getAllProductsOnce();
+      const homeFeaturedProducts = all.filter(product => !!product.homeFeatured);
+      if (homeFeaturedProducts.length) {
+        this.isSeasonalFeatured = false;
+        this.featuredProductsAll = homeFeaturedProducts;
+        this.featuredRotationWindow = homeFeaturedProducts.length;
+        this.featuredRotationIndex = 0;
+        this.stopFeaturedRotation();
+        this.featuredProducts = [...homeFeaturedProducts];
+        this.scheduleFeaturedRotationRefresh();
+        return;
+      }
+
+      const valentineSlugSet = new Set(
+        ['valentines', 'valentine', seasonalTag].filter((slug): slug is string => !!slug).map(slug => slug.toLowerCase())
+      );
+      const valentineProducts = all.filter(product =>
+        this.isPublishedProduct(product) && this.productMatchesCollectionsOrTags(product, valentineSlugSet)
+      );
+
+      if (valentineProducts.length) {
+        this.isSeasonalFeatured = true;
+        this.featuredProductsAll = valentineProducts;
+        this.featuredRotationWindow = valentineProducts.length;
+        this.featuredRotationIndex = 0;
+        this.stopFeaturedRotation();
+        this.featuredProducts = [...valentineProducts];
+        this.scheduleFeaturedRotationRefresh();
+        return;
+      }
+
       if (seasonalTag) {
         products = await this.productsService
           .getProductsByTag(seasonalTag, Math.max(this.featuredRotationWindow + 4, 8))
@@ -165,11 +197,20 @@ export class HomePageComponent extends LoadingComponentBase implements OnInit {
 
       this.featuredProductsAll = products || [];
       this.featuredRotationIndex = 0;
-      this.refreshFeaturedRotation();
-      this.cdr.detectChanges();
+      this.scheduleFeaturedRotationRefresh();
     } catch (error) {
       this.logger.error('HomePage error loading featured products', error);
     }
+  }
+
+  private productMatchesCollectionsOrTags(product: Product, slugSet: Set<string>): boolean {
+    const collectionMatch = (product.collectionIds || []).some(id => slugSet.has((id || '').toLowerCase()));
+    const tagMatch = (product.tags || []).some(tag => slugSet.has((tag || '').toLowerCase()));
+    return collectionMatch || tagMatch;
+  }
+
+  private isPublishedProduct(product: Product): boolean {
+    return !product.status || product.status === 'published';
   }
 
   private async loadBestSellersAsync() {
@@ -214,13 +255,10 @@ export class HomePageComponent extends LoadingComponentBase implements OnInit {
       });
 
     this.heroProducts = keepUnique(this.heroProducts);
-    this.featuredProductsAll = keepUnique(
-      this.featuredProductsAll.length ? this.featuredProductsAll : this.featuredProducts
-    );
     this.bestSellerProducts = keepUnique(this.bestSellerProducts);
     this.newArrivalProducts = keepUnique(this.newArrivalProducts);
     this.featuredRotationIndex = 0;
-    this.refreshFeaturedRotation();
+    this.scheduleFeaturedRotationRefresh();
   }
 
   private async loadGalleryPreview() {
@@ -306,6 +344,13 @@ export class HomePageComponent extends LoadingComponentBase implements OnInit {
     }, intervalMs);
   }
 
+  private scheduleFeaturedRotationRefresh() {
+    Promise.resolve().then(() => {
+      this.refreshFeaturedRotation();
+      this.cdr.detectChanges();
+    });
+  }
+
   private buildFeaturedWindow(): Product[] {
     if (!this.featuredProductsAll.length) {
       return [];
@@ -359,6 +404,3 @@ export class HomePageComponent extends LoadingComponentBase implements OnInit {
   }
 
 }
-
-
-

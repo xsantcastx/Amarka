@@ -26,6 +26,7 @@ export interface Product {
   galleryImageIds?: string[];  // Array of media IDs
   videoUrl?: string;       // Product video URL
   tags?: string[];
+  homeFeatured?: boolean;  // Show in homepage featured section
   seo?: {
     title?: string;
     metaDescription?: string;
