@@ -8,6 +8,22 @@ export interface BulkPricingTierSnapshot {
   label?: string;
 }
 
+export interface CustomizationPlacement {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  rotation?: number;
+}
+
+export interface CartItemCustomization {
+  id?: string;
+  logoUrl: string;
+  logoFilename?: string;
+  baseImageUrl?: string;
+  placement: CustomizationPlacement;
+}
+
 // ===== Cart Item =====
 
 export interface CartItem {
@@ -30,6 +46,10 @@ export interface CartItem {
   
   // Pricing tiers snapshot (for bulk pricing)
   bulkPricingTiers?: BulkPricingTierSnapshot[];
+
+  // Customization snapshot (for customizable products)
+  customizationId?: Id;
+  customization?: CartItemCustomization;
 }
 
 // ===== Cart =====
@@ -113,6 +133,8 @@ export interface OrderItem {
   currency: string;
   imageUrl?: string;
   grosor?: string;             // Category/model identifier
+  customizationId?: Id;
+  customization?: CartItemCustomization;
 }
 
 // ===== Order Totals =====

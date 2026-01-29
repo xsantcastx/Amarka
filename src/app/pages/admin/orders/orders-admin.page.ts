@@ -18,6 +18,19 @@ interface OrderItem {
   sku?: string;
   image?: string;
   imageUrl?: string;
+  customizationId?: string;
+  customization?: {
+    logoUrl: string;
+    logoFilename?: string;
+    baseImageUrl?: string;
+    placement?: {
+      x: number;
+      y: number;
+      width: number;
+      height: number;
+      rotation?: number;
+    };
+  };
 }
 
 interface ShippingAddress {
@@ -243,6 +256,32 @@ export class OrdersAdminComponent implements OnInit {
 
   getCustomerEmail(order: Order): string {
     return order.customer?.email || order.shippingAddress?.email || 'N/A';
+  }
+
+  hasCustomization(item: OrderItem): boolean {
+    return !!item.customization?.logoUrl;
+  }
+
+  getCustomizationBaseImage(item: OrderItem): string {
+    return item.customization?.baseImageUrl || item.imageUrl || item.image || '';
+  }
+
+  getCustomizationOverlayStyle(item: OrderItem): Record<string, string> {
+    const placement = item.customization?.placement;
+    const x = placement?.x ?? 35;
+    const y = placement?.y ?? 35;
+    const width = placement?.width ?? 30;
+    const height = placement?.height ?? 30;
+    const rotation = placement?.rotation ?? 0;
+
+    return {
+      top: `${y}%`,
+      left: `${x}%`,
+      width: `${width}%`,
+      height: `${height}%`,
+      transform: `rotate(${rotation}deg)`,
+      transformOrigin: 'center'
+    };
   }
 
   openDetailModal(order: Order): void {

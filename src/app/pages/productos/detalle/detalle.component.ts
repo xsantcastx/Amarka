@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, PLATFORM_ID, inject, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, AfterViewInit, PLATFORM_ID, inject, ChangeDetectorRef, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
@@ -12,6 +12,7 @@ import { SeoSchemaService } from '../../../services/seo-schema.service';
 import { BrandConfigService } from '../../../core/services/brand-config.service';
 import { ProductReviewService } from '../../../services/product-review.service';
 import { BulkPricingTier, Product, ProductVariant } from '../../../models/product';
+import { CartItemCustomization } from '../../../models/cart';
 import { Media } from '../../../models/media';
 import { Category } from '../../../models/catalog';
 import { Model } from '../../../models/catalog';
@@ -19,7 +20,8 @@ import { ReviewSummary } from '../../../models/review';
 import { ImageLightboxComponent, LightboxImage } from '../../../shared/components/image-lightbox/image-lightbox.component';
 import { ProductReviewsComponent } from '../../../shared/components/product-reviews/product-reviews.component';
 import { StorageService } from '../../../services/storage.service';
-import { firstValueFrom, Subscription } from 'rxjs';
+import { firstValueFrom, lastValueFrom, Subscription } from 'rxjs';
+import { Auth } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-detalle',
@@ -43,6 +45,7 @@ export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
   private brandConfig = inject(BrandConfigService);
   private cdr = inject(ChangeDetectorRef);
   private storageService = inject(StorageService);
+  private auth = inject(Auth);
   
   producto: Product | undefined;
   category: Category | undefined;
@@ -67,6 +70,15 @@ export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
   addSuccess = false;
   addError = '';
   private routeSubscription?: Subscription;
+  customLogoPreview: string | null = null;
+  customLogoName = '';
+  customLogoError = '';
+  customLogoFile: File | null = null;
+  customPlacementOverride: { x: number; y: number } | null = null;
+  private isDraggingCustomization = false;
+  private dragOffsetX = 0;
+  private dragOffsetY = 0;
+  @ViewChild('customizationPreview') customizationPreviewRef?: ElementRef<HTMLDivElement>;
 
   async ngOnInit() {
     // Subscribe to route param changes to reload when navigating between products
@@ -108,6 +120,7 @@ export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
       }
 
       this.producto = producto;
+      this.resetCustomizationPreview();
       this.cdr.detectChanges();
 
       const [category, model, reviewSummary] = await Promise.all([
@@ -138,6 +151,14 @@ export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
         this.cdr.detectChanges();
       }
     }
+  }
+
+  private resetCustomizationPreview() {
+    this.customLogoPreview = null;
+    this.customLogoName = '';
+    this.customLogoError = '';
+    this.customPlacementOverride = null;
+    this.customLogoFile = null;
   }
 
   private async loadProductMediaAssets(): Promise<void> {
@@ -220,6 +241,130 @@ export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
     this.cdr.detectChanges();
   }
 
+  startCustomizationDrag(event: MouseEvent | TouchEvent) {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    if (!this.customizationPreviewRef?.nativeElement) {
+      return;
+    }
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    const container = this.customizationPreviewRef.nativeElement;
+    const rect = container.getBoundingClientRect();
+    const placement = this.customizationPlacement;
+    const overlayLeft = rect.left + (placement.x / 100) * rect.width;
+    const overlayTop = rect.top + (placement.y / 100) * rect.height;
+
+    const pointer = this.getPointerPosition(event);
+    this.dragOffsetX = pointer.x - overlayLeft;
+    this.dragOffsetY = pointer.y - overlayTop;
+    this.isDraggingCustomization = true;
+
+    this.addDragListeners();
+  }
+
+  private addDragListeners() {
+    window.addEventListener('mousemove', this.onCustomizationDragMove);
+    window.addEventListener('mouseup', this.onCustomizationDragEnd);
+    window.addEventListener('touchmove', this.onCustomizationDragMove, { passive: false });
+    window.addEventListener('touchend', this.onCustomizationDragEnd);
+    window.addEventListener('touchcancel', this.onCustomizationDragEnd);
+  }
+
+  private removeDragListeners() {
+    window.removeEventListener('mousemove', this.onCustomizationDragMove);
+    window.removeEventListener('mouseup', this.onCustomizationDragEnd);
+    window.removeEventListener('touchmove', this.onCustomizationDragMove);
+    window.removeEventListener('touchend', this.onCustomizationDragEnd);
+    window.removeEventListener('touchcancel', this.onCustomizationDragEnd);
+  }
+
+  private onCustomizationDragMove = (event: MouseEvent | TouchEvent) => {
+    if (!this.isDraggingCustomization || !this.customizationPreviewRef?.nativeElement) {
+      return;
+    }
+
+    event.preventDefault();
+    const container = this.customizationPreviewRef.nativeElement;
+    const rect = container.getBoundingClientRect();
+    const placement = this.customizationPlacement;
+    const overlayWidth = (placement.width / 100) * rect.width;
+    const overlayHeight = (placement.height / 100) * rect.height;
+
+    const pointer = this.getPointerPosition(event);
+    let nextLeft = pointer.x - rect.left - this.dragOffsetX;
+    let nextTop = pointer.y - rect.top - this.dragOffsetY;
+
+    nextLeft = Math.min(Math.max(0, nextLeft), rect.width - overlayWidth);
+    nextTop = Math.min(Math.max(0, nextTop), rect.height - overlayHeight);
+
+    const nextX = (nextLeft / rect.width) * 100;
+    const nextY = (nextTop / rect.height) * 100;
+
+    this.customPlacementOverride = { x: nextX, y: nextY };
+    this.cdr.detectChanges();
+  };
+
+  private onCustomizationDragEnd = () => {
+    if (!this.isDraggingCustomization) {
+      return;
+    }
+    this.isDraggingCustomization = false;
+    this.removeDragListeners();
+  };
+
+  private getPointerPosition(event: MouseEvent | TouchEvent) {
+    if ('touches' in event) {
+      const touch = event.touches[0] || event.changedTouches[0];
+      return { x: touch?.clientX ?? 0, y: touch?.clientY ?? 0 };
+    }
+    return { x: event.clientX, y: event.clientY };
+  }
+
+  onCustomLogoSelected(event: Event) {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    const input = event.target as HTMLInputElement;
+    if (!input.files || input.files.length === 0) {
+      return;
+    }
+
+    const file = input.files[0];
+    const validation = this.storageService.validateImageFile(file);
+    if (!validation.valid) {
+      this.customLogoError = validation.error?.includes('size')
+        ? 'product.customization_file_too_large'
+        : 'product.customization_invalid_file';
+      this.customLogoFile = null;
+      this.customLogoPreview = null;
+      this.customLogoName = '';
+      return;
+    }
+
+    this.customLogoError = '';
+    this.customLogoName = file.name;
+    this.customLogoFile = file;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.customLogoPreview = typeof reader.result === 'string' ? reader.result : null;
+      this.cdr.detectChanges();
+    };
+    reader.readAsDataURL(file);
+  }
+
+  clearCustomLogo() {
+    this.customLogoPreview = null;
+    this.customLogoName = '';
+    this.customLogoError = '';
+    this.customPlacementOverride = null;
+    this.customLogoFile = null;
+  }
+
   private normalizeBulkPricingTiers(tiers?: BulkPricingTier[]): BulkPricingTier[] {
     if (!tiers || !Array.isArray(tiers)) {
       return [];
@@ -235,8 +380,67 @@ export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
       .sort((a, b) => a.minQty - b.minQty);
   }
 
+  private clampPercent(value: any, min: number, max: number, fallback: number): number {
+    const numeric = Number(value);
+    if (!Number.isFinite(numeric)) {
+      return fallback;
+    }
+    return Math.min(max, Math.max(min, numeric));
+  }
+
   get bulkPricingTiers(): BulkPricingTier[] {
     return this.normalizeBulkPricingTiers(this.producto?.bulkPricingTiers);
+  }
+
+  get isCustomizable(): boolean {
+    return this.producto?.customizable === true;
+  }
+
+  get customizationBaseImageUrl(): string | null {
+    if (!this.producto) {
+      return null;
+    }
+    const baseImage = this.producto.customization?.baseImageUrl;
+    if (baseImage) {
+      return baseImage;
+    }
+    return this.coverImage?.url || this.producto.imageUrl || null;
+  }
+
+  get customizationPlacement() {
+    const placement = this.producto?.customization?.placement;
+    const override = this.customPlacementOverride;
+    return {
+      x: this.clampPercent(override?.x ?? placement?.x, 0, 100, 35),
+      y: this.clampPercent(override?.y ?? placement?.y, 0, 100, 35),
+      width: this.clampPercent(placement?.width, 1, 100, 30),
+      height: this.clampPercent(placement?.height, 1, 100, 30),
+      rotation: this.clampPercent(placement?.rotation, -180, 180, 0)
+    };
+  }
+
+  get customizationOverlayStyle() {
+    const placement = this.customizationPlacement;
+    return {
+      top: `${placement.y}%`,
+      left: `${placement.x}%`,
+      width: `${placement.width}%`,
+      height: `${placement.height}%`,
+      transform: `rotate(${placement.rotation}deg)`,
+      transformOrigin: 'center'
+    };
+  }
+
+  get customizationAreaStyle() {
+    const placement = this.customizationPlacement;
+    return {
+      top: `${placement.y}%`,
+      left: `${placement.x}%`,
+      width: `${placement.width}%`,
+      height: `${placement.height}%`,
+      transform: `rotate(${placement.rotation}deg)`,
+      transformOrigin: 'center'
+    };
   }
 
   get hasVariants(): boolean {
@@ -530,6 +734,54 @@ export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
     this.lightboxOpen = true;
   }
 
+  private generateCustomizationId(): string {
+    if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) {
+      return crypto.randomUUID();
+    }
+    return `custom_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  }
+
+  private sanitizeFilename(filename: string): string {
+    return filename.replace(/[^a-zA-Z0-9._-]/g, '-');
+  }
+
+  private async buildCustomizationPayload(): Promise<CartItemCustomization | null> {
+    if (!this.producto || !this.producto.id || !this.customLogoFile) {
+      return null;
+    }
+
+    const user = this.auth.currentUser;
+    if (!user) {
+      this.addError = 'Please log in to save your custom logo.';
+      return null;
+    }
+
+    const cartId = await this.cartService.ensureCartId();
+    if (!cartId) {
+      this.addError = 'We could not save your logo. Please try again.';
+      return null;
+    }
+
+    const customizationId = this.generateCustomizationId();
+    const safeFilename = this.sanitizeFilename(this.customLogoFile.name);
+    const storagePath = `customizations/${user.uid}/${cartId}/${this.producto.id}/${customizationId}-${safeFilename}`;
+
+    const uploadResult = await lastValueFrom(this.storageService.uploadFile(this.customLogoFile, storagePath));
+    const logoUrl = uploadResult.downloadURL;
+    if (!logoUrl) {
+      this.addError = 'We could not save your logo. Please try again.';
+      return null;
+    }
+
+    return {
+      id: customizationId,
+      logoUrl,
+      logoFilename: this.customLogoFile.name,
+      baseImageUrl: this.customizationBaseImageUrl || undefined,
+      placement: this.customizationPlacement
+    };
+  }
+
   async addToCart() {
     if (!this.producto || this.addInProgress) return;
 
@@ -545,7 +797,17 @@ export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
     this.cdr.detectChanges();
 
     try {
-      await this.cartService.add(this.producto, 1, this.selectedVariant || undefined);
+      let customizationPayload: CartItemCustomization | null = null;
+      if (this.isCustomizable && this.customLogoFile) {
+        customizationPayload = await this.buildCustomizationPayload();
+        if (!customizationPayload) {
+          this.addInProgress = false;
+          this.cdr.detectChanges();
+          return;
+        }
+      }
+
+      await this.cartService.add(this.producto, 1, this.selectedVariant || undefined, customizationPayload || undefined);
       this.addSuccess = true;
       setTimeout(() => {
         this.addSuccess = false;
@@ -778,5 +1040,6 @@ export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.routeSubscription) {
       this.routeSubscription.unsubscribe();
     }
+    this.removeDragListeners();
   }
 }

@@ -109,6 +109,75 @@
               </div>
             </div>
           }
+
+          @if (isCustomizable) {
+            <div class="mt-8 rounded-2xl border border-ts-accent/20 bg-ts-bg-soft/40 p-5 shadow-xl shadow-ts-accent/10">
+              <div class="flex items-start justify-between gap-4 mb-4">
+                <div>
+                  <h3 class="text-lg font-semibold text-ts-ink">{{ 'product.customization_title' | translate }}</h3>
+                  <p class="text-sm text-ts-ink-soft">{{ 'product.customization_subtitle' | translate }}</p>
+                </div>
+                <span class="px-3 py-1 text-xs font-semibold bg-ts-accent/20 text-ts-accent border border-ts-accent/30 rounded-full">
+                  {{ 'product.customization_badge' | translate }}
+                </span>
+              </div>
+
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-sm font-medium text-ts-ink mb-2">{{ 'product.customization_upload_label' | translate }}</label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    (change)="onCustomLogoSelected($event)"
+                    class="block w-full text-sm text-ts-ink file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-ts-accent/20 file:text-ts-ink hover:file:bg-ts-accent/30">
+                  @if (customLogoName) {
+                    <div class="mt-2 flex items-center justify-between text-xs text-ts-ink-soft">
+                      <span>{{ customLogoName }}</span>
+                      <button type="button" (click)="clearCustomLogo()" class="text-ts-accent hover:text-ts-accent/80">
+                        {{ 'product.customization_remove' | translate }}
+                      </button>
+                    </div>
+                  }
+                  @if (customLogoError) {
+                    <p class="mt-2 text-xs text-red-500">{{ customLogoError | translate }}</p>
+                  }
+                </div>
+
+                <div class="rounded-xl border border-ts-line/40 bg-ts-bg-soft/60 p-3">
+                  <div #customizationPreview class="relative aspect-[4/3] overflow-hidden rounded-lg bg-ts-bg-soft/60 border border-ts-line/30">
+                    @if (customizationBaseImageUrl) {
+                      <img [src]="customizationBaseImageUrl" [alt]="producto.name" class="w-full h-full object-cover">
+                    } @else {
+                      <div class="w-full h-full flex items-center justify-center text-xs text-ts-ink-soft">
+                        {{ 'product.customization_missing_base' | translate }}
+                      </div>
+                    }
+
+                    <div class="absolute border-2 border-dashed border-ts-accent/60 rounded-lg pointer-events-none" [ngStyle]="customizationAreaStyle"></div>
+
+                    @if (customLogoPreview) {
+                      <img
+                        [src]="customLogoPreview"
+                        alt="Logo preview"
+                        draggable="false"
+                        (mousedown)="startCustomizationDrag($event)"
+                        (touchstart)="startCustomizationDrag($event)"
+                        class="absolute object-contain drop-shadow-lg cursor-move select-none"
+                        [ngStyle]="customizationOverlayStyle">
+                    } @else {
+                      <div class="absolute flex items-center justify-center text-[10px] text-ts-ink-soft bg-ts-bg/50 border border-ts-accent/30 rounded-lg cursor-move select-none"
+                           (mousedown)="startCustomizationDrag($event)"
+                           (touchstart)="startCustomizationDrag($event)"
+                           [ngStyle]="customizationOverlayStyle">
+                        {{ 'product.customization_placeholder' | translate }}
+                      </div>
+                    }
+                  </div>
+                  <p class="mt-2 text-xs text-ts-ink-soft">{{ 'product.customization_hint' | translate }}</p>
+                </div>
+              </div>
+            </div>
+          }
         </div>
       
       <!-- Product Information -->

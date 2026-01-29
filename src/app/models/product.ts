@@ -26,6 +26,8 @@ export interface Product {
   galleryImageIds?: string[];  // Array of media IDs
   videoUrl?: string;       // Product video URL
   tags?: string[];
+  customizable?: boolean;
+  customization?: ProductCustomizationConfig;
   seo?: {
     title?: string;
     metaDescription?: string;
@@ -36,6 +38,19 @@ export interface Product {
   seoLocked?: boolean;
   createdAt?: Timestamp;   // Creation timestamp
   updatedAt?: Timestamp;   // Last update timestamp
+}
+
+export interface ProductCustomizationPlacement {
+  x: number; // Percent from left
+  y: number; // Percent from top
+  width: number; // Percent of base image width
+  height: number; // Percent of base image height
+  rotation?: number; // Degrees
+}
+
+export interface ProductCustomizationConfig {
+  baseImageUrl?: string;
+  placement?: ProductCustomizationPlacement;
 }
 
 export interface BulkPricingTier {

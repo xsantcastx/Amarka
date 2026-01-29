@@ -177,7 +177,17 @@
     "variant": "Variant",
     "bulk_pricing": "Bulk pricing",
     "bulk_pricing_hint": "Bulk pricing available. Prices update in the cart.",
-    "from": "From"
+    "from": "From",
+    "customization_title": "Custom design preview",
+    "customization_subtitle": "Upload your logo or design to see placement before purchase.",
+    "customization_badge": "Customizable",
+    "customization_upload_label": "Upload your logo",
+    "customization_remove": "Remove",
+    "customization_missing_base": "Base image not available.",
+    "customization_placeholder": "Logo area",
+    "customization_hint": "Preview updates instantly with your uploaded image. Drag to reposition.",
+    "customization_invalid_file": "Please upload a valid image file.",
+    "customization_file_too_large": "File is too large. Max 5MB."
   },
   "home": {
     "loading": "Loading content...",

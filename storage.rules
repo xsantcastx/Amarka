@@ -74,6 +74,13 @@ service firebase.storage {
       allow write: if isAdmin() && isValidImage();
       allow delete: if isAdmin();
     }
+
+    // Customer customization uploads (logos/designs)
+    match /customizations/{userId}/{allPaths=**} {
+      allow read: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
+      allow write: if isAuthenticated() && (request.auth.uid == userId || isAdmin()) && isValidImage();
+      allow delete: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
+    }
     
     // User profile images - Users can manage their own
     match /users/{userId}/{imageName} {

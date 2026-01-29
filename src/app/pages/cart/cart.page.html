@@ -65,12 +65,19 @@
                         <span *ngIf="it.variantLabel" class="px-2 py-0.5 bg-ts-bg-soft rounded-md border border-ts-line text-xs">
                           {{ it.variantLabel }}
                         </span>
+                        <span *ngIf="it.customization?.logoUrl" class="px-2 py-0.5 bg-ts-accent/15 border border-ts-accent/30 rounded-full text-xs text-ts-ink">
+                          Custom logo
+                        </span>
+                      </div>
+                      <div *ngIf="it.customization?.logoUrl" class="mt-2 flex items-center gap-2 text-xs text-ts-ink-soft">
+                        <img [src]="it.customization?.logoUrl" alt="Logo" class="w-10 h-10 object-contain bg-ts-bg-soft border border-ts-line rounded-lg">
+                        <span>{{ it.customization?.logoFilename || 'Logo uploaded' }}</span>
                       </div>
                     </div>
                     
                     <!-- Remove Button -->
                     <button 
-                      (click)="remove(it.product.id, it.variantId)"
+                      (click)="remove(it.product.id, it.variantId, it.customizationId)"
                       class="flex-shrink-0 p-2 text-ts-ink-soft hover:text-error hover:bg-error/10 rounded-lg transition-all group/btn"
                       title="Remove item">
                       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -84,7 +91,7 @@
                       <label class="text-sm text-ts-ink-soft font-medium">{{ 'cart.quantity' | translate }}:</label>
                     <div class="flex items-center gap-2 bg-ts-bg-soft border border-ts-line rounded-lg px-1 py-1">
                       <button 
-                        (click)="updateQty(it.product.id, (it.qty - 1).toString(), it.variantId)"
+                        (click)="updateQty(it.product.id, (it.qty - 1).toString(), it.variantId, it.customizationId)"
                         [disabled]="it.qty <= 1"
                         class="w-8 h-8 flex items-center justify-center text-ts-ink-soft hover:text-ts-ink hover:bg-ts-accent/20 rounded-md transition-all disabled:opacity-30 disabled:cursor-not-allowed">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -95,10 +102,10 @@
                         type="number" 
                         min="1" 
                         [value]="it.qty"
-                        (input)="updateQty(it.product.id, $any($event.target).value, it.variantId)"
+                        (input)="updateQty(it.product.id, $any($event.target).value, it.variantId, it.customizationId)"
                         class="w-16 text-center bg-transparent border-0 text-ts-ink font-semibold focus:outline-none focus:ring-0">
                       <button 
-                        (click)="updateQty(it.product.id, (it.qty + 1).toString(), it.variantId)"
+                        (click)="updateQty(it.product.id, (it.qty + 1).toString(), it.variantId, it.customizationId)"
                         class="w-8 h-8 flex items-center justify-center text-ts-ink-soft hover:text-ts-ink hover:bg-ts-accent/20 rounded-md transition-all">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>

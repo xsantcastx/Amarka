@@ -131,3 +131,63 @@
     </div>
   </div>
 </div>
+
+<!-- Order Detail Modal -->
+<div *ngIf="showDetailModal && selectedOrder" class="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50" (click)="closeDetailModal()">
+  <div class="bg-ts-paper border border-ts-line rounded-2xl shadow-xl w-full max-w-4xl max-h-[90vh] overflow-hidden" (click)="$event.stopPropagation()">
+    <div class="flex items-start justify-between px-6 py-4 border-b border-ts-line">
+      <div>
+        <h2 class="text-lg font-semibold text-ts-ink">Order {{ selectedOrder.orderNumber }}</h2>
+        <p class="text-xs text-ts-ink-soft">Status: {{ selectedOrder.status | titlecase }} - Total {{ selectedOrder.total | currency:'USD':'symbol':'1.2-2' }}</p>
+      </div>
+      <button (click)="closeDetailModal()" class="p-2 rounded-lg bg-ts-bg-soft border border-ts-line text-ts-ink hover:border-ts-accent transition-colors">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+
+    <div class="p-6 overflow-y-auto max-h-[80vh] space-y-6">
+      <div>
+        <h3 class="text-sm font-semibold text-ts-ink mb-3">Items</h3>
+        <div class="space-y-4">
+          <div *ngFor="let item of selectedOrder.items" class="border border-ts-line rounded-xl p-4">
+            <div class="flex flex-wrap gap-4 items-start">
+              <div class="w-24 h-24 bg-ts-bg-soft border border-ts-line rounded-lg overflow-hidden flex items-center justify-center">
+                <img *ngIf="item.imageUrl || item.image" [src]="item.imageUrl || item.image" [alt]="item.name" class="w-full h-full object-cover">
+                <span *ngIf="!item.imageUrl && !item.image" class="text-xs text-ts-ink-soft">No image</span>
+              </div>
+              <div class="flex-1 min-w-[200px]">
+                <div class="text-sm font-semibold text-ts-ink">{{ item.name }}</div>
+                <div class="text-xs text-ts-ink-soft mt-1">
+                  Qty: {{ item.qty || item.quantity || 1 }} â€¢ SKU: {{ item.sku || 'n/a' }}
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="hasCustomization(item)" class="mt-4">
+              <div class="text-xs font-semibold text-ts-ink mb-2">Customization preview</div>
+              <div class="rounded-lg border border-ts-line bg-ts-bg-soft/40 p-3">
+                <div class="relative aspect-[4/3] overflow-hidden rounded-lg bg-ts-bg-soft/60 border border-ts-line/30">
+                  <img *ngIf="getCustomizationBaseImage(item)" [src]="getCustomizationBaseImage(item)" [alt]="item.name" class="w-full h-full object-cover">
+                  <div *ngIf="!getCustomizationBaseImage(item)" class="w-full h-full flex items-center justify-center text-xs text-ts-ink-soft">
+                    Base image missing
+                  </div>
+                  <img [src]="item.customization?.logoUrl" alt="Logo overlay" class="absolute object-contain drop-shadow-lg" [ngStyle]="getCustomizationOverlayStyle(item)">
+                </div>
+                <div class="mt-2 text-xs text-ts-ink-soft">{{ item.customization?.logoFilename || 'Logo uploaded' }}</div>
+                <a *ngIf="item.customization?.logoUrl"
+                   [href]="item.customization?.logoUrl"
+                   target="_blank"
+                   rel="noopener"
+                   class="mt-2 inline-flex items-center gap-2 text-xs font-semibold text-ts-accent hover:text-ts-accent/80">
+                  Download logo
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

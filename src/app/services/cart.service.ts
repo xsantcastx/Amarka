@@ -2,7 +2,7 @@ import { Injectable, inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { BehaviorSubject, map, Observable, of, combineLatest } from 'rxjs';
 import { BulkPricingTier, Product, ProductVariant } from '../models/product';
-import { BulkPricingTierSnapshot, Cart, CartItem } from '../models/cart';
+import { BulkPricingTierSnapshot, Cart, CartItem, CartItemCustomization } from '../models/cart';
 import { Firestore, doc, docData, setDoc, Timestamp, serverTimestamp, updateDoc } from '@angular/fire/firestore';
 import { Auth } from '@angular/fire/auth';
 import { switchMap, catchError, tap } from 'rxjs/operators';
@@ -336,6 +336,50 @@ export class CartService {
     return variant.imageUrl;
   }
 
+  private generateCustomizationId(): string {
+    if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) {
+      return crypto.randomUUID();
+    }
+    return `custom_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  }
+
+  private async getOrCreateCart(): Promise<Cart | null> {
+    let currentCart = this.cartState$.value;
+    if (currentCart?.id) {
+      return currentCart;
+    }
+
+    const user = this.auth.currentUser;
+    const baseCart = currentCart ?? this.createEmptyCart();
+
+    if (user) {
+      baseCart.id = user.uid;
+      baseCart.uid = user.uid;
+      this.cartState$.next(baseCart);
+      return baseCart;
+    }
+
+    if (!isPlatformBrowser(this.platformId)) {
+      console.error('[CartService] Cannot create cart on server');
+      return null;
+    }
+
+    let anonId = localStorage.getItem(ANON_CART_KEY);
+    if (!anonId) {
+      anonId = `anon_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      localStorage.setItem(ANON_CART_KEY, anonId);
+    }
+
+    baseCart.id = anonId;
+    this.cartState$.next(baseCart);
+    return baseCart;
+  }
+
+  async ensureCartId(): Promise<string | null> {
+    const cart = await this.getOrCreateCart();
+    return cart?.id ?? null;
+  }
+
   private getUnitPriceForQty(
     basePrice: number,
     qty: number,
@@ -357,7 +401,7 @@ export class CartService {
   /**
    * Add product to cart
    */
-  async add(product: Product, qty = 1, variant?: ProductVariant): Promise<void> {
+  async add(product: Product, qty = 1, variant?: ProductVariant, customization?: CartItemCustomization): Promise<void> {
     // Get inventory settings
     const settings = await this.settingsService.getSettings();
 
@@ -387,36 +431,23 @@ export class CartService {
       }
     }
 
-    let currentCart = this.cartState$.value;
-    
-    // If no cart exists, create one
-    if (!currentCart || !currentCart.id) {
+    const currentCart = await this.getOrCreateCart();
+    if (!currentCart) {
+      return;
+    }
 
-      const user = this.auth.currentUser;
-      
-      if (user) {
-        // Create user cart
-        currentCart = this.createEmptyCart(user.uid);
-        currentCart.uid = user.uid;
-      } else {
-        // Create anonymous cart
-        if (isPlatformBrowser(this.platformId)) {
-          let anonId = localStorage.getItem(ANON_CART_KEY);
-          if (!anonId) {
-            anonId = `anon_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-            localStorage.setItem(ANON_CART_KEY, anonId);
-          }
-          currentCart = this.createEmptyCart(anonId);
-        } else {
-          console.error('[CartService] Cannot create cart on server');
-          return;
-        }
-      }
+    const customizationId = customization
+      ? (customization.id || this.generateCustomizationId())
+      : undefined;
+    if (customization && !customization.id) {
+      customization.id = customizationId;
     }
     
     // Check if item already exists
     const existingItemIndex = currentCart.items.findIndex(
-      item => item.productId === product.id && item.variantId === variantKey
+      item => item.productId === product.id
+        && item.variantId === variantKey
+        && (customizationId ? item.customizationId === customizationId : !item.customizationId)
     );
 
     if (existingItemIndex >= 0) {
@@ -472,7 +503,9 @@ export class CartService {
         ...(!variantImageUrl && product.imageUrl && { imageUrl: product.imageUrl }),
         ...(variant?.sku && { sku: variant.sku }),
         ...(!variant?.sku && product.sku && { sku: product.sku }),
-        ...(bulkPricingTiers.length > 0 && { bulkPricingTiers })
+        ...(bulkPricingTiers.length > 0 && { bulkPricingTiers }),
+        ...(customizationId && { customizationId }),
+        ...(customization && { customization })
       };
 
       currentCart.items.push(newItem);
@@ -485,22 +518,30 @@ export class CartService {
   /**
    * Remove item from cart
    */
-  async remove(productId: string, variantId?: string): Promise<void> {
+  async remove(productId: string, variantId?: string, customizationId?: string): Promise<void> {
     const currentCart = this.cartState$.value;
     if (!currentCart) return;
 
-    currentCart.items = currentCart.items.filter(item => !(item.productId === productId && item.variantId === variantId));
+    currentCart.items = currentCart.items.filter(item => !(
+      item.productId === productId
+      && item.variantId === variantId
+      && (customizationId ? item.customizationId === customizationId : !item.customizationId)
+    ));
     await this.saveCart(currentCart);
   }
 
   /**
    * Update item quantity
    */
-  async updateQty(productId: string, qty: number, variantId?: string): Promise<void> {
+  async updateQty(productId: string, qty: number, variantId?: string, customizationId?: string): Promise<void> {
     const currentCart = this.cartState$.value;
     if (!currentCart) return;
 
-    const item = currentCart.items.find(i => i.productId === productId && i.variantId === variantId);
+    const item = currentCart.items.find(i =>
+      i.productId === productId
+      && i.variantId === variantId
+      && (customizationId ? i.customizationId === customizationId : !i.customizationId)
+    );
     if (item) {
       item.qty = Math.max(1, Math.floor(qty));
       if (item.bulkPricingTiers?.length) {

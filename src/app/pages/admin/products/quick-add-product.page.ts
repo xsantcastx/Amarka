@@ -137,6 +137,13 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
       tags: [''],
       vendor: [this.brandConfig.siteName],
       videoUrl: [''],
+      customizable: [false],
+      customizationBaseImageUrl: [''],
+      customizationX: [35, [Validators.min(0), Validators.max(100)]],
+      customizationY: [35, [Validators.min(0), Validators.max(100)]],
+      customizationWidth: [30, [Validators.min(1), Validators.max(100)]],
+      customizationHeight: [30, [Validators.min(1), Validators.max(100)]],
+      customizationRotation: [0],
       // SEO fields
       metaTitle: [''],
       metaDescription: [''],
@@ -223,6 +230,13 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
         weight: product.specs?.['weight'] || 0,
         tags: (product.tags || []).join(', '),
         vendor: this.brandName,
+        customizable: product.customizable === true || !!product.customization,
+        customizationBaseImageUrl: product.customization?.baseImageUrl || '',
+        customizationX: product.customization?.placement?.x ?? 35,
+        customizationY: product.customization?.placement?.y ?? 35,
+        customizationWidth: product.customization?.placement?.width ?? 30,
+        customizationHeight: product.customization?.placement?.height ?? 30,
+        customizationRotation: product.customization?.placement?.rotation ?? 0,
         metaTitle: product.seo?.title || '',
         metaDescription: product.seo?.metaDescription || '',
         slug: product.slug || ''
@@ -433,6 +447,35 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
     const prefix = modelName.substring(0, 3).toUpperCase();
     const random = Math.floor(Math.random() * 100000).toString().padStart(5, '0');
     return `${prefix}-${random}`;
+  }
+
+  private parseNumber(value: any, fallback: number): number {
+    const numeric = Number(value);
+    return Number.isFinite(numeric) ? numeric : fallback;
+  }
+
+  private clamp(value: any, min: number, max: number, fallback: number): number {
+    const numeric = this.parseNumber(value, fallback);
+    return Math.min(max, Math.max(min, numeric));
+  }
+
+  private buildCustomizationPayload(formValue: any) {
+    const customizable = !!formValue.customizable;
+    const baseImageUrl = (formValue.customizationBaseImageUrl || '').trim();
+    const placement = {
+      x: this.clamp(formValue.customizationX, 0, 100, 35),
+      y: this.clamp(formValue.customizationY, 0, 100, 35),
+      width: this.clamp(formValue.customizationWidth, 1, 100, 30),
+      height: this.clamp(formValue.customizationHeight, 1, 100, 30),
+      rotation: this.parseNumber(formValue.customizationRotation, 0)
+    };
+    return {
+      customizable,
+      customization: {
+        baseImageUrl: baseImageUrl || undefined,
+        placement
+      }
+    };
   }
 
   private generateTempId(): string {
@@ -770,6 +813,7 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
       const slug = formValue.slug || this.generateSlug(formValue.title);
       const variants = await this.buildVariantsPayload(slug);
       const bulkPricingTiers = this.normalizeBulkPricingTiers();
+      const customization = this.buildCustomizationPayload(formValue);
 
       const productPayload: Omit<Product, 'id'> = {
         name: formValue.title,
@@ -794,6 +838,8 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
           ...this.currentSpecs
         },
         videoUrl,
+        customizable: customization.customizable,
+        customization: customization.customization,
         seo: {
           title: formValue.metaTitle || '',
           metaDescription: formValue.metaDescription || '',

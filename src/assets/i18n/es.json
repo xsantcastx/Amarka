@@ -175,7 +175,17 @@
     "variant": "Variante",
     "bulk_pricing": "Precios por volumen",
     "bulk_pricing_hint": "Precios por volumen disponibles. Se actualizan en el carrito.",
-    "from": "Desde"
+    "from": "Desde",
+    "customization_title": "Vista previa personalizada",
+    "customization_subtitle": "Sube tu logo o diseÃ±o para ver la ubicaciÃ³n antes de comprar.",
+    "customization_badge": "Personalizable",
+    "customization_upload_label": "Sube tu logo",
+    "customization_remove": "Quitar",
+    "customization_missing_base": "La imagen base no estÃ¡ disponible.",
+    "customization_placeholder": "Ãrea del logo",
+    "customization_hint": "La vista previa se actualiza al instante con tu imagen. Arrastra para ajustar.",
+    "customization_invalid_file": "Sube una imagen vÃ¡lida.",
+    "customization_file_too_large": "El archivo es muy grande. MÃ¡ximo 5MB."
   },
   "home": {
     "hero": {
