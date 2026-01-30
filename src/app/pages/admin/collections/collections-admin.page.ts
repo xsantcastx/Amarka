@@ -31,6 +31,8 @@ export class CollectionsAdminPageComponent implements OnInit {
   editing: CollectionDoc | null = null;
   errorMessage = '';
   isSaving = false;
+  filterTerm = '';
+  statusFilter: 'all' | 'active' | 'inactive' = 'all';
   
   // Image upload
   selectedHeroFile: File | null = null;
@@ -50,6 +52,36 @@ export class CollectionsAdminPageComponent implements OnInit {
     seoDescription: [''],
     seoImage: ['']
   });
+
+  get totalCount(): number {
+    return this.collections.length;
+  }
+
+  get activeCount(): number {
+    return this.collections.filter(col => col.active !== false).length;
+  }
+
+  get inactiveCount(): number {
+    return this.collections.filter(col => col.active === false).length;
+  }
+
+  get filteredCollections(): CollectionDoc[] {
+    const term = this.filterTerm.trim().toLowerCase();
+    return this.collections.filter(col => {
+      const matchesStatus =
+        this.statusFilter === 'all' ||
+        (this.statusFilter === 'active' && col.active !== false) ||
+        (this.statusFilter === 'inactive' && col.active === false);
+
+      const matchesTerm =
+        !term ||
+        col.name.toLowerCase().includes(term) ||
+        col.slug.toLowerCase().includes(term) ||
+        (col.description || '').toLowerCase().includes(term);
+
+      return matchesStatus && matchesTerm;
+    });
+  }
 
   async ngOnInit() {
     const isAdmin = await this.checkAdminAccess();

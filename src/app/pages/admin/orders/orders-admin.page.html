@@ -1,64 +1,90 @@
-<div class="min-h-screen bg-ts-bg md:flex">
+<div class="min-h-screen bg-ts-bg">
   <app-admin-sidebar class="hidden md:block"></app-admin-sidebar>
 
   <div class="flex-1 md:pl-64">
-    <div class="bg-ts-paper border-b border-ts-line shadow-sm">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-        <div>
-          <div class="flex items-center gap-3 mb-1">
-            <a routerLink="/admin" class="text-ts-ink hover:text-ts-accent transition-colors">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-              </svg>
-            </a>
-            <h1 class="text-xl font-bold text-ts-ink">{{ 'admin.orders.title' | translate }}</h1>
+    <div class="relative overflow-hidden">
+      <div class="absolute -top-24 right-0 h-56 w-56 rounded-full bg-ts-accent/15 blur-3xl"></div>
+      <div class="absolute -top-12 right-40 h-40 w-40 rounded-full bg-ts-ink/5 blur-3xl"></div>
+      <div class="bg-ts-paper/90 backdrop-blur border-b border-ts-line">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div class="flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <div class="flex items-center gap-3">
+                <a routerLink="/admin" class="text-ts-ink hover:text-ts-accent transition-colors">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                  </svg>
+                </a>
+                <div>
+                  <h1 class="text-2xl font-semibold text-ts-ink">{{ 'admin.orders.title' | translate }}</h1>
+                  <p class="text-sm text-ts-ink-soft">{{ 'admin.title' | translate }} &bull; {{ 'admin.all_orders' | translate }} {{ orders().length }}</p>
+                </div>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <button (click)="refreshOrders()" class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-ts-bg-soft border border-ts-line text-ts-ink text-sm font-medium hover:border-ts-accent transition-colors" [title]="'admin.refresh' | translate">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v6h6M20 20v-6h-6M5 19a9 9 0 0014-7V5"></path>
+                </svg>
+                {{ 'admin.refresh' | translate }}
+              </button>
+            </div>
           </div>
-          <a routerLink="/admin" class="text-sm text-ts-ink-soft hover:text-ts-ink transition-colors">{{ 'admin.title' | translate }}</a>
-        </div>
-        <div class="flex items-center gap-2">
-          <button (click)="refreshOrders()" class="p-2 rounded-lg bg-ts-bg-soft border border-ts-line text-ts-ink hover:border-ts-accent transition-colors" [title]="'admin.refresh' | translate">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v6h6M20 20v-6h-6M5 19a9 9 0 0014-7V5"></path>
-            </svg>
-          </button>
         </div>
       </div>
     </div>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
-      <div class="flex flex-wrap gap-3 items-center">
-        <button
-          *ngFor="let status of statusOptions"
-          (click)="selectStatus(status.value)"
-          class="px-4 py-2 rounded-full border text-sm font-medium transition-colors"
-          [class.bg-ts-accent]="selectedStatus === status.value"
-          [class.text-ts-ink]="selectedStatus === status.value"
-          [class.border-ts-accent]="selectedStatus === status.value"
-          [class.text-ts-ink-soft]="selectedStatus !== status.value"
-          [class.border-ts-line]="selectedStatus !== status.value">
-          {{ status.label | translate }}
-        </button>
+      <div *ngIf="successMessage()" class="rounded-2xl border border-emerald-200 bg-emerald-50/80 px-4 py-3 text-sm text-emerald-700">
+        {{ successMessage() | translate }}
+      </div>
+      <div *ngIf="errorMessage()" class="rounded-2xl border border-rose-200 bg-rose-50/80 px-4 py-3 text-sm text-rose-700">
+        {{ errorMessage() | translate }}
       </div>
 
-      <div class="grid md:grid-cols-3 gap-4 items-end">
-        <div class="md:col-span-2">
-          <div class="relative">
-            <input type="text" [(ngModel)]="searchTerm" (input)="applyFilters()" [placeholder]="'common.search' | translate" class="w-full pl-10 pr-4 py-3 bg-ts-paper border border-ts-line rounded-xl text-ts-ink placeholder-ts-ink-soft focus:ring-2 focus:ring-ts-accent focus:border-ts-accent" />
-            <svg class="w-5 h-5 text-ts-ink-soft absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M4 11a7 7 0 1114 0 7 7 0 01-14 0z"></path>
-            </svg>
+      <div class="bg-ts-paper border border-ts-line rounded-2xl shadow-sm p-4 space-y-4">
+        <div class="flex flex-col lg:flex-row lg:items-center gap-4">
+          <div class="flex-1">
+            <div class="relative">
+              <input
+                type="text"
+                [(ngModel)]="searchTerm"
+                (input)="applyFilters()"
+                [placeholder]="'common.search' | translate"
+                class="w-full pl-10 pr-4 py-3 bg-ts-bg-soft border border-ts-line rounded-xl text-ts-ink placeholder-ts-ink-soft focus:ring-2 focus:ring-ts-accent focus:border-ts-accent" />
+              <svg class="w-5 h-5 text-ts-ink-soft absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M4 11a7 7 0 1114 0 7 7 0 01-14 0z"></path>
+              </svg>
+            </div>
           </div>
         </div>
-        <div class="flex gap-3">
-          <select [(ngModel)]="selectedStatus" (change)="applyFilters()" class="px-3 py-2 bg-ts-paper border border-ts-line rounded-lg text-ts-ink focus:ring-2 focus:ring-ts-accent focus:border-ts-accent">
-            <option value="all">All</option>
-            <option value="pending">Pending</option>
-            <option value="processing">Processing</option>
-            <option value="shipped">Shipped</option>
-            <option value="delivered">Delivered</option>
-            <option value="cancelled">Cancelled</option>
-          </select>
-          <button (click)="refreshOrders()" class="px-3 py-2 bg-ts-accent text-ts-ink rounded-lg border border-ts-accent/60 hover:bg-ts-accent/90">Refresh</button>
+
+        <div class="flex flex-wrap gap-2">
+          <button
+            *ngFor="let status of statusOptions"
+            (click)="selectStatus(status.value)"
+            class="inline-flex items-center gap-2 px-4 py-2 rounded-full border text-sm font-semibold transition-colors"
+            [ngClass]="{
+              'bg-ts-accent/15 text-ts-ink border-ts-accent shadow-sm': selectedStatus === status.value,
+              'bg-ts-bg-soft text-ts-ink border-ts-line hover:border-ts-accent/60 hover:bg-ts-accent/5': selectedStatus !== status.value
+            }">
+            <span
+              class="h-2 w-2 rounded-full"
+              [ngClass]="{
+                'bg-amber-500': status.value === 'pending',
+                'bg-orange-500': status.value === 'processing',
+                'bg-blue-500': status.value === 'shipped',
+                'bg-emerald-500': status.value === 'delivered',
+                'bg-rose-500': status.value === 'cancelled',
+                'bg-ts-ink/40': status.value === 'all',
+                'ring-2 ring-ts-accent/40': selectedStatus === status.value
+              }"></span>
+            {{ status.label | translate }}
+            <span class="text-xs" [ngClass]="{
+              'text-ts-ink/70': selectedStatus === status.value,
+              'text-ts-ink-soft': selectedStatus !== status.value
+            }">{{ getStatusCount(status.value) }}</span>
+          </button>
         </div>
       </div>
 
@@ -87,7 +113,12 @@
                 </td>
               </tr>
               <tr *ngFor="let order of filteredOrders" class="hover:bg-ts-bg-soft transition-colors">
-                <td class="px-6 py-4 text-sm font-medium text-ts-ink">{{ order.orderNumber }}</td>
+                <td class="px-6 py-4 text-sm font-medium text-ts-ink">
+                  <div class="flex flex-col">
+                    <span>{{ order.orderNumber }}</span>
+                    <span class="text-xs text-ts-ink-soft">{{ (order.itemCount || order.items.length || 0) }} {{ 'admin.orders.items' | translate }}</span>
+                  </div>
+                </td>
                 <td class="px-6 py-4 text-sm text-ts-ink">{{ order.date | date:'dd/MM/yyyy' }}</td>
                 <td class="px-6 py-4">
                   <div class="text-sm font-medium text-ts-ink">{{ getCustomerName(order) }}</div>
@@ -95,17 +126,23 @@
                 </td>
                 <td class="px-6 py-4 text-sm font-semibold text-ts-ink">{{ order.total | currency:'USD':'symbol':'1.2-2' }}</td>
                 <td class="px-6 py-4">
-                  <span class="text-xs px-2 py-0.5 rounded-full border"
-                        [class.bg-green-50]="order.status === 'delivered'"
-                        [class.text-green-700]="order.status === 'delivered'"
-                        [class.border-green-200]="order.status === 'delivered'"
-                        [class.bg-amber-50]="order.status === 'pending' || order.status === 'processing'"
-                        [class.text-amber-700]="order.status === 'pending' || order.status === 'processing'"
-                        [class.border-amber-200]="order.status === 'pending' || order.status === 'processing'"
-                        [class.bg-ts-bg-soft]="order.status === 'shipped'"
-                        [class.text-ts-ink]="order.status === 'shipped'"
-                        [class.border-ts-line]="order.status === 'shipped'">
-                    {{ order.status | titlecase }}
+                  <span
+                    class="inline-flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-semibold"
+                    [ngClass]="{
+                      'bg-amber-50 text-amber-700 border-amber-200': order.status === 'pending' || order.status === 'processing',
+                      'bg-blue-50 text-blue-700 border-blue-200': order.status === 'shipped',
+                      'bg-emerald-50 text-emerald-700 border-emerald-200': order.status === 'delivered',
+                      'bg-rose-50 text-rose-700 border-rose-200': order.status === 'cancelled'
+                    }">
+                    <span
+                      class="h-2 w-2 rounded-full"
+                      [ngClass]="{
+                        'bg-amber-500': order.status === 'pending' || order.status === 'processing',
+                        'bg-blue-500': order.status === 'shipped',
+                        'bg-emerald-500': order.status === 'delivered',
+                        'bg-rose-500': order.status === 'cancelled'
+                      }"></span>
+                    {{ ('admin.' + order.status) | translate }}
                   </span>
                 </td>
                 <td class="px-6 py-4 text-right">
@@ -116,9 +153,9 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
                       </svg>
                     </button>
-                    <button (click)="openStatusModal(order)" class="p-2 bg-ts-accent text-ts-ink border border-ts-accent/60 rounded-lg hover:bg-ts-accent/90 transition-colors" [title]="'admin.update_status' | translate">
+                    <button (click)="openStatusModal(order)" class="p-2 bg-ts-accent/15 text-ts-ink border border-ts-accent/40 rounded-lg hover:bg-ts-accent/25 hover:border-ts-accent transition-colors" [title]="'admin.update_status' | translate">
                       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
                       </svg>
                     </button>
                   </div>
@@ -133,60 +170,184 @@
 </div>
 
 <!-- Order Detail Modal -->
-<div *ngIf="showDetailModal && selectedOrder" class="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50" (click)="closeDetailModal()">
-  <div class="bg-ts-paper border border-ts-line rounded-2xl shadow-xl w-full max-w-4xl max-h-[90vh] overflow-hidden" (click)="$event.stopPropagation()">
-    <div class="flex items-start justify-between px-6 py-4 border-b border-ts-line">
+<div *ngIf="showDetailModal && selectedOrder" class="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50" (click)="closeDetailModal()">
+  <div class="bg-ts-paper border border-ts-line rounded-2xl shadow-2xl w-full max-w-5xl max-h-[90vh] overflow-hidden" (click)="$event.stopPropagation()">
+    <div class="flex flex-wrap items-start justify-between gap-4 px-6 py-4 border-b border-ts-line bg-ts-bg-soft">
       <div>
-        <h2 class="text-lg font-semibold text-ts-ink">Order {{ selectedOrder.orderNumber }}</h2>
-        <p class="text-xs text-ts-ink-soft">Status: {{ selectedOrder.status | titlecase }} - Total {{ selectedOrder.total | currency:'USD':'symbol':'1.2-2' }}</p>
+        <p class="text-xs uppercase tracking-wide text-ts-ink-soft">{{ 'admin.order_number' | translate }}</p>
+        <h2 class="text-2xl font-semibold text-ts-ink">{{ selectedOrder.orderNumber }}</h2>
+        <p class="text-sm text-ts-ink-soft">{{ selectedOrder.date | date:'dd/MM/yyyy HH:mm' }}</p>
       </div>
-      <button (click)="closeDetailModal()" class="p-2 rounded-lg bg-ts-bg-soft border border-ts-line text-ts-ink hover:border-ts-accent transition-colors">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div class="flex items-center gap-3">
+        <span
+          class="inline-flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-semibold"
+          [ngClass]="{
+            'bg-amber-50 text-amber-700 border-amber-200': selectedOrder.status === 'pending' || selectedOrder.status === 'processing',
+            'bg-blue-50 text-blue-700 border-blue-200': selectedOrder.status === 'shipped',
+            'bg-emerald-50 text-emerald-700 border-emerald-200': selectedOrder.status === 'delivered',
+            'bg-rose-50 text-rose-700 border-rose-200': selectedOrder.status === 'cancelled'
+          }">
+          <span
+            class="h-2 w-2 rounded-full"
+            [ngClass]="{
+              'bg-amber-500': selectedOrder.status === 'pending' || selectedOrder.status === 'processing',
+              'bg-blue-500': selectedOrder.status === 'shipped',
+              'bg-emerald-500': selectedOrder.status === 'delivered',
+              'bg-rose-500': selectedOrder.status === 'cancelled'
+            }"></span>
+          {{ ('admin.' + selectedOrder.status) | translate }}
+        </span>
+        <button (click)="closeDetailModal()" class="p-2 rounded-lg bg-ts-paper border border-ts-line text-ts-ink hover:border-ts-accent transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="p-6 overflow-y-auto max-h-[80vh]">
+      <div class="grid lg:grid-cols-[1.3fr,0.9fr] gap-6">
+        <div class="space-y-4">
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div class="bg-ts-bg-soft border border-ts-line rounded-xl p-4">
+              <p class="text-xs uppercase tracking-wide text-ts-ink-soft">{{ 'admin.customer' | translate }}</p>
+              <p class="text-sm font-semibold text-ts-ink mt-2">{{ getCustomerName(selectedOrder) }}</p>
+              <p class="text-xs text-ts-ink-soft">{{ getCustomerEmail(selectedOrder) }}</p>
+              <p class="text-xs text-ts-ink-soft">{{ selectedOrder.customer?.phone || selectedOrder.shippingAddress?.phoneE164 || selectedOrder.shippingAddress?.phone || 'N/A' }}</p>
+            </div>
+            <div class="bg-ts-bg-soft border border-ts-line rounded-xl p-4">
+              <p class="text-xs uppercase tracking-wide text-ts-ink-soft">{{ 'client.shipping_address' | translate }}</p>
+              <div class="text-xs text-ts-ink-soft mt-2 space-y-1">
+                <p>{{ selectedOrder.shippingAddress?.street || selectedOrder.shippingAddress?.line1 || 'N/A' }}</p>
+                <p *ngIf="selectedOrder.shippingAddress?.line2">{{ selectedOrder.shippingAddress?.line2 }}</p>
+                <p>{{ selectedOrder.shippingAddress?.postalCode }} {{ selectedOrder.shippingAddress?.city }}</p>
+                <p>{{ selectedOrder.shippingAddress?.state || selectedOrder.shippingAddress?.region }} {{ selectedOrder.shippingAddress?.country }}</p>
+                <p *ngIf="selectedOrder.tracking || selectedOrder.trackingNumber" class="pt-2">
+                  {{ 'client.tracking' | translate }}: {{ selectedOrder.tracking || selectedOrder.trackingNumber }}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-ts-paper border border-ts-line rounded-2xl p-4">
+            <div class="flex items-center justify-between mb-3">
+              <h3 class="text-sm font-semibold text-ts-ink">{{ 'admin.orders.items' | translate }}</h3>
+              <span class="text-xs text-ts-ink-soft">{{ (selectedOrder.itemCount || selectedOrder.items.length || 0) }} {{ 'admin.orders.items' | translate }}</span>
+            </div>
+            <div class="space-y-4">
+              <div *ngFor="let item of selectedOrder.items" class="border border-ts-line rounded-xl p-4">
+                <div class="flex flex-wrap gap-4 items-start">
+                  <div class="w-20 h-20 bg-ts-bg-soft border border-ts-line rounded-lg overflow-hidden flex items-center justify-center">
+                    <img *ngIf="item.imageUrl || item.image" [src]="item.imageUrl || item.image" [alt]="item.name" class="w-full h-full object-cover">
+                    <span *ngIf="!item.imageUrl && !item.image" class="text-xs text-ts-ink-soft">{{ 'admin.orders.no_image' | translate }}</span>
+                  </div>
+                  <div class="flex-1 min-w-[200px]">
+                    <div class="text-sm font-semibold text-ts-ink">{{ item.name }}</div>
+                    <div class="text-xs text-ts-ink-soft mt-1">
+                      {{ 'admin.orders.qty' | translate }}: {{ item.qty || item.quantity || 1 }} &bull; {{ 'admin.orders.sku' | translate }}: {{ item.sku || 'n/a' }}
+                    </div>
+                  </div>
+                  <div class="text-right min-w-[100px]">
+                    <p class="text-xs text-ts-ink-soft">{{ 'admin.total' | translate }}</p>
+                    <p class="text-sm font-semibold text-ts-ink">
+                      {{ ((item.qty || item.quantity || 1) * (item.unitPrice || item.price || 0)) | currency:'USD':'symbol':'1.2-2' }}
+                    </p>
+                  </div>
+                </div>
+
+                <div *ngIf="hasCustomization(item)" class="mt-4">
+                  <div class="text-xs font-semibold text-ts-ink mb-2">{{ 'admin.orders.customization_preview' | translate }}</div>
+                  <div class="rounded-lg border border-ts-line bg-ts-bg-soft/40 p-3">
+                    <div class="relative aspect-[4/3] overflow-hidden rounded-lg bg-ts-bg-soft/60 border border-ts-line/30">
+                      <img *ngIf="getCustomizationBaseImage(item)" [src]="getCustomizationBaseImage(item)" [alt]="item.name" class="w-full h-full object-cover">
+                      <div *ngIf="!getCustomizationBaseImage(item)" class="w-full h-full flex items-center justify-center text-xs text-ts-ink-soft">
+                        {{ 'admin.orders.base_image_missing' | translate }}
+                      </div>
+                      <img [src]="item.customization?.logoUrl" alt="Logo overlay" class="absolute object-contain drop-shadow-lg" [ngStyle]="getCustomizationOverlayStyle(item)">
+                    </div>
+                    <div class="mt-2 text-xs text-ts-ink-soft">{{ item.customization?.logoFilename || ('admin.orders.logo_uploaded' | translate) }}</div>
+                    <a *ngIf="item.customization?.logoUrl"
+                       [href]="item.customization?.logoUrl"
+                       target="_blank"
+                       rel="noopener"
+                       class="mt-2 inline-flex items-center gap-2 text-xs font-semibold text-ts-accent hover:text-ts-accent/80">
+                      {{ 'admin.orders.download_logo' | translate }}
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="space-y-4">
+          <div class="bg-ts-bg-soft border border-ts-line rounded-2xl p-5">
+            <div class="flex items-center justify-between">
+              <p class="text-xs uppercase tracking-wide text-ts-ink-soft">{{ 'admin.total' | translate }}</p>
+              <p class="text-2xl font-semibold text-ts-ink">{{ selectedOrder.total | currency:'USD':'symbol':'1.2-2' }}</p>
+            </div>
+            <div class="mt-4 space-y-2 text-sm text-ts-ink-soft">
+              <div class="flex items-center justify-between">
+                <span>{{ 'admin.order_number' | translate }}</span>
+                <span class="text-ts-ink">{{ selectedOrder.orderNumber }}</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span>{{ 'admin.date' | translate }}</span>
+                <span class="text-ts-ink">{{ selectedOrder.date | date:'dd/MM/yyyy' }}</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span>{{ 'admin.status' | translate }}</span>
+                <span class="text-ts-ink">{{ ('admin.' + selectedOrder.status) | translate }}</span>
+              </div>
+            </div>
+          </div>
+          <div class="bg-ts-paper border border-ts-line rounded-2xl p-5">
+            <div class="flex items-center justify-between">
+              <p class="text-xs uppercase tracking-wide text-ts-ink-soft">{{ 'admin.customer' | translate }}</p>
+              <p class="text-sm font-semibold text-ts-ink">{{ getCustomerName(selectedOrder) }}</p>
+            </div>
+            <div class="mt-2 text-xs text-ts-ink-soft">{{ getCustomerEmail(selectedOrder) }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Status Update Modal -->
+<div *ngIf="showStatusModal && orderToUpdate" class="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50" (click)="closeStatusModal()">
+  <div class="bg-ts-paper border border-ts-line rounded-2xl shadow-2xl w-full max-w-md p-6" (click)="$event.stopPropagation()">
+    <div class="flex items-center justify-between mb-4">
+      <div>
+        <p class="text-xs uppercase tracking-wide text-ts-ink-soft">{{ 'admin.order_number' | translate }}</p>
+        <h2 class="text-lg font-semibold text-ts-ink">{{ orderToUpdate.orderNumber }}</h2>
+      </div>
+      <button (click)="closeStatusModal()" class="p-2 rounded-lg bg-ts-bg-soft border border-ts-line text-ts-ink hover:border-ts-accent transition-colors">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
         </svg>
       </button>
     </div>
 
-    <div class="p-6 overflow-y-auto max-h-[80vh] space-y-6">
+    <div class="space-y-4">
       <div>
-        <h3 class="text-sm font-semibold text-ts-ink mb-3">Items</h3>
-        <div class="space-y-4">
-          <div *ngFor="let item of selectedOrder.items" class="border border-ts-line rounded-xl p-4">
-            <div class="flex flex-wrap gap-4 items-start">
-              <div class="w-24 h-24 bg-ts-bg-soft border border-ts-line rounded-lg overflow-hidden flex items-center justify-center">
-                <img *ngIf="item.imageUrl || item.image" [src]="item.imageUrl || item.image" [alt]="item.name" class="w-full h-full object-cover">
-                <span *ngIf="!item.imageUrl && !item.image" class="text-xs text-ts-ink-soft">No image</span>
-              </div>
-              <div class="flex-1 min-w-[200px]">
-                <div class="text-sm font-semibold text-ts-ink">{{ item.name }}</div>
-                <div class="text-xs text-ts-ink-soft mt-1">
-                  Qty: {{ item.qty || item.quantity || 1 }} â€¢ SKU: {{ item.sku || 'n/a' }}
-                </div>
-              </div>
-            </div>
+        <label class="block text-sm font-medium text-ts-ink-soft mb-2">{{ 'admin.status' | translate }}</label>
+        <select [(ngModel)]="newStatus" class="w-full px-4 py-3 bg-ts-bg-soft border border-ts-line rounded-xl text-ts-ink focus:ring-2 focus:ring-ts-accent focus:border-ts-accent">
+          <option value="pending">{{ 'admin.pending' | translate }}</option>
+          <option value="processing">{{ 'admin.processing' | translate }}</option>
+          <option value="shipped">{{ 'admin.shipped' | translate }}</option>
+          <option value="delivered">{{ 'admin.delivered' | translate }}</option>
+          <option value="cancelled">{{ 'admin.cancelled' | translate }}</option>
+        </select>
+      </div>
 
-            <div *ngIf="hasCustomization(item)" class="mt-4">
-              <div class="text-xs font-semibold text-ts-ink mb-2">Customization preview</div>
-              <div class="rounded-lg border border-ts-line bg-ts-bg-soft/40 p-3">
-                <div class="relative aspect-[4/3] overflow-hidden rounded-lg bg-ts-bg-soft/60 border border-ts-line/30">
-                  <img *ngIf="getCustomizationBaseImage(item)" [src]="getCustomizationBaseImage(item)" [alt]="item.name" class="w-full h-full object-cover">
-                  <div *ngIf="!getCustomizationBaseImage(item)" class="w-full h-full flex items-center justify-center text-xs text-ts-ink-soft">
-                    Base image missing
-                  </div>
-                  <img [src]="item.customization?.logoUrl" alt="Logo overlay" class="absolute object-contain drop-shadow-lg" [ngStyle]="getCustomizationOverlayStyle(item)">
-                </div>
-                <div class="mt-2 text-xs text-ts-ink-soft">{{ item.customization?.logoFilename || 'Logo uploaded' }}</div>
-                <a *ngIf="item.customization?.logoUrl"
-                   [href]="item.customization?.logoUrl"
-                   target="_blank"
-                   rel="noopener"
-                   class="mt-2 inline-flex items-center gap-2 text-xs font-semibold text-ts-accent hover:text-ts-accent/80">
-                  Download logo
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div class="flex items-center gap-3 pt-2">
+        <button (click)="updateStatus()" class="flex-1 px-4 py-2 rounded-xl bg-ts-ink text-ts-paper font-medium hover:bg-ts-ink/90 transition-colors">
+          {{ 'common.save' | translate }}
+        </button>
+        <button (click)="closeStatusModal()" class="flex-1 px-4 py-2 rounded-xl bg-ts-bg-soft border border-ts-line text-ts-ink font-medium hover:border-ts-accent transition-colors">
+          {{ 'common.cancel' | translate }}
+        </button>
       </div>
     </div>
   </div>

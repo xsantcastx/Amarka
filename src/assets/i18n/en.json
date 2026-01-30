@@ -39,7 +39,7 @@
     "gallery_management": "Gallery Management",
     "order_management": "Order Management",
     "collections": "Collections",
-    "models": "Models",
+    "models": "Models & Categories",
     "user_management": "User Management",
     "benefit_templates": "Benefit Templates",
     "analytics": "Analytics",
@@ -162,6 +162,7 @@
     "delete": "Delete",
     "cancel": "Cancel",
     "save": "Save",
+    "saving": "Saving...",
     "hello": "Hello",
     "search": "Search",
     "loading": "Loading..."
@@ -290,28 +291,451 @@
   },
   "admin": {
     "title": "Admin",
+    "manage_users": "Manage Users",
+    "users_description": "Review user accounts, roles, and access.",
+    "search_users": "Search users",
+    "search_users_placeholder": "Search by name or email...",
+    "filter_by_role": "Filter by role",
+    "all_roles": "All roles",
+    "user": "User",
+    "company": "Company",
+    "role": "Role",
+    "status": "Status",
+    "created_at": "Created",
+    "actions": "Actions",
+    "role_client": "Client",
+    "role_admin": "Admin",
+    "active": "Active",
+    "disabled": "Disabled",
+    "loading_users": "Loading users...",
+    "no_users_found": "No users found.",
+    "change_role": "Change role",
+    "change_role_for": "Change role for",
+    "new_role": "New role",
+    "enable_user": "Enable user",
+    "disable_user": "Disable user",
+    "confirm": "Confirm",
+    "all_orders": "All orders",
+    "pending": "Pending",
+    "processing": "Processing",
+    "shipped": "Shipped",
+    "delivered": "Delivered",
+    "cancelled": "Cancelled",
+    "order_number": "Order #",
+    "date": "Date",
+    "customer": "Customer",
+    "total": "Total",
+    "refresh": "Refresh",
+    "view": "View",
+    "update_status": "Update status",
+    "status_updated": "Status updated.",
+    "no_orders": "No orders found.",
+    "orders": {
+      "title": "Orders",
+      "order_title": "Order",
+      "status_label": "Status",
+      "total_label": "Total",
+      "items": "Items",
+      "qty": "Qty",
+      "sku": "SKU",
+      "no_image": "No image",
+      "customization_preview": "Customization preview",
+      "base_image_missing": "Base image missing",
+      "logo_uploaded": "Logo uploaded",
+      "download_logo": "Download logo"
+    },
+    "gallery": {
+      "title": "Gallery",
+      "subtitle": "Manage gallery projects, tags, and uploads.",
+      "stats": {
+        "images": "Images",
+        "projects": "Projects",
+        "tags": "Tags"
+      },
+      "filters": {
+        "all": "All media",
+        "search_placeholder": "Search by project name, tags, or caption..."
+      },
+      "projects": {
+        "title": "Projects",
+        "subtitle": "Grouped by project name and metadata.",
+        "project": "project",
+        "projects": "projects",
+        "photo": "photo",
+        "photos": "photos",
+        "empty_title": "No projects found",
+        "empty_body": "Try uploading new images or adjusting your search.",
+        "linked_services": "Linked services"
+      },
+      "actions": {
+        "upload": "Upload images",
+        "manage": "Manage",
+        "add_photos": "Add photos",
+        "delete_project": "Delete project",
+        "close": "Close",
+        "add_tags": "Add tags",
+        "adding": "Adding...",
+        "save_photo": "Save photo changes",
+        "save_project": "Save project settings",
+        "saving": "Saving..."
+      },
+      "fields": {
+        "project_name": "Project name",
+        "project_name_placeholder": "e.g. Enchanted Garden Wedding",
+        "project_name_help": "Project name is used as the title.",
+        "project_name_help_single": "Display name for this project.",
+        "project_name_help_multi": "Shared name for {{count}} images (auto-numbered).",
+        "description": "Description",
+        "description_placeholder": "e.g. Newport Beach, CA - Waterfront ceremony",
+        "description_help": "Location and event details (optional).",
+        "tags": "Tags",
+        "tags_help": "Select at least one tag to organize your gallery.",
+        "tags_selected": "{{count}} selected",
+        "quick_tags_placeholder": "Add tags separated by commas",
+        "quick_tags_help": "Separate multiple tags with commas.",
+        "custom_tags_title": "Add custom tags",
+        "custom_tags_placeholder": "Type a tag (e.g. Spring Wedding, Corporate Event)",
+        "custom_tags_help": "Separate multiple tags with commas.",
+        "select_existing_tags": "Or select from existing:",
+        "related_services": "Related services",
+        "related_services_help": "Connect this gallery to specific services you offer (optional).",
+        "related_services_help_single": "Link this photo to specific services.",
+        "related_services_help_all": "Applied to every photo in this project.",
+        "no_services": "No services available"
+      },
+      "upload": {
+        "title": "Upload images",
+        "subtitle": "Add new images to your gallery.",
+        "image_files": "Image files",
+        "selected_images": "Selected images",
+        "file_single": "file ready to upload",
+        "file_plural": "files ready to upload",
+        "clear_all": "Clear all",
+        "drop_title": "Click or drag files here to upload",
+        "drop_subtitle": "Select multiple images for bulk upload. Max 10MB per file.",
+        "drop_hint": "Recommended: 1600x1200px or larger.",
+        "uploading": "Uploading images...",
+        "progress": "{{current}} of {{total}} complete",
+        "button_single": "Upload image",
+        "button_multi": "Upload {{count}} images",
+        "button_empty": "Select images first"
+      },
+      "project_manager": {
+        "eyebrow": "Project manager",
+        "photos_title": "Project photos",
+        "photos_hint": "Select a photo to edit its title and tags.",
+        "edit_photo": "Edit photo settings",
+        "save_note_single": "Saving updates this photo's name, description, tags, and related services.",
+        "save_note_all": "Saving updates the description, tags, and related services for all photos in this project."
+      },
+      "confirm": {
+        "close_title": "Unsaved changes",
+        "close_body": "You have unsaved changes. Are you sure you want to close?",
+        "close_continue": "Continue editing",
+        "close_discard": "Discard changes",
+        "delete_title": "Delete image",
+        "delete_body": "Are you sure you want to delete this image?",
+        "project_delete_title": "Delete project",
+        "project_delete_body": "This will delete {{count}} photos in \"{{name}}\". This cannot be undone."
+      },
+      "messages": {
+        "load_failed": "Unable to load gallery media.",
+        "project_tag_required": "Select at least one tag for the project.",
+        "project_name_required": "Project name is required.",
+        "photo_updated": "Photo updated successfully.",
+        "photo_update_failed": "Unable to update photo.",
+        "project_updated": "Project settings updated successfully.",
+        "project_update_failed": "Unable to update project settings.",
+        "project_deleted": "Project deleted.",
+        "project_delete_failed": "Unable to delete project.",
+        "tag_input_required": "Enter at least one tag name separated by commas.",
+        "tag_create_failed": "Failed to create one or more tags. Please try again.",
+        "tags_added": "Tags added to this project.",
+        "invalid_file_type": "\"{{name}}\" is not a valid image file.",
+        "file_too_large": "\"{{name}}\" exceeds the {{maxSize}}MB size limit.",
+        "images_selected": "{{count}} image(s) selected for upload.",
+        "select_image": "Please select at least one image.",
+        "required_fields": "Please fill in all required fields.",
+        "tag_required": "Please select at least one tag.",
+        "auth_required": "You must be signed in to upload images.",
+        "upload_success": "Successfully uploaded {{count}} image(s).",
+        "upload_failed": "Error uploading media. {{message}}",
+        "media_updated": "Media updated successfully.",
+        "media_update_failed": "Unable to update media.",
+        "delete_blocked": "Cannot delete: Used by services: {{services}}. Remove this image from the service gallery first.",
+        "media_deleted": "Media deleted successfully.",
+        "media_delete_failed": "Unable to delete media.",
+        "logout_failed": "Failed to log out. Please try again."
+      }
+    },
+    "models": {
+      "title": "Models & Categories",
+      "subtitle": "Manage models and categories in one place.",
+      "empty": "No models found. Create your first model to get started.",
+      "loading": "Loading models...",
+      "stats": {
+        "total": "Total models",
+        "active": "Active models",
+        "inactive": "Inactive models"
+      },
+      "filters": {
+        "search_placeholder": "Search by name or slug...",
+        "status_label": "Status",
+        "status_all": "All",
+        "status_active": "Active",
+        "status_inactive": "Inactive",
+        "category_label": "Category",
+        "all_categories": "All categories"
+      },
+      "table": {
+        "name": "Name",
+        "slug": "Slug",
+        "category": "Category",
+        "status": "Status",
+        "actions": "Actions",
+        "active": "Active",
+        "inactive": "Inactive",
+        "unassigned": "Unassigned"
+      },
+      "bulk": {
+        "selected": "{{count}} models selected",
+        "selected_single": "1 model selected",
+        "activate": "Activate",
+        "deactivate": "Deactivate",
+        "delete": "Delete"
+      },
+      "actions": {
+        "add": "Add model",
+        "edit": "Edit",
+        "delete": "Delete",
+        "create": "Create model",
+        "update": "Update model",
+        "cancel": "Cancel",
+        "create_first": "Create first model"
+      },
+      "modal": {
+        "new_title": "New model",
+        "edit_title": "Edit model"
+      },
+      "fields": {
+        "name": "Name",
+        "name_placeholder": "Model name",
+        "slug": "Slug",
+        "slug_help": "Auto-generated from the name. Edit if needed.",
+        "category": "Category",
+        "texture_hints": "Texture hints",
+        "texture_hints_placeholder": "e.g. Matte finish, glossy, metallic...",
+        "texture_hints_help": "One per line. Used for previews and search.",
+        "default_tags": "Default tags",
+        "default_tags_placeholder": "e.g. gift, premium, corporate",
+        "default_tags_help": "Comma-separated.",
+        "active": "Active"
+      },
+      "messages": {
+        "name_required": "Name is required.",
+        "slug_exists": "Slug \"{{slug}}\" is already in use.",
+        "created": "Model created.",
+        "updated": "Model updated.",
+        "save_failed": "Failed to save model.",
+        "deleted": "Model deleted.",
+        "delete_failed": "Failed to delete model.",
+        "confirm_delete": "Delete \"{{name}}\"? This cannot be undone.",
+        "confirm_bulk_delete": "Delete {{count}} selected models? This cannot be undone.",
+        "bulk_deleted": "Deleted {{count}} models.",
+        "bulk_activated": "Models activated.",
+        "bulk_deactivated": "Models deactivated."
+      },
+      "categories": {
+        "title": "Categories",
+        "subtitle": "Organize models and products by category.",
+        "empty": "No categories found. Create your first category.",
+        "bulk": {
+          "selected": "{{count}} categories selected",
+          "selected_single": "1 category selected",
+          "activate": "Activate",
+          "deactivate": "Deactivate",
+          "delete": "Delete"
+        },
+        "table": {
+          "name": "Name",
+          "slug": "Slug",
+          "order": "Order",
+          "status": "Status",
+          "actions": "Actions",
+          "active": "Active",
+          "inactive": "Inactive"
+        },
+        "actions": {
+          "add": "Add category",
+          "edit": "Edit",
+          "delete": "Delete",
+          "create": "Create category",
+          "update": "Update category",
+          "cancel": "Cancel",
+          "create_first": "Create first category"
+        },
+        "modal": {
+          "new_title": "New category",
+          "edit_title": "Edit category"
+        },
+        "fields": {
+          "name": "Name",
+          "name_placeholder": "Category name",
+          "slug": "Slug",
+          "slug_help": "Auto-generated from the name. Edit if needed.",
+          "order": "Display order",
+          "active": "Active"
+        },
+        "messages": {
+          "name_required": "Name is required.",
+          "created": "Category created.",
+          "updated": "Category updated.",
+          "save_failed": "Failed to save category.",
+          "deleted": "Category deleted.",
+          "delete_failed": "Failed to delete category.",
+          "confirm_delete": "Delete \"{{name}}\"? This cannot be undone.",
+          "confirm_bulk_delete": "Delete {{count}} categories? This cannot be undone.",
+          "bulk_deleted": "Deleted {{count}} categories.",
+          "bulk_activated": "Categories activated.",
+          "bulk_deactivated": "Categories deactivated.",
+          "bulk_failed": "Failed to update categories."
+        }
+      }
+    },
     "collections": {
       "title": "Collections",
+      "subtitle": "Design and organize your collections in one place.",
       "back_to_admin": "Admin",
       "new_collection": "New Collection",
       "new_collection_title": "New Collection",
       "edit_collection": "Edit Collection",
       "loading": "Loading collections...",
+      "empty_title": "No collections yet",
+      "empty_body": "Create a collection to showcase curated product groups.",
+      "stats": {
+        "total": "Total collections",
+        "active": "Active collections",
+        "inactive": "Inactive collections"
+      },
+      "filters": {
+        "search_placeholder": "Search by name, slug, or description...",
+        "status_label": "Status",
+        "status_all": "All",
+        "status_active": "Active",
+        "status_inactive": "Inactive"
+      },
+      "card": {
+        "no_image": "No hero image",
+        "no_description": "No description yet."
+      },
       "form": {
         "edit": "Edit",
         "delete": "Delete",
         "name": "Name",
         "slug": "Slug",
+        "slug_help": "Auto-generated from the name. Edit if needed.",
         "description": "Description",
         "hero_image": "Hero Image",
         "choose_image": "Choose Image",
         "max_size": "Max 5MB (JPG, PNG, WebP)",
+        "hero_hint": "Recommended size: 1600x900.",
         "upload_progress": "Uploading hero image",
         "seo_title": "SEO Title",
         "seo_description": "SEO Description",
-        "seo_image": "SEO Image URL"
+        "seo_image": "SEO Image URL",
+        "active": "Active",
+        "cancel": "Cancel",
+        "save": "Save",
+        "saving": "Saving..."
       }
-    }
+    },
+    "settings": {
+      "title": "Settings",
+      "subtitle": "Manage store settings, branding, and content.",
+      "actions": {
+        "saving": "Saving...",
+        "lock": "Lock",
+        "unlock": "Unlock",
+        "show": "Show",
+        "hide": "Hide"
+      },
+      "states": {
+        "enabled": "Enabled",
+        "disabled": "Disabled"
+      },
+      "feedback": {
+        "success": "Settings updated successfully.",
+        "error_details": "Unable to save settings: {{message}}"
+      }
+    },
+    "analytics": {
+      "eyebrow": "Insights",
+      "title": "Analytics",
+      "subtitle": "Performance overview in {{currency}}.",
+      "period": {
+        "today": "Today",
+        "week": "Last 7 days",
+        "month": "This month",
+        "year": "This year"
+      },
+      "metrics": {
+        "total_orders": "Total orders",
+        "revenue": "Revenue",
+        "average_order_value": "Average order value",
+        "new_customers": "New customers",
+        "products_updated": "Products updated",
+        "gallery_uploads": "Gallery uploads"
+      },
+      "recent_activity": "Recent activity",
+      "showing_period": "Showing {{period}}",
+      "no_activity": "No recent activity for this period.",
+      "future_title": "Upcoming analytics",
+      "future_description": "More insights are on the way to help you track growth and optimize your catalog.",
+      "future_items": {
+        "charts": {
+          "title": "Trend charts",
+          "description": "Visualize sales and order volume over time.",
+          "status": "In beta"
+        },
+        "top_products": {
+          "title": "Top products",
+          "description": "See best-selling items and revenue leaders.",
+          "status": "In development"
+        },
+        "geo": {
+          "title": "Geo insights",
+          "description": "Understand where customers are ordering from.",
+          "status": "In design"
+        },
+        "funnels": {
+          "title": "Checkout funnels",
+          "description": "Track drop-offs through the purchase flow.",
+          "status": "Research"
+        }
+      }
+    },
+    "products": {
+      "title": "Products",
+      "add_product": "Add Product",
+      "no_products": "No products found",
+      "edit": "Edit",
+      "delete": "Delete",
+      "delete_product": "Delete Product",
+      "confirm_delete": "Are you sure you want to delete this product?",
+      "product_image": "Image",
+      "product_name": "Product Name",
+      "product_category": "Category",
+      "product_model": "Model",
+      "product_price": "Price",
+      "status_published": "Published",
+      "status_draft": "Draft",
+      "status_archived": "Archived"
+    },
+    "setup_required": "Setup Required",
+    "need_categories_and_models": "You need to create categories and models first.",
+    "need_category": "You need to create a category first.",
+    "need_model": "You need to create a model first.",
+    "goto_catalog": "Go to Catalog"
   },
   "footer": {
     "description": "Premium engraving and personalized gifts crafted to keep. From corporate awards to milestone keepsakes, we engrave with precision and deliver gift-ready.",

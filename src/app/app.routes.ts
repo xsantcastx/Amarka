@@ -156,12 +156,6 @@ export const routes: Routes = [
     title: routeTitle('page_titles.gallery_management')
   },
   {
-    path: 'admin/services',
-    loadComponent: () => import('./pages/admin/services/services-admin.page').then(m => m.ServicesAdminPage),
-    canActivate: [adminGuard],
-    title: routeTitle('Services Management')
-  },
-  {
     path: 'admin/orders',
     loadComponent: () => import('./pages/admin/orders/orders-admin.page').then(m => m.OrdersAdminComponent),
     canActivate: [adminGuard],

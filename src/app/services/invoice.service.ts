@@ -52,228 +52,255 @@ export class InvoiceService {
 
   async generateInvoice(order: InvoiceOrder): Promise<void> {
     const doc = new jsPDF();
-    
-    // Brand + logo
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    const margin = 16;
+    const contentRight = pageWidth - margin;
+    const contentWidth = pageWidth - (margin * 2);
+    const headerHeight = 44;
+
     const logo = await this.getLogoDataUrl();
+
+    // Header background
+    doc.setFillColor(252, 246, 238);
+    doc.rect(0, 0, pageWidth, headerHeight, 'F');
+
+    // Brand + logo
     if (logo) {
       try {
-        doc.addImage(logo, 'PNG', 20, 12, 42, 16);
+        doc.addImage(logo, 'PNG', margin, 12, 36, 14);
       } catch (err) {
         console.warn('[Invoice] Logo render failed, using text fallback', err);
-        doc.setFontSize(24);
+        doc.setFontSize(18);
         doc.setTextColor(this.primaryColor.r, this.primaryColor.g, this.primaryColor.b);
-        doc.text(this.brandName, 20, 22);
+        doc.text(this.brandName, margin, 22);
       }
     } else {
-      doc.setFontSize(24);
+      doc.setFontSize(18);
       doc.setTextColor(this.primaryColor.r, this.primaryColor.g, this.primaryColor.b);
-      doc.text(this.brandName, 20, 22);
+      doc.text(this.brandName, margin, 22);
     }
-    
-    doc.setFontSize(11);
+
+    doc.setFontSize(9);
     doc.setTextColor(this.softInkColor.r, this.softInkColor.g, this.softInkColor.b);
-    doc.text(this.brandTagline, 20, 32);
-    
-    // Decorative line under brand
+    doc.text(this.brandTagline, margin, 32);
+
     doc.setDrawColor(this.secondaryColor.r, this.secondaryColor.g, this.secondaryColor.b);
-    doc.setLineWidth(0.5);
-    doc.line(20, 35, 80, 35);
-    
-    // Invoice Title
-    doc.setFontSize(22);
+    doc.setLineWidth(0.4);
+    doc.line(margin, headerHeight - 10, margin + 65, headerHeight - 10);
+
+    // Invoice title
+    doc.setFontSize(20);
     doc.setTextColor(this.inkColor.r, this.inkColor.g, this.inkColor.b);
-    doc.text('INVOICE', 150, 22);
-    
-    // Order Information Box with warm background
-    doc.setFillColor(247, 240, 231); // ts-bg #F7F0E7
-    doc.roundedRect(145, 28, 50, 24, 2, 2, 'F');
-    
+    doc.text('INVOICE', contentRight, 20, { align: 'right' });
     doc.setFontSize(9);
     doc.setTextColor(this.softInkColor.r, this.softInkColor.g, this.softInkColor.b);
-    doc.text('Invoice #:', 148, 33);
-    doc.text('Date:', 148, 39);
-    doc.text('Status:', 148, 45);
-    
-    doc.setFontSize(9);
-    doc.setTextColor(this.inkColor.r, this.inkColor.g, this.inkColor.b);
-    doc.text(order.orderNumber, 192, 33, { align: 'right' });
-    doc.text(this.formatDate(order.date || order.createdAt), 192, 39, { align: 'right' });
-    
-    // Status with color coding
-    const status = this.formatStatus(order.status);
-    if (order.status === 'completed' || order.status === 'delivered') {
-      doc.setTextColor(34, 197, 94); // green
-    } else if (order.status === 'processing' || order.status === 'shipped') {
-      doc.setTextColor(this.primaryColor.r, this.primaryColor.g, this.primaryColor.b);
-    } else {
+    doc.text(`Invoice # ${order.orderNumber}`, contentRight, 28, { align: 'right' });
+
+    // Order summary card
+    const summaryWidth = 74;
+    const summaryX = contentRight - summaryWidth;
+    const summaryY = headerHeight + 10;
+    const summaryHeight = 46;
+    doc.setFillColor(255, 255, 255);
+    doc.setDrawColor(232, 214, 201);
+    doc.setLineWidth(0.3);
+    doc.roundedRect(summaryX, summaryY, summaryWidth, summaryHeight, 2, 2, 'FD');
+
+    doc.setFontSize(8);
+    doc.setTextColor(this.softInkColor.r, this.softInkColor.g, this.softInkColor.b);
+    doc.text('ORDER SUMMARY', summaryX + 4, summaryY + 6);
+
+    const summaryRows = [
+      { label: 'Date', value: this.formatDate(order.date || order.createdAt) },
+      { label: 'Status', value: this.formatStatus(order.status) },
+      { label: 'Total', value: `${this.getCurrencySymbol(order.currency)}${order.total.toFixed(2)}` }
+    ];
+
+    let summaryTextY = summaryY + 14;
+    summaryRows.forEach((row, index) => {
+      doc.setFontSize(9);
       doc.setTextColor(this.softInkColor.r, this.softInkColor.g, this.softInkColor.b);
-    }
-    doc.text(status, 192, 45, { align: 'right' });
-    
-    // Shipping Address with styled header
-    doc.setFontSize(11);
+      doc.text(`${row.label}:`, summaryX + 4, summaryTextY);
+
+      if (row.label === 'Status') {
+        if (order.status === 'completed' || order.status === 'delivered') {
+          doc.setTextColor(34, 197, 94);
+        } else if (order.status === 'processing' || order.status === 'shipped') {
+          doc.setTextColor(this.primaryColor.r, this.primaryColor.g, this.primaryColor.b);
+        } else {
+          doc.setTextColor(this.softInkColor.r, this.softInkColor.g, this.softInkColor.b);
+        }
+      } else if (row.label === 'Total') {
+        doc.setTextColor(this.primaryColor.r, this.primaryColor.g, this.primaryColor.b);
+      } else {
+        doc.setTextColor(this.inkColor.r, this.inkColor.g, this.inkColor.b);
+      }
+
+      doc.text(row.value, summaryX + summaryWidth - 4, summaryTextY, { align: 'right' });
+      summaryTextY += index === 0 ? 9 : 8;
+    });
+
+    // Shipping address
+    const addressX = margin;
+    const addressY = summaryY + 4;
+    doc.setFontSize(10);
     doc.setTextColor(this.inkColor.r, this.inkColor.g, this.inkColor.b);
-    doc.text('Ship To:', 20, 60);
-    
+    doc.text('Ship To', addressX, addressY);
     doc.setDrawColor(this.secondaryColor.r, this.secondaryColor.g, this.secondaryColor.b);
     doc.setLineWidth(0.3);
-    doc.line(20, 62, 45, 62);
-    
+    doc.line(addressX, addressY + 2, addressX + 28, addressY + 2);
+
     doc.setFontSize(9);
     doc.setTextColor(this.softInkColor.r, this.softInkColor.g, this.softInkColor.b);
-    if (order.shippingAddress) {
-      const addr = order.shippingAddress;
-      let y = 68;
-      
-      if (addr.firstName && addr.lastName) {
-        doc.setFont('helvetica', 'bold');
-        doc.text(`${addr.firstName} ${addr.lastName}`, 20, y);
-        doc.setFont('helvetica', 'normal');
-        y += 5;
-      }
-      
-      if (addr.line1) {
-        doc.text(addr.line1, 20, y);
-        y += 5;
-      }
-      
-      if (addr.line2) {
-        doc.text(addr.line2, 20, y);
-        y += 5;
-      }
-      
-      if (addr.city || addr.region || addr.postalCode) {
-        const cityLine = [addr.city, addr.region, addr.postalCode].filter(Boolean).join(', ');
-        doc.text(cityLine, 20, y);
-        y += 5;
-      }
-      
-      if (addr.country) {
-        doc.text(addr.country, 20, y);
-        y += 5;
-      }
-      
-      if (addr.phone) {
-        doc.text(`Phone: ${addr.phone}`, 20, y);
-      }
-    }
-    
-    // Items Table Header with Amarka branding
-    const tableTop = 105;
-    doc.setFillColor(this.primaryColor.r, this.primaryColor.g, this.primaryColor.b);
-    doc.roundedRect(20, tableTop, 170, 9, 1, 1, 'F');
-    
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(9);
-    doc.setFont('helvetica', 'bold');
-    doc.text('Product', 25, tableTop + 6);
-    doc.text('Qty', 130, tableTop + 6);
-    doc.text('Unit Price', 152, tableTop + 6);
-    doc.text('Total', 180, tableTop + 6);
-    doc.setFont('helvetica', 'normal');
-    
-    // Items Table Body
-    doc.setTextColor(this.inkColor.r, this.inkColor.g, this.inkColor.b);
-    doc.setFontSize(9);
-    let currentY = tableTop + 17;
-    
+    const addr = order.shippingAddress || {};
+    const addressLines: string[] = [];
+    const fullName = [addr.firstName, addr.lastName].filter(Boolean).join(' ');
+    if (fullName) addressLines.push(fullName);
+    if (addr.line1) addressLines.push(addr.line1);
+    if (addr.line2) addressLines.push(addr.line2);
+    const cityLine = [addr.city, addr.region || addr.state, addr.postalCode].filter(Boolean).join(', ');
+    if (cityLine) addressLines.push(cityLine);
+    if (addr.country) addressLines.push(addr.country);
+    if (addr.email) addressLines.push(`Email: ${addr.email}`);
+    if (addr.phoneE164 || addr.phone) addressLines.push(`Phone: ${addr.phoneE164 || addr.phone}`);
+    if (!addressLines.length) addressLines.push('No address provided');
+
+    let addressTextY = addressY + 8;
+    addressLines.forEach((line) => {
+      doc.text(line, addressX, addressTextY);
+      addressTextY += 5;
+    });
+
+    // Table setup
+    const tableX = margin;
+    const tableWidth = contentWidth;
+    const tableTop = Math.max(summaryY + summaryHeight + 12, addressTextY + 6);
+    const colProduct = tableX + 4;
+    const colQty = tableX + 118;
+    const colUnit = tableX + 142;
+    const colTotal = tableX + 174;
+    const nameWidth = 100;
+
+    const drawTableHeader = (yPos: number): number => {
+      doc.setFillColor(this.primaryColor.r, this.primaryColor.g, this.primaryColor.b);
+      doc.roundedRect(tableX, yPos, tableWidth, 9, 1, 1, 'F');
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'bold');
+      doc.text('Item', colProduct, yPos + 6);
+      doc.text('Qty', colQty, yPos + 6, { align: 'right' });
+      doc.text('Unit', colUnit, yPos + 6, { align: 'right' });
+      doc.text('Total', colTotal, yPos + 6, { align: 'right' });
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(this.inkColor.r, this.inkColor.g, this.inkColor.b);
+      return yPos + 14;
+    };
+
+    const drawContinuationHeader = (): number => {
+      doc.setFontSize(10);
+      doc.setTextColor(this.inkColor.r, this.inkColor.g, this.inkColor.b);
+      doc.text(this.brandName, margin, 12);
+      doc.setFontSize(9);
+      doc.setTextColor(this.softInkColor.r, this.softInkColor.g, this.softInkColor.b);
+      doc.text(`Invoice # ${order.orderNumber}`, contentRight, 12, { align: 'right' });
+      return drawTableHeader(18);
+    };
+
+    let currentY = drawTableHeader(tableTop);
+    const currSymbol = this.getCurrencySymbol(order.currency);
+
     if (order.items && order.items.length > 0) {
       order.items.forEach((item, index) => {
         const productName = item.name || item.productName || 'Product';
         const quantity = item.qty || item.quantity || 1;
         const unitPrice = item.unitPrice || item.price || 0;
         const total = quantity * unitPrice;
-        
-        // Wrap product name if too long
-        const maxWidth = 100;
-        const lines = doc.splitTextToSize(productName, maxWidth);
-        
-        lines.forEach((line: string, lineIndex: number) => {
-          doc.text(line, 25, currentY + (lineIndex * 5));
-        });
-        
-        const currSymbol = this.getCurrencySymbol(order.currency);
-        doc.text(quantity.toString(), 135, currentY, { align: 'right' });
-        doc.text(`${currSymbol}${unitPrice.toFixed(2)}`, 165, currentY, { align: 'right' });
-        doc.text(`${currSymbol}${total.toFixed(2)}`, 185, currentY, { align: 'right' });
-        
-        currentY += Math.max(5, lines.length * 5);
-        
-        // Add line separator
-        if (index < order.items.length - 1) {
-          doc.setDrawColor(this.secondaryColor.r, this.secondaryColor.g, this.secondaryColor.b);
-          doc.setLineWidth(0.2);
-          doc.line(20, currentY + 2, 190, currentY + 2);
-          currentY += 7;
+
+        const lines = doc.splitTextToSize(productName, nameWidth);
+        const rowHeight = Math.max(10, (lines.length * 5) + 2);
+
+        if (currentY + rowHeight + 10 > pageHeight - 60) {
+          doc.addPage();
+          currentY = drawContinuationHeader();
         }
+
+        if (index % 2 === 0) {
+          doc.setFillColor(254, 252, 248);
+          doc.rect(tableX, currentY - 4, tableWidth, rowHeight + 4, 'F');
+        }
+
+        lines.forEach((line: string, lineIndex: number) => {
+          doc.text(line, colProduct, currentY + (lineIndex * 5));
+        });
+
+        doc.text(quantity.toString(), colQty, currentY, { align: 'right' });
+        doc.text(`${currSymbol}${unitPrice.toFixed(2)}`, colUnit, currentY, { align: 'right' });
+        doc.text(`${currSymbol}${total.toFixed(2)}`, colTotal, currentY, { align: 'right' });
+
+        currentY += rowHeight + 4;
       });
     } else {
-      doc.text('No items found for this order.', 25, currentY);
+      doc.text('No items found for this order.', colProduct, currentY);
       currentY += 12;
     }
-    
-    // Totals Section with warm background
-    currentY += 12;
-    const totalsX = 135;
-    
-    // Add subtle background for totals
-    doc.setFillColor(254, 252, 248); // ts-bg-soft #FEFCF8
-    doc.roundedRect(130, currentY - 3, 62, 35, 2, 2, 'F');
-    
-    // Calculate subtotal, tax, shipping from order data
+
+    // Totals
     const subtotal = order.subtotal || this.calculateSubtotal(order.items);
     const tax = order.tax || (order.total - subtotal);
     const shipping = order.shipping || 0;
-    
+    const totalsLines: Array<{ label: string; value: number }> = [
+      { label: 'Subtotal', value: subtotal }
+    ];
+    if (shipping > 0) totalsLines.push({ label: 'Shipping', value: shipping });
+    if (tax > 0) totalsLines.push({ label: 'Tax', value: tax });
+
+    const totalsHeight = 16 + (totalsLines.length * 6) + 10;
+    if (currentY + totalsHeight > pageHeight - 50) {
+      doc.addPage();
+      currentY = drawContinuationHeader();
+      currentY += 6;
+    }
+
+    const totalsWidth = 72;
+    const totalsX = contentRight - totalsWidth;
+    doc.setFillColor(254, 252, 248);
+    doc.setDrawColor(232, 214, 201);
+    doc.roundedRect(totalsX, currentY, totalsWidth, totalsHeight, 2, 2, 'FD');
+
+    let totalsY = currentY + 10;
     doc.setFontSize(9);
     doc.setTextColor(this.softInkColor.r, this.softInkColor.g, this.softInkColor.b);
-    
-    const currSymbol = this.getCurrencySymbol(order.currency);
-    doc.text('Subtotal:', totalsX, currentY);
-    doc.text(`${currSymbol}${subtotal.toFixed(2)}`, 188, currentY, { align: 'right' });
-    
-    if (shipping > 0) {
-      currentY += 6;
-      doc.text('Shipping:', totalsX, currentY);
-      doc.text(`${currSymbol}${shipping.toFixed(2)}`, 188, currentY, { align: 'right' });
-    }
-    
-    if (tax > 0) {
-      currentY += 6;
-      doc.text('Tax:', totalsX, currentY);
-      doc.text(`${currSymbol}${tax.toFixed(2)}`, 188, currentY, { align: 'right' });
-    }
-    
-    // Total with emphasis
-    currentY += 10;
+    totalsLines.forEach((row) => {
+      doc.text(`${row.label}:`, totalsX + 6, totalsY);
+      doc.text(`${currSymbol}${row.value.toFixed(2)}`, totalsX + totalsWidth - 6, totalsY, { align: 'right' });
+      totalsY += 6;
+    });
+
     doc.setFontSize(11);
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(this.inkColor.r, this.inkColor.g, this.inkColor.b);
-    doc.text('Total:', totalsX, currentY);
+    doc.text('Total', totalsX + 6, totalsY + 4);
     doc.setTextColor(this.primaryColor.r, this.primaryColor.g, this.primaryColor.b);
-    doc.text(`${currSymbol}${order.total.toFixed(2)}`, 188, currentY, { align: 'right' });
+    doc.text(`${currSymbol}${order.total.toFixed(2)}`, totalsX + totalsWidth - 6, totalsY + 4, { align: 'right' });
     doc.setFont('helvetica', 'normal');
-    
-    // Footer with Amarka contact info
-    const footerY = 248;
-    
-    doc.setFontSize(11);
+
+    // Footer
+    const footerY = pageHeight - 28;
+    doc.setDrawColor(232, 214, 201);
+    doc.setLineWidth(0.4);
+    doc.line(margin, footerY - 6, contentRight, footerY - 6);
+
+    doc.setFontSize(10);
     doc.setTextColor(this.primaryColor.r, this.primaryColor.g, this.primaryColor.b);
-    doc.text('Thank you for your order!', 105, footerY, { align: 'center' });
-    
+    doc.text('Thank you for your order!', pageWidth / 2, footerY, { align: 'center' });
+
     doc.setFontSize(8);
     doc.setTextColor(this.softInkColor.r, this.softInkColor.g, this.softInkColor.b);
-    doc.text(this.brandAddress, 105, footerY + 5, { align: 'center' });
-    doc.text(`Email: ${this.contactEmail}`, 105, footerY + 10, { align: 'center' });
-    doc.text(`Phone: ${this.contactPhone}`, 105, footerY + 15, { align: 'center' });
-    doc.text(`Hours: ${this.supportHours}`, 105, footerY + 20, { align: 'center' });
-    
-    // Add border with Amarka colors
-    doc.setDrawColor(this.primaryColor.r, this.primaryColor.g, this.primaryColor.b);
-    doc.setLineWidth(0.8);
-    doc.roundedRect(15, 15, 180, 270, 3, 3);
-    
-    // Save the PDF
+    doc.text(this.brandAddress, pageWidth / 2, footerY + 6, { align: 'center' });
+    doc.text(`Email: ${this.contactEmail}  |  Phone: ${this.contactPhone}`, pageWidth / 2, footerY + 11, { align: 'center' });
+    doc.text(`Hours: ${this.supportHours}`, pageWidth / 2, footerY + 16, { align: 'center' });
+
     const fileName = `invoice-${order.orderNumber}.pdf`;
     doc.save(fileName);
   }

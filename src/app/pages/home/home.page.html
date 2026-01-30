@@ -47,6 +47,7 @@
 </section>
 
 <!-- Featured Products -->
+@if (featuredProducts.length) {
 <section class="section-gap bg-ts-bg-soft home-featured">
   <div class="page-container">
     <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-8">
@@ -62,18 +63,13 @@
       </div>
     </div>
     <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-      @if (featuredProducts.length === 0) {
-      <div class="sm:col-span-2 lg:col-span-4 text-center text-ts-ink-soft">
-        {{ 'home.featured.empty' | translate }}
-      </div>
-      } @else {
       @for (product of featuredProducts; track product.id) {
       <ts-product-card [product]="product" />
-      }
       }
     </div>
   </div>
 </section>
+}
 
 <!-- Best sellers -->
 @if (bestSellerProducts.length) {
@@ -89,27 +85,6 @@
     </div>
     <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
       @for (product of bestSellerProducts; track product.id) {
-      <ts-product-card [product]="product" />
-      }
-    </div>
-  </div>
-</section>
-}
-
-<!-- New arrivals -->
-@if (newArrivalProducts.length) {
-<section class="section-gap bg-ts-bg-soft">
-  <div class="page-container">
-    <div class="flex items-center justify-between mb-6">
-      <div>
-        <p class="badge">{{ 'home.new.badge' | translate }}</p>
-        <h3 class="heading-display text-3xl text-ts-ink">{{ 'home.new.title' | translate }}</h3>
-        <p class="text-ts-ink-soft">{{ 'home.new.subtitle' | translate }}</p>
-      </div>
-      <a routerLink="/productos" class="btn-outline">{{ 'home.new.cta' | translate }}</a>
-    </div>
-    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-      @for (product of newArrivalProducts; track product.id) {
       <ts-product-card [product]="product" />
       }
     </div>
@@ -146,29 +121,6 @@
   </div>
 </section>
 
-<!-- Gallery Preview -->
-@if (galleryImages.length > 0) {
-<section class="section-gap bg-ts-bg-soft">
-  <div class="page-container">
-    <div class="flex items-center justify-between mb-6">
-      <div>
-        <p class="badge">{{ 'home.gallery.badge' | translate }}</p>
-        <h3 class="heading-display text-3xl text-ts-ink">{{ 'home.gallery.title' | translate }}</h3>
-        <p class="text-ts-ink-soft">{{ 'home.gallery.subtitle' | translate }}</p>
-      </div>
-      <a routerLink="/galeria" class="btn-outline">{{ 'home.gallery.cta' | translate }}</a>
-    </div>
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      @for (image of galleryImages; track image.id) {
-      <div class="rounded-2xl overflow-hidden border border-ts-line bg-white shadow-sm aspect-[4/3]">
-        <img [src]="image.thumbnailUrl || image.imageUrl" [alt]="image.title || ('home.gallery.alt' | translate)"
-          class="w-full h-full object-cover" loading="lazy">
-      </div>
-      }
-    </div>
-  </div>
-</section>
-}
 
 <!-- Reviews -->
 <app-home-reviews />

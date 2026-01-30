@@ -2,134 +2,233 @@
   <app-admin-sidebar class="hidden md:block"></app-admin-sidebar>
 
   <div class="flex-1 md:pl-64">
-    <div class="bg-ts-paper border-b border-ts-line shadow-sm">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-        <div>
-          <div class="flex items-center gap-3 mb-1">
-            <a routerLink="/admin" class="text-ts-ink hover:text-ts-accent transition-colors">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-              </svg>
-            </a>
-            <h1 class="text-xl font-bold text-ts-ink">{{ 'admin.collections.title' | translate }}</h1>
+    <div class="relative overflow-hidden">
+      <div class="absolute -top-24 right-0 h-56 w-56 rounded-full bg-ts-accent/15 blur-3xl"></div>
+      <div class="absolute -top-12 right-40 h-40 w-40 rounded-full bg-ts-ink/5 blur-3xl"></div>
+      <div class="bg-ts-paper/90 backdrop-blur border-b border-ts-line">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div class="flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+              <a routerLink="/admin" class="text-ts-ink hover:text-ts-accent transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                </svg>
+              </a>
+              <div>
+                <h1 class="text-2xl font-semibold text-ts-ink">{{ 'admin.collections.title' | translate }}</h1>
+                <p class="text-sm text-ts-ink-soft">{{ 'admin.collections.subtitle' | translate }}</p>
+              </div>
+            </div>
+            <button (click)="openCreate()" class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-ts-accent text-ts-ink border border-ts-accent/60 text-sm font-semibold hover:bg-ts-accent/90 transition-colors">
+              {{ 'admin.collections.new_collection' | translate }}
+            </button>
           </div>
-          <a routerLink="/admin" class="text-sm text-ts-ink-soft hover:text-ts-ink transition-colors">{{ 'admin.collections.back_to_admin' | translate }}</a>
         </div>
-        <button (click)="openCreate()" class="px-4 py-2 bg-ts-accent text-ts-ink border border-ts-accent/60 rounded-lg hover:bg-ts-accent/90 transition-colors">
-          {{ 'admin.collections.new_collection' | translate }}
-        </button>
       </div>
     </div>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+      <div *ngIf="errorMessage" class="rounded-2xl border border-red-200 bg-red-50/80 px-4 py-3 text-sm text-red-700">
+        {{ errorMessage }}
+      </div>
+
+      <div class="grid gap-4 sm:grid-cols-3">
+        <div class="bg-ts-paper border border-ts-line rounded-2xl px-4 py-3">
+          <p class="text-xs uppercase tracking-wide text-ts-ink-soft">{{ 'admin.collections.stats.total' | translate }}</p>
+          <p class="text-2xl font-semibold text-ts-ink mt-2">{{ totalCount }}</p>
+        </div>
+        <div class="bg-ts-paper border border-ts-line rounded-2xl px-4 py-3">
+          <p class="text-xs uppercase tracking-wide text-ts-ink-soft">{{ 'admin.collections.stats.active' | translate }}</p>
+          <p class="text-2xl font-semibold text-ts-ink mt-2">{{ activeCount }}</p>
+        </div>
+        <div class="bg-ts-paper border border-ts-line rounded-2xl px-4 py-3">
+          <p class="text-xs uppercase tracking-wide text-ts-ink-soft">{{ 'admin.collections.stats.inactive' | translate }}</p>
+          <p class="text-2xl font-semibold text-ts-ink mt-2">{{ inactiveCount }}</p>
+        </div>
+      </div>
+
+      <div class="bg-ts-paper border border-ts-line rounded-2xl shadow-sm p-4">
+        <div class="grid gap-4 lg:grid-cols-[1.4fr,0.6fr]">
+          <div>
+            <label class="text-xs uppercase tracking-wide text-ts-ink-soft">{{ 'common.search' | translate }}</label>
+            <div class="relative mt-2">
+              <svg class="w-5 h-5 text-ts-ink-soft absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M9.5 17a7.5 7.5 0 110-15 7.5 7.5 0 010 15z"></path>
+              </svg>
+              <input
+                type="search"
+                [(ngModel)]="filterTerm"
+                class="w-full pl-10 pr-4 py-2.5 bg-ts-bg-soft border border-ts-line rounded-xl focus:ring-2 focus:ring-ts-accent focus:border-ts-accent text-ts-ink placeholder-ts-ink-soft"
+                [placeholder]="'admin.collections.filters.search_placeholder' | translate">
+            </div>
+          </div>
+          <div>
+            <label class="text-xs uppercase tracking-wide text-ts-ink-soft">{{ 'admin.collections.filters.status_label' | translate }}</label>
+            <select [(ngModel)]="statusFilter" class="mt-2 w-full px-3 py-2.5 bg-ts-bg-soft border border-ts-line rounded-xl text-ts-ink focus:ring-2 focus:ring-ts-accent focus:border-ts-accent">
+              <option value="all">{{ 'admin.collections.filters.status_all' | translate }}</option>
+              <option value="active">{{ 'admin.collections.filters.status_active' | translate }}</option>
+              <option value="inactive">{{ 'admin.collections.filters.status_inactive' | translate }}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
       <div *ngIf="isLoading" class="bg-ts-paper border border-ts-line rounded-2xl shadow-sm p-12 text-center text-ts-ink-soft">
         <div class="app-spinner" style="--spinner-size: 72px;"><img src="/Logo Clear.png" alt="Loading" width="96" height="96"></div>
         <p class="mt-4">{{ 'admin.collections.loading' | translate }}</p>
       </div>
 
-      <div *ngIf="!isLoading" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        <div *ngFor="let col of collections" class="bg-ts-paper border border-ts-line rounded-xl p-4 shadow-sm flex flex-col gap-3">
-          <div class="flex items-center justify-between">
-            <div>
-              <h3 class="text-lg font-semibold text-ts-ink">{{ col.name }}</h3>
-              <p class="text-sm text-ts-ink-soft">{{ col.slug }}</p>
+      <div *ngIf="!isLoading && filteredCollections.length === 0" class="bg-ts-paper border border-ts-line rounded-2xl shadow-sm p-12 text-center">
+        <div class="flex flex-col items-center justify-center gap-4">
+          <svg class="w-16 h-16 text-ts-ink-soft" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+          <div>
+            <p class="text-base font-semibold text-ts-ink">{{ 'admin.collections.empty_title' | translate }}</p>
+            <p class="text-sm text-ts-ink-soft mt-1">{{ 'admin.collections.empty_body' | translate }}</p>
+          </div>
+          <button (click)="openCreate()" class="px-4 py-2 rounded-full bg-ts-accent text-ts-ink border border-ts-accent/60 text-sm font-semibold hover:bg-ts-accent/90 transition-colors">
+            {{ 'admin.collections.new_collection' | translate }}
+          </button>
+        </div>
+      </div>
+
+      <div *ngIf="!isLoading && filteredCollections.length > 0" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div *ngFor="let col of filteredCollections" class="group bg-ts-paper border border-ts-line rounded-2xl overflow-hidden shadow-sm flex flex-col">
+          <div class="relative aspect-[4/3] bg-ts-bg-soft">
+            <img *ngIf="col.heroImageUrl" [src]="col.heroImageUrl" [alt]="col.name" class="w-full h-full object-cover">
+            <div *ngIf="!col.heroImageUrl" class="w-full h-full flex items-center justify-center text-xs text-ts-ink-soft">
+              {{ 'admin.collections.card.no_image' | translate }}
             </div>
-            <span class="text-xs px-2 py-1 rounded-full border" [class.bg-green-50]="col.active" [class.text-green-700]="col.active" [class.border-green-200]="col.active" [class.bg-ts-bg-soft]="!col.active" [class.text-ts-ink]="!col.active" [class.border-ts-line]="!col.active">
+            <span class="absolute top-3 right-3 text-xs px-2 py-1 rounded-full border"
+              [class.bg-green-100]="col.active"
+              [class.text-green-900]="col.active"
+              [class.border-green-200]="col.active"
+              [class.bg-ts-bg-soft]="!col.active"
+              [class.text-ts-ink]="!col.active"
+              [class.border-ts-line]="!col.active">
               {{ (col.active ? 'common.active' : 'common.inactive') | translate }}
             </span>
           </div>
-          <p class="text-sm text-ts-ink-soft line-clamp-3">{{ col.description }}</p>
-          <div class="flex gap-2 mt-auto">
-            <button (click)="editCollection(col)" class="px-3 py-2 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink hover:bg-ts-accent/15">{{ 'admin.collections.form.edit' | translate }}</button>
-            <button (click)="deleteCollection(col)" class="px-3 py-2 bg-red-50 border border-red-200 rounded-lg text-red-700 hover:bg-red-100">{{ 'admin.collections.form.delete' | translate }}</button>
+          <div class="p-4 flex flex-col gap-3 flex-1">
+            <div>
+              <h3 class="text-lg font-semibold text-ts-ink">{{ col.name }}</h3>
+              <p class="text-xs text-ts-ink-soft font-mono">{{ col.slug }}</p>
+            </div>
+            <p class="text-sm text-ts-ink-soft line-clamp-3">
+              {{ col.description || ('admin.collections.card.no_description' | translate) }}
+            </p>
+            <div class="flex gap-2 mt-auto">
+              <button (click)="editCollection(col)" class="px-3 py-2 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink hover:bg-ts-accent/15">
+                {{ 'admin.collections.form.edit' | translate }}
+              </button>
+              <button (click)="deleteCollection(col)" class="px-3 py-2 bg-rose-100 border border-rose-200 rounded-lg text-rose-800 hover:bg-rose-200">
+                {{ 'admin.collections.form.delete' | translate }}
+              </button>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
     <div *ngIf="showModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50" (click)="closeModal()">
-      <div class="bg-ts-paper border border-ts-line rounded-2xl shadow-lg max-w-2xl w-full p-6" (click)="$event.stopPropagation()">
-        <div class="flex items-center justify-between mb-4">
-          <h2 class="text-lg font-semibold text-ts-ink">{{ (editing ? 'admin.collections.edit_collection' : 'admin.collections.new_collection_title') | translate }}</h2>
-          <button (click)="closeModal()" class="text-ts-ink hover:text-ts-accent">&times;</button>
+      <div class="bg-ts-paper border border-ts-line rounded-2xl shadow-2xl w-full max-w-3xl overflow-hidden" (click)="$event.stopPropagation()">
+        <div class="px-6 py-4 border-b border-ts-line bg-ts-bg-soft/40 flex items-center justify-between">
+          <div>
+            <p class="text-xs uppercase tracking-wide text-ts-ink-soft">{{ editing ? ('admin.collections.edit_collection' | translate) : ('admin.collections.new_collection_title' | translate) }}</p>
+            <h2 class="text-xl font-semibold text-ts-ink">{{ editing ? form.value?.name : ('admin.collections.new_collection_title' | translate) }}</h2>
+          </div>
+          <button (click)="closeModal()" class="p-2 rounded-lg bg-ts-paper border border-ts-line text-ts-ink hover:border-ts-accent transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
         </div>
 
-        <form [formGroup]="form" class="space-y-4">
-          <div class="grid sm:grid-cols-2 gap-4">
-            <div>
-              <label class="block text-sm font-medium text-ts-ink mb-1">{{ 'admin.collections.form.name' | translate }}</label>
-              <input type="text" formControlName="name" class="w-full px-3 py-2 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink focus:ring-2 focus:ring-ts-accent focus:border-ts-accent" />
+        <form [formGroup]="form" class="max-h-[80vh] overflow-y-auto px-6 py-6 space-y-5">
+            <div class="grid sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-semibold text-ts-ink">{{ 'admin.collections.form.name' | translate }}</label>
+                <input type="text" formControlName="name" class="mt-2 w-full px-4 py-2.5 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink focus:ring-2 focus:ring-ts-accent focus:border-ts-accent" />
+              </div>
+              <div>
+                <label class="block text-sm font-semibold text-ts-ink">{{ 'admin.collections.form.slug' | translate }}</label>
+                <input type="text" formControlName="slug" class="mt-2 w-full px-4 py-2.5 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink focus:ring-2 focus:ring-ts-accent focus:border-ts-accent" />
+                <p class="text-xs text-ts-ink-soft mt-2">{{ 'admin.collections.form.slug_help' | translate }}</p>
+              </div>
             </div>
             <div>
-              <label class="block text-sm font-medium text-ts-ink mb-1">{{ 'admin.collections.form.slug' | translate }}</label>
-              <input type="text" formControlName="slug" class="w-full px-3 py-2 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink focus:ring-2 focus:ring-ts-accent focus:border-ts-accent" />
+              <label class="block text-sm font-semibold text-ts-ink">{{ 'admin.collections.form.description' | translate }}</label>
+              <textarea rows="4" formControlName="description" class="mt-2 w-full px-4 py-2.5 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink focus:ring-2 focus:ring-ts-accent focus:border-ts-accent"></textarea>
             </div>
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-ts-ink mb-1">{{ 'admin.collections.form.description' | translate }}</label>
-            <textarea rows="3" formControlName="description" class="w-full px-3 py-2 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink focus:ring-2 focus:ring-ts-accent focus:border-ts-accent"></textarea>
-          </div>
-          
-          <!-- Hero Image Upload -->
-          <div>
-            <label class="block text-sm font-medium text-ts-ink mb-2">{{ 'admin.collections.form.hero_image' | translate }}</label>
-            
-            @if (heroPreview || existingHeroUrl) {
-              <div class="relative inline-block group">
-                <img [src]="heroPreview || existingHeroUrl" alt="Hero preview" class="w-full max-w-md h-48 object-cover rounded-lg border border-ts-line" />
+
+            <div>
+              <label class="block text-sm font-semibold text-ts-ink mb-2">{{ 'admin.collections.form.hero_image' | translate }}</label>
+
+              <div *ngIf="heroPreview || existingHeroUrl" class="relative inline-block group">
+                <img [src]="heroPreview || existingHeroUrl" alt="Hero preview" class="w-full max-w-md h-48 object-cover rounded-xl border border-ts-line" />
                 <button
                   type="button"
                   (click)="removeHeroImage()"
-                  class="absolute top-2 right-2 p-2 bg-red-500 text-white rounded-lg opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600">
+                  class="absolute top-2 right-2 p-2 bg-rose-500 text-white rounded-lg opacity-0 group-hover:opacity-100 transition-opacity hover:bg-rose-600">
                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                   </svg>
                 </button>
               </div>
-            } @else {
-              <div class="flex items-center gap-4">
-                <label class="flex items-center gap-2 px-4 py-2 bg-ts-accent text-ts-ink border border-ts-accent/60 rounded-lg cursor-pointer hover:bg-ts-accent/90 transition-colors">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                  </svg>
-                  <span>{{ 'admin.collections.form.choose_image' | translate }}</span>
-                  <input type="file" accept="image/*" (change)="onHeroSelected($event)" class="hidden" />
-                </label>
-                <span class="text-sm text-ts-ink-soft">{{ 'admin.collections.form.max_size' | translate }}</span>
+
+              <div *ngIf="!heroPreview && !existingHeroUrl" class="border border-dashed border-ts-line rounded-xl p-4 bg-ts-bg-soft/60">
+                <div class="flex flex-wrap items-center gap-4">
+                  <label class="flex items-center gap-2 px-4 py-2 bg-ts-accent text-ts-ink border border-ts-accent/60 rounded-lg cursor-pointer hover:bg-ts-accent/90 transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    </svg>
+                    <span>{{ 'admin.collections.form.choose_image' | translate }}</span>
+                    <input type="file" accept="image/*" (change)="onHeroSelected($event)" class="hidden" />
+                  </label>
+                  <div class="text-xs text-ts-ink-soft">
+                    <div>{{ 'admin.collections.form.max_size' | translate }}</div>
+                    <div>{{ 'admin.collections.form.hero_hint' | translate }}</div>
+                  </div>
+                </div>
               </div>
-            }
-            
-            @if (uploadingHero) {
-              <div class="mt-2">
+
+              <div *ngIf="uploadingHero" class="mt-2">
                 <div class="flex items-center gap-2 text-sm text-ts-ink-soft">
                   <div class="app-spinner" style="--spinner-size: 16px;"><img src="/Logo Clear.png" alt="Uploading" width="16" height="16"></div>
                   <span>{{ 'admin.collections.form.upload_progress' | translate }}... {{ heroUploadProgress }}%</span>
                 </div>
               </div>
-            }
-          </div>
-          <div class="grid sm:grid-cols-3 gap-4">
-            <div>
-              <label class="block text-sm font-medium text-ts-ink mb-1">{{ 'admin.collections.form.seo_title' | translate }}</label>
-              <input type="text" formControlName="seoTitle" class="w-full px-3 py-2 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink focus:ring-2 focus:ring-ts-accent focus:border-ts-accent" />
             </div>
-            <div>
-              <label class="block text-sm font-medium text-ts-ink mb-1">{{ 'admin.collections.form.seo_description' | translate }}</label>
-              <input type="text" formControlName="seoDescription" class="w-full px-3 py-2 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink focus:ring-2 focus:ring-ts-accent focus:border-ts-accent" />
+
+            <div class="border border-ts-line rounded-xl p-4 bg-ts-bg-soft/40">
+              <p class="text-xs uppercase tracking-wide text-ts-ink-soft">{{ 'admin.collections.form.seo_title' | translate }}</p>
+              <div class="grid gap-3 mt-3 sm:grid-cols-3">
+                <div class="space-y-2">
+                  <label class="text-xs font-semibold text-ts-ink">{{ 'admin.collections.form.seo_title' | translate }}</label>
+                  <input type="text" formControlName="seoTitle" class="w-full px-3 py-2 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink focus:ring-2 focus:ring-ts-accent focus:border-ts-accent" />
+                </div>
+                <div class="space-y-2">
+                  <label class="text-xs font-semibold text-ts-ink">{{ 'admin.collections.form.seo_description' | translate }}</label>
+                  <input type="text" formControlName="seoDescription" class="w-full px-3 py-2 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink focus:ring-2 focus:ring-ts-accent focus:border-ts-accent" />
+                </div>
+                <div class="space-y-2">
+                  <label class="text-xs font-semibold text-ts-ink">{{ 'admin.collections.form.seo_image' | translate }}</label>
+                  <input type="text" formControlName="seoImage" class="w-full px-3 py-2 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink focus:ring-2 focus:ring-ts-accent focus:border-ts-accent" />
+                </div>
+              </div>
             </div>
-            <div>
-              <label class="block text-sm font-medium text-ts-ink mb-1">{{ 'admin.collections.form.seo_image' | translate }}</label>
-              <input type="text" formControlName="seoImage" class="w-full px-3 py-2 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink focus:ring-2 focus:ring-ts-accent focus:border-ts-accent" />
-            </div>
-          </div>
-          <label class="inline-flex items-center gap-2 text-ts-ink">
-            <input type="checkbox" formControlName="active" class="w-4 h-4 text-ts-accent border-ts-line focus:ring-ts-accent">
-            {{ 'admin.collections.form.active' | translate }}
-          </label>
+
+            <label class="inline-flex items-center gap-2 text-ts-ink">
+              <input type="checkbox" formControlName="active" class="w-4 h-4 text-ts-accent border-ts-line focus:ring-ts-accent">
+              {{ 'admin.collections.form.active' | translate }}
+            </label>
         </form>
 
-        <div class="flex justify-end gap-3 mt-6">
-          <button (click)="closeModal()" [disabled]="isSaving" class="px-4 py-2 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink hover:bg-ts-paper disabled:opacity-50 disabled:cursor-not-allowed">{{ 'admin.collections.form.cancel' | translate }}</button>
+        <div class="px-6 py-4 border-t border-ts-line bg-ts-paper flex items-center justify-end gap-3">
+          <button (click)="closeModal()" [disabled]="isSaving" class="px-4 py-2 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink hover:bg-ts-paper disabled:opacity-50 disabled:cursor-not-allowed">
+            {{ 'admin.collections.form.cancel' | translate }}
+          </button>
           <button (click)="save()" [disabled]="isSaving || form.invalid" class="px-4 py-2 bg-ts-accent text-ts-ink border border-ts-accent/60 rounded-lg hover:bg-ts-accent/90 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
             <div *ngIf="isSaving" class="app-spinner" style="--spinner-size: 16px;"><img src="/Logo Clear.png" alt="Saving" width="16" height="16"></div>
             {{ (isSaving ? 'admin.collections.form.saving' : 'admin.collections.form.save') | translate }}

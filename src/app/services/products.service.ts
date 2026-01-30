@@ -144,6 +144,43 @@ export class ProductsService {
   }
 
   /**
+   * Get products explicitly featured on the home page
+   */
+  getFeaturedOnHomeProducts(count: number = 8): Observable<Product[]> {
+    const productsCol = collection(this.firestore, 'products');
+    const orderedQuery = query(
+      productsCol,
+      where('status', '==', 'published'),
+      where('featuredOnHome', '==', true),
+      orderBy('featuredPriority', 'desc'),
+      orderBy('createdAt', 'desc'),
+      limit(count)
+    );
+
+    return from(getDocs(orderedQuery)).pipe(
+      map(snapshot => snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      } as Product))),
+      catchError(err => {
+        this.logger.debug('ProductsService getFeaturedOnHomeProducts index missing, falling back without orderBy', err?.message);
+        const fallbackQuery = query(
+          productsCol,
+          where('status', '==', 'published'),
+          where('featuredOnHome', '==', true),
+          limit(count)
+        );
+        return from(getDocs(fallbackQuery)).pipe(
+          map(snapshot => snapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+          } as Product)))
+        );
+      })
+    );
+  }
+
+  /**
    * Get products by tag (e.g., bestseller). Falls back to latest if none found.
    */
   getProductsByTag(tag: string, count: number = 8): Observable<Product[]> {

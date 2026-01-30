@@ -1,194 +1,342 @@
 <div class="min-h-screen bg-ts-bg md:flex">
-  <app-admin-sidebar></app-admin-sidebar>
+  <app-admin-sidebar class="hidden md:block"></app-admin-sidebar>
 
   <div class="flex-1 md:pl-64">
-    <div class="bg-ts-paper border-b border-ts-line shadow-sm">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-        <div>
-          <div class="flex items-center gap-3 mb-1">
-            <a routerLink="/admin" class="text-ts-ink hover:text-ts-accent transition-colors">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-              </svg>
-            </a>
-            <h1 class="text-xl font-bold text-ts-ink">{{ 'admin.models.title' | translate }}</h1>
+    <div class="relative overflow-hidden">
+      <div class="absolute -top-24 right-0 h-56 w-56 rounded-full bg-ts-accent/15 blur-3xl"></div>
+      <div class="absolute -top-12 right-40 h-40 w-40 rounded-full bg-ts-ink/5 blur-3xl"></div>
+      <div class="bg-ts-paper/90 backdrop-blur border-b border-ts-line">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div class="flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+              <a routerLink="/admin" class="text-ts-ink hover:text-ts-accent transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                </svg>
+              </a>
+              <div>
+                <h1 class="text-2xl font-semibold text-ts-ink">{{ 'admin.models.title' | translate }}</h1>
+                <p class="text-sm text-ts-ink-soft">{{ 'admin.models.subtitle' | translate }}</p>
+              </div>
+            </div>
+            <button
+              (click)="addNew()"
+              class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-ts-accent text-ts-ink border border-ts-accent/60 text-sm font-semibold hover:bg-ts-accent/90 transition-colors">
+              {{ 'admin.models.actions.add' | translate }}
+            </button>
           </div>
-          <a routerLink="/admin" class="text-sm text-ts-ink-soft hover:text-ts-ink transition-colors">{{ 'admin.models.subtitle' | translate }}</a>
         </div>
-        <button
-          (click)="addNew()"
-          class="px-4 py-2 bg-ts-accent text-ts-ink border border-ts-accent/60 rounded-lg hover:bg-ts-accent/90 transition-colors">
-          {{ 'admin.models.actions.add' | translate }}
-        </button>
       </div>
     </div>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+      @if (messageKey) {
+        <div
+          class="p-4 rounded-2xl border text-sm"
+          [class.bg-success/10]="messageType === 'success'"
+          [class.border-success/30]="messageType === 'success'"
+          [class.text-success]="messageType === 'success'"
+          [class.bg-error/10]="messageType === 'error'"
+          [class.border-error/30]="messageType === 'error'"
+          [class.text-error]="messageType === 'error'"
+          [class.bg-ts-accent/10]="messageType === 'info'"
+          [class.border-ts-accent/20]="messageType === 'info'"
+          [class.text-ts-accent]="messageType === 'info'">
+          {{ messageKey | translate: messageParams }}
+        </div>
+      }
+      @if (errorMessage) {
+        <div class="p-4 rounded-2xl border border-error/30 bg-error/10 text-error text-sm">
+          {{ errorMessage }}
+        </div>
+      }
 
-    @if (messageKey) {
-      <div
-        class="p-4 rounded-lg border"
-        [class.bg-success/10]="messageType === 'success'"
-        [class.border-success/30]="messageType === 'success'"
-        [class.text-success]="messageType === 'success'"
-        [class.bg-error/10]="messageType === 'error'"
-        [class.border-error/30]="messageType === 'error'"
-        [class.text-error]="messageType === 'error'"
-        [class.bg-ts-accent/10]="messageType === 'info'"
-        [class.border-ts-accent/20]="messageType === 'info'"
-        [class.text-ts-accent]="messageType === 'info'">
-        {{ messageKey | translate: messageParams }}
-      </div>
-    }
-    @if (errorMessage) {
-      <div class="p-4 rounded-lg border border-error/30 bg-error/10 text-error">
-        {{ errorMessage }}
-      </div>
-    }
-
-    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-      <div class="relative flex-1 max-w-md">
-        <svg class="w-5 h-5 text-ts-ink-soft absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M9.5 17a7.5 7.5 0 110-15 7.5 7.5 0 010 15z"></path>
-        </svg>
-        <input
-          type="search"
-          [(ngModel)]="filterTerm"
-          class="w-full pl-10 pr-4 py-2 bg-ts-bg-soft border border-ts-line rounded-xl focus:ring-2 focus:ring-ts-accent focus:border-ts-accent text-ts-ink placeholder-ts-ink-soft"
-          [placeholder]="'admin.models.filters.search_placeholder' | translate">
-      </div>
-    </div>
-
-    @if (selectedModels.size > 0) {
-      <div class="bg-ts-accent/10 border border-ts-accent/30 rounded-lg p-4 flex items-center justify-between">
-        <span class="text-ts-ink font-medium">{{ selectedModels.size }} model(s) selected</span>
-        <div class="flex items-center gap-2">
-          <button (click)="bulkActivate()" class="px-3 py-1.5 text-sm bg-success/20 border border-success/30 text-success rounded-lg hover:bg-success/30 transition-all">
-            Activate
-          </button>
-          <button (click)="bulkDeactivate()" class="px-3 py-1.5 text-sm bg-warning/20 border border-warning/30 text-warning rounded-lg hover:bg-warning/30 transition-all">
-            Deactivate
-          </button>
-          <button (click)="bulkDelete()" class="px-3 py-1.5 text-sm bg-error/20 border border-error/30 text-error rounded-lg hover:bg-error/30 transition-all">
-            Delete
-          </button>
+      <div class="grid gap-4 sm:grid-cols-3">
+        <div class="bg-ts-paper border border-ts-line rounded-2xl px-4 py-3">
+          <p class="text-xs uppercase tracking-wide text-ts-ink-soft">{{ 'admin.models.stats.total' | translate }}</p>
+          <p class="text-2xl font-semibold text-ts-ink mt-2">{{ totalCount }}</p>
+        </div>
+        <div class="bg-ts-paper border border-ts-line rounded-2xl px-4 py-3">
+          <p class="text-xs uppercase tracking-wide text-ts-ink-soft">{{ 'admin.models.stats.active' | translate }}</p>
+          <p class="text-2xl font-semibold text-ts-ink mt-2">{{ activeCount }}</p>
+        </div>
+        <div class="bg-ts-paper border border-ts-line rounded-2xl px-4 py-3">
+          <p class="text-xs uppercase tracking-wide text-ts-ink-soft">{{ 'admin.models.stats.inactive' | translate }}</p>
+          <p class="text-2xl font-semibold text-ts-ink mt-2">{{ inactiveCount }}</p>
         </div>
       </div>
-    }
 
-    @if (selectedModels.size > 0) {
-      <div class="bg-ts-accent/10 border border-ts-accent/30 rounded-xl p-4 flex items-center justify-between">
-        <span class="text-sm font-medium text-ts-ink">{{ selectedModels.size }} {{ selectedModels.size === 1 ? 'model' : 'models' }} selected</span>
-        <div class="flex items-center gap-2">
-          <button (click)="bulkActivate()" class="px-3 py-1.5 text-xs bg-green-50 border border-green-200 text-green-700 rounded-lg hover:bg-green-100 transition-all">
-            Activate Selected
-          </button>
-          <button (click)="bulkDeactivate()" class="px-3 py-1.5 text-xs bg-amber-50 border border-amber-200 text-amber-700 rounded-lg hover:bg-amber-100 transition-all">
-            Deactivate Selected
-          </button>
-          <button (click)="bulkDelete()" class="px-3 py-1.5 text-xs bg-red-50 border border-red-200 text-red-700 rounded-lg hover:bg-red-100 transition-all">
-            Delete Selected
-          </button>
+      <div class="bg-ts-paper border border-ts-line rounded-2xl shadow-sm p-4">
+        <div class="grid gap-4 lg:grid-cols-[1.4fr,0.8fr,0.8fr]">
+          <div>
+            <label class="text-xs uppercase tracking-wide text-ts-ink-soft">{{ 'common.search' | translate }}</label>
+            <div class="relative mt-2">
+              <svg class="w-5 h-5 text-ts-ink-soft absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M9.5 17a7.5 7.5 0 110-15 7.5 7.5 0 010 15z"></path>
+              </svg>
+              <input
+                type="search"
+                [(ngModel)]="filterTerm"
+                class="w-full pl-10 pr-4 py-2.5 bg-ts-bg-soft border border-ts-line rounded-xl focus:ring-2 focus:ring-ts-accent focus:border-ts-accent text-ts-ink placeholder-ts-ink-soft"
+                [placeholder]="'admin.models.filters.search_placeholder' | translate">
+            </div>
+          </div>
+          <div>
+            <label class="text-xs uppercase tracking-wide text-ts-ink-soft">{{ 'admin.models.filters.status_label' | translate }}</label>
+            <select [(ngModel)]="statusFilter" class="mt-2 w-full px-3 py-2.5 bg-ts-bg-soft border border-ts-line rounded-xl text-ts-ink focus:ring-2 focus:ring-ts-accent focus:border-ts-accent">
+              <option value="all">{{ 'admin.models.filters.status_all' | translate }}</option>
+              <option value="active">{{ 'admin.models.filters.status_active' | translate }}</option>
+              <option value="inactive">{{ 'admin.models.filters.status_inactive' | translate }}</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-xs uppercase tracking-wide text-ts-ink-soft">{{ 'admin.models.filters.category_label' | translate }}</label>
+            <select [(ngModel)]="categoryFilter" class="mt-2 w-full px-3 py-2.5 bg-ts-bg-soft border border-ts-line rounded-xl text-ts-ink focus:ring-2 focus:ring-ts-accent focus:border-ts-accent">
+              <option value="all">{{ 'admin.models.filters.all_categories' | translate }}</option>
+              @for (category of categories; track category.id) {
+                <option [value]="category.id">{{ category.name }}</option>
+              }
+            </select>
+          </div>
         </div>
       </div>
-    }
 
-    @if (isLoading) {
-      <div class="flex flex-col items-center justify-center py-16 gap-4 bg-ts-paper border border-ts-line rounded-2xl shadow-lvl1">
-        <div class="app-spinner" style="--spinner-size: 48px;" aria-hidden="true">
-          <img src="/Logo Clear.png" alt="" width="64" height="64">
+      @if (selectedModels.size > 0) {
+        <div class="bg-ts-accent/10 border border-ts-accent/30 rounded-2xl p-4 flex flex-wrap items-center justify-between gap-4">
+          <span class="text-sm font-medium text-ts-ink">
+            {{ selectedModels.size === 1 ? ('admin.models.bulk.selected_single' | translate) : ('admin.models.bulk.selected' | translate:{ count: selectedModels.size }) }}
+          </span>
+          <div class="flex items-center gap-2 flex-wrap">
+            <button (click)="bulkActivate()" class="px-3 py-1.5 text-sm bg-green-100 border border-green-200 text-ts-ink rounded-full hover:bg-green-200 transition-all">
+              {{ 'admin.models.bulk.activate' | translate }}
+            </button>
+            <button (click)="bulkDeactivate()" class="px-3 py-1.5 text-sm bg-amber-100 border border-amber-200 text-amber-800 rounded-full hover:bg-amber-200 transition-all">
+              {{ 'admin.models.bulk.deactivate' | translate }}
+            </button>
+            <button (click)="bulkDelete()" class="px-3 py-1.5 text-sm bg-rose-100 border border-rose-200 text-rose-800 rounded-full hover:bg-rose-200 transition-all">
+              {{ 'admin.models.bulk.delete' | translate }}
+            </button>
+          </div>
         </div>
-        <p class="text-ts-ink-soft">{{ 'admin.models.loading' | translate }}</p>
-      </div>
-    } @else {
+      }
+
+      @if (isLoading) {
+        <div class="flex flex-col items-center justify-center py-16 gap-4 bg-ts-paper border border-ts-line rounded-2xl shadow-lvl1">
+          <div class="app-spinner" style="--spinner-size: 48px;" aria-hidden="true">
+            <img src="/Logo Clear.png" alt="" width="64" height="64">
+          </div>
+          <p class="text-ts-ink-soft">{{ 'admin.models.loading' | translate }}</p>
+        </div>
+      } @else {
+        <div class="bg-ts-paper border border-ts-line rounded-2xl shadow-sm overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-ts-line">
+              <thead class="bg-ts-bg-soft border-b border-ts-line">
+                <tr>
+                  <th class="px-6 py-3 text-left">
+                    <input
+                      type="checkbox"
+                      [checked]="allSelected"
+                      (change)="toggleSelectAll()"
+                      aria-label="Select all"
+                      class="w-5 h-5 text-ts-accent bg-ts-paper border-2 border-ts-line rounded cursor-pointer focus:ring-ts-accent">
+                  </th>
+                  <th class="px-6 py-3 text-left text-xs font-semibold text-ts-ink-soft uppercase tracking-wider">{{ 'admin.models.table.name' | translate }}</th>
+                  <th class="px-6 py-3 text-left text-xs font-semibold text-ts-ink-soft uppercase tracking-wider">{{ 'admin.models.table.slug' | translate }}</th>
+                  <th class="px-6 py-3 text-left text-xs font-semibold text-ts-ink-soft uppercase tracking-wider">{{ 'admin.models.table.category' | translate }}</th>
+                  <th class="px-6 py-3 text-left text-xs font-semibold text-ts-ink-soft uppercase tracking-wider">{{ 'admin.models.table.status' | translate }}</th>
+                  <th class="px-6 py-3 text-right text-xs font-semibold text-ts-ink-soft uppercase tracking-wider">{{ 'admin.models.table.actions' | translate }}</th>
+                </tr>
+              </thead>
+              <tbody class="bg-ts-paper divide-y divide-ts-line/60">
+                @if (filteredModels.length === 0) {
+                  <tr>
+                    <td colspan="6" class="px-6 py-12 text-center">
+                      <div class="flex flex-col items-center justify-center gap-4">
+                        <svg class="w-16 h-16 text-ts-ink-soft" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
+                        </svg>
+                        <p class="text-ts-ink-soft">{{ 'admin.models.empty' | translate }}</p>
+                        <button
+                          (click)="addNew()"
+                          class="px-4 py-2 rounded-full bg-ts-accent text-ts-ink border border-ts-accent/60 text-sm font-semibold hover:bg-ts-accent/90 transition-colors">
+                          {{ 'admin.models.actions.create_first' | translate }}
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                } @else {
+                  @for (model of filteredModels; track trackByModelId($index, model)) {
+                    <tr class="hover:bg-ts-bg-soft transition-colors" [class.bg-ts-accent/5]="model.id && selectedModels.has(model.id)">
+                      <td class="px-6 py-4">
+                        <input
+                          type="checkbox"
+                          [checked]="model.id && selectedModels.has(model.id)"
+                          (change)="model.id && toggleSelect(model.id)"
+                          aria-label="Select model"
+                          class="w-5 h-5 text-ts-accent bg-ts-paper border-2 border-ts-line rounded cursor-pointer focus:ring-ts-accent">
+                      </td>
+                      <td class="px-6 py-4">
+                        <div class="text-sm font-semibold text-ts-ink">{{ model.name }}</div>
+                        @if (model.textureHints && model.textureHints.length) {
+                          <div class="text-xs text-ts-ink-soft mt-1">{{ model.textureHints.join(', ') }}</div>
+                        }
+                      </td>
+                      <td class="px-6 py-4">
+                        <span class="inline-flex px-2 py-1 text-xs font-mono bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink">
+                          {{ model.slug }}
+                        </span>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="inline-flex items-center gap-2 px-2.5 py-1 text-xs font-medium bg-ts-accent/15 text-ts-ink border border-ts-accent/30 rounded-full">
+                          <span class="h-1.5 w-1.5 rounded-full bg-ts-accent"></span>
+                          {{ getCategoryName(model.categoryId) }}
+                        </span>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        @if (model.active !== false) {
+                          <span class="text-xs px-2 py-0.5 rounded-full border bg-green-100 text-green-900 border-green-300">
+                            {{ 'admin.models.table.active' | translate }}
+                          </span>
+                        } @else {
+                          <span class="text-xs px-2 py-0.5 rounded-full border bg-red-50 text-red-700 border-red-200">
+                            {{ 'admin.models.table.inactive' | translate }}
+                          </span>
+                        }
+                      </td>
+                      <td class="px-6 py-4 text-right whitespace-nowrap">
+                        <div class="flex items-center justify-end gap-2">
+                          <button
+                            (click)="edit(model)"
+                            class="px-3 py-1.5 text-xs bg-ts-accent/15 border border-ts-accent/30 text-ts-ink rounded-full hover:bg-ts-accent/25 transition-all">
+                            {{ 'admin.models.actions.edit' | translate }}
+                          </button>
+                          <button
+                            (click)="delete(model)"
+                            class="px-3 py-1.5 text-xs bg-rose-100 border border-rose-200 text-rose-800 rounded-full hover:bg-rose-200 transition-all">
+                            {{ 'admin.models.actions.delete' | translate }}
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  }
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      }
+
       <div class="bg-ts-paper border border-ts-line rounded-2xl shadow-sm overflow-hidden">
+        <div class="px-6 py-5 border-b border-ts-line bg-ts-bg-soft/40">
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h2 class="text-lg font-semibold text-ts-ink">{{ 'admin.models.categories.title' | translate }}</h2>
+              <p class="text-xs text-ts-ink-soft">{{ 'admin.models.categories.subtitle' | translate }}</p>
+            </div>
+            <button
+              (click)="addCategory()"
+              class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-ts-accent/15 text-ts-ink border border-ts-accent/40 text-sm font-semibold hover:bg-ts-accent/25 transition-colors">
+              {{ 'admin.models.categories.actions.add' | translate }}
+            </button>
+          </div>
+        </div>
+        @if (selectedCategories.size > 0) {
+          <div class="px-6 py-3 border-b border-ts-line bg-ts-accent/10 flex flex-wrap items-center justify-between gap-3">
+            <span class="text-sm font-medium text-ts-ink">
+              {{ selectedCategories.size === 1 ? ('admin.models.categories.bulk.selected_single' | translate) : ('admin.models.categories.bulk.selected' | translate:{ count: selectedCategories.size }) }}
+            </span>
+            <div class="flex items-center gap-2 flex-wrap">
+              <button (click)="bulkActivateCategories()" class="px-3 py-1.5 text-sm bg-green-100 border border-green-200 text-ts-ink rounded-full hover:bg-green-200 transition-all">
+                {{ 'admin.models.categories.bulk.activate' | translate }}
+              </button>
+              <button (click)="bulkDeactivateCategories()" class="px-3 py-1.5 text-sm bg-amber-100 border border-amber-200 text-amber-800 rounded-full hover:bg-amber-200 transition-all">
+                {{ 'admin.models.categories.bulk.deactivate' | translate }}
+              </button>
+              <button (click)="bulkDeleteCategories()" class="px-3 py-1.5 text-sm bg-rose-100 border border-rose-200 text-rose-800 rounded-full hover:bg-rose-200 transition-all">
+                {{ 'admin.models.categories.bulk.delete' | translate }}
+              </button>
+            </div>
+          </div>
+        }
         <div class="overflow-x-auto">
           <table class="min-w-full divide-y divide-ts-line">
             <thead class="bg-ts-bg-soft border-b border-ts-line">
-              <tr>
-                <th class="px-6 py-3 text-left">
-                  <input type="checkbox" [checked]="allSelected" (change)="toggleSelectAll()" class="w-4 h-4 text-ts-accent bg-ts-bg-soft border-ts-line rounded focus:ring-ts-accent">
-                </th>
-                <th class="px-6 py-3 text-left text-xs font-semibold text-ts-ink-soft uppercase tracking-wider">{{ 'admin.models.table.name' | translate }}</th>
-                <th class="px-6 py-3 text-left text-xs font-semibold text-ts-ink-soft uppercase tracking-wider">{{ 'admin.models.table.slug' | translate }}</th>
-                <th class="px-6 py-3 text-left text-xs font-semibold text-ts-ink-soft uppercase tracking-wider">
-                  <div class="flex flex-col gap-1">
-                    <span>{{ 'admin.models.table.category' | translate }}</span>
-                    <select [(ngModel)]="categoryFilter" class="text-xs px-2 py-1 bg-ts-bg-soft border border-ts-line rounded text-ts-ink focus:ring-1 focus:ring-ts-accent focus:border-ts-accent">
-                      <option value="all">All Categories</option>
-                      @for (category of categories; track category.id) {
-                        <option [value]="category.id">{{ category.name }}</option>
-                      }
-                    </select>
-                  </div>
-                </th>
-                <th class="px-6 py-3 text-left text-xs font-semibold text-ts-ink-soft uppercase tracking-wider">
-                  <div class="flex flex-col gap-1">
-                    <span>{{ 'admin.models.table.status' | translate }}</span>
-                    <select [(ngModel)]="statusFilter" class="text-xs px-2 py-1 bg-ts-bg-soft border border-ts-line rounded text-ts-ink focus:ring-1 focus:ring-ts-accent focus:border-ts-accent">
-                      <option value="all">{{ 'admin.models.filters.status_all' | translate }}</option>
-                      <option value="active">{{ 'admin.models.filters.status_active' | translate }}</option>
-                      <option value="inactive">{{ 'admin.models.filters.status_inactive' | translate }}</option>
-                    </select>
-                  </div>
-                </th>
-                <th class="px-6 py-3 text-right text-xs font-semibold text-ts-ink-soft uppercase tracking-wider">{{ 'admin.models.table.actions' | translate }}</th>
-              </tr>
+                <tr>
+                  <th class="px-6 py-3 text-left">
+                    <input
+                      type="checkbox"
+                      [checked]="allCategoriesSelected"
+                      (change)="toggleSelectAllCategories()"
+                      aria-label="Select all categories"
+                      class="w-5 h-5 text-ts-accent bg-ts-paper border-2 border-ts-line rounded cursor-pointer focus:ring-ts-accent">
+                  </th>
+                  <th class="px-6 py-3 text-left text-xs font-semibold text-ts-ink-soft uppercase tracking-wider">{{ 'admin.models.categories.table.name' | translate }}</th>
+                  <th class="px-6 py-3 text-left text-xs font-semibold text-ts-ink-soft uppercase tracking-wider">{{ 'admin.models.categories.table.slug' | translate }}</th>
+                  <th class="px-6 py-3 text-left text-xs font-semibold text-ts-ink-soft uppercase tracking-wider">{{ 'admin.models.categories.table.order' | translate }}</th>
+                  <th class="px-6 py-3 text-left text-xs font-semibold text-ts-ink-soft uppercase tracking-wider">{{ 'admin.models.categories.table.status' | translate }}</th>
+                  <th class="px-6 py-3 text-right text-xs font-semibold text-ts-ink-soft uppercase tracking-wider">{{ 'admin.models.categories.table.actions' | translate }}</th>
+                </tr>
             </thead>
             <tbody class="bg-ts-paper divide-y divide-ts-line/60">
-              @if (filteredModels.length === 0) {
-                <tr>
-                  <td colspan="6" class="px-6 py-12 text-center">
+              @if (categories.length === 0) {
+                  <tr>
+                    <td colspan="6" class="px-6 py-12 text-center">
                     <div class="flex flex-col items-center justify-center gap-4">
                       <svg class="w-16 h-16 text-ts-ink-soft" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                       </svg>
-                      <p class="text-ts-ink-soft">{{ 'admin.models.empty' | translate }}</p>
+                      <p class="text-ts-ink-soft">{{ 'admin.models.categories.empty' | translate }}</p>
+                      <button
+                        (click)="addCategory()"
+                        class="px-4 py-2 rounded-full bg-ts-accent text-ts-ink border border-ts-accent/60 text-sm font-semibold hover:bg-ts-accent/90 transition-colors">
+                        {{ 'admin.models.categories.actions.create_first' | translate }}
+                      </button>
                     </div>
                   </td>
                 </tr>
               } @else {
-                @for (model of filteredModels; track trackByModelId($index, model)) {
-                  <tr class="hover:bg-ts-bg-soft transition-colors">
+                @for (category of categories; track category.id) {
+                  <tr class="hover:bg-ts-bg-soft transition-colors" [class.bg-ts-accent/5]="category.id && selectedCategories.has(category.id)">
                     <td class="px-6 py-4">
-                      <input type="checkbox" [checked]="model.id && selectedModels.has(model.id)" (change)="model.id && toggleSelect(model.id)" class="w-4 h-4 text-ts-accent bg-ts-bg-soft border-ts-line rounded focus:ring-ts-accent">
+                      <input
+                        type="checkbox"
+                        [checked]="category.id && selectedCategories.has(category.id)"
+                        (change)="category.id && toggleSelectCategory(category.id)"
+                        aria-label="Select category"
+                        class="w-5 h-5 text-ts-accent bg-ts-paper border-2 border-ts-line rounded cursor-pointer focus:ring-ts-accent">
                     </td>
                     <td class="px-6 py-4">
-                      <div class="text-sm font-medium text-ts-ink">{{ model.name }}</div>
-                      @if (model.textureHints && model.textureHints.length) {
-                        <div class="text-xs text-ts-ink-soft mt-1">{{ model.textureHints.join(', ') }}</div>
-                      }
+                      <div class="text-sm font-semibold text-ts-ink">{{ category.name }}</div>
                     </td>
                     <td class="px-6 py-4">
-                      <span class="text-sm text-ts-accent font-mono">{{ model.slug }}</span>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                      <span class="px-2 py-1 text-xs font-medium bg-ts-accent/15 text-ts-ink border border-ts-accent/30 rounded-full">
-                        {{ getCategoryName(model.categoryId) }}
+                      <span class="inline-flex px-2 py-1 text-xs font-mono bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink">
+                        {{ category.slug }}
                       </span>
                     </td>
+                    <td class="px-6 py-4 text-sm text-ts-ink">{{ category.order ?? '-' }}</td>
                     <td class="px-6 py-4 whitespace-nowrap">
-                      @if (model.active !== false) {
-                        <span class="text-xs px-2 py-0.5 rounded-full border bg-green-50 text-green-700 border-green-200">
-                          {{ 'admin.models.table.active' | translate }}
+                      @if (category.active !== false) {
+                        <span class="text-xs px-2 py-0.5 rounded-full border bg-green-100 text-green-900 border-green-300">
+                          {{ 'admin.models.categories.table.active' | translate }}
                         </span>
                       } @else {
                         <span class="text-xs px-2 py-0.5 rounded-full border bg-red-50 text-red-700 border-red-200">
-                          {{ 'admin.models.table.inactive' | translate }}
+                          {{ 'admin.models.categories.table.inactive' | translate }}
                         </span>
                       }
                     </td>
                     <td class="px-6 py-4 text-right whitespace-nowrap">
                       <div class="flex items-center justify-end gap-2">
                         <button
-                          (click)="edit(model)"
-                          class="px-3 py-1.5 text-xs bg-ts-accent/20 border border-ts-accent/30 text-ts-accent rounded-lg hover:bg-ts-accent/30 transition-all">
-                          {{ 'admin.models.actions.edit' | translate }}
+                          (click)="editCategory(category)"
+                          class="px-3 py-1.5 text-xs bg-ts-accent/15 border border-ts-accent/30 text-ts-ink rounded-full hover:bg-ts-accent/25 transition-all">
+                          {{ 'admin.models.categories.actions.edit' | translate }}
                         </button>
                         <button
-                          (click)="delete(model)"
-                          class="px-3 py-1.5 text-xs bg-error/20 border border-error/30 text-error rounded-lg hover:bg-error/30 transition-all">
-                          {{ 'admin.models.actions.delete' | translate }}
+                          (click)="deleteCategory(category)"
+                          class="px-3 py-1.5 text-xs bg-rose-100 border border-rose-200 text-rose-800 rounded-full hover:bg-rose-200 transition-all">
+                          {{ 'admin.models.categories.actions.delete' | translate }}
                         </button>
                       </div>
                     </td>
@@ -199,10 +347,7 @@
           </table>
         </div>
       </div>
-    }
-
-
-  </div>
+    </div>
   </div>
 
   @if (showModal) {
@@ -221,29 +366,29 @@
 
         <div class="px-6 py-6 space-y-5">
           <div class="space-y-2">
-            <label class="text-sm font-medium text-ts-ink-soft">{{ 'admin.models.fields.name' | translate }}</label>
+            <label class="text-sm font-semibold text-ts-ink">{{ 'admin.models.fields.name' | translate }}</label>
             <input
               type="text"
               [(ngModel)]="selectedModel.name"
               (blur)="generateSlug()"
-              class="w-full px-4 py-2.5 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink focus:border-ts-accent focus:ring-2 focus:ring-ts-accent"
+              class="w-full px-4 py-2.5 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink cursor-text caret-ts-ink hover:border-ts-accent/60 focus:border-ts-accent focus:ring-2 focus:ring-ts-accent"
               [placeholder]="'admin.models.fields.name_placeholder' | translate">
           </div>
 
           <div class="space-y-2">
-            <label class="text-sm font-medium text-ts-ink-soft">{{ 'admin.models.fields.slug' | translate }}</label>
+            <label class="text-sm font-semibold text-ts-ink">{{ 'admin.models.fields.slug' | translate }}</label>
             <input
               type="text"
               [(ngModel)]="selectedModel.slug"
-              class="w-full px-4 py-2.5 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-accent font-mono focus:border-ts-accent focus:ring-2 focus:ring-ts-accent">
-            <p class="text-xs text-ts-ink-soft">{{ 'admin.models.fields.slug_help' | translate }}</p>
+              class="w-full px-4 py-2.5 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-accent font-mono cursor-text caret-ts-ink hover:border-ts-accent/60 focus:border-ts-accent focus:ring-2 focus:ring-ts-accent">
+            <p class="text-xs text-ts-ink-soft leading-relaxed">{{ 'admin.models.fields.slug_help' | translate }}</p>
           </div>
 
           <div class="space-y-2">
-            <label class="text-sm font-medium text-ts-ink-soft">{{ 'admin.models.fields.category' | translate }}</label>
+            <label class="text-sm font-semibold text-ts-ink">{{ 'admin.models.fields.category' | translate }}</label>
             <select
               [(ngModel)]="selectedModel.categoryId"
-              class="w-full px-4 py-2.5 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink focus:border-ts-accent focus:ring-2 focus:ring-ts-accent">
+              class="w-full px-4 py-2.5 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink cursor-pointer hover:border-ts-accent/60 focus:border-ts-accent focus:ring-2 focus:ring-ts-accent">
               @for (category of categories; track category.id) {
                 <option [value]="category.id">{{ category.name }}</option>
               }
@@ -251,23 +396,23 @@
           </div>
 
           <div class="space-y-2">
-            <label class="text-sm font-medium text-ts-ink-soft">{{ 'admin.models.fields.texture_hints' | translate }}</label>
+            <label class="text-sm font-semibold text-ts-ink">{{ 'admin.models.fields.texture_hints' | translate }}</label>
             <textarea
               [(ngModel)]="textureHintsInput"
               rows="3"
-              class="w-full px-4 py-2.5 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink focus:border-ts-accent focus:ring-2 focus:ring-ts-accent"
+              class="w-full px-4 py-2.5 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink cursor-text caret-ts-ink hover:border-ts-accent/60 focus:border-ts-accent focus:ring-2 focus:ring-ts-accent"
               [placeholder]="'admin.models.fields.texture_hints_placeholder' | translate"></textarea>
-            <p class="text-xs text-ts-ink-soft">{{ 'admin.models.fields.texture_hints_help' | translate }}</p>
+            <p class="text-xs text-ts-ink-soft leading-relaxed">{{ 'admin.models.fields.texture_hints_help' | translate }}</p>
           </div>
 
           <div class="space-y-2">
-            <label class="text-sm font-medium text-ts-ink-soft">{{ 'admin.models.fields.default_tags' | translate }}</label>
+            <label class="text-sm font-semibold text-ts-ink">{{ 'admin.models.fields.default_tags' | translate }}</label>
             <textarea
               [(ngModel)]="defaultTagsInput"
               rows="2"
-              class="w-full px-4 py-2.5 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink focus:border-ts-accent focus:ring-2 focus:ring-ts-accent"
+              class="w-full px-4 py-2.5 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink cursor-text caret-ts-ink hover:border-ts-accent/60 focus:border-ts-accent focus:ring-2 focus:ring-ts-accent"
               [placeholder]="'admin.models.fields.default_tags_placeholder' | translate"></textarea>
-            <p class="text-xs text-ts-ink-soft">{{ 'admin.models.fields.default_tags_help' | translate }}</p>
+            <p class="text-xs text-ts-ink-soft leading-relaxed">{{ 'admin.models.fields.default_tags_help' | translate }}</p>
           </div>
 
           <label class="flex items-center gap-2 text-ts-ink cursor-pointer">
@@ -277,15 +422,92 @@
         </div>
 
         <div class="px-6 py-4 border-t border-ts-line flex items-center justify-end gap-3">
-          <button (click)="closeModal()" class="px-6 py-2.5 border border-ts-line text-ts-ink-soft rounded-lg hover:bg-ts-bg-soft transition-all">
+          <button (click)="closeModal()" class="px-6 py-2.5 border border-ts-line text-ts-ink-soft rounded-lg hover:bg-ts-bg-soft transition-all" [disabled]="isSaving" [class.opacity-60]="isSaving">
             {{ 'admin.models.actions.cancel' | translate }}
           </button>
-          <button (click)="save()" class="px-6 py-2.5 bg-ts-accent text-ts-ink border border-ts-accent/60 rounded-lg hover:bg-ts-accent/90 transition-all shadow-lvl1">
-            {{ (isEditMode ? 'admin.models.actions.update' : 'admin.models.actions.create') | translate }}
+          <button
+            (click)="save()"
+            class="px-6 py-2.5 bg-ts-accent text-ts-ink border border-ts-accent/60 rounded-lg hover:bg-ts-accent/90 transition-all shadow-lvl1 inline-flex items-center gap-2"
+            [disabled]="isSaving"
+            [class.opacity-60]="isSaving"
+            [class.cursor-not-allowed]="isSaving">
+            <svg *ngIf="isSaving" class="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <circle class="opacity-25" cx="12" cy="12" r="9" stroke-width="2"></circle>
+              <path class="opacity-75" stroke-linecap="round" stroke-width="2" d="M21 12a9 9 0 01-9 9"></path>
+            </svg>
+            {{ isSaving ? ('common.saving' | translate) : ((isEditMode ? 'admin.models.actions.update' : 'admin.models.actions.create') | translate) }}
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+
+  @if (showCategoryModal) {
+    <div class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div class="bg-ts-paper rounded-2xl border border-ts-line shadow-lvl3 max-w-xl w-full overflow-hidden">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-ts-line">
+          <h2 class="text-2xl font-semibold text-ts-ink">
+            {{ (isCategoryEditMode ? 'admin.models.categories.modal.edit_title' : 'admin.models.categories.modal.new_title') | translate }}
+          </h2>
+          <button (click)="closeCategoryModal()" class="text-ts-ink-soft hover:text-ts-ink transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+
+        <div class="px-6 py-6 space-y-5">
+          <div class="space-y-2">
+            <label class="text-sm font-semibold text-ts-ink">{{ 'admin.models.categories.fields.name' | translate }}</label>
+            <input
+              type="text"
+              [(ngModel)]="selectedCategory.name"
+              (blur)="generateCategorySlug()"
+              class="w-full px-4 py-2.5 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink cursor-text caret-ts-ink hover:border-ts-accent/60 focus:border-ts-accent focus:ring-2 focus:ring-ts-accent"
+              [placeholder]="'admin.models.categories.fields.name_placeholder' | translate">
+          </div>
+
+          <div class="space-y-2">
+            <label class="text-sm font-semibold text-ts-ink">{{ 'admin.models.categories.fields.slug' | translate }}</label>
+            <input
+              type="text"
+              [(ngModel)]="selectedCategory.slug"
+              class="w-full px-4 py-2.5 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-accent font-mono cursor-text caret-ts-ink hover:border-ts-accent/60 focus:border-ts-accent focus:ring-2 focus:ring-ts-accent">
+            <p class="text-xs text-ts-ink-soft leading-relaxed">{{ 'admin.models.categories.fields.slug_help' | translate }}</p>
+          </div>
+
+          <div class="space-y-2">
+            <label class="text-sm font-semibold text-ts-ink">{{ 'admin.models.categories.fields.order' | translate }}</label>
+            <input
+              type="number"
+              [(ngModel)]="selectedCategory.order"
+              class="w-full px-4 py-2.5 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink cursor-text caret-ts-ink hover:border-ts-accent/60 focus:border-ts-accent focus:ring-2 focus:ring-ts-accent">
+          </div>
+
+          <label class="flex items-center gap-2 text-ts-ink cursor-pointer">
+            <input type="checkbox" [(ngModel)]="selectedCategory.active" class="w-4 h-4 text-ts-accent bg-ts-bg-soft border-ts-line rounded focus:ring-ts-accent">
+            <span>{{ 'admin.models.categories.fields.active' | translate }}</span>
+          </label>
+        </div>
+
+        <div class="px-6 py-4 border-t border-ts-line flex items-center justify-end gap-3">
+          <button (click)="closeCategoryModal()" class="px-6 py-2.5 border border-ts-line text-ts-ink-soft rounded-lg hover:bg-ts-bg-soft transition-all" [disabled]="isCategorySaving" [class.opacity-60]="isCategorySaving">
+            {{ 'admin.models.categories.actions.cancel' | translate }}
+          </button>
+          <button
+            (click)="saveCategory()"
+            class="px-6 py-2.5 bg-ts-accent text-ts-ink border border-ts-accent/60 rounded-lg hover:bg-ts-accent/90 transition-all shadow-lvl1 inline-flex items-center gap-2"
+            [disabled]="isCategorySaving"
+            [class.opacity-60]="isCategorySaving"
+            [class.cursor-not-allowed]="isCategorySaving">
+            <svg *ngIf="isCategorySaving" class="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <circle class="opacity-25" cx="12" cy="12" r="9" stroke-width="2"></circle>
+              <path class="opacity-75" stroke-linecap="round" stroke-width="2" d="M21 12a9 9 0 01-9 9"></path>
+            </svg>
+            {{ isCategorySaving ? ('common.saving' | translate) : ((isCategoryEditMode ? 'admin.models.categories.actions.update' : 'admin.models.categories.actions.create') | translate) }}
           </button>
         </div>
       </div>
     </div>
   }
 </div>
-

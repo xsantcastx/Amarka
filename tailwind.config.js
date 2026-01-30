@@ -38,7 +38,7 @@ module.exports = {
       },
       fontFamily: {
         serif: ['"Playfair Display"', '"Cormorant Garamond"', 'ui-serif', 'serif'],
-        sans: ['"Inter"', '"Source Sans 3"', 'ui-sans-serif', 'system-ui']
+        sans: ['"Source Sans 3"', '"Inter"', 'ui-sans-serif', 'system-ui']
       },
       boxShadow: {
         lvl0: 'var(--shadow-0)',
