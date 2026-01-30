@@ -1,51 +1,82 @@
-/* Admin theme overrides to map legacy "bitcoin" utility classes to the new ivory/gold palette */
-.bg-bitcoin-dark,
-.from-bitcoin-dark,
-.to-bitcoin-dark {
-  background-color: var(--ts-bg);
+/* Admin theme overrides to map legacy "bitcoin" utility classes to the Amarka palette */
+.bg-bitcoin-dark {
+  background-color: color-mix(in srgb, var(--ts-ink) 6%, var(--ts-bg));
+  color: var(--ts-ink);
 }
 
-.bg-bitcoin-gray,
-.text-bitcoin-gray {
-  background-color: var(--ts-bg-soft);
-  color: var(--ts-ink-soft);
+.bg-bitcoin-gray {
+  background-color: color-mix(in srgb, var(--ts-ink) 4%, var(--ts-bg-soft));
+  color: var(--ts-ink);
 }
 
-.text-bitcoin-orange,
-.border-bitcoin-orange,
-.from-bitcoin-orange,
-.to-bitcoin-orange,
-.bg-bitcoin-orange,
-.shadow-bitcoin,
-.shadow-bitcoin-lg,
-.shadow-bitcoin-sm {
+.bg-bitcoin-gold {
+  background-color: color-mix(in srgb, var(--ts-accent) 22%, var(--ts-paper));
+  color: var(--ts-ink);
+}
+
+.bg-bitcoin-orange {
+  background-color: var(--ts-accent);
   color: var(--ts-ink);
   border-color: var(--ts-accent);
-  background-color: var(--ts-accent);
   box-shadow: 0 10px 24px -18px rgba(29, 42, 57, 0.35);
 }
 
-.bg-bitcoin-gold,
-.text-bitcoin-gold {
-  background-color: var(--ts-accent-soft);
-  color: var(--ts-ink);
-}
+.text-bitcoin-orange { color: var(--ts-accent); }
+.text-bitcoin-gold { color: var(--ts-accent-soft); }
+.text-bitcoin-gray { color: var(--ts-ink-soft); }
+.text-bitcoin-dark { color: var(--ts-ink); }
 
-.border-bitcoin-gray {
-  border-color: var(--ts-line);
-}
+.border-bitcoin-orange { border-color: var(--ts-accent); }
+.border-bitcoin-gray { border-color: var(--ts-line); }
+.border-bitcoin-gold { border-color: color-mix(in srgb, var(--ts-accent) 70%, var(--ts-paper)); }
 
-.bg-bitcoin-orange\/10 { background-color: color-mix(in srgb, var(--ts-accent) 10%, transparent); }
-.bg-bitcoin-orange\/20 { background-color: color-mix(in srgb, var(--ts-accent) 20%, transparent); }
-.bg-bitcoin-orange\/30 { background-color: color-mix(in srgb, var(--ts-accent) 30%, transparent); }
-.border-bitcoin-orange\/20 { border-color: color-mix(in srgb, var(--ts-accent) 20%, transparent); }
-.border-bitcoin-orange\/30 { border-color: color-mix(in srgb, var(--ts-accent) 30%, transparent); }
-.bg-bitcoin-dark\/60 { background-color: color-mix(in srgb, var(--ts-bg) 60%, transparent); }
-.bg-bitcoin-dark\/80 { background-color: color-mix(in srgb, var(--ts-bg) 80%, transparent); }
-.text-bitcoin-gray\/70 { color: color-mix(in srgb, var(--ts-ink-soft) 70%, transparent); }
-.text-bitcoin-gray\/50 { color: color-mix(in srgb, var(--ts-ink-soft) 50%, transparent); }
-.border-bitcoin-gray\/30 { border-color: color-mix(in srgb, var(--ts-line) 70%, transparent); }
+.shadow-bitcoin { box-shadow: 0 12px 28px -20px color-mix(in srgb, var(--ts-accent) 26%, transparent); }
+.shadow-bitcoin-lg { box-shadow: 0 22px 48px -28px color-mix(in srgb, var(--ts-accent) 28%, transparent); }
+.shadow-bitcoin-sm { box-shadow: 0 6px 16px -14px color-mix(in srgb, var(--ts-accent) 22%, transparent); }
+
+.bg-bitcoin-orange\/10 { background-color: color-mix(in srgb, var(--ts-accent) 12%, var(--ts-paper)); }
+.bg-bitcoin-orange\/15 { background-color: color-mix(in srgb, var(--ts-accent) 18%, var(--ts-paper)); }
+.bg-bitcoin-orange\/20 { background-color: color-mix(in srgb, var(--ts-accent) 24%, var(--ts-paper)); }
+.bg-bitcoin-orange\/30 { background-color: color-mix(in srgb, var(--ts-accent) 32%, var(--ts-paper)); }
+.bg-bitcoin-orange\/40 { background-color: color-mix(in srgb, var(--ts-accent) 40%, var(--ts-paper)); }
+.bg-bitcoin-orange\/80 { background-color: color-mix(in srgb, var(--ts-accent) 86%, var(--ts-ink)); }
+.bg-bitcoin-orange\/90 { background-color: color-mix(in srgb, var(--ts-accent) 92%, var(--ts-ink)); }
+
+.bg-bitcoin-gold\/20 { background-color: color-mix(in srgb, var(--ts-accent-soft) 24%, var(--ts-paper)); }
+
+.bg-bitcoin-gray\/10 { background-color: color-mix(in srgb, var(--ts-ink) 6%, var(--ts-paper)); }
+.bg-bitcoin-gray\/20 { background-color: color-mix(in srgb, var(--ts-ink) 10%, var(--ts-paper)); }
+.bg-bitcoin-gray\/30 { background-color: color-mix(in srgb, var(--ts-ink) 14%, var(--ts-paper)); }
+
+.bg-bitcoin-dark\/20 { background-color: color-mix(in srgb, var(--ts-ink) 8%, var(--ts-paper)); }
+.bg-bitcoin-dark\/40 { background-color: color-mix(in srgb, var(--ts-ink) 12%, var(--ts-paper)); }
+.bg-bitcoin-dark\/50 { background-color: color-mix(in srgb, var(--ts-ink) 14%, var(--ts-paper)); }
+.bg-bitcoin-dark\/60 { background-color: color-mix(in srgb, var(--ts-ink) 18%, var(--ts-paper)); }
+.bg-bitcoin-dark\/70 { background-color: color-mix(in srgb, var(--ts-ink) 22%, var(--ts-paper)); }
+.bg-bitcoin-dark\/80 { background-color: color-mix(in srgb, var(--ts-ink) 26%, var(--ts-paper)); }
+.bg-bitcoin-dark\/95 { background-color: color-mix(in srgb, var(--ts-ink) 34%, var(--ts-paper)); }
+
+.border-bitcoin-orange\/10 { border-color: color-mix(in srgb, var(--ts-accent) 20%, transparent); }
+.border-bitcoin-orange\/20 { border-color: color-mix(in srgb, var(--ts-accent) 30%, transparent); }
+.border-bitcoin-orange\/30 { border-color: color-mix(in srgb, var(--ts-accent) 40%, transparent); }
+.border-bitcoin-orange\/40 { border-color: color-mix(in srgb, var(--ts-accent) 50%, transparent); }
+.border-bitcoin-orange\/50 { border-color: color-mix(in srgb, var(--ts-accent) 60%, transparent); }
+
 .border-bitcoin-gray\/20 { border-color: color-mix(in srgb, var(--ts-line) 80%, transparent); }
+.border-bitcoin-gray\/30 { border-color: color-mix(in srgb, var(--ts-line) 70%, transparent); }
+.border-bitcoin-gray\/50 { border-color: color-mix(in srgb, var(--ts-line) 55%, transparent); }
+
+.border-bitcoin-gold\/30 { border-color: color-mix(in srgb, var(--ts-accent-soft) 45%, transparent); }
+
+.text-bitcoin-gray\/30 { color: color-mix(in srgb, var(--ts-ink-soft) 30%, transparent); }
+.text-bitcoin-gray\/40 { color: color-mix(in srgb, var(--ts-ink-soft) 40%, transparent); }
+.text-bitcoin-gray\/50 { color: color-mix(in srgb, var(--ts-ink-soft) 50%, transparent); }
+.text-bitcoin-gray\/60 { color: color-mix(in srgb, var(--ts-ink-soft) 60%, transparent); }
+.text-bitcoin-gray\/70 { color: color-mix(in srgb, var(--ts-ink-soft) 70%, transparent); }
+.text-bitcoin-gray\/80 { color: color-mix(in srgb, var(--ts-ink-soft) 80%, transparent); }
+
+.text-bitcoin-orange\/70 { color: color-mix(in srgb, var(--ts-accent) 70%, var(--ts-ink)); }
+.text-bitcoin-orange\/80 { color: color-mix(in srgb, var(--ts-accent) 80%, var(--ts-ink)); }
 
 .bitcoin-gradient-text {
   background: linear-gradient(135deg, var(--ts-accent), var(--ts-accent-soft));

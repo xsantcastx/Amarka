@@ -34,15 +34,38 @@ export class ModelsAdminComponent extends LoadingComponentBase implements OnInit
 
   showModal = false;
   isEditMode = false;
+  isSaving = false;
   selectedModel: Partial<Model> = {};
   originalSlug = '';
   textureHintsInput = '';
   defaultTagsInput = '';
 
+  showCategoryModal = false;
+  isCategoryEditMode = false;
+  isCategorySaving = false;
+  selectedCategory: Partial<Category> = {};
+  selectedCategories: Set<string> = new Set();
+
   messageKey: string | null = null;
   messageType: MessageType = 'info';
   messageParams: Record<string, unknown> = {};
   private messageTimer: ReturnType<typeof setTimeout> | null = null;
+
+  get totalCount(): number {
+    return this.models.length;
+  }
+
+  get activeCount(): number {
+    return this.models.filter(model => model.active !== false).length;
+  }
+
+  get inactiveCount(): number {
+    return this.models.filter(model => model.active === false).length;
+  }
+
+  get allCategoriesSelected(): boolean {
+    return this.categories.length > 0 && this.categories.every(cat => cat.id && this.selectedCategories.has(cat.id));
+  }
 
   get filteredModels(): Model[] {
     const term = this.filterTerm.trim().toLowerCase();
@@ -87,8 +110,10 @@ export class ModelsAdminComponent extends LoadingComponentBase implements OnInit
 
   async bulkDelete() {
     if (this.selectedModels.size === 0) return;
-    
-    if (!confirm(`Delete ${this.selectedModels.size} selected model(s)? This cannot be undone.`)) {
+
+    const count = this.selectedModels.size;
+    const confirmMessage = this.translate.instant('admin.models.messages.confirm_bulk_delete', { count });
+    if (!confirm(confirmMessage)) {
       return;
     }
 
@@ -98,7 +123,7 @@ export class ModelsAdminComponent extends LoadingComponentBase implements OnInit
       );
       this.selectedModels.clear();
       await this.loadModels();
-      this.showMessage('admin.models.messages.bulk_deleted', 'success', { count: this.selectedModels.size });
+      this.showMessage('admin.models.messages.bulk_deleted', 'success', { count });
     } catch (error) {
       console.error('Bulk delete error:', error);
       this.setError('Failed to delete models');
@@ -190,10 +215,29 @@ export class ModelsAdminComponent extends LoadingComponentBase implements OnInit
     this.showModal = true;
   }
 
+  addCategory() {
+    this.selectedCategory = {
+      name: '',
+      slug: '',
+      order: (this.categories?.length || 0) + 1,
+      active: true
+    };
+    this.isCategoryEditMode = false;
+    this.showCategoryModal = true;
+  }
+
+  editCategory(category: Category) {
+    this.selectedCategory = { ...category };
+    this.isCategoryEditMode = true;
+    this.showCategoryModal = true;
+  }
+
   async save() {
+    if (this.isSaving) return;
     const trimmedName = (this.selectedModel.name || '').trim();
     if (!trimmedName) {
       this.showMessage('admin.models.messages.name_required', 'error');
+      this.isSaving = false;
       return;
     }
     this.selectedModel.name = trimmedName;
@@ -202,6 +246,7 @@ export class ModelsAdminComponent extends LoadingComponentBase implements OnInit
     this.selectedModel.slug = sanitizedSlug;
 
     try {
+      this.isSaving = true;
       const slugChanged = !this.isEditMode || sanitizedSlug !== this.originalSlug;
       if (slugChanged) {
         const exists = await this.modelService.slugExists(
@@ -235,6 +280,40 @@ export class ModelsAdminComponent extends LoadingComponentBase implements OnInit
     } catch (error) {
       console.error('[ModelsAdmin] Error saving model:', error);
       this.showMessage('admin.models.messages.save_failed', 'error');
+    } finally {
+      this.isSaving = false;
+    }
+  }
+
+  async saveCategory() {
+    if (this.isCategorySaving) return;
+    const trimmedName = (this.selectedCategory.name || '').trim();
+    if (!trimmedName) {
+      this.showMessage('admin.models.categories.messages.name_required', 'error');
+      return;
+    }
+
+    this.isCategorySaving = true;
+    try {
+      this.selectedCategory.name = trimmedName;
+      const sanitizedSlug = this.sanitizeSlug(this.selectedCategory.slug || trimmedName);
+      this.selectedCategory.slug = sanitizedSlug;
+
+      if (this.isCategoryEditMode && this.selectedCategory.id) {
+        await this.categoryService.updateCategory(this.selectedCategory.id, this.selectedCategory);
+        this.showMessage('admin.models.categories.messages.updated', 'success');
+      } else {
+        await this.categoryService.addCategory(this.selectedCategory as Omit<Category, 'id'>);
+        this.showMessage('admin.models.categories.messages.created', 'success');
+      }
+
+      await this.loadCategories();
+      this.closeCategoryModal();
+    } catch (error) {
+      console.error('[ModelsAdmin] Error saving category:', error);
+      this.showMessage('admin.models.categories.messages.save_failed', 'error');
+    } finally {
+      this.isCategorySaving = false;
     }
   }
 
@@ -261,6 +340,106 @@ export class ModelsAdminComponent extends LoadingComponentBase implements OnInit
     }
   }
 
+  toggleSelectAllCategories() {
+    if (this.allCategoriesSelected) {
+      this.categories.forEach(cat => cat.id && this.selectedCategories.delete(cat.id));
+    } else {
+      this.categories.forEach(cat => cat.id && this.selectedCategories.add(cat.id));
+    }
+  }
+
+  toggleSelectCategory(categoryId: string) {
+    if (this.selectedCategories.has(categoryId)) {
+      this.selectedCategories.delete(categoryId);
+    } else {
+      this.selectedCategories.add(categoryId);
+    }
+  }
+
+  async bulkActivateCategories() {
+    if (this.selectedCategories.size === 0) return;
+    try {
+      const updates = Array.from(this.selectedCategories).map(id => {
+        const category = this.categories.find(cat => cat.id === id);
+        if (category) {
+          return this.categoryService.updateCategory(id, { ...category, active: true });
+        }
+        return Promise.resolve();
+      });
+      await Promise.all(updates);
+      this.selectedCategories.clear();
+      await this.loadCategories();
+      this.showMessage('admin.models.categories.messages.bulk_activated', 'success');
+    } catch (error) {
+      console.error('[ModelsAdmin] Bulk activate categories error:', error);
+      this.showMessage('admin.models.categories.messages.bulk_failed', 'error');
+    }
+  }
+
+  async bulkDeactivateCategories() {
+    if (this.selectedCategories.size === 0) return;
+    try {
+      const updates = Array.from(this.selectedCategories).map(id => {
+        const category = this.categories.find(cat => cat.id === id);
+        if (category) {
+          return this.categoryService.updateCategory(id, { ...category, active: false });
+        }
+        return Promise.resolve();
+      });
+      await Promise.all(updates);
+      this.selectedCategories.clear();
+      await this.loadCategories();
+      this.showMessage('admin.models.categories.messages.bulk_deactivated', 'success');
+    } catch (error) {
+      console.error('[ModelsAdmin] Bulk deactivate categories error:', error);
+      this.showMessage('admin.models.categories.messages.bulk_failed', 'error');
+    }
+  }
+
+  async bulkDeleteCategories() {
+    if (this.selectedCategories.size === 0) return;
+    const count = this.selectedCategories.size;
+    const confirmMessage = this.translate.instant('admin.models.categories.messages.confirm_bulk_delete', { count });
+    if (!window.confirm(confirmMessage)) {
+      return;
+    }
+
+    try {
+      await Promise.all(
+        Array.from(this.selectedCategories).map(id => this.categoryService.deleteCategory(id))
+      );
+      this.selectedCategories.clear();
+      await this.loadCategories();
+      this.showMessage('admin.models.categories.messages.bulk_deleted', 'success', { count });
+    } catch (error) {
+      console.error('[ModelsAdmin] Bulk delete categories error:', error);
+      this.showMessage('admin.models.categories.messages.bulk_failed', 'error');
+    }
+  }
+
+  async deleteCategory(category: Category) {
+    if (!category.id) {
+      return;
+    }
+
+    const confirmMessage = this.translate.instant('admin.models.categories.messages.confirm_delete', {
+      name: category.name
+    });
+
+    if (!window.confirm(confirmMessage)) {
+      return;
+    }
+
+    try {
+      await this.categoryService.deleteCategory(category.id);
+      this.showMessage('admin.models.categories.messages.deleted', 'success');
+      await this.loadCategories();
+    } catch (error) {
+      console.error('[ModelsAdmin] Error deleting category:', error);
+      this.showMessage('admin.models.categories.messages.delete_failed', 'error');
+    }
+  }
+
   closeModal() {
     this.showModal = false;
     this.selectedModel = {};
@@ -268,11 +447,23 @@ export class ModelsAdminComponent extends LoadingComponentBase implements OnInit
     this.defaultTagsInput = '';
   }
 
+  closeCategoryModal() {
+    this.showCategoryModal = false;
+    this.selectedCategory = {};
+  }
+
   generateSlug() {
     if (!this.selectedModel.name) {
       return;
     }
     this.selectedModel.slug = this.sanitizeSlug(this.selectedModel.name);
+  }
+
+  generateCategorySlug() {
+    if (!this.selectedCategory.name) {
+      return;
+    }
+    this.selectedCategory.slug = this.sanitizeSlug(this.selectedCategory.name);
   }
 
   getCategoryName(categoryId: string | undefined): string {

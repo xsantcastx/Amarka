@@ -38,13 +38,15 @@
 // Secondary button (subtle sage green)
 .btn-secondary {
   @extend .btn-primary;
-  background: color-mix(in srgb, var(--ts-accent) 22%, transparent);
-  color: var(--ts-accent) !important; /* Use accent color for better contrast on light background */
-  box-shadow: none;
-  border: 1px solid transparent;
+  background: color-mix(in srgb, var(--ts-accent) 18%, var(--ts-paper));
+  color: var(--ts-ink) !important;
+  box-shadow: 0 10px 24px -22px rgba(29, 42, 57, 0.24);
+  border: 1px solid color-mix(in srgb, var(--ts-accent) 35%, transparent);
 
   &:hover {
-    background: color-mix(in srgb, var(--ts-accent) 30%, transparent);
+    background: color-mix(in srgb, var(--ts-accent) 26%, var(--ts-paper));
+    border-color: color-mix(in srgb, var(--ts-accent) 50%, transparent);
+    box-shadow: 0 14px 28px -22px rgba(29, 42, 57, 0.28);
   }
 }
 
@@ -59,12 +61,13 @@
   text-decoration: none;
   transition: all 0.18s ease;
   color: var(--ts-accent);
-  background: transparent;
-  border: 2px solid var(--ts-accent);
+  background: color-mix(in srgb, var(--ts-accent) 6%, var(--ts-paper));
+  border: 2px solid color-mix(in srgb, var(--ts-accent) 60%, transparent);
   cursor: pointer;
 
   &:hover {
-    background: color-mix(in srgb, var(--ts-accent) 10%, transparent);
+    background: color-mix(in srgb, var(--ts-accent) 14%, var(--ts-paper));
+    border-color: color-mix(in srgb, var(--ts-accent) 80%, transparent);
     transform: translateY(-1px);
   }
 }

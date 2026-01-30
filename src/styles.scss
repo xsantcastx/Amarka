@@ -18,7 +18,7 @@
 }
 
 :root {
-  --font-sans: "Inter", "Source Sans 3", ui-sans-serif, system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  --font-sans: "Source Sans 3", "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
   --font-display: "Playfair Display", "Cormorant Garamond", "Inter", "Times New Roman", serif;
   --font-mono: "JetBrains Mono", "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 
@@ -100,20 +100,20 @@
 }
 
 :root[data-theme-button-style="outline"] {
-  --btn-primary-bg: transparent;
+  --btn-primary-bg: color-mix(in srgb, var(--ts-accent) 6%, var(--ts-paper));
   --btn-primary-text: var(--ts-accent);
   --btn-primary-border: var(--ts-accent);
   --btn-primary-shadow: none;
-  --btn-primary-hover-bg: color-mix(in srgb, var(--ts-accent) 12%, transparent);
+  --btn-primary-hover-bg: color-mix(in srgb, var(--ts-accent) 14%, var(--ts-paper));
   --btn-primary-hover-shadow: none;
 }
 
 :root[data-theme-button-style="ghost"] {
-  --btn-primary-bg: transparent;
-  --btn-primary-text: var(--ts-accent);
-  --btn-primary-border: transparent;
+  --btn-primary-bg: color-mix(in srgb, var(--ts-ink) 4%, var(--ts-paper));
+  --btn-primary-text: var(--ts-ink);
+  --btn-primary-border: color-mix(in srgb, var(--ts-ink) 12%, transparent);
   --btn-primary-shadow: none;
-  --btn-primary-hover-bg: color-mix(in srgb, var(--ts-accent) 12%, transparent);
+  --btn-primary-hover-bg: color-mix(in srgb, var(--ts-ink) 8%, var(--ts-paper));
   --btn-primary-hover-shadow: none;
 }
 
@@ -142,59 +142,6 @@
 .page-container {
   width: min(1120px, 100% - (var(--container-inline-padding) * 2));
   margin-inline: auto;
-}
-
-/* Legacy "bitcoin-" class mappings to Amarka theme tokens */
-[class*="bg-bitcoin-dark"] {
-  background-color: var(--ts-bg-soft) !important;
-  color: var(--ts-ink) !important;
-}
-
-[class*="bg-bitcoin-orange"] {
-  background-color: color-mix(in srgb, var(--ts-accent) 85%, #fff 15%) !important;
-  color: var(--ts-ink) !important;
-}
-
-[class*="bg-bitcoin-gold"] {
-  background-color: color-mix(in srgb, var(--ts-accent) 70%, #fff 30%) !important;
-  color: var(--ts-ink) !important;
-}
-
-[class*="bg-bitcoin-gray"] {
-  background-color: color-mix(in srgb, var(--ts-ink-soft) 10%, #fff 90%) !important;
-  color: var(--ts-ink) !important;
-}
-
-[class*="border-bitcoin-orange"] {
-  border-color: var(--ts-accent) !important;
-}
-
-[class*="border-bitcoin-gold"] {
-  border-color: color-mix(in srgb, var(--ts-accent) 80%, #fff 20%) !important;
-}
-
-[class*="border-bitcoin-gray"] {
-  border-color: color-mix(in srgb, var(--ts-ink) 12%, #000 0%) !important;
-}
-
-[class*="text-bitcoin-orange"] {
-  color: var(--ts-accent) !important;
-}
-
-[class*="text-bitcoin-gold"] {
-  color: color-mix(in srgb, var(--ts-accent) 80%, #000 20%) !important;
-}
-
-[class*="text-bitcoin-gray"] {
-  color: var(--ts-ink-soft) !important;
-}
-
-[class*="shadow-bitcoin"] {
-  box-shadow: var(--shadow-soft) !important;
-}
-
-[class*="shadow-bitcoin-lg"] {
-  box-shadow: var(--shadow-hover) !important;
 }
 
 @media (max-width: 768px) {
@@ -1032,6 +979,17 @@ select {
   border: 1px solid var(--surface-border) !important;
   box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.03);
   backdrop-filter: blur(6px);
+  caret-color: var(--ts-ink);
+  color-scheme: light;
+}
+
+input,
+textarea {
+  cursor: text;
+}
+
+select {
+  cursor: pointer;
 }
 
 input::placeholder,
@@ -1176,51 +1134,6 @@ img {
     --ts-paper: #FFFFFF;
     --ts-line: #808080;
   }
-}
-
-/* Bitcoin Theme Utility Classes */
-.text-bitcoin-orange {
-  color: var(--ts-accent) !important;
-}
-
-.text-bitcoin-gold {
-  color: color-mix(in srgb, var(--ts-accent) 85%, var(--ts-paper) 15%) !important;
-}
-
-.text-bitcoin-gray {
-  color: var(--ts-ink-soft) !important;
-}
-
-.text-luxury-gold {
-  color: color-mix(in srgb, var(--ts-accent) 80%, var(--ts-ink) 20%) !important;
-}
-
-.bg-bitcoin-dark {
-  background-color: var(--ts-bg) !important;
-}
-
-.border-bitcoin-orange {
-  border-color: var(--ts-accent) !important;
-}
-
-.border-bitcoin-gray {
-  border-color: var(--ts-line) !important;
-}
-
-.shadow-bitcoin {
-  box-shadow: 0 12px 28px -20px color-mix(in srgb, var(--ts-accent) 26%, transparent) !important;
-}
-
-.shadow-bitcoin-lg {
-  box-shadow: 0 22px 48px -28px color-mix(in srgb, var(--ts-accent) 28%, transparent) !important;
-}
-
-.text-bitcoin-dark {
-  color: var(--ts-ink) !important;
-}
-
-.text-white {
-  color: #ffffff !important;
 }
 
 /* Additional text readability fixes */

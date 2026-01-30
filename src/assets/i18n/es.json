@@ -39,7 +39,7 @@
     "gallery_management": "Gesti?n de galer?a",
     "order_management": "Gesti?n de pedidos",
     "collections": "Colecciones",
-    "models": "Modelos",
+    "models": "Modelos y categorias",
     "user_management": "Gesti?n de usuarios",
     "benefit_templates": "Plantillas de beneficios",
     "analytics": "Anal?tica",
@@ -162,7 +162,12 @@
     "search": "Buscar",
     "hello": "Hola",
     "active": "Activo",
-    "inactive": "Inactivo"
+    "inactive": "Inactivo",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "saving": "Guardando..."
   },
   "product": {
     "in_stock": "en stock",
@@ -203,9 +208,9 @@
       "view_product": "Ver producto"
     },
     "collections": {
-      "heading": "Comprar por colección",
-      "view_all": "Ver todas",
-      "empty": "Crea colecciones para mostrarlas aquí."
+      "heading": "Comprar por coleccion",
+      "view_all": "Ver todo",
+      "empty": "Crea colecciones para mostrarlas aqui."
     },
     "featured": {
       "badge": "Selecciones curadas",
@@ -299,62 +304,453 @@
     "manage_orders": "Administrar Pedidos",
     "manage_gallery": "Administrar Galería",
     "manage_users": "Administrar Usuarios",
+    "users_description": "Revisa cuentas de usuario, roles y acceso.",
+    "search_users": "Buscar usuarios",
+    "search_users_placeholder": "Buscar por nombre o correo...",
+    "filter_by_role": "Filtrar por rol",
+    "all_roles": "Todos los roles",
+    "user": "Usuario",
+    "company": "Empresa",
+    "role": "Rol",
+    "status": "Estado",
+    "created_at": "Creado",
+    "actions": "Acciones",
+    "role_client": "Cliente",
+    "role_admin": "Administrador",
+    "active": "Activo",
+    "disabled": "Deshabilitado",
+    "loading_users": "Cargando usuarios...",
+    "no_users_found": "No se encontraron usuarios.",
+    "change_role": "Cambiar rol",
+    "change_role_for": "Cambiar rol para",
+    "new_role": "Nuevo rol",
+    "enable_user": "Habilitar usuario",
+    "disable_user": "Deshabilitar usuario",
+    "confirm": "Confirmar",
+    "all_orders": "Todos los pedidos",
+    "pending": "Pendiente",
+    "processing": "En proceso",
+    "shipped": "Enviado",
+    "delivered": "Entregado",
+    "cancelled": "Cancelado",
+    "order_number": "Pedido #",
+    "date": "Fecha",
+    "customer": "Cliente",
+    "total": "Total",
+    "refresh": "Actualizar",
+    "view": "Ver",
+    "update_status": "Actualizar estado",
+    "status_updated": "Estado actualizado.",
+    "no_orders": "No se encontraron pedidos.",
+    "orders": {
+      "title": "Pedidos",
+      "order_title": "Pedido",
+      "status_label": "Estado",
+      "total_label": "Total",
+      "items": "Artículos",
+      "qty": "Cantidad",
+      "sku": "SKU",
+      "no_image": "Sin imagen",
+      "customization_preview": "Vista previa de personalización",
+      "base_image_missing": "Falta la imagen base",
+      "logo_uploaded": "Logo subido",
+      "download_logo": "Descargar logo"
+    },
+    "gallery": {
+      "title": "Galeria",
+      "subtitle": "Administra proyectos, etiquetas y cargas de la galeria.",
+      "stats": {
+        "images": "Imagenes",
+        "projects": "Proyectos",
+        "tags": "Etiquetas"
+      },
+      "filters": {
+        "all": "Todo el contenido",
+        "search_placeholder": "Buscar por nombre del proyecto, etiquetas o descripcion..."
+      },
+      "projects": {
+        "title": "Proyectos",
+        "subtitle": "Agrupados por nombre y metadatos.",
+        "project": "proyecto",
+        "projects": "proyectos",
+        "photo": "foto",
+        "photos": "fotos",
+        "empty_title": "No se encontraron proyectos",
+        "empty_body": "Prueba subir nuevas imagenes o ajustar la busqueda.",
+        "linked_services": "Servicios vinculados"
+      },
+      "actions": {
+        "upload": "Subir imagenes",
+        "manage": "Gestionar",
+        "add_photos": "Agregar fotos",
+        "delete_project": "Eliminar proyecto",
+        "close": "Cerrar",
+        "add_tags": "Agregar etiquetas",
+        "adding": "Agregando...",
+        "save_photo": "Guardar cambios de foto",
+        "save_project": "Guardar ajustes del proyecto",
+        "saving": "Guardando..."
+      },
+      "fields": {
+        "project_name": "Nombre del proyecto",
+        "project_name_placeholder": "p. ej. Boda Jardin Encantado",
+        "project_name_help": "El nombre del proyecto se usa como titulo.",
+        "project_name_help_single": "Nombre para este proyecto.",
+        "project_name_help_multi": "Nombre compartido para {{count}} imagenes (numeradas automaticamente).",
+        "description": "Descripcion",
+        "description_placeholder": "p. ej. Newport Beach, CA - ceremonia junto al mar",
+        "description_help": "Detalles de ubicacion y evento (opcional).",
+        "tags": "Etiquetas",
+        "tags_help": "Selecciona al menos una etiqueta para organizar la galeria.",
+        "tags_selected": "{{count}} seleccionadas",
+        "quick_tags_placeholder": "Agrega etiquetas separadas por comas",
+        "quick_tags_help": "Separa varias etiquetas con comas.",
+        "custom_tags_title": "Agregar etiquetas personalizadas",
+        "custom_tags_placeholder": "Escribe una etiqueta (p. ej. Boda de Primavera, Evento Corporativo)",
+        "custom_tags_help": "Separa varias etiquetas con comas.",
+        "select_existing_tags": "O selecciona de las existentes:",
+        "related_services": "Servicios relacionados",
+        "related_services_help": "Conecta esta galeria con servicios especificos (opcional).",
+        "related_services_help_single": "Vincula esta foto a servicios especificos.",
+        "related_services_help_all": "Se aplica a todas las fotos de este proyecto.",
+        "no_services": "No hay servicios disponibles"
+      },
+      "upload": {
+        "title": "Subir imagenes",
+        "subtitle": "Agrega nuevas imagenes a tu galeria.",
+        "image_files": "Archivos de imagen",
+        "selected_images": "Imagenes seleccionadas",
+        "file_single": "archivo listo para subir",
+        "file_plural": "archivos listos para subir",
+        "clear_all": "Limpiar todo",
+        "drop_title": "Haz clic o arrastra archivos para subir",
+        "drop_subtitle": "Selecciona varias imagenes para subir en lote. Maximo 10MB por archivo.",
+        "drop_hint": "Recomendado: 1600x1200px o mas.",
+        "uploading": "Subiendo imagenes...",
+        "progress": "{{current}} de {{total}} completadas",
+        "button_single": "Subir imagen",
+        "button_multi": "Subir {{count}} imagenes",
+        "button_empty": "Selecciona imagenes primero"
+      },
+      "project_manager": {
+        "eyebrow": "Administrador de proyecto",
+        "photos_title": "Fotos del proyecto",
+        "photos_hint": "Selecciona una foto para editar su titulo y etiquetas.",
+        "edit_photo": "Editar ajustes de la foto",
+        "save_note_single": "Guardar actualiza el nombre, descripcion, etiquetas y servicios relacionados de esta foto.",
+        "save_note_all": "Guardar actualiza la descripcion, etiquetas y servicios relacionados de todas las fotos de este proyecto."
+      },
+      "confirm": {
+        "close_title": "Cambios sin guardar",
+        "close_body": "Tienes cambios sin guardar. Seguro que deseas cerrar?",
+        "close_continue": "Continuar editando",
+        "close_discard": "Descartar cambios",
+        "delete_title": "Eliminar imagen",
+        "delete_body": "Seguro que deseas eliminar esta imagen?",
+        "project_delete_title": "Eliminar proyecto",
+        "project_delete_body": "Esto eliminara {{count}} fotos de \"{{name}}\". Esta accion no se puede deshacer."
+      },
+      "messages": {
+        "load_failed": "No se pudo cargar la galeria.",
+        "project_tag_required": "Selecciona al menos una etiqueta para el proyecto.",
+        "project_name_required": "El nombre del proyecto es obligatorio.",
+        "photo_updated": "Foto actualizada correctamente.",
+        "photo_update_failed": "No se pudo actualizar la foto.",
+        "project_updated": "Ajustes del proyecto actualizados.",
+        "project_update_failed": "No se pudieron actualizar los ajustes del proyecto.",
+        "project_deleted": "Proyecto eliminado.",
+        "project_delete_failed": "No se pudo eliminar el proyecto.",
+        "tag_input_required": "Escribe al menos una etiqueta separada por comas.",
+        "tag_create_failed": "No se pudieron crear una o mas etiquetas. Intentalo de nuevo.",
+        "tags_added": "Etiquetas agregadas a este proyecto.",
+        "invalid_file_type": "\"{{name}}\" no es un archivo de imagen valido.",
+        "file_too_large": "\"{{name}}\" supera el limite de {{maxSize}}MB.",
+        "images_selected": "{{count}} imagen(es) seleccionada(s) para subir.",
+        "select_image": "Selecciona al menos una imagen.",
+        "required_fields": "Completa todos los campos obligatorios.",
+        "tag_required": "Selecciona al menos una etiqueta.",
+        "auth_required": "Debes iniciar sesion para subir imagenes.",
+        "upload_success": "Se subieron {{count}} imagen(es) correctamente.",
+        "upload_failed": "Error al subir medios. {{message}}",
+        "media_updated": "Medio actualizado correctamente.",
+        "media_update_failed": "No se pudo actualizar el medio.",
+        "delete_blocked": "No se puede eliminar: usado por servicios: {{services}}. Elimina la imagen de la galeria del servicio primero.",
+        "media_deleted": "Medio eliminado correctamente.",
+        "media_delete_failed": "No se pudo eliminar el medio.",
+        "logout_failed": "No se pudo cerrar sesion. Intentalo de nuevo."
+      }
+    },
     "catalog": {
       "title": "Catálogo"
     },
     "models": {
-      "title": "Modelos de Productos",
-      "subtitle": "Administra variantes y configuraciones de modelos de productos",
+      "title": "Modelos y categorias",
+      "subtitle": "Administra modelos y categorias en un solo lugar.",
       "empty": "No se encontraron modelos. Crea tu primer modelo para comenzar.",
+      "loading": "Cargando modelos...",
+      "stats": {
+        "total": "Total de modelos",
+        "active": "Modelos activos",
+        "inactive": "Modelos inactivos"
+      },
       "filters": {
         "search_placeholder": "Buscar por nombre o slug...",
         "status_label": "Estado",
         "status_all": "Todos",
         "status_active": "Activos",
-        "status_inactive": "Inactivos"
+        "status_inactive": "Inactivos",
+        "category_label": "Categoria",
+        "all_categories": "Todas las categorias"
       },
       "table": {
         "name": "Nombre",
         "slug": "Slug",
-        "category": "Categoría",
+        "category": "Categoria",
         "status": "Estado",
         "actions": "Acciones",
         "active": "Activo",
-        "inactive": "Inactivo"
+        "inactive": "Inactivo",
+        "unassigned": "Sin asignar"
+      },
+      "bulk": {
+        "selected": "{{count}} modelos seleccionados",
+        "selected_single": "1 modelo seleccionado",
+        "activate": "Activar",
+        "deactivate": "Desactivar",
+        "delete": "Eliminar"
       },
       "actions": {
-        "add": "Agregar Modelo",
+        "add": "Agregar modelo",
         "edit": "Editar",
         "delete": "Eliminar",
-        "create_first": "Crear Primer Modelo"
+        "create": "Crear modelo",
+        "update": "Actualizar modelo",
+        "cancel": "Cancelar",
+        "create_first": "Crear primer modelo"
       },
       "modal": {
-        "new_title": "Nuevo Modelo",
-        "edit_title": "Editar Modelo"
+        "new_title": "Nuevo modelo",
+        "edit_title": "Editar modelo"
+      },
+      "fields": {
+        "name": "Nombre",
+        "name_placeholder": "Nombre del modelo",
+        "slug": "Slug",
+        "slug_help": "Se genera desde el nombre. Edita si es necesario.",
+        "category": "Categoria",
+        "texture_hints": "Indicaciones de textura",
+        "texture_hints_placeholder": "ej: Mate, brillante, metalico...",
+        "texture_hints_help": "Una por linea. Se usa para vista previa y busqueda.",
+        "default_tags": "Tags por defecto",
+        "default_tags_placeholder": "ej: regalo, premium, corporativo",
+        "default_tags_help": "Separados por comas.",
+        "active": "Activo"
+      },
+      "messages": {
+        "name_required": "El nombre es obligatorio.",
+        "slug_exists": "El slug \"{{slug}}\" ya esta en uso.",
+        "created": "Modelo creado.",
+        "updated": "Modelo actualizado.",
+        "save_failed": "No se pudo guardar el modelo.",
+        "deleted": "Modelo eliminado.",
+        "delete_failed": "No se pudo eliminar el modelo.",
+        "confirm_delete": "Eliminar \"{{name}}\"? Esta accion no se puede deshacer.",
+        "confirm_bulk_delete": "Eliminar {{count}} modelos seleccionados? Esta accion no se puede deshacer.",
+        "bulk_deleted": "{{count}} modelos eliminados.",
+        "bulk_activated": "Modelos activados.",
+        "bulk_deactivated": "Modelos desactivados."
+      },
+      "categories": {
+        "title": "Categorias",
+        "subtitle": "Organiza modelos y productos por categoria.",
+        "empty": "No hay categorias. Crea la primera categoria.",
+        "bulk": {
+          "selected": "{{count}} categorias seleccionadas",
+          "selected_single": "1 categoria seleccionada",
+          "activate": "Activar",
+          "deactivate": "Desactivar",
+          "delete": "Eliminar"
+        },
+        "table": {
+          "name": "Nombre",
+          "slug": "Slug",
+          "order": "Orden",
+          "status": "Estado",
+          "actions": "Acciones",
+          "active": "Activo",
+          "inactive": "Inactivo"
+        },
+        "actions": {
+          "add": "Agregar categoria",
+          "edit": "Editar",
+          "delete": "Eliminar",
+          "create": "Crear categoria",
+          "update": "Actualizar categoria",
+          "cancel": "Cancelar",
+          "create_first": "Crear primera categoria"
+        },
+        "modal": {
+          "new_title": "Nueva categoria",
+          "edit_title": "Editar categoria"
+        },
+        "fields": {
+          "name": "Nombre",
+          "name_placeholder": "Nombre de la categoria",
+          "slug": "Slug",
+          "slug_help": "Se genera desde el nombre. Edita si es necesario.",
+          "order": "Orden",
+          "active": "Activo"
+        },
+        "messages": {
+          "name_required": "El nombre es obligatorio.",
+          "created": "Categoria creada.",
+          "updated": "Categoria actualizada.",
+          "save_failed": "No se pudo guardar la categoria.",
+          "deleted": "Categoria eliminada.",
+          "delete_failed": "No se pudo eliminar la categoria.",
+          "confirm_delete": "Eliminar \"{{name}}\"? Esta accion no se puede deshacer.",
+          "confirm_bulk_delete": "Eliminar {{count}} categorias? Esta accion no se puede deshacer.",
+          "bulk_deleted": "{{count}} categorias eliminadas.",
+          "bulk_activated": "Categorias activadas.",
+          "bulk_deactivated": "Categorias desactivadas.",
+          "bulk_failed": "No se pudieron actualizar las categorias."
+        }
       }
     },
     "collections": {
       "title": "Colecciones",
+      "subtitle": "Disena y organiza tus colecciones en un solo lugar.",
       "back_to_admin": "Admin",
-      "new_collection": "+ Nueva Colección",
+      "new_collection": "Nueva coleccion",
+      "new_collection_title": "Nueva coleccion",
+      "edit_collection": "Editar coleccion",
       "loading": "Cargando colecciones...",
-      "edit_collection": "Editar Colección",
-      "new_collection_title": "Nueva Colección",
+      "empty_title": "Sin colecciones",
+      "empty_body": "Crea una coleccion para mostrar grupos de productos.",
+      "stats": {
+        "total": "Total de colecciones",
+        "active": "Colecciones activas",
+        "inactive": "Colecciones inactivas"
+      },
+      "filters": {
+        "search_placeholder": "Buscar por nombre, slug o descripcion...",
+        "status_label": "Estado",
+        "status_all": "Todos",
+        "status_active": "Activas",
+        "status_inactive": "Inactivas"
+      },
+      "card": {
+        "no_image": "Sin imagen principal",
+        "no_description": "Sin descripcion."
+      },
       "form": {
+        "edit": "Editar",
+        "delete": "Eliminar",
         "name": "Nombre",
         "slug": "Slug",
-        "description": "Descripción",
-        "hero_image": "Imagen Principal",
-        "choose_image": "Elegir Imagen",
-        "max_size": "Máx 5MB (JPG, PNG, WebP)",
-        "upload_progress": "Subiendo",
+        "slug_help": "Se genera desde el nombre. Edita si es necesario.",
+        "description": "Descripcion",
+        "hero_image": "Imagen principal",
+        "choose_image": "Elegir imagen",
+        "max_size": "Max 5MB (JPG, PNG, WebP)",
+        "hero_hint": "Tamano recomendado: 1600x900.",
+        "upload_progress": "Subiendo imagen principal",
+        "seo_title": "Titulo SEO",
+        "seo_description": "Descripcion SEO",
+        "seo_image": "URL de imagen SEO",
         "active": "Activo",
-        "save": "Guardar",
         "cancel": "Cancelar",
-        "edit": "Editar",
-        "delete": "Eliminar"
+        "save": "Guardar",
+        "saving": "Guardando..."
       }
-    }
+    },
+    "settings": {
+      "title": "Configuración",
+      "subtitle": "Gestiona la configuración, la marca y el contenido.",
+      "actions": {
+        "saving": "Guardando...",
+        "lock": "Bloquear",
+        "unlock": "Desbloquear",
+        "show": "Mostrar",
+        "hide": "Ocultar"
+      },
+      "states": {
+        "enabled": "Habilitado",
+        "disabled": "Deshabilitado"
+      },
+      "feedback": {
+        "success": "Configuración actualizada correctamente.",
+        "error_details": "No se pudo guardar la configuración: {{message}}"
+      }
+    },
+    "analytics": {
+      "eyebrow": "Insights",
+      "title": "Analitica",
+      "subtitle": "Resumen de rendimiento en {{currency}}.",
+      "period": {
+        "today": "Hoy",
+        "week": "Ultimos 7 dias",
+        "month": "Este mes",
+        "year": "Este año"
+      },
+      "metrics": {
+        "total_orders": "Pedidos totales",
+        "revenue": "Ingresos",
+        "average_order_value": "Valor promedio por pedido",
+        "new_customers": "Nuevos clientes",
+        "products_updated": "Productos actualizados",
+        "gallery_uploads": "Cargas en galeria"
+      },
+      "recent_activity": "Actividad reciente",
+      "showing_period": "Mostrando {{period}}",
+      "no_activity": "No hay actividad reciente para este periodo.",
+      "future_title": "Analitica proxima",
+      "future_description": "Mas insights estan en camino para ayudarte a crecer.",
+      "future_items": {
+        "charts": {
+          "title": "Graficos de tendencia",
+          "description": "Visualiza ventas y volumen de pedidos.",
+          "status": "En beta"
+        },
+        "top_products": {
+          "title": "Productos destacados",
+          "description": "Ver los productos mas vendidos y sus ingresos.",
+          "status": "En desarrollo"
+        },
+        "geo": {
+          "title": "Insights geograficos",
+          "description": "Comprende de donde compran tus clientes.",
+          "status": "En diseño"
+        },
+        "funnels": {
+          "title": "Embudo de compra",
+          "description": "Revisa abandonos en el proceso de compra.",
+          "status": "Investigacion"
+        }
+      }
+    },
+    "products": {
+      "title": "Productos",
+      "add_product": "Agregar Producto",
+      "no_products": "No se encontraron productos",
+      "edit": "Editar",
+      "delete": "Eliminar",
+      "delete_product": "Eliminar Producto",
+      "confirm_delete": "¿Estás seguro de que quieres eliminar este producto?",
+      "product_image": "Imagen",
+      "product_name": "Nombre del Producto",
+      "product_category": "Categoría",
+      "product_model": "Modelo",
+      "product_price": "Precio",
+      "status_published": "Publicado",
+      "status_draft": "Borrador",
+      "status_archived": "Archivado"
+    },
+    "setup_required": "Configuración Requerida",
+    "need_categories_and_models": "Necesitas crear categorías y modelos primero.",
+    "need_category": "Necesitas crear una categoría primero.",
+    "need_model": "Necesitas crear un modelo primero.",
+    "goto_catalog": "Ir al Catálogo"
   },
   "footer": {
     "description": "Grabado premium y regalos personalizados hechos para durar. Desde premios corporativos hasta recuerdos de hitos importantes, grabamos con precisión y entregamos listos para regalar.",

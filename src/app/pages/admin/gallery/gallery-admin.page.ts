@@ -56,7 +56,10 @@ export class GalleryAdminComponent extends LoadingComponentBase implements OnIni
   editForm: FormGroup;
   projectForm: FormGroup;
   successMessage = '';
+  successMessageParams: Record<string, any> = {};
   warningMessage = '';  // Add warning for non-critical issues
+  warningMessageParams: Record<string, any> = {};
+  errorMessageParams: Record<string, any> = {};
   selectedTag: MediaTag | 'all' = 'all';
   searchTerm = '';
   showDeleteConfirm = false;
@@ -81,6 +84,8 @@ export class GalleryAdminComponent extends LoadingComponentBase implements OnIni
 
   selectedFiles: File[] = [];
   showCloseConfirmation = false;
+  closeConfirmContext: 'upload' | 'project' | null = null;
+  showProjectDeleteConfirm = false;
   private mediaSub: Subscription | null = null;
   private productsSub: Subscription | null = null;
   private tagsSub: Subscription | null = null;
@@ -157,7 +162,8 @@ export class GalleryAdminComponent extends LoadingComponentBase implements OnIni
       },
       error: (error) => {
         console.error('Error loading media:', error);
-        this.setError('Error loading media files');
+        this.setError('admin.gallery.messages.load_failed');
+        this.errorMessageParams = {};
       }
     });
   }
@@ -187,6 +193,18 @@ export class GalleryAdminComponent extends LoadingComponentBase implements OnIni
         console.error('Error loading tags:', error);
       }
     });
+  }
+
+  get galleryMediaCount(): number {
+    return this.mediaList.filter(m => m.relatedEntityType === 'gallery').length;
+  }
+
+  get projectCount(): number {
+    return this.galleryProjects.length;
+  }
+
+  get tagCount(): number {
+    return this.availableTags.length;
   }
 
   get filteredMedia(): Media[] {
@@ -255,6 +273,9 @@ export class GalleryAdminComponent extends LoadingComponentBase implements OnIni
     this.projectToManage = latest;
     this.showProjectManager = true;
     this.errorMessage = '';
+    this.errorMessageParams = {};
+    this.warningMessage = '';
+    this.warningMessageParams = {};
     this.projectForm.patchValue({
       caption: latest.caption || '',
       tags: [...latest.tags],
@@ -279,17 +300,17 @@ export class GalleryAdminComponent extends LoadingComponentBase implements OnIni
   }
 
   closeProjectManagerWithConfirm(): void {
-    if (this.projectForm.dirty || this.projectForm.touched) {
-      if (confirm('You have unsaved changes. Are you sure you want to close?')) {
-        this.closeProjectManager();
-      }
-    } else {
-      this.closeProjectManager();
+    const hasUnsavedChanges = this.projectForm.dirty || this.projectForm.touched || this.editForm.dirty;
+    if (hasUnsavedChanges) {
+      this.openCloseConfirmation('project');
+      return;
     }
+    this.closeProjectManager();
   }
 
   closeProjectManager(): void {
     this.showProjectManager = false;
+    this.showProjectDeleteConfirm = false;
     this.projectToManage = null;
     this.selectMediaForEdit(null);
     this.projectForm.reset({
@@ -298,6 +319,11 @@ export class GalleryAdminComponent extends LoadingComponentBase implements OnIni
       relatedProductIds: []
     });
     this.isProjectSaving = false;
+  }
+
+  private openCloseConfirmation(context: 'upload' | 'project'): void {
+    this.closeConfirmContext = context;
+    this.showCloseConfirmation = true;
   }
 
   addPhotosToProject(project: GalleryProjectSummary): void {
@@ -313,35 +339,43 @@ export class GalleryAdminComponent extends LoadingComponentBase implements OnIni
     this.closeProjectManager();
   }
 
-  async deleteProject(project: GalleryProjectSummary | null): Promise<void> {
-    if (!project) return;
-
-    const confirmMessage = `Are you sure you want to delete the project "${project.name}"?\n\nThis will delete ALL ${project.photoCount} photo${project.photoCount === 1 ? '' : 's'} in this project. This action cannot be undone.`;
-    
-    if (!confirm(confirmMessage)) {
+  requestDeleteProject(): void {
+    if (!this.projectToManage) {
       return;
     }
+    this.showProjectDeleteConfirm = true;
+  }
 
+  closeProjectDeleteConfirm(): void {
+    this.showProjectDeleteConfirm = false;
+  }
+
+  async confirmDeleteProject(): Promise<void> {
+    if (!this.projectToManage) {
+      return;
+    }
+    this.showProjectDeleteConfirm = false;
+    await this.performDeleteProject(this.projectToManage);
+  }
+
+  private async performDeleteProject(project: GalleryProjectSummary): Promise<void> {
     try {
       this.isProjectSaving = true;
       this.errorMessage = '';
+      this.errorMessageParams = {};
 
-      // Delete all media items in the project
       const deletePromises = project.images.map(async (media) => {
         try {
-          // Delete from storage (ignore if file doesn't exist)
           if (media.url) {
             try {
               await this.storageService.deleteFile(media.url);
             } catch (storageError: any) {
-              // Ignore storage errors (file may already be deleted or not exist)
               if (storageError.code !== 'storage/object-not-found') {
                 console.warn(`Storage deletion warning for ${media.id}:`, storageError);
               }
             }
           }
-          
-          // Delete from Firestore
+
           await this.mediaService.deleteMedia(media.id!);
         } catch (error) {
           console.error(`Error deleting media ${media.id}:`, error);
@@ -350,18 +384,20 @@ export class GalleryAdminComponent extends LoadingComponentBase implements OnIni
       });
 
       await Promise.all(deletePromises);
-
-      // Refresh the gallery by reloading media
       this.subscribeToMedia();
-      
-      // Close the modal
       this.closeProjectManager();
 
-      // Show success message (you could use a toast notification here)
-      alert(`Successfully deleted project "${project.name}" and all its photos.`);
+      this.successMessage = 'admin.gallery.messages.project_deleted';
+      this.successMessageParams = { name: project.name };
+      setTimeout(() => {
+        this.successMessage = '';
+        this.successMessageParams = {};
+      }, 4000);
     } catch (error: any) {
       console.error('Error deleting project:', error);
-      this.errorMessage = `Failed to delete project: ${error.message || 'Unknown error'}`;
+      this.errorMessage = 'admin.gallery.messages.project_delete_failed';
+      this.errorMessageParams = { message: error?.message || '' };
+    } finally {
       this.isProjectSaving = false;
     }
   }
@@ -381,10 +417,12 @@ export class GalleryAdminComponent extends LoadingComponentBase implements OnIni
     const caption: string = this.projectForm.value.caption || '';
     const tags: MediaTag[] = this.projectForm.value.tags || [];
     this.errorMessage = '';
+    this.errorMessageParams = {};
     const relatedProductIds: string[] = this.projectForm.value.relatedProductIds || [];
 
     if (tags.length === 0) {
-      this.errorMessage = 'Please select at least one tag for the project';
+      this.errorMessage = 'admin.gallery.messages.project_tag_required';
+      this.errorMessageParams = {};
       return;
     }
 
@@ -393,7 +431,8 @@ export class GalleryAdminComponent extends LoadingComponentBase implements OnIni
       const altText = this.editForm.value.altText || '';
       
       if (!altText.trim()) {
-        this.errorMessage = 'Project name is required';
+        this.errorMessage = 'admin.gallery.messages.project_name_required';
+        this.errorMessageParams = {};
         return;
       }
 
@@ -425,11 +464,13 @@ export class GalleryAdminComponent extends LoadingComponentBase implements OnIni
         }, { emitEvent: false });
         this.editForm.markAsPristine();
         this.projectForm.markAsPristine();
-        this.successMessage = 'Photo updated successfully';
+        this.successMessage = 'admin.gallery.messages.photo_updated';
+        this.successMessageParams = {};
         this.subscribeToMedia();
       } catch (error) {
         console.error('Error updating photo:', error);
-        this.errorMessage = 'Error updating photo';
+        this.errorMessage = 'admin.gallery.messages.photo_update_failed';
+        this.errorMessageParams = {};
       } finally {
         this.isProjectSaving = false;
       }
@@ -444,6 +485,7 @@ export class GalleryAdminComponent extends LoadingComponentBase implements OnIni
 
     this.isProjectSaving = true;
     this.errorMessage = '';
+    this.errorMessageParams = {};
 
     try {
       const relatedEntityIds = relatedProductIds.map(id => `products/${id}`);
@@ -463,11 +505,13 @@ export class GalleryAdminComponent extends LoadingComponentBase implements OnIni
         relatedProductIds: [...relatedProductIds]
       };
       this.projectForm.markAsPristine();
-      this.successMessage = 'Project settings updated successfully';
+      this.successMessage = 'admin.gallery.messages.project_updated';
+      this.successMessageParams = {};
       this.subscribeToMedia();
     } catch (error) {
       console.error('Error updating project settings:', error);
-      this.errorMessage = 'Error updating project settings';
+      this.errorMessage = 'admin.gallery.messages.project_update_failed';
+      this.errorMessageParams = {};
     } finally {
       this.isProjectSaving = false;
     }
@@ -493,7 +537,9 @@ export class GalleryAdminComponent extends LoadingComponentBase implements OnIni
     this.editForm.markAsPristine();
 
     this.successMessage = '';
+    this.successMessageParams = {};
     this.errorMessage = '';
+    this.errorMessageParams = {};
   }
 
   onAltTextChange(event: Event): void {
@@ -684,6 +730,7 @@ export class GalleryAdminComponent extends LoadingComponentBase implements OnIni
     relatedProductIds?: string[];
   }): void {
     this.showUploadModal = true;
+    this.closeConfirmContext = null;
     this.uploadForm.reset({
       altText: defaults?.altText ?? '',
       caption: defaults?.caption ?? '',
@@ -693,28 +740,36 @@ export class GalleryAdminComponent extends LoadingComponentBase implements OnIni
     this.selectedFiles = [];
     this.revokeAllPreviewUrls();
     this.successMessage = '';
+    this.successMessageParams = {};
     this.errorMessage = '';
+    this.errorMessageParams = {};
     this.warningMessage = '';  // Clear warning
+    this.warningMessageParams = {};
     this.uploadProgress = 0;
     this.uploadedCount = 0;
     this.totalToUpload = 0;
   }
 
-  closeUploadModal(): void {
-    // Check if there are unsaved changes
-    if (this.hasUnsavedChanges() && !this.showCloseConfirmation) {
-      this.showCloseConfirmation = true;
+  closeUploadModal(force = false): void {
+    if (!force && this.hasUnsavedChanges() && !this.showCloseConfirmation) {
+      this.openCloseConfirmation('upload');
       return;
     }
 
-    // Proceed with closing
+    this.forceCloseUploadModal();
+  }
+
+  private forceCloseUploadModal(): void {
     this.showUploadModal = false;
     this.showCloseConfirmation = false;
+    this.closeConfirmContext = null;
     this.uploadForm.reset();
     this.selectedFiles = [];
     this.revokeAllPreviewUrls();
     this.errorMessage = '';
+    this.errorMessageParams = {};
     this.warningMessage = '';  // Clear warning
+    this.warningMessageParams = {};
     this.uploadProgress = 0;
     this.uploadedCount = 0;
     this.totalToUpload = 0;
@@ -722,11 +777,22 @@ export class GalleryAdminComponent extends LoadingComponentBase implements OnIni
 
   cancelCloseModal(): void {
     this.showCloseConfirmation = false;
+    this.closeConfirmContext = null;
   }
 
   confirmCloseModal(): void {
-    this.showCloseConfirmation = true;
-    this.closeUploadModal();
+    const context = this.closeConfirmContext;
+    this.showCloseConfirmation = false;
+    this.closeConfirmContext = null;
+
+    if (context === 'project') {
+      this.closeProjectManager();
+      return;
+    }
+
+    if (context === 'upload') {
+      this.closeUploadModal(true);
+    }
   }
 
   hasUnsavedChanges(): boolean {
@@ -768,18 +834,21 @@ export class GalleryAdminComponent extends LoadingComponentBase implements OnIni
     let hasErrors = false;
     
     // Validate each file
+    const maxSizeMb = 10;
     for (const file of files) {
       // Validate file type
       if (!file.type.startsWith('image/')) {
-        this.errorMessage = `"${file.name}" is not a valid image file`;
+        this.errorMessage = 'admin.gallery.messages.invalid_file_type';
+        this.errorMessageParams = { name: file.name };
         hasErrors = true;
         continue;
       }
 
       // Validate file size (10MB max)
-      const maxSize = 10 * 1024 * 1024; // 10MB
+      const maxSize = maxSizeMb * 1024 * 1024;
       if (file.size > maxSize) {
-        this.errorMessage = `"${file.name}" exceeds 10MB size limit`;
+        this.errorMessage = 'admin.gallery.messages.file_too_large';
+        this.errorMessageParams = { name: file.name, maxSize: maxSizeMb };
         hasErrors = true;
         continue;
       }
@@ -792,16 +861,24 @@ export class GalleryAdminComponent extends LoadingComponentBase implements OnIni
     }
 
     this.selectedFiles = validFiles;
-    this.errorMessage = hasErrors ? this.errorMessage : '';
+    if (!hasErrors) {
+      this.errorMessage = '';
+      this.errorMessageParams = {};
+    }
     this.warningMessage = '';
+    this.warningMessageParams = {};
 
     // Generate preview URLs for all selected images
     this.revokeAllPreviewUrls();
     this.previewUrls = validFiles.map(file => URL.createObjectURL(file));
 
     if (validFiles.length > 0) {
-      this.successMessage = `${validFiles.length} image(s) selected for upload`;
-      setTimeout(() => this.successMessage = '', 3000);
+      this.successMessage = 'admin.gallery.messages.images_selected';
+      this.successMessageParams = { count: validFiles.length };
+      setTimeout(() => {
+        this.successMessage = '';
+        this.successMessageParams = {};
+      }, 3000);
     }
   }
 
@@ -817,7 +894,9 @@ export class GalleryAdminComponent extends LoadingComponentBase implements OnIni
 
     if (this.selectedFiles.length === 0) {
       this.errorMessage = '';
+      this.errorMessageParams = {};
       this.warningMessage = '';
+      this.warningMessageParams = {};
     }
   }
 
@@ -849,8 +928,12 @@ export class GalleryAdminComponent extends LoadingComponentBase implements OnIni
   async addQuickTags(scope: 'upload' | 'edit' | 'project' = 'upload'): Promise<void> {
     const input = this.quickTagInputs[scope]?.trim() || '';
     if (!input) {
-      this.warningMessage = 'Enter at least one tag name separated by commas';
-      setTimeout(() => (this.warningMessage = ''), 3000);
+      this.warningMessage = 'admin.gallery.messages.tag_input_required';
+      this.warningMessageParams = {};
+      setTimeout(() => {
+        this.warningMessage = '';
+        this.warningMessageParams = {};
+      }, 3000);
       return;
     }
 
@@ -860,8 +943,12 @@ export class GalleryAdminComponent extends LoadingComponentBase implements OnIni
       .filter(tag => tag.length > 0);
 
     if (tagNames.length === 0) {
-      this.warningMessage = 'Enter at least one tag name separated by commas';
-      setTimeout(() => (this.warningMessage = ''), 3000);
+      this.warningMessage = 'admin.gallery.messages.tag_input_required';
+      this.warningMessageParams = {};
+      setTimeout(() => {
+        this.warningMessage = '';
+        this.warningMessageParams = {};
+      }, 3000);
       return;
     }
 
@@ -869,6 +956,7 @@ export class GalleryAdminComponent extends LoadingComponentBase implements OnIni
     const currentTags = new Set<MediaTag>(form.get('tags')?.value || []);
     this.isAddingQuickTags = true;
     this.errorMessage = '';
+    this.errorMessageParams = {};
 
     try {
       for (const rawName of tagNames) {
@@ -892,7 +980,8 @@ export class GalleryAdminComponent extends LoadingComponentBase implements OnIni
             this.availableTags = [...this.availableTags, existingTag];
           } catch (error) {
             console.error('Error creating tag:', error);
-            this.errorMessage = 'Failed to create one or more tags. Please try again.';
+            this.errorMessage = 'admin.gallery.messages.tag_create_failed';
+            this.errorMessageParams = {};
             continue;
           }
         }
@@ -908,8 +997,12 @@ export class GalleryAdminComponent extends LoadingComponentBase implements OnIni
       this.forceUpdate();
 
       if (!this.errorMessage) {
-        this.successMessage = 'Tags added to this project';
-        setTimeout(() => (this.successMessage = ''), 3000);
+        this.successMessage = 'admin.gallery.messages.tags_added';
+        this.successMessageParams = {};
+        setTimeout(() => {
+          this.successMessage = '';
+          this.successMessageParams = {};
+        }, 3000);
       }
     } finally {
       this.isAddingQuickTags = false;
@@ -958,14 +1051,16 @@ export class GalleryAdminComponent extends LoadingComponentBase implements OnIni
   async onSubmit(): Promise<void> {
     if (this.isSaving || this.isUploading || this.selectedFiles.length === 0) {
       if (this.selectedFiles.length === 0) {
-        this.errorMessage = 'Please select at least one image';
+        this.errorMessage = 'admin.gallery.messages.select_image';
+        this.errorMessageParams = {};
       }
       return;
     }
 
     if (this.uploadForm.invalid) {
       this.markFormGroupTouched(this.uploadForm);
-      this.errorMessage = 'Please fill in all required fields';
+      this.errorMessage = 'admin.gallery.messages.required_fields';
+      this.errorMessageParams = {};
       return;
     }
 
@@ -976,14 +1071,17 @@ export class GalleryAdminComponent extends LoadingComponentBase implements OnIni
     const sharedCaption = formValue.caption || '';
 
     if (tags.length === 0) {
-      this.errorMessage = 'Please select at least one tag';
+      this.errorMessage = 'admin.gallery.messages.tag_required';
+      this.errorMessageParams = {};
       return;
     }
 
     this.isUploading = true;
     this.isSaving = true;
     this.errorMessage = '';
+    this.errorMessageParams = {};
     this.warningMessage = '';
+    this.warningMessageParams = {};
     this.uploadProgress = 0;
     this.uploadedCount = 0;
     this.totalToUpload = this.selectedFiles.length;
@@ -991,7 +1089,7 @@ export class GalleryAdminComponent extends LoadingComponentBase implements OnIni
     try {
       const currentUser = this.authService.getCurrentUser();
       if (!currentUser) {
-        throw new Error('User not authenticated');
+        throw new Error('AUTH_REQUIRED');
       }
 
       // Upload each file with optimization
@@ -1064,16 +1162,24 @@ export class GalleryAdminComponent extends LoadingComponentBase implements OnIni
       }
 
       this.uploadProgress = 100;
-      this.successMessage = `Successfully uploaded ${this.uploadedCount} image(s)`;
+      this.successMessage = 'admin.gallery.messages.upload_success';
+      this.successMessageParams = { count: this.uploadedCount };
       this.closeUploadModal();
       this.subscribeToMedia();
 
       setTimeout(() => {
         this.successMessage = '';
+        this.successMessageParams = {};
       }, 5000);
     } catch (error) {
       console.error('Error uploading media:', error);
-      this.errorMessage = error instanceof Error ? error.message : 'Error uploading media';
+      if (error instanceof Error && error.message === 'AUTH_REQUIRED') {
+        this.errorMessage = 'admin.gallery.messages.auth_required';
+        this.errorMessageParams = {};
+      } else {
+        this.errorMessage = 'admin.gallery.messages.upload_failed';
+        this.errorMessageParams = { message: error instanceof Error ? error.message : '' };
+      }
     } finally {
       this.isUploading = false;
       this.isSaving = false;
@@ -1089,7 +1195,8 @@ export class GalleryAdminComponent extends LoadingComponentBase implements OnIni
 
     if (this.editForm.invalid) {
       this.markFormGroupTouched(this.editForm);
-      this.errorMessage = 'Please fill in all required fields';
+      this.errorMessage = 'admin.gallery.messages.required_fields';
+      this.errorMessageParams = {};
       return;
     }
 
@@ -1099,6 +1206,7 @@ export class GalleryAdminComponent extends LoadingComponentBase implements OnIni
 
     this.isSaving = true;
     this.errorMessage = '';
+    this.errorMessageParams = {};
 
     try {
       await this.mediaService.updateMedia(this.mediaToEdit.id, {
@@ -1109,7 +1217,8 @@ export class GalleryAdminComponent extends LoadingComponentBase implements OnIni
       });
 
       this.subscribeToMedia();
-      this.successMessage = 'Media updated successfully';
+      this.successMessage = 'admin.gallery.messages.media_updated';
+      this.successMessageParams = {};
       this.mediaToEdit = {
         ...this.mediaToEdit,
         altText: formValue.altText || '',
@@ -1121,10 +1230,12 @@ export class GalleryAdminComponent extends LoadingComponentBase implements OnIni
 
       setTimeout(() => {
         this.successMessage = '';
+        this.successMessageParams = {};
       }, 3000);
     } catch (error) {
       console.error('Error updating media:', error);
-      this.errorMessage = 'Error updating media';
+      this.errorMessage = 'admin.gallery.messages.media_update_failed';
+      this.errorMessageParams = {};
     } finally {
       this.isSaving = false;
     }
@@ -1160,7 +1271,8 @@ export class GalleryAdminComponent extends LoadingComponentBase implements OnIni
           const relatedProducts = this.services.filter((s: ServiceItem) => productIds.includes(s.id || ''));
           if (relatedProducts.length > 0) {
             const productNames = relatedProducts.map((s: ServiceItem) => s.title).join(', ');
-            this.errorMessage = `Cannot delete: Used by services: ${productNames}. Please remove this image from the service's gallery first.`;
+            this.errorMessage = 'admin.gallery.messages.delete_blocked';
+            this.errorMessageParams = { services: productNames };
             this.isSaving = false;
             return;
           }
@@ -1174,15 +1286,18 @@ export class GalleryAdminComponent extends LoadingComponentBase implements OnIni
       this.mediaList = this.mediaList.filter(media => media.id !== deletedId);
       this.updateGalleryProjects();
       
-      this.successMessage = 'Media deleted successfully';
+      this.successMessage = 'admin.gallery.messages.media_deleted';
+      this.successMessageParams = {};
       this.closeDeleteConfirm();
 
       setTimeout(() => {
         this.successMessage = '';
+        this.successMessageParams = {};
       }, 3000);
     } catch (error) {
       console.error('Error deleting media:', error);
-      this.errorMessage = 'Error deleting media';
+      this.errorMessage = 'admin.gallery.messages.media_delete_failed';
+      this.errorMessageParams = {};
     } finally {
       this.isSaving = false;
     }
@@ -1193,7 +1308,8 @@ export class GalleryAdminComponent extends LoadingComponentBase implements OnIni
       await this.authService.signOutUser('/client/login');
     } catch (error) {
       console.error('Logout error:', error);
-      this.errorMessage = 'Failed to log out. Please try again.';
+      this.errorMessage = 'admin.gallery.messages.logout_failed';
+      this.errorMessageParams = {};
     }
   }
 

@@ -3,8 +3,6 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { FormsModule } from '@angular/forms';
-import { Firestore, collection, query, where, limit, getDocs } from '@angular/fire/firestore';
-import { GalleryService, GalleryImage } from '../../services/gallery.service';
 import { ServiceService, ServiceItem } from '../../services/service.service';
 import { ProductsService } from '../../services/products.service';
 import { Product } from '../../models/product';
@@ -28,8 +26,6 @@ import { ProductCardComponent } from '../../shared/components/product-card/produ
 })
 export class HomePageComponent extends LoadingComponentBase implements OnInit {
   private platformId = inject(PLATFORM_ID);
-  private firestore = inject(Firestore);
-  private galleryService = inject(GalleryService);
   private serviceService = inject(ServiceService);
   private productsService = inject(ProductsService);
   private collectionsService = inject(CollectionsService);
@@ -52,9 +48,6 @@ export class HomePageComponent extends LoadingComponentBase implements OnInit {
   heroCollections: CollectionDoc[] = [];
   brandName = this.brandConfig.siteName;
   
-  galleryImages: GalleryImage[] = [];
-  currentImageIndex = 0;
-  private imageRotationInterval?: any;
   private featuredRotationInterval?: any;
   private featuredRotationIndex = 0;
   private featuredRotationWindow = 8;
@@ -90,7 +83,6 @@ export class HomePageComponent extends LoadingComponentBase implements OnInit {
     try {
       await Promise.all([
         this.loadCollections(),
-        this.loadGalleryPreview(),
         this.loadServicesAsync(),
         this.loadFeaturedProductsAsync(),
         this.loadBestSellersAsync(),
@@ -147,22 +139,12 @@ export class HomePageComponent extends LoadingComponentBase implements OnInit {
 
   private async loadFeaturedProductsAsync() {
     try {
-      const seasonalTag = this.activeSeasonalTheme?.featuredProductsTag;
-      let products: Product[] | undefined;
+      const products = await this.productsService
+        .getFeaturedOnHomeProducts(Math.max(this.featuredRotationWindow, 8))
+        .pipe(take(1))
+        .toPromise();
 
-      if (seasonalTag) {
-        products = await this.productsService
-          .getProductsByTag(seasonalTag, Math.max(this.featuredRotationWindow + 4, 8))
-          .pipe(take(1))
-          .toPromise();
-        this.isSeasonalFeatured = !!products?.length;
-      }
-
-      if (!products || products.length === 0) {
-        this.isSeasonalFeatured = false;
-        products = await this.productsService.getFeaturedProducts(8).pipe(take(1)).toPromise();
-      }
-
+      this.isSeasonalFeatured = false;
       this.featuredProductsAll = products || [];
       this.featuredRotationIndex = 0;
       this.refreshFeaturedRotation();
@@ -223,69 +205,6 @@ export class HomePageComponent extends LoadingComponentBase implements OnInit {
     this.refreshFeaturedRotation();
   }
 
-  private async loadGalleryPreview() {
-    // Load from media collection (same as gallery page)
-    const mediaQuery = query(
-      collection(this.firestore, 'media'),
-      where('relatedEntityType', '==', 'gallery'),
-      limit(5)
-    );
-    
-    try {
-      const snapshot = await getDocs(mediaQuery);
-      const mediaItems = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      })) as any[];
-      
-      // Convert media items to GalleryImage format for display
-      this.galleryImages = mediaItems.map(media => ({
-        id: media.id,
-        imageUrl: media.url,
-        title: media.altText || media.caption,
-        uploadedAt: media.uploadedAt
-      })) as GalleryImage[];
-      
-      // Start auto-rotation if we have multiple images
-      if (this.galleryImages.length > 1) {
-        this.startImageRotation();
-      }
-      
-      this.setLoading(false);
-    } catch (error: any) {
-      this.logger.error('HomePage error loading gallery', error);
-      this.setLoading(false);
-    }
-  }
-
-  private loadLatestImages() {
-    this.galleryService.getAllImages()
-      .pipe(take(1))
-      .subscribe({
-        next: (images: GalleryImage[]) => {
-          this.galleryImages = images.slice(0, 5);
-          this.setLoading(false);
-        },
-        error: (error: any) => {
-          this.logger.error('HomePage error loading gallery', error);
-          this.setLoading(false);
-        }
-      });
-  }
-
-  private startImageRotation() {
-    // Clear any existing interval
-    if (this.imageRotationInterval) {
-      clearInterval(this.imageRotationInterval);
-    }
-    
-    // Rotate image every 5 seconds
-    this.imageRotationInterval = setInterval(() => {
-      if (this.galleryImages.length > 0) {
-        this.currentImageIndex = (this.currentImageIndex + 1) % this.galleryImages.length;
-      }
-    }, 5000);
-  }
 
   private refreshFeaturedRotation() {
     this.stopFeaturedRotation();
@@ -331,10 +250,6 @@ export class HomePageComponent extends LoadingComponentBase implements OnInit {
   }
 
   ngOnDestroy() {
-    // Clean up interval when component is destroyed
-    if (this.imageRotationInterval) {
-      clearInterval(this.imageRotationInterval);
-    }
     this.stopFeaturedRotation();
   }
 

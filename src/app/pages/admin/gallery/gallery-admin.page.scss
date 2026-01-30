@@ -8,39 +8,3 @@
   line-clamp: 2;
   overflow: hidden;
 }
-
-.admin-gallery-page {
-  [class~="text-bitcoin-gray"] {
-    color: rgba(248, 250, 252, 0.85) !important;
-  }
-
-  [class*="text-bitcoin-gray/80"] {
-    color: rgba(248, 250, 252, 0.8) !important;
-  }
-
-  [class*="text-bitcoin-gray/70"] {
-    color: rgba(248, 250, 252, 0.7) !important;
-  }
-
-  [class*="text-bitcoin-gray/60"] {
-    color: rgba(248, 250, 252, 0.6) !important;
-  }
-
-  [class*="text-bitcoin-gray/50"],
-  [class*="placeholder:text-bitcoin-gray/50"] {
-    color: rgba(248, 250, 252, 0.55) !important;
-  }
-
-  [class*="text-bitcoin-gray/40"] {
-    color: rgba(248, 250, 252, 0.45) !important;
-  }
-
-  [class*="text-bitcoin-gray/30"] {
-    color: rgba(248, 250, 252, 0.35) !important;
-  }
-
-  input::placeholder,
-  textarea::placeholder {
-    color: rgba(248, 250, 252, 0.45) !important;
-  }
-}

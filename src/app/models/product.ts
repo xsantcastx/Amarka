@@ -28,6 +28,8 @@ export interface Product {
   tags?: string[];
   customizable?: boolean;
   customization?: ProductCustomizationConfig;
+  featuredOnHome?: boolean;
+  featuredPriority?: number;
   seo?: {
     title?: string;
     metaDescription?: string;

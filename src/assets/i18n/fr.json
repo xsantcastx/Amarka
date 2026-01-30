@@ -22,7 +22,7 @@
     "gallery_management": "Gallery Management",
     "order_management": "Order Management",
     "collections": "Collections",
-    "models": "Models",
+    "models": "Modeles et categories",
     "user_management": "User Management",
     "benefit_templates": "Benefit Templates",
     "analytics": "Analytics",
@@ -184,5 +184,467 @@
     "download_invoice": "Télécharger la Facture",
     "my_profile": "Mon Profil",
     "logout": "Déconnexion"
+  },
+  "admin": {
+    "manage_users": "Gérer les utilisateurs",
+    "users_description": "Gérez les comptes, rôles et accès.",
+    "search_users": "Rechercher des utilisateurs",
+    "search_users_placeholder": "Rechercher par nom ou e-mail...",
+    "filter_by_role": "Filtrer par rôle",
+    "all_roles": "Tous les rôles",
+    "user": "Utilisateur",
+    "company": "Entreprise",
+    "role": "Rôle",
+    "status": "Statut",
+    "created_at": "Créé le",
+    "actions": "Actions",
+    "role_client": "Client",
+    "role_admin": "Admin",
+    "active": "Actif",
+    "disabled": "Désactivé",
+    "loading_users": "Chargement des utilisateurs...",
+    "no_users_found": "Aucun utilisateur trouvé.",
+    "change_role": "Changer le rôle",
+    "change_role_for": "Changer le rôle pour",
+    "new_role": "Nouveau rôle",
+    "enable_user": "Activer l'utilisateur",
+    "disable_user": "Désactiver l'utilisateur",
+    "confirm": "Confirmer",
+    "all_orders": "Toutes les commandes",
+    "pending": "En attente",
+    "processing": "En traitement",
+    "shipped": "Expédiée",
+    "delivered": "Livrée",
+    "cancelled": "Annulée",
+    "order_number": "Commande #",
+    "date": "Date",
+    "customer": "Client",
+    "total": "Total",
+    "refresh": "Rafraîchir",
+    "view": "Voir",
+    "update_status": "Mettre à jour le statut",
+    "status_updated": "Statut mis à jour.",
+    "no_orders": "Aucune commande.",
+    "orders": {
+      "title": "Commandes",
+      "order_title": "Commande",
+      "status_label": "Statut",
+      "total_label": "Total",
+      "items": "Articles",
+      "qty": "Qté",
+      "sku": "SKU",
+      "no_image": "Pas d'image",
+      "customization_preview": "Aperçu de personnalisation",
+      "base_image_missing": "Image de base manquante",
+      "logo_uploaded": "Logo téléchargé",
+      "download_logo": "Télécharger le logo"
+    },
+    "gallery": {
+      "title": "Galerie",
+      "subtitle": "Gerez les projets, tags et envois de la galerie.",
+      "stats": {
+        "images": "Images",
+        "projects": "Projets",
+        "tags": "Tags"
+      },
+      "filters": {
+        "all": "Tous les medias",
+        "search_placeholder": "Rechercher par nom de projet, tags ou description..."
+      },
+      "projects": {
+        "title": "Projets",
+        "subtitle": "Regroupes par nom de projet et metadonnees.",
+        "project": "projet",
+        "projects": "projets",
+        "photo": "photo",
+        "photos": "photos",
+        "empty_title": "Aucun projet trouve",
+        "empty_body": "Essayez de televerser de nouvelles images ou de modifier la recherche.",
+        "linked_services": "Services lies"
+      },
+      "actions": {
+        "upload": "Televerser des images",
+        "manage": "Gerer",
+        "add_photos": "Ajouter des photos",
+        "delete_project": "Supprimer le projet",
+        "close": "Fermer",
+        "add_tags": "Ajouter des tags",
+        "adding": "Ajout...",
+        "save_photo": "Enregistrer les changements de la photo",
+        "save_project": "Enregistrer les parametres du projet",
+        "saving": "Enregistrement..."
+      },
+      "fields": {
+        "project_name": "Nom du projet",
+        "project_name_placeholder": "ex. Mariage Jardin Enchante",
+        "project_name_help": "Le nom du projet est utilise comme titre.",
+        "project_name_help_single": "Nom pour ce projet.",
+        "project_name_help_multi": "Nom partage pour {{count}} images (numerote automatiquement).",
+        "description": "Description",
+        "description_placeholder": "ex. Newport Beach, CA - ceremonie en bord de mer",
+        "description_help": "Details de lieu et d'evenement (optionnel).",
+        "tags": "Tags",
+        "tags_help": "Selectionnez au moins un tag pour organiser votre galerie.",
+        "tags_selected": "{{count}} selectionnes",
+        "quick_tags_placeholder": "Ajoutez des tags separes par des virgules",
+        "quick_tags_help": "Separez plusieurs tags avec des virgules.",
+        "custom_tags_title": "Ajouter des tags personnalises",
+        "custom_tags_placeholder": "Saisissez un tag (ex. Mariage de printemps, Evenement corporate)",
+        "custom_tags_help": "Separez plusieurs tags avec des virgules.",
+        "select_existing_tags": "Ou selectionnez parmi les existants :",
+        "related_services": "Services associes",
+        "related_services_help": "Associez cette galerie a des services specifiques (optionnel).",
+        "related_services_help_single": "Liez cette photo a des services specifiques.",
+        "related_services_help_all": "Applique a toutes les photos de ce projet.",
+        "no_services": "Aucun service disponible"
+      },
+      "upload": {
+        "title": "Televerser des images",
+        "subtitle": "Ajoutez de nouvelles images a votre galerie.",
+        "image_files": "Fichiers image",
+        "selected_images": "Images selectionnees",
+        "file_single": "fichier pret a televerser",
+        "file_plural": "fichiers prets a televerser",
+        "clear_all": "Tout effacer",
+        "drop_title": "Cliquez ou glissez des fichiers pour televerser",
+        "drop_subtitle": "Selectionnez plusieurs images pour un televersement en lot. Max 10MB par fichier.",
+        "drop_hint": "Recommande : 1600x1200px ou plus.",
+        "uploading": "Televersement des images...",
+        "progress": "{{current}} sur {{total}} termines",
+        "button_single": "Televerser une image",
+        "button_multi": "Televerser {{count}} images",
+        "button_empty": "Selectionnez des images d'abord"
+      },
+      "project_manager": {
+        "eyebrow": "Gestion du projet",
+        "photos_title": "Photos du projet",
+        "photos_hint": "Selectionnez une photo pour modifier son titre et ses tags.",
+        "edit_photo": "Modifier les reglages de la photo",
+        "save_note_single": "L'enregistrement met a jour le nom, la description, les tags et les services lies pour cette photo.",
+        "save_note_all": "L'enregistrement met a jour la description, les tags et les services lies pour toutes les photos de ce projet."
+      },
+      "confirm": {
+        "close_title": "Modifications non enregistrees",
+        "close_body": "Vous avez des modifications non enregistrees. Voulez-vous fermer?",
+        "close_continue": "Continuer l'edition",
+        "close_discard": "Ignorer les modifications",
+        "delete_title": "Supprimer l'image",
+        "delete_body": "Voulez-vous supprimer cette image?",
+        "project_delete_title": "Supprimer le projet",
+        "project_delete_body": "Cela supprimera {{count}} photos dans \"{{name}}\". Cette action est definitive."
+      },
+      "messages": {
+        "load_failed": "Impossible de charger la galerie.",
+        "project_tag_required": "Selectionnez au moins un tag pour le projet.",
+        "project_name_required": "Le nom du projet est obligatoire.",
+        "photo_updated": "Photo mise a jour.",
+        "photo_update_failed": "Impossible de mettre a jour la photo.",
+        "project_updated": "Parametres du projet mis a jour.",
+        "project_update_failed": "Impossible de mettre a jour les parametres du projet.",
+        "project_deleted": "Projet supprime.",
+        "project_delete_failed": "Impossible de supprimer le projet.",
+        "tag_input_required": "Saisissez au moins un tag separe par des virgules.",
+        "tag_create_failed": "Impossible de creer un ou plusieurs tags. Reessayez.",
+        "tags_added": "Tags ajoutes a ce projet.",
+        "invalid_file_type": "\"{{name}}\" n'est pas un fichier image valide.",
+        "file_too_large": "\"{{name}}\" depasse la limite de {{maxSize}}MB.",
+        "images_selected": "{{count}} image(s) selectionnee(s) pour televersement.",
+        "select_image": "Veuillez selectionner au moins une image.",
+        "required_fields": "Veuillez remplir tous les champs requis.",
+        "tag_required": "Veuillez selectionner au moins un tag.",
+        "auth_required": "Vous devez vous connecter pour televerser des images.",
+        "upload_success": "{{count}} image(s) televersee(s) avec succes.",
+        "upload_failed": "Erreur lors du televersement. {{message}}",
+        "media_updated": "Media mis a jour.",
+        "media_update_failed": "Impossible de mettre a jour le media.",
+        "delete_blocked": "Suppression impossible : utilise par les services : {{services}}. Retirez cette image du service d'abord.",
+        "media_deleted": "Media supprime.",
+        "media_delete_failed": "Impossible de supprimer le media.",
+        "logout_failed": "Echec de la deconnexion. Reessayez."
+      }
+    },
+    "settings": {
+      "title": "Paramètres",
+      "subtitle": "Gérez les paramètres, la marque et le contenu.",
+      "actions": {
+        "saving": "Enregistrement...",
+        "lock": "Verrouiller",
+        "unlock": "Déverrouiller",
+        "show": "Afficher",
+        "hide": "Masquer"
+      },
+      "states": {
+        "enabled": "Activé",
+        "disabled": "Désactivé"
+      },
+      "feedback": {
+        "success": "Paramètres mis à jour avec succès.",
+        "error_details": "Impossible d’enregistrer les paramètres : {{message}}"
+      }
+    },
+    "analytics": {
+      "eyebrow": "Insights",
+      "title": "Analytique",
+      "subtitle": "Vue d’ensemble des performances en {{currency}}.",
+      "period": {
+        "today": "Aujourd’hui",
+        "week": "7 derniers jours",
+        "month": "Ce mois-ci",
+        "year": "Cette année"
+      },
+      "metrics": {
+        "total_orders": "Commandes totales",
+        "revenue": "Revenus",
+        "average_order_value": "Panier moyen",
+        "new_customers": "Nouveaux clients",
+        "products_updated": "Produits mis à jour",
+        "gallery_uploads": "Uploads galerie"
+      },
+      "recent_activity": "Activité récente",
+      "showing_period": "Période : {{period}}",
+      "no_activity": "Aucune activité récente pour cette période.",
+      "future_title": "Analytique à venir",
+      "future_description": "De nouveaux insights arrivent pour mieux suivre la croissance.",
+      "future_items": {
+        "charts": {
+          "title": "Graphiques de tendances",
+          "description": "Visualisez les ventes et le volume des commandes.",
+          "status": "En bêta"
+        },
+        "top_products": {
+          "title": "Meilleurs produits",
+          "description": "Voir les produits les plus vendus.",
+          "status": "En développement"
+        },
+        "geo": {
+          "title": "Insights géo",
+          "description": "Comprendre d’où viennent les clients.",
+          "status": "En design"
+        },
+        "funnels": {
+          "title": "Entonnoirs d’achat",
+          "description": "Suivre les abandons du parcours d’achat.",
+          "status": "Recherche"
+        }
+      }
+    },
+    "models": {
+      "title": "Modeles et categories",
+      "subtitle": "Gerez modeles et categories au meme endroit.",
+      "empty": "Aucun modele. Creez votre premier modele pour commencer.",
+      "loading": "Chargement des modeles...",
+      "stats": {
+        "total": "Modeles totaux",
+        "active": "Modeles actifs",
+        "inactive": "Modeles inactifs"
+      },
+      "filters": {
+        "search_placeholder": "Rechercher par nom ou slug...",
+        "status_label": "Statut",
+        "status_all": "Tous",
+        "status_active": "Actifs",
+        "status_inactive": "Inactifs",
+        "category_label": "Categorie",
+        "all_categories": "Toutes les categories"
+      },
+      "table": {
+        "name": "Nom",
+        "slug": "Slug",
+        "category": "Categorie",
+        "status": "Statut",
+        "actions": "Actions",
+        "active": "Actif",
+        "inactive": "Inactif",
+        "unassigned": "Non assigne"
+      },
+      "bulk": {
+        "selected": "{{count}} modeles selectionnes",
+        "selected_single": "1 modele selectionne",
+        "activate": "Activer",
+        "deactivate": "Desactiver",
+        "delete": "Supprimer"
+      },
+      "actions": {
+        "add": "Ajouter un modele",
+        "edit": "Modifier",
+        "delete": "Supprimer",
+        "create": "Creer le modele",
+        "update": "Mettre a jour le modele",
+        "cancel": "Annuler",
+        "create_first": "Creer le premier modele"
+      },
+      "modal": {
+        "new_title": "Nouveau modele",
+        "edit_title": "Modifier le modele"
+      },
+      "fields": {
+        "name": "Nom",
+        "name_placeholder": "Nom du modele",
+        "slug": "Slug",
+        "slug_help": "Genere depuis le nom. Modifiez si besoin.",
+        "category": "Categorie",
+        "texture_hints": "Indications de texture",
+        "texture_hints_placeholder": "ex: Mat, brillant, metallique...",
+        "texture_hints_help": "Une par ligne. Utilise pour la previsualisation et la recherche.",
+        "default_tags": "Tags par defaut",
+        "default_tags_placeholder": "ex: cadeau, premium, corporate",
+        "default_tags_help": "Separes par des virgules.",
+        "active": "Actif"
+      },
+      "messages": {
+        "name_required": "Le nom est requis.",
+        "slug_exists": "Le slug \"{{slug}}\" est deja utilise.",
+        "created": "Modele cree.",
+        "updated": "Modele mis a jour.",
+        "save_failed": "Echec de l'enregistrement du modele.",
+        "deleted": "Modele supprime.",
+        "delete_failed": "Echec de suppression du modele.",
+        "confirm_delete": "Supprimer \"{{name}}\"? Cette action est definitive.",
+        "confirm_bulk_delete": "Supprimer {{count}} modeles selectionnes? Cette action est definitive.",
+        "bulk_deleted": "{{count}} modeles supprimes.",
+        "bulk_activated": "Modeles actives.",
+        "bulk_deactivated": "Modeles desactives."
+      },
+      "categories": {
+        "title": "Categories",
+        "subtitle": "Organisez les modeles et produits par categorie.",
+        "empty": "Aucune categorie. Creez la premiere categorie.",
+        "bulk": {
+          "selected": "{{count}} categories selectionnees",
+          "selected_single": "1 categorie selectionnee",
+          "activate": "Activer",
+          "deactivate": "Desactiver",
+          "delete": "Supprimer"
+        },
+        "table": {
+          "name": "Nom",
+          "slug": "Slug",
+          "order": "Ordre",
+          "status": "Statut",
+          "actions": "Actions",
+          "active": "Actif",
+          "inactive": "Inactif"
+        },
+        "actions": {
+          "add": "Ajouter une categorie",
+          "edit": "Modifier",
+          "delete": "Supprimer",
+          "create": "Creer une categorie",
+          "update": "Mettre a jour la categorie",
+          "cancel": "Annuler",
+          "create_first": "Creer la premiere categorie"
+        },
+        "modal": {
+          "new_title": "Nouvelle categorie",
+          "edit_title": "Modifier la categorie"
+        },
+        "fields": {
+          "name": "Nom",
+          "name_placeholder": "Nom de la categorie",
+          "slug": "Slug",
+          "slug_help": "Genere depuis le nom. Modifiez si besoin.",
+          "order": "Ordre",
+          "active": "Actif"
+        },
+        "messages": {
+          "name_required": "Le nom est requis.",
+          "created": "Categorie creee.",
+          "updated": "Categorie mise a jour.",
+          "save_failed": "Echec de l'enregistrement de la categorie.",
+          "deleted": "Categorie supprimee.",
+          "delete_failed": "Echec de suppression de la categorie.",
+          "confirm_delete": "Supprimer \"{{name}}\"? Cette action est definitive.",
+          "confirm_bulk_delete": "Supprimer {{count}} categories? Cette action est definitive.",
+          "bulk_deleted": "{{count}} categories supprimees.",
+          "bulk_activated": "Categories activees.",
+          "bulk_deactivated": "Categories desactivees.",
+          "bulk_failed": "Echec de mise a jour des categories."
+        }
+      }
+    },
+    "collections": {
+      "title": "Collections",
+      "subtitle": "Gerez et organisez vos collections au meme endroit.",
+      "back_to_admin": "Admin",
+      "new_collection": "Nouvelle collection",
+      "new_collection_title": "Nouvelle collection",
+      "edit_collection": "Modifier la collection",
+      "loading": "Chargement des collections...",
+      "empty_title": "Aucune collection",
+      "empty_body": "Creez une collection pour presenter des groupes de produits.",
+      "stats": {
+        "total": "Collections totales",
+        "active": "Collections actives",
+        "inactive": "Collections inactives"
+      },
+      "filters": {
+        "search_placeholder": "Rechercher par nom, slug ou description...",
+        "status_label": "Statut",
+        "status_all": "Tous",
+        "status_active": "Actives",
+        "status_inactive": "Inactives"
+      },
+      "card": {
+        "no_image": "Aucune image",
+        "no_description": "Pas de description."
+      },
+      "form": {
+        "edit": "Modifier",
+        "delete": "Supprimer",
+        "name": "Nom",
+        "slug": "Slug",
+        "slug_help": "Genere depuis le nom. Modifiez si besoin.",
+        "description": "Description",
+        "hero_image": "Image hero",
+        "choose_image": "Choisir une image",
+        "max_size": "Max 5MB (JPG, PNG, WebP)",
+        "hero_hint": "Taille recommandee : 1600x900.",
+        "upload_progress": "Upload de l'image hero",
+        "seo_title": "Titre SEO",
+        "seo_description": "Description SEO",
+        "seo_image": "URL image SEO",
+        "active": "Actif",
+        "cancel": "Annuler",
+        "save": "Enregistrer",
+        "saving": "Enregistrement..."
+      }
+    },
+    "products": {
+      "title": "Produits",
+      "add_product": "Ajouter un Produit",
+      "no_products": "Aucun produit trouvé",
+      "edit": "Modifier",
+      "delete": "Supprimer",
+      "delete_product": "Supprimer le Produit",
+      "confirm_delete": "Êtes-vous sûr de vouloir supprimer ce produit?",
+      "product_image": "Image",
+      "product_name": "Nom du Produit",
+      "product_category": "Catégorie",
+      "product_model": "Modèle",
+      "product_price": "Prix",
+      "status_published": "Publié",
+      "status_draft": "Brouillon",
+      "status_archived": "Archivé"
+    },
+    "setup_required": "Configuration Requise",
+    "need_categories_and_models": "Vous devez d'abord créer des catégories et des modèles.",
+    "need_category": "Vous devez d'abord créer une catégorie.",
+    "need_model": "Vous devez d'abord créer un modèle.",
+    "goto_catalog": "Aller au Catalogue"
+  },
+  "common": {
+    "loading": "Chargement...",
+    "loading_content": "Chargement du contenu...",
+    "back": "Retour a l'accueil",
+    "search": "Rechercher",
+    "hello": "Bonjour",
+    "active": "Actif",
+    "inactive": "Inactif",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "saving": "Enregistrement..."
   }
 }
+

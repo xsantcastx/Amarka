@@ -144,6 +144,8 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
       customizationWidth: [30, [Validators.min(1), Validators.max(100)]],
       customizationHeight: [30, [Validators.min(1), Validators.max(100)]],
       customizationRotation: [0],
+      featuredOnHome: [false],
+      featuredPriority: [0, [Validators.min(0)]],
       // SEO fields
       metaTitle: [''],
       metaDescription: [''],
@@ -237,6 +239,8 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
         customizationWidth: product.customization?.placement?.width ?? 30,
         customizationHeight: product.customization?.placement?.height ?? 30,
         customizationRotation: product.customization?.placement?.rotation ?? 0,
+        featuredOnHome: product.featuredOnHome === true,
+        featuredPriority: product.featuredPriority ?? 0,
         metaTitle: product.seo?.title || '',
         metaDescription: product.seo?.metaDescription || '',
         slug: product.slug || ''
@@ -840,6 +844,10 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
         videoUrl,
         customizable: customization.customizable,
         customization: customization.customization,
+        featuredOnHome: !!formValue.featuredOnHome,
+        featuredPriority: Number.isFinite(Number(formValue.featuredPriority))
+          ? Number(formValue.featuredPriority)
+          : 0,
         seo: {
           title: formValue.metaTitle || '',
           metaDescription: formValue.metaDescription || '',

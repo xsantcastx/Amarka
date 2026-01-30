@@ -12,7 +12,6 @@
       <div class="space-y-3">
         <p class="badge">Curated collection</p>
         <h2 class="text-3xl font-serif text-ts-ink leading-tight">{{ title }}</h2>
-        <p class="text-ts-ink-soft">{{ subtitle }}</p>
         <div class="flex flex-wrap gap-3 text-sm text-ts-ink-soft">
           <span class="px-3 py-1 rounded-full border border-ts-line bg-ts-bg-soft">{{ filtered.length || products.length }} items</span>
           <span class="px-3 py-1 rounded-full border border-ts-line bg-ts-bg-soft">Personalised & ready to ship</span>
@@ -89,7 +88,11 @@
     } @else {
       @if (filtered.length === 0) {
         <div class="bg-ts-paper border border-ts-line rounded-2xl p-10 text-center">
-          <p class="text-ts-ink-soft">No products found. Try adjusting filters.</p>
+          @if (products.length === 0) {
+            <p class="text-ts-ink-soft">No products in this collection yet.</p>
+          } @else {
+            <p class="text-ts-ink-soft">No products match your filters.</p>
+          }
         </div>
       } @else {
         <div class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">

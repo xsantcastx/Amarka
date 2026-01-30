@@ -29,7 +29,8 @@ export class CollectionPageComponent implements OnInit {
   slug = '';
   collectionId = '';
   title = '';
-  subtitle = 'Curated personalised gifts crafted with warm materials and thoughtful engraving.';
+  subtitle = '';
+  private readonly defaultSubtitle = 'Curated personalised gifts crafted with warm materials and thoughtful engraving.';
   collection: CollectionDoc | null = null;
   breadcrumbs: Breadcrumb[] = [
     { label: 'Home', url: '/', icon: 'home' },
@@ -56,17 +57,19 @@ export class CollectionPageComponent implements OnInit {
     if (this.collection) {
       this.collectionId = this.collection.id || '';
       this.title = this.collection.name;
-      this.subtitle = this.collection.description || this.subtitle;
+      const description = (this.collection.description || '').trim();
+      this.subtitle = description;
       this.metaService.setPageMeta({
         title: this.collection.seo?.title || this.collection.name,
-        description: this.collection.seo?.description || this.subtitle,
+        description: this.collection.seo?.description || description || this.defaultSubtitle,
         image: this.collection.seo?.image
       });
     } else {
       this.title = this.slugToTitle(this.slug);
+      this.subtitle = '';
       this.metaService.setPageMeta({
         title: this.title,
-        description: this.subtitle
+        description: this.defaultSubtitle
       });
     }
     this.cdr.detectChanges();
@@ -77,21 +80,39 @@ export class CollectionPageComponent implements OnInit {
     this.cdr.detectChanges();
     try {
       const all = await this.productsService.getAllProductsOnce();
+      const published = all.filter(p => p.status === 'published');
       // Filter by collectionIds if available, else by tag fallback
       const slugLower = this.slug.toLowerCase();
       const collectionIdLower = (this.collectionId || '').toLowerCase();
 
-      this.products = all.filter(p => {
-        const inCollection = (p.collectionIds || []).some(id => {
-          const normalized = (id || '').toLowerCase();
-          return normalized === slugLower || (!!collectionIdLower && normalized === collectionIdLower);
-        });
-        const tagMatch = (p.tags || []).some(t => t?.toLowerCase() === slugLower);
-        return inCollection || tagMatch;
+      this.products = published.filter(p => {
+        const matchesCollectionToken = (token: unknown): boolean => {
+          if (!token) return false;
+          if (typeof token === 'string') {
+            const normalized = token.toLowerCase();
+            return normalized === slugLower || (!!collectionIdLower && normalized === collectionIdLower);
+          }
+          if (typeof token === 'object') {
+            const obj = token as { id?: string; slug?: string };
+            const id = (obj.id || '').toLowerCase();
+            const slug = (obj.slug || '').toLowerCase();
+            return (
+              (!!id && (id === slugLower || (!!collectionIdLower && id === collectionIdLower))) ||
+              (!!slug && (slug === slugLower || (!!collectionIdLower && slug === collectionIdLower)))
+            );
+          }
+          return false;
+        };
+
+        const collectionTokens: unknown[] = [
+          ...(p.collectionIds || []),
+          (p as any).collectionId,
+          ...(Array.isArray((p as any).collections) ? (p as any).collections : [])
+        ];
+
+        const inCollection = collectionTokens.some(matchesCollectionToken);
+        return inCollection;
       });
-      if (this.products.length === 0) {
-        this.products = all.filter(p => p.status !== 'archived');
-      }
       this.tags = Array.from(new Set(this.products.flatMap(p => p.tags || []))).slice(0, 12);
       this.applyFilters();
     } catch (err) {

@@ -83,6 +83,7 @@ export class ProductsAdminComponent extends LoadingComponentBase implements OnIn
   selectedCategoryFilter = '';
   selectedModelFilter = '';
   selectedStatusFilter = '';
+  showFeaturedOnly = false;
   showDeleteConfirm = false;
   productToDelete: Product | null = null;
 
@@ -839,7 +840,41 @@ export class ProductsAdminComponent extends LoadingComponentBase implements OnIn
       filtered = filtered.filter(p => p.status === this.selectedStatusFilter);
     }
 
+    if (this.showFeaturedOnly) {
+      filtered = filtered.filter(p => p.featuredOnHome === true);
+    }
+
     return filtered;
+  }
+
+  getCollectionDebugLabel(product: Product): string {
+    if (!product) {
+      return '—';
+    }
+
+    const tokens = new Set<string>();
+    const addToken = (token: unknown) => {
+      if (!token) return;
+      if (typeof token === 'string') {
+        const trimmed = token.trim();
+        if (trimmed) tokens.add(trimmed);
+        return;
+      }
+      if (typeof token === 'object') {
+        const obj = token as { id?: string; slug?: string };
+        if (obj.id) tokens.add(obj.id);
+        if (obj.slug) tokens.add(obj.slug);
+      }
+    };
+
+    (product.collectionIds || []).forEach(addToken);
+    addToken((product as any).collectionId);
+    const collections = (product as any).collections;
+    if (Array.isArray(collections)) {
+      collections.forEach(addToken);
+    }
+
+    return tokens.size ? Array.from(tokens).join(', ') : '—';
   }
 
   openCreateModal() {
