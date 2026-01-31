@@ -7,7 +7,8 @@ import {
   signOut,
   user,
   User,
-  updateProfile
+  updateProfile,
+  sendPasswordResetEmail
 } from '@angular/fire/auth';
 import { 
   Firestore, 
@@ -352,15 +353,15 @@ export class AuthService {
   private async sendNewUserNotification(uid: string, email: string, displayName: string): Promise<void> {
     try {
       const settings = await this.settingsService.getSettings();
-      
+
       if (!settings.newUserNotifications) {
         this.logger.debug('AuthService new user notifications disabled, skipping email');
         return;
       }
-      
+
       const recipientEmail = settings.notificationEmail || settings.contactEmail;
       this.logger.debug('AuthService sending new user notification to', recipientEmail);
-      
+
       const emailData = {
         to: recipientEmail,
         subject: this.brandConfig.emails.notifications?.['newUser']?.subject || `🎉 New User Registration - ${this.brandConfig.siteName}`,
@@ -381,7 +382,7 @@ export class AuthService {
           </div>
         `
       };
-      
+
       const result = await this.emailService.queueEmail(emailData);
       if (result.success) {
         this.logger.debug('AuthService new user notification email queued successfully');
@@ -389,6 +390,25 @@ export class AuthService {
     } catch (error) {
       this.logger.error('AuthService error sending new user notification', error);
       // Don't throw - notification failure shouldn't break registration
+    }
+  }
+
+  /**
+   * Send password reset email to user
+   */
+  async sendPasswordReset(email: string): Promise<void> {
+    try {
+      await sendPasswordResetEmail(this.auth, email);
+      this.logger.debug('AuthService password reset email sent to', email);
+    } catch (error: any) {
+      this.logger.error('AuthService error sending password reset email', error);
+      // Don't reveal if email exists for security
+      if (error.code === 'auth/user-not-found') {
+        // Silently succeed to prevent email enumeration
+        this.logger.debug('AuthService user not found, but not revealing this');
+        return;
+      }
+      throw error;
     }
   }
 }

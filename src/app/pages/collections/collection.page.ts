@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { ProductsService } from '../../services/products.service';
 import { Product } from '../../models/product';
-import { PageHeaderComponent, Breadcrumb } from '../../shared/components/page-header/page-header.component';
+import { PageHeaderComponent } from '../../shared/components/page-header/page-header.component';
 import { ProductCardComponent } from '../../shared/components/product-card/product-card.component';
 import { MetaService } from '../../services/meta.service';
 import { CollectionsService, CollectionDoc } from '../../services/collections.service';
@@ -32,10 +32,6 @@ export class CollectionPageComponent implements OnInit {
   subtitle = '';
   private readonly defaultSubtitle = 'Curated personalised gifts crafted with warm materials and thoughtful engraving.';
   collection: CollectionDoc | null = null;
-  breadcrumbs: Breadcrumb[] = [
-    { label: 'Home', url: '/', icon: 'home' },
-    { label: 'Collections', url: '/collections' }
-  ];
 
   products: Product[] = [];
   filtered: Product[] = [];
@@ -48,7 +44,6 @@ export class CollectionPageComponent implements OnInit {
   async ngOnInit() {
     this.slug = this.route.snapshot.paramMap.get('slug') || '';
     await this.loadCollection();
-    this.breadcrumbs.push({ label: this.title });
     await this.loadProducts();
   }
 

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { CollectionsService, CollectionDoc } from '../../services/collections.service';
-import { PageHeaderComponent, Breadcrumb } from '../../shared/components/page-header/page-header.component';
+import { PageHeaderComponent } from '../../shared/components/page-header/page-header.component';
 
 @Component({
   selector: 'app-collections-index',
@@ -15,11 +15,6 @@ import { PageHeaderComponent, Breadcrumb } from '../../shared/components/page-he
 export class CollectionsIndexPageComponent implements OnInit {
   private collectionsService = inject(CollectionsService);
   private cdr = inject(ChangeDetectorRef);
-
-  breadcrumbs: Breadcrumb[] = [
-    { label: 'nav.home', url: '/', icon: 'home' },
-    { label: 'collections.title' }
-  ];
 
   collections: CollectionDoc[] = [];
   isLoading = true;

@@ -234,6 +234,17 @@
   .page-hero__decor {
     opacity: 0.25;
   }
+
+  // Text background box for better readability on hero images
+  .page-hero__heading {
+    background: color-mix(in srgb, var(--ts-bg) 85%, transparent);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: clamp(1.5rem, 4vw, 2.5rem);
+    border-radius: var(--radius-xl, 1rem);
+    border: 1px solid color-mix(in srgb, var(--ts-line) 50%, transparent);
+    box-shadow: 0 4px 24px color-mix(in srgb, var(--ts-ink) 8%, transparent);
+  }
 }
 
 // Centered alignment
@@ -286,6 +297,11 @@
     background-size: 200% 200%;
     -webkit-background-clip: text;
     background-clip: text;
+  }
+
+  // Hero variant heading box with seasonal accent
+  .page-hero--hero .page-hero__heading {
+    border-color: color-mix(in srgb, var(--season-rose, #e16888) 15%, var(--ts-line));
   }
 }
 

@@ -119,6 +119,11 @@ export const routes: Routes = [
     title: routeTitle('page_titles.register')
   },
   {
+    path: 'client/forgot-password',
+    loadComponent: () => import('./pages/client/forgot-password/forgot-password.page').then(m => m.ForgotPasswordPageComponent),
+    title: routeTitle('page_titles.forgot_password')
+  },
+  {
     path: 'client/profile',
     loadComponent: () => import('./pages/client/profile/profile.page').then(m => m.ProfilePageComponent),
     canActivate: [authGuard],

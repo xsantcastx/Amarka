@@ -15,7 +15,7 @@ import { ThemeService } from '../../services/theme.service';
 import { Product } from '../../models/product';
 import { Category, Model, Tag } from '../../models/catalog';
 import { Media } from '../../models/media';
-import { PageHeaderComponent, Breadcrumb } from '../../shared/components/page-header/page-header.component';
+import { PageHeaderComponent } from '../../shared/components/page-header/page-header.component';
 import { LoadingComponentBase } from '../../core/classes/loading-component.base';
 import { firstValueFrom } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
@@ -40,13 +40,7 @@ export class ProductosPageComponent extends LoadingComponentBase implements OnIn
   private themeService = inject(ThemeService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
-  
-  // Breadcrumbs for navigation
-  breadcrumbs: Breadcrumb[] = [
-    { label: 'nav.home', url: '/', icon: 'home' },
-    { label: 'nav.products', icon: 'products' }
-  ];
-  
+
   // Firestore products
   allProducts: Product[] = [];
   filteredProducts: Product[] = [];

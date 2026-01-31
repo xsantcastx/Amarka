@@ -1,24 +1,14 @@
-﻿<section class="section-gap bg-ts-bg">
-  <div class="page-container">
-    <div class="luxury-hero">
-      <div class="luxury-hero__content">
-        <span class="badge">Our Portfolio</span>
-        <h1 class="luxury-hero__title">{{ heroTitle }}</h1>
-        <p class="luxury-hero__subtitle">
-          {{ heroSubtitle }}
-        </p>
-        <div class="luxury-hero__actions">
-          <a routerLink="/contacto" class="btn-primary">Book a consultation</a>
-          <a routerLink="/servicios" class="btn-secondary">View services</a>
-        </div>
-      </div>
-      <div class="luxury-hero__media">
-        <div class="badge absolute top-3.5 right-3.5 shadow-soft">Curated gallery</div>
-        <img [src]="heroImage" alt="Event gallery highlights" loading="lazy" />
-      </div>
-    </div>
+<!-- Gallery Page Header -->
+<app-page-header
+  [title]="'gallery.title' | translate"
+  [subtitle]="'gallery.subtitle' | translate"
+  [badgeText]="'gallery.badge' | translate"
+  variant="featured">
+  <div slot="actions" class="flex flex-wrap gap-3 justify-center">
+    <a routerLink="/contacto" class="btn-primary">{{ 'gallery.cta_consultation' | translate }}</a>
+    <a routerLink="/productos" class="btn-secondary">{{ 'gallery.cta_products' | translate }}</a>
   </div>
-</section>
+</app-page-header>
 
 <!-- Enhanced Category Filters with Tag Icons & Colors -->
 <section class="py-6 bg-ts-bg-soft border-b border-ts-line">
@@ -32,7 +22,7 @@
           <svg class="w-5 h-5 text-ts-ink" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
           </svg>
-          <span>{{ showFilters ? 'Hide Tags' : 'Show Tags' }}</span>
+          <span>{{ showFilters ? ('gallery.hide_tags' | translate) : ('gallery.show_tags' | translate) }}</span>
           <svg 
             class="w-4 h-4 transition-transform"
             [class.rotate-180]="showFilters"
@@ -54,7 +44,7 @@
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
             </svg>
-            <span class="hidden sm:inline">Projects</span>
+            <span class="hidden sm:inline">{{ 'gallery.view_projects' | translate }}</span>
           </button>
           <button
             (click)="viewMode = 'grid'"
@@ -65,7 +55,7 @@
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
             </svg>
-            <span class="hidden sm:inline">Grid</span>
+            <span class="hidden sm:inline">{{ 'gallery.view_grid' | translate }}</span>
           </button>
         </div>
 
@@ -81,7 +71,7 @@
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"></path>
               </svg>
-              Random
+              {{ 'gallery.sort_random' | translate }}
             </button>
             <button
               (click)="changeSortOrder('recent')"
@@ -92,7 +82,7 @@
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
               </svg>
-              Recent
+              {{ 'gallery.sort_recent' | translate }}
             </button>
             <button
               (click)="changeSortOrder('popular')"
@@ -103,7 +93,7 @@
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
               </svg>
-              Popular
+              {{ 'gallery.sort_popular' | translate }}
             </button>
           </div>
         }
@@ -115,10 +105,10 @@
           <span class="px-3 py-1 bg-ts-accent/20 border border-ts-line text-ts-ink text-sm font-medium rounded-full">
             {{ filteredProjects.length }} / {{ allProjects.length }} projects
           </span>
-          <button 
+          <button
             (click)="filtrarPorCategoria('todos')"
             class="px-3 py-1 bg-ts-paper hover:bg-ts-bg-soft border border-ts-line text-ts-ink text-sm font-medium rounded-full transition-colors">
-            View All
+            {{ 'collections.view_all' | translate }}
           </button>
         </div>
       }
@@ -349,12 +339,12 @@
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
               </svg>
-              <span>Loading...</span>
+              <span>{{ 'common.loading' | translate }}</span>
             } @else {
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
               </svg>
-              <span>Load More Images</span>
+              <span>{{ 'gallery.load_more' | translate }}</span>
             }
           </button>
           <p class="mt-4 text-sm text-ts-ink-soft">

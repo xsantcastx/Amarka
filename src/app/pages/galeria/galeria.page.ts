@@ -1,7 +1,9 @@
 import { Component, OnInit, inject, PLATFORM_ID, ViewChild, ElementRef, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
+import { PageHeaderComponent } from '../../shared/components/page-header/page-header.component';
 import { CategoriaGaleria, GaleriaItem } from '../../core/services/data.service';
 import { Firestore, collection, query, where, orderBy, getDocs, QueryDocumentSnapshot } from '@angular/fire/firestore';
 import { Auth, user } from '@angular/fire/auth';
@@ -31,7 +33,7 @@ interface GalleryProject {
 @Component({
   selector: 'app-galeria-page',
   standalone: true,
-  imports: [CommonModule, TranslateModule, FormsModule],
+  imports: [CommonModule, TranslateModule, FormsModule, RouterLink, PageHeaderComponent],
   templateUrl: './galeria.page.html',
   styleUrl: './galeria.page.scss'
 })

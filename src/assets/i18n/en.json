@@ -47,7 +47,8 @@
     "email_templates": "Email Templates",
     "size_groups": "Size Groups",
     "reviews": "Reviews",
-    "not_found": "Page Not Found"
+    "not_found": "Page Not Found",
+    "forgot_password": "Forgot Password"
   },
   "client": {
     "login": "Login",
@@ -137,7 +138,12 @@
       "weak_password": "Password is too weak",
       "registration_failed": "Registration failed. Please try again.",
       "login_failed": "Login failed. Please check your credentials.",
-      "name_required": "Name is required and must be at least 3 characters"
+      "name_required": "Name is required and must be at least 3 characters",
+      "email_required": "Email is required",
+      "email_invalid": "Please enter a valid email address",
+      "password_required": "Password is required",
+      "password_min_length": "Password is too short",
+      "password_reset_failed": "Failed to send reset email. Please try again."
     },
     "orders": "My Orders",
     "orders_subtitle": "Track and manage your orders",
@@ -162,7 +168,13 @@
     "download_invoice": "Download Invoice",
     "my_profile": "My Profile",
     "no_account": "Don't have an account?",
-    "already_have_account": "Already have an account?"
+    "already_have_account": "Already have an account?",
+    "forgot_password": "Forgot password?",
+    "forgot_password_title": "Reset Your Password",
+    "forgot_password_subtitle": "Enter your email and we'll send you a reset link.",
+    "forgot_password_email_sent": "Password reset email sent! Check your inbox.",
+    "forgot_password_submit": "Send Reset Link",
+    "forgot_password_back_to_login": "Back to Login"
   },
   "common": {
     "active": "Active",
@@ -211,6 +223,32 @@
     "customization_note_required": "Please add your note.",
     "customization_link_required": "Please add your link.",
     "customization_logo_required": "Please upload a logo file."
+  },
+  "gallery": {
+    "title": "Our Portfolio",
+    "subtitle": "Explore our curated collection of personalized and engraved creations.",
+    "badge": "Gallery",
+    "curated_badge": "Curated gallery",
+    "cta_consultation": "Book a consultation",
+    "cta_products": "Browse products",
+    "show_tags": "Show Tags",
+    "hide_tags": "Hide Tags",
+    "view_projects": "Projects",
+    "view_grid": "Grid",
+    "sort_random": "Random",
+    "sort_recent": "Recent",
+    "sort_popular": "Popular",
+    "load_more": "Load More Images",
+    "all_projects": "All Projects",
+    "showing_all": "Showing all projects",
+    "showing": "Showing",
+    "projects": "projects",
+    "view": "View",
+    "of": "of",
+    "project": "Project",
+    "global": "Global",
+    "no_projects": "No projects found",
+    "no_projects_message": "Try adjusting your filters or check back soon for new content."
   },
   "home": {
     "loading": "Loading content...",
