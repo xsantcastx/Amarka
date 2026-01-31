@@ -7,6 +7,10 @@
   display: block;
 }
 
+.page-hero__inner {
+  padding-top: clamp(6rem, 12vw, 7.5rem);
+}
+
 // Background image support
 .page-hero__bg-image {
   position: absolute;

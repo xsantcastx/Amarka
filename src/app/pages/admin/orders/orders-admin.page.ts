@@ -20,7 +20,7 @@ interface OrderItem {
   imageUrl?: string;
   customizationId?: string;
   customization?: {
-    logoUrl: string;
+    logoUrl?: string;
     logoFilename?: string;
     baseImageUrl?: string;
     placement?: {
@@ -30,6 +30,8 @@ interface OrderItem {
       height: number;
       rotation?: number;
     };
+    note?: string;
+    link?: string;
   };
 }
 
@@ -259,7 +261,7 @@ export class OrdersAdminComponent implements OnInit {
   }
 
   hasCustomization(item: OrderItem): boolean {
-    return !!item.customization?.logoUrl;
+    return !!item.customization?.logoUrl || !!item.customization?.note || !!item.customization?.link;
   }
 
   getCustomizationBaseImage(item: OrderItem): string {

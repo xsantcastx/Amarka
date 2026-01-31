@@ -257,7 +257,7 @@
 
                 <div *ngIf="hasCustomization(item)" class="mt-4">
                   <div class="text-xs font-semibold text-ts-ink mb-2">{{ 'admin.orders.customization_preview' | translate }}</div>
-                  <div class="rounded-lg border border-ts-line bg-ts-bg-soft/40 p-3">
+                  <div *ngIf="item.customization?.logoUrl" class="rounded-lg border border-ts-line bg-ts-bg-soft/40 p-3">
                     <div class="relative aspect-[4/3] overflow-hidden rounded-lg bg-ts-bg-soft/60 border border-ts-line/30">
                       <img *ngIf="getCustomizationBaseImage(item)" [src]="getCustomizationBaseImage(item)" [alt]="item.name" class="w-full h-full object-cover">
                       <div *ngIf="!getCustomizationBaseImage(item)" class="w-full h-full flex items-center justify-center text-xs text-ts-ink-soft">
@@ -273,6 +273,18 @@
                        class="mt-2 inline-flex items-center gap-2 text-xs font-semibold text-ts-accent hover:text-ts-accent/80">
                       {{ 'admin.orders.download_logo' | translate }}
                     </a>
+                  </div>
+                  <div *ngIf="item.customization?.note || item.customization?.link" class="mt-2 space-y-1 text-xs text-ts-ink-soft">
+                    <div *ngIf="item.customization?.note">
+                      <span class="font-semibold text-ts-ink">{{ 'product.customization_note_label' | translate }}:</span>
+                      <span class="ml-1">{{ item.customization?.note }}</span>
+                    </div>
+                    <div *ngIf="item.customization?.link">
+                      <span class="font-semibold text-ts-ink">{{ 'product.customization_link_label' | translate }}:</span>
+                      <a [href]="item.customization?.link" target="_blank" rel="noopener" class="ml-1 text-ts-accent hover:text-ts-accent/80">
+                        {{ item.customization?.link }}
+                      </a>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -342,7 +354,7 @@
       </div>
 
       <div class="flex items-center gap-3 pt-2">
-        <button (click)="updateStatus()" class="flex-1 px-4 py-2 rounded-xl bg-ts-ink text-ts-paper font-medium hover:bg-ts-ink/90 transition-colors">
+        <button (click)="updateStatus()" class="flex-1 px-4 py-2 rounded-xl bg-ts-accent text-ts-ink font-semibold hover:bg-ts-accent/90 transition-colors">
           {{ 'common.save' | translate }}
         </button>
         <button (click)="closeStatusModal()" class="flex-1 px-4 py-2 rounded-xl bg-ts-bg-soft border border-ts-line text-ts-ink font-medium hover:border-ts-accent transition-colors">

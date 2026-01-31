@@ -68,6 +68,13 @@ export interface ProductCustomizationConfig {
   placement?: ProductCustomizationPlacement;  // Legacy single-zone placement
   zones?: CustomizationZone[];                // Multi-zone placements
   maxTotalLogos?: number;                     // Max total logos across all zones (default 5)
+  clientInput?: ProductClientInputConfig;     // Required client-provided fields
+}
+
+export interface ProductClientInputConfig {
+  note?: boolean;
+  link?: boolean;
+  logo?: boolean;
 }
 
 export interface BulkPricingTier {

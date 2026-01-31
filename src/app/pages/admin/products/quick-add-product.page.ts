@@ -126,6 +126,9 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
   newZoneName = '';
   newZoneId = '';
   zoneIdManuallyEdited = false;
+  zoneImageFiles: Record<string, File | null> = {};
+  zoneImagePreviews: Record<string, string> = {};
+  zoneImageUploading: Record<string, boolean> = {};
 
   // Preset zone templates for common product types
   readonly zonePresets: { name: string; zones: Omit<CustomizationZone, 'id'>[] }[] = [
@@ -186,6 +189,9 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
       customizationHeight: [30, [Validators.min(1), Validators.max(100)]],
       customizationRotation: [0],
       maxTotalLogos: [5, [Validators.min(1), Validators.max(20)]],
+      clientNoteRequired: [false],
+      clientLinkRequired: [false],
+      clientLogoRequired: [false],
       featuredOnHome: [false],
       featuredPriority: [0, [Validators.min(0)]],
       // SEO fields
@@ -282,6 +288,9 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
         customizationHeight: product.customization?.placement?.height ?? 30,
         customizationRotation: product.customization?.placement?.rotation ?? 0,
         maxTotalLogos: product.customization?.maxTotalLogos ?? 5,
+        clientNoteRequired: product.customization?.clientInput?.note === true,
+        clientLinkRequired: product.customization?.clientInput?.link === true,
+        clientLogoRequired: product.customization?.clientInput?.logo === true,
         featuredOnHome: product.featuredOnHome === true,
         featuredPriority: product.featuredPriority ?? 0,
         metaTitle: product.seo?.title || '',
@@ -296,6 +305,14 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
         ...zone,
         placement: { ...zone.placement }
       }));
+      this.zoneImageFiles = {};
+      this.zoneImagePreviews = {};
+      this.zoneImageUploading = {};
+      for (const zone of this.customizationZones) {
+        if (zone.baseImageUrl) {
+          this.zoneImagePreviews[zone.id] = zone.baseImageUrl;
+        }
+      }
       this.maxTotalLogos = product.customization?.maxTotalLogos ?? 5;
 
       // Load cover preview
@@ -523,6 +540,12 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
       height: this.clamp(formValue.customizationHeight, 1, 100, 30),
       rotation: this.parseNumber(formValue.customizationRotation, 0)
     };
+    const clientInput = {
+      note: !!formValue.clientNoteRequired,
+      link: !!formValue.clientLinkRequired,
+      logo: !!formValue.clientLogoRequired
+    };
+    const hasClientInput = clientInput.note || clientInput.link || clientInput.logo;
 
     // Build zones array with validated placements
     const zones = this.customizationZones.map(zone => ({
@@ -546,7 +569,8 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
         baseImageUrl: baseImageUrl || undefined,
         placement,
         zones: zones.length > 0 ? zones : undefined,
-        maxTotalLogos: this.parseNumber(formValue.maxTotalLogos, 5)
+        maxTotalLogos: this.parseNumber(formValue.maxTotalLogos, 5),
+        ...(hasClientInput ? { clientInput } : {})
       }
     };
   }
@@ -884,6 +908,7 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
       }
 
       const slug = formValue.slug || this.generateSlug(formValue.title);
+      await this.uploadZoneImages(slug);
       const variants = await this.buildVariantsPayload(slug);
       const bulkPricingTiers = this.normalizeBulkPricingTiers();
       const customization = this.buildCustomizationPayload(formValue);
@@ -1236,6 +1261,7 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
       id: this.generateSlug(zone.name),
       placement: { ...zone.placement }
     }));
+    this.resetZoneImages();
     this.showAddZoneForm = false;
   }
 
@@ -1274,6 +1300,10 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
    * Remove a customization zone
    */
   removeCustomizationZone(index: number) {
+    const zone = this.customizationZones[index];
+    if (zone) {
+      this.clearZoneImageState(zone.id);
+    }
     this.customizationZones.splice(index, 1);
   }
 
@@ -1358,6 +1388,9 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
 
     const index = this.customizationZones.indexOf(zone);
     this.customizationZones.splice(index + 1, 0, duplicate);
+    if (zone.baseImageUrl) {
+      this.zoneImagePreviews[newId] = zone.baseImageUrl;
+    }
   }
 
   /**
@@ -1372,6 +1405,89 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
    */
   get totalZonesCount(): number {
     return this.customizationZones.length;
+  }
+
+  getZoneImagePreview(zone: CustomizationZone): string | null {
+    return this.zoneImagePreviews[zone.id] || zone.baseImageUrl || null;
+  }
+
+  onZoneImageSelected(event: Event, zone: CustomizationZone) {
+    const input = event.target as HTMLInputElement | null;
+    const file = input?.files?.[0];
+    if (!file) return;
+
+    if (!this.isAllowedImageType(file.type)) {
+      this.setError('product.customization_invalid_file');
+      return;
+    }
+
+    if (file.size > MEDIA_VALIDATION.MAX_SIZE) {
+      this.setError('product.customization_file_too_large');
+      return;
+    }
+
+    const previousPreview = this.zoneImagePreviews[zone.id];
+    if (previousPreview?.startsWith('blob:')) {
+      URL.revokeObjectURL(previousPreview);
+    }
+
+    this.zoneImageFiles[zone.id] = file;
+    this.zoneImagePreviews[zone.id] = URL.createObjectURL(file);
+  }
+
+  clearZoneImage(zone: CustomizationZone) {
+    this.clearZoneImageState(zone.id);
+    zone.baseImageUrl = '';
+  }
+
+  private clearZoneImageState(zoneId: string) {
+    const preview = this.zoneImagePreviews[zoneId];
+    if (preview?.startsWith('blob:')) {
+      URL.revokeObjectURL(preview);
+    }
+    delete this.zoneImagePreviews[zoneId];
+    delete this.zoneImageFiles[zoneId];
+    delete this.zoneImageUploading[zoneId];
+  }
+
+  private resetZoneImages() {
+    for (const preview of Object.values(this.zoneImagePreviews)) {
+      if (preview?.startsWith('blob:')) {
+        URL.revokeObjectURL(preview);
+      }
+    }
+    this.zoneImageFiles = {};
+    this.zoneImagePreviews = {};
+    this.zoneImageUploading = {};
+  }
+
+  private async uploadZoneImages(slug: string) {
+    const uploads = this.customizationZones.map(async zone => {
+      const file = this.zoneImageFiles[zone.id];
+      if (!file) return;
+      this.zoneImageUploading[zone.id] = true;
+      try {
+        const uploadResult = await lastValueFrom(
+          this.storageService.uploadFile(
+            file,
+            `products/zones/${slug}/${zone.id}_${Date.now()}_${file.name}`
+          )
+        );
+        if (uploadResult.downloadURL) {
+          zone.baseImageUrl = uploadResult.downloadURL;
+          this.zoneImagePreviews[zone.id] = uploadResult.downloadURL;
+        }
+      } finally {
+        this.zoneImageUploading[zone.id] = false;
+        this.zoneImageFiles[zone.id] = null;
+      }
+    });
+
+    await Promise.all(uploads);
+  }
+
+  private isAllowedImageType(fileType: string): boolean {
+    return (MEDIA_VALIDATION.ALLOWED_TYPES as readonly string[]).includes(fileType);
   }
 
   // ===== Memory Cleanup =====
@@ -1397,6 +1513,12 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
     for (const variant of this.variantDrafts) {
       if (variant.imagePreview?.startsWith('blob:')) {
         URL.revokeObjectURL(variant.imagePreview);
+      }
+    }
+
+    for (const preview of Object.values(this.zoneImagePreviews)) {
+      if (preview?.startsWith('blob:')) {
+        URL.revokeObjectURL(preview);
       }
     }
 

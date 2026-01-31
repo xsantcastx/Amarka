@@ -76,6 +76,9 @@ export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
   customLogoError = '';
   customLogoFile: File | null = null;
   customPlacementOverride: { x: number; y: number } | null = null;
+  clientNote = '';
+  clientLink = '';
+  clientInputErrors: { note?: string; link?: string; logo?: string } = {};
   private isDraggingCustomization = false;
   private dragOffsetX = 0;
   private dragOffsetY = 0;
@@ -83,8 +86,18 @@ export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // Multi-zone customization
   activeZoneId: string | null = null;
-  zoneCustomizations: Map<string, { file: File; preview: string; placement?: { x: number; y: number } }> = new Map();
+  zoneCustomizations: Map<string, {
+    file: File;
+    preview: string;
+    placement?: { x: number; y: number; width: number; height: number; rotation?: number };
+    scale?: number;
+  }> = new Map();
   zoneErrors: Map<string, string> = new Map();
+  private isDraggingZone = false;
+  private draggingZoneId: string | null = null;
+  private zoneDragOffsetX = 0;
+  private zoneDragOffsetY = 0;
+  private zoneDragContainer: HTMLElement | null = null;
 
   async ngOnInit() {
     // Subscribe to route param changes to reload when navigating between products
@@ -165,6 +178,9 @@ export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
     this.customLogoError = '';
     this.customPlacementOverride = null;
     this.customLogoFile = null;
+    this.clientNote = '';
+    this.clientLink = '';
+    this.clientInputErrors = {};
     // Reset multi-zone state
     this.resetMultiZoneCustomization();
   }
@@ -354,6 +370,7 @@ export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     this.customLogoError = '';
+    this.clientInputErrors.logo = '';
     this.customLogoName = file.name;
     this.customLogoFile = file;
 
@@ -371,6 +388,25 @@ export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
     this.customLogoError = '';
     this.customPlacementOverride = null;
     this.customLogoFile = null;
+    if (this.clientInputErrors.logo) {
+      this.clientInputErrors.logo = '';
+    }
+  }
+
+  onClientNoteChange(event: Event) {
+    const value = (event.target as HTMLTextAreaElement | null)?.value ?? '';
+    this.clientNote = value;
+    if (this.clientInputErrors.note) {
+      this.clientInputErrors.note = '';
+    }
+  }
+
+  onClientLinkChange(event: Event) {
+    const value = (event.target as HTMLInputElement | null)?.value ?? '';
+    this.clientLink = value;
+    if (this.clientInputErrors.link) {
+      this.clientInputErrors.link = '';
+    }
   }
 
   // ===== Multi-Zone Customization Methods =====
@@ -407,6 +443,10 @@ export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.zoneErrors.get(zoneId) || '';
   }
 
+  getZoneBaseImage(zone: CustomizationZone): string | null {
+    return zone.baseImageUrl || this.customizationBaseImageUrl;
+  }
+
   onZoneLogoSelected(event: Event, zone: CustomizationZone) {
     if (!isPlatformBrowser(this.platformId)) return;
 
@@ -429,6 +469,9 @@ export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     this.zoneErrors.delete(zone.id);
+    if (this.clientInputErrors.logo) {
+      this.clientInputErrors.logo = '';
+    }
 
     const reader = new FileReader();
     reader.onload = () => {
@@ -436,7 +479,14 @@ export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
       this.zoneCustomizations.set(zone.id, {
         file,
         preview,
-        placement: { x: zone.placement.x, y: zone.placement.y }
+        placement: {
+          x: zone.placement.x,
+          y: zone.placement.y,
+          width: zone.placement.width,
+          height: zone.placement.height,
+          rotation: zone.placement.rotation
+        },
+        scale: 100
       });
       this.cdr.detectChanges();
     };
@@ -449,6 +499,9 @@ export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.activeZoneId === zoneId) {
       this.activeZoneId = null;
     }
+    if (this.clientInputErrors.logo) {
+      this.clientInputErrors.logo = '';
+    }
     this.cdr.detectChanges();
   }
 
@@ -456,6 +509,9 @@ export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
     this.zoneCustomizations.clear();
     this.zoneErrors.clear();
     this.activeZoneId = null;
+    if (this.clientInputErrors.logo) {
+      this.clientInputErrors.logo = '';
+    }
     this.cdr.detectChanges();
   }
 
@@ -465,11 +521,126 @@ export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
     return {
       top: `${this.clampPercent(placement.y, 0, 100, 35)}%`,
       left: `${this.clampPercent(placement.x, 0, 100, 35)}%`,
-      width: `${this.clampPercent(zone.placement.width, 1, 100, 30)}%`,
-      height: `${this.clampPercent(zone.placement.height, 1, 100, 30)}%`,
-      transform: `rotate(${this.clampPercent(zone.placement.rotation, -180, 180, 0)}deg)`,
+      width: `${this.clampPercent(placement.width ?? zone.placement.width, 1, 100, 30)}%`,
+      height: `${this.clampPercent(placement.height ?? zone.placement.height, 1, 100, 30)}%`,
+      transform: `rotate(${this.clampPercent(placement.rotation ?? zone.placement.rotation, -180, 180, 0)}deg)`,
       transformOrigin: 'center'
     };
+  }
+
+  startZoneDrag(event: MouseEvent | TouchEvent, zone: CustomizationZone, container: HTMLElement) {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    const placement = this.zoneCustomizations.get(zone.id)?.placement || zone.placement;
+    const rect = container.getBoundingClientRect();
+    const overlayLeft = rect.left + (placement.x / 100) * rect.width;
+    const overlayTop = rect.top + (placement.y / 100) * rect.height;
+    const pointer = this.getPointerPosition(event);
+
+    this.zoneDragOffsetX = pointer.x - overlayLeft;
+    this.zoneDragOffsetY = pointer.y - overlayTop;
+    this.isDraggingZone = true;
+    this.draggingZoneId = zone.id;
+    this.zoneDragContainer = container;
+
+    this.addZoneDragListeners();
+  }
+
+  private addZoneDragListeners() {
+    window.addEventListener('mousemove', this.onZoneDragMove);
+    window.addEventListener('mouseup', this.onZoneDragEnd);
+    window.addEventListener('touchmove', this.onZoneDragMove, { passive: false });
+    window.addEventListener('touchend', this.onZoneDragEnd);
+    window.addEventListener('touchcancel', this.onZoneDragEnd);
+  }
+
+  private removeZoneDragListeners() {
+    window.removeEventListener('mousemove', this.onZoneDragMove);
+    window.removeEventListener('mouseup', this.onZoneDragEnd);
+    window.removeEventListener('touchmove', this.onZoneDragMove);
+    window.removeEventListener('touchend', this.onZoneDragEnd);
+    window.removeEventListener('touchcancel', this.onZoneDragEnd);
+  }
+
+  private onZoneDragMove = (event: MouseEvent | TouchEvent) => {
+    if (!this.isDraggingZone || !this.zoneDragContainer || !this.draggingZoneId) {
+      return;
+    }
+
+    const zone = this.customizationZones.find(item => item.id === this.draggingZoneId);
+    if (!zone) {
+      return;
+    }
+
+    event.preventDefault();
+    const rect = this.zoneDragContainer.getBoundingClientRect();
+    const placement = this.zoneCustomizations.get(zone.id)?.placement || zone.placement;
+    const overlayWidth = (placement.width / 100) * rect.width;
+    const overlayHeight = (placement.height / 100) * rect.height;
+
+    const pointer = this.getPointerPosition(event);
+    let nextLeft = pointer.x - rect.left - this.zoneDragOffsetX;
+    let nextTop = pointer.y - rect.top - this.zoneDragOffsetY;
+
+    nextLeft = Math.min(Math.max(0, nextLeft), rect.width - overlayWidth);
+    nextTop = Math.min(Math.max(0, nextTop), rect.height - overlayHeight);
+
+    const nextX = (nextLeft / rect.width) * 100;
+    const nextY = (nextTop / rect.height) * 100;
+
+    const existing = this.zoneCustomizations.get(zone.id);
+    if (existing) {
+      existing.placement = {
+        x: nextX,
+        y: nextY,
+        width: placement.width,
+        height: placement.height,
+        rotation: placement.rotation
+      };
+    }
+
+    this.cdr.detectChanges();
+  };
+
+  private onZoneDragEnd = () => {
+    if (!this.isDraggingZone) {
+      return;
+    }
+    this.isDraggingZone = false;
+    this.draggingZoneId = null;
+    this.zoneDragContainer = null;
+    this.removeZoneDragListeners();
+  };
+
+  getZoneScale(zone: CustomizationZone): number {
+    return this.zoneCustomizations.get(zone.id)?.scale ?? 100;
+  }
+
+  onZoneScaleChange(zone: CustomizationZone, value: number) {
+    const customization = this.zoneCustomizations.get(zone.id);
+    if (!customization) {
+      return;
+    }
+
+    const scale = this.clampPercent(value, 60, 200, 100);
+    const baseWidth = zone.placement.width;
+    const baseHeight = zone.placement.height;
+
+    customization.scale = scale;
+    customization.placement = {
+      x: customization.placement?.x ?? zone.placement.x,
+      y: customization.placement?.y ?? zone.placement.y,
+      width: this.clampPercent(baseWidth * (scale / 100), 1, 100, baseWidth),
+      height: this.clampPercent(baseHeight * (scale / 100), 1, 100, baseHeight),
+      rotation: customization.placement?.rotation ?? zone.placement.rotation
+    };
+
+    this.cdr.detectChanges();
   }
 
   buildZoneCustomizations(): ZoneCustomization[] {
@@ -478,6 +649,7 @@ export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
     for (const zone of this.customizationZones) {
       const customization = this.zoneCustomizations.get(zone.id);
       if (customization) {
+        const placement = customization.placement || zone.placement;
         zones.push({
           zoneId: zone.id,
           zoneName: zone.name,
@@ -486,11 +658,11 @@ export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
             logoUrl: customization.preview, // Will be replaced with actual URL after upload
             logoFilename: customization.file.name,
             placement: {
-              x: customization.placement?.x ?? zone.placement.x,
-              y: customization.placement?.y ?? zone.placement.y,
-              width: zone.placement.width,
-              height: zone.placement.height,
-              rotation: zone.placement.rotation
+              x: placement.x ?? zone.placement.x,
+              y: placement.y ?? zone.placement.y,
+              width: placement.width ?? zone.placement.width,
+              height: placement.height ?? zone.placement.height,
+              rotation: placement.rotation ?? zone.placement.rotation
             }
           }]
         });
@@ -533,19 +705,41 @@ export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.normalizeBulkPricingTiers(this.producto?.bulkPricingTiers);
   }
 
+  get clientInputConfig() {
+    return this.producto?.customization?.clientInput || {};
+  }
+
+  get requiresNote(): boolean {
+    return !!this.clientInputConfig.note;
+  }
+
+  get requiresLink(): boolean {
+    return !!this.clientInputConfig.link;
+  }
+
+  get requiresLogoInput(): boolean {
+    return !!this.clientInputConfig.logo;
+  }
+
+  get hasClientInputs(): boolean {
+    return this.requiresNote || this.requiresLink || this.requiresLogoInput;
+  }
+
+  get showLogoCustomization(): boolean {
+    const hasPlacement = !!this.producto?.customization?.placement;
+    return this.requiresLogoInput || this.hasMultipleZones || this.producto?.customizable === true || hasPlacement;
+  }
+
   get isCustomizable(): boolean {
-    return this.producto?.customizable === true;
+    return this.producto?.customizable === true || this.hasMultipleZones || this.hasClientInputs;
   }
 
   get customizationBaseImageUrl(): string | null {
     if (!this.producto) {
       return null;
     }
-    const baseImage = this.producto.customization?.baseImageUrl;
-    if (baseImage) {
-      return baseImage;
-    }
-    return this.coverImage?.url || this.producto.imageUrl || null;
+    const baseImage = (this.producto.customization?.baseImageUrl || '').trim();
+    return baseImage || null;
   }
 
   get customizationPlacement() {
@@ -887,40 +1081,139 @@ export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private async buildCustomizationPayload(): Promise<CartItemCustomization | null> {
-    if (!this.producto || !this.producto.id || !this.customLogoFile) {
+    if (!this.producto || !this.producto.id) {
       return null;
     }
 
-    const user = this.auth.currentUser;
-    if (!user) {
-      this.addError = 'Please log in to save your custom logo.';
-      return null;
-    }
-
-    const cartId = await this.cartService.ensureCartId();
-    if (!cartId) {
-      this.addError = 'We could not save your logo. Please try again.';
+    const hasZoneUploads = this.zoneCustomizations.size > 0;
+    const trimmedNote = (this.clientNote || '').trim();
+    const trimmedLink = (this.clientLink || '').trim();
+    if (!this.customLogoFile && !hasZoneUploads && !trimmedNote && !trimmedLink) {
       return null;
     }
 
     const customizationId = this.generateCustomizationId();
-    const safeFilename = this.sanitizeFilename(this.customLogoFile.name);
-    const storagePath = `customizations/${user.uid}/${cartId}/${this.producto.id}/${customizationId}-${safeFilename}`;
 
-    const uploadResult = await lastValueFrom(this.storageService.uploadFile(this.customLogoFile, storagePath));
-    const logoUrl = uploadResult.downloadURL;
-    if (!logoUrl) {
-      this.addError = 'We could not save your logo. Please try again.';
-      return null;
+    let logoUrl = '';
+    let logoFilename: string | undefined;
+
+    if (this.customLogoFile || hasZoneUploads) {
+      const user = this.auth.currentUser;
+      if (!user) {
+        this.addError = 'Please log in to save your custom logo.';
+        return null;
+      }
+
+      const cartId = await this.cartService.ensureCartId();
+      if (!cartId) {
+        this.addError = 'We could not save your logo. Please try again.';
+        return null;
+      }
+
+      if (this.customLogoFile) {
+        const safeFilename = this.sanitizeFilename(this.customLogoFile.name);
+        const storagePath = `customizations/${user.uid}/${cartId}/${this.producto.id}/${customizationId}-${safeFilename}`;
+
+        const uploadResult = await lastValueFrom(this.storageService.uploadFile(this.customLogoFile, storagePath));
+        logoUrl = uploadResult.downloadURL || '';
+        logoFilename = this.customLogoFile.name;
+        if (!logoUrl) {
+          this.addError = 'We could not save your logo. Please try again.';
+          return null;
+        }
+      }
+
+      const zones: ZoneCustomization[] = [];
+      if (hasZoneUploads) {
+        for (const zone of this.customizationZones) {
+          const customization = this.zoneCustomizations.get(zone.id);
+          if (!customization) {
+            continue;
+          }
+
+          const safeFilename = this.sanitizeFilename(customization.file.name);
+          const storagePath = `customizations/${user.uid}/${cartId}/${this.producto.id}/${customizationId}-${zone.id}-${safeFilename}`;
+          const uploadResult = await lastValueFrom(this.storageService.uploadFile(customization.file, storagePath));
+          const zoneLogoUrl = uploadResult.downloadURL || '';
+          if (!zoneLogoUrl) {
+            this.addError = 'We could not save your logo. Please try again.';
+            return null;
+          }
+
+          const placement = customization.placement || zone.placement;
+          zones.push({
+            zoneId: zone.id,
+            zoneName: zone.name,
+            baseImageUrl: zone.baseImageUrl,
+            logos: [{
+              logoUrl: zoneLogoUrl,
+              logoFilename: customization.file.name,
+              placement: {
+                x: placement.x ?? zone.placement.x,
+                y: placement.y ?? zone.placement.y,
+                width: placement.width ?? zone.placement.width,
+                height: placement.height ?? zone.placement.height,
+                rotation: placement.rotation ?? zone.placement.rotation
+              }
+            }]
+          });
+
+          if (!logoUrl) {
+            logoUrl = zoneLogoUrl;
+            logoFilename = customization.file.name;
+          }
+        }
+      }
+
+      return {
+        id: customizationId,
+        logoUrl,
+        logoFilename,
+        baseImageUrl: this.customizationBaseImageUrl || undefined,
+        placement: this.customizationPlacement,
+        note: trimmedNote || undefined,
+        link: trimmedLink || undefined,
+        zones: zones.length ? zones : undefined
+      };
     }
 
     return {
       id: customizationId,
       logoUrl,
-      logoFilename: this.customLogoFile.name,
+      logoFilename,
       baseImageUrl: this.customizationBaseImageUrl || undefined,
-      placement: this.customizationPlacement
+      placement: this.customizationPlacement,
+      note: trimmedNote || undefined,
+      link: trimmedLink || undefined
     };
+  }
+
+  private validateClientInputs(): boolean {
+    const errors: { note?: string; link?: string; logo?: string } = {};
+    const noteValue = (this.clientNote || '').trim();
+    const linkValue = (this.clientLink || '').trim();
+
+    if (this.requiresNote && !noteValue) {
+      errors.note = 'product.customization_note_required';
+    }
+    if (this.requiresLink && !linkValue) {
+      errors.link = 'product.customization_link_required';
+    }
+    if (this.requiresLogoInput && this.totalUploadedLogos === 0) {
+      errors.logo = 'product.customization_logo_required';
+    }
+
+    this.clientInputErrors = errors;
+    if (errors.logo && !this.customLogoFile && !this.hasMultipleZones) {
+      this.customLogoError = errors.logo;
+    }
+
+    if (Object.keys(errors).length > 0) {
+      this.addError = errors.note || errors.link || errors.logo || 'Please complete the required fields.';
+      this.cdr.detectChanges();
+      return false;
+    }
+    return true;
   }
 
   async addToCart() {
@@ -939,7 +1232,12 @@ export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
 
     try {
       let customizationPayload: CartItemCustomization | null = null;
-      if (this.isCustomizable && this.customLogoFile) {
+      if (this.hasClientInputs && !this.validateClientInputs()) {
+        this.addInProgress = false;
+        this.cdr.detectChanges();
+        return;
+      }
+      if (this.isCustomizable && (this.customLogoFile || this.zoneCustomizations.size > 0 || this.hasClientInputs)) {
         customizationPayload = await this.buildCustomizationPayload();
         if (!customizationPayload) {
           this.addInProgress = false;

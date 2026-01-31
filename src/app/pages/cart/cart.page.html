@@ -73,6 +73,18 @@
                         <img [src]="it.customization?.logoUrl" alt="Logo" class="w-10 h-10 object-contain bg-ts-bg-soft border border-ts-line rounded-lg">
                         <span>{{ it.customization?.logoFilename || 'Logo uploaded' }}</span>
                       </div>
+                      <div *ngIf="it.customization?.note || it.customization?.link" class="mt-2 space-y-1 text-xs text-ts-ink-soft">
+                        <div *ngIf="it.customization?.note">
+                          <span class="font-semibold text-ts-ink">{{ 'product.customization_note_label' | translate }}:</span>
+                          <span class="ml-1">{{ it.customization?.note }}</span>
+                        </div>
+                        <div *ngIf="it.customization?.link">
+                          <span class="font-semibold text-ts-ink">{{ 'product.customization_link_label' | translate }}:</span>
+                          <a [href]="it.customization?.link" target="_blank" rel="noopener" class="ml-1 text-ts-accent hover:text-ts-accent/80">
+                            {{ it.customization?.link }}
+                          </a>
+                        </div>
+                      </div>
                     </div>
                     
                     <!-- Remove Button -->

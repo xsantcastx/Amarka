@@ -122,60 +122,205 @@
                 </span>
               </div>
 
-              <div class="space-y-4">
-                <div>
-                  <label class="block text-sm font-medium text-ts-ink mb-2">{{ 'product.customization_upload_label' | translate }}</label>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    (change)="onCustomLogoSelected($event)"
-                    class="block w-full text-sm text-ts-ink file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-ts-accent/20 file:text-ts-ink hover:file:bg-ts-accent/30">
-                  @if (customLogoName) {
-                    <div class="mt-2 flex items-center justify-between text-xs text-ts-ink-soft">
-                      <span>{{ customLogoName }}</span>
-                      <button type="button" (click)="clearCustomLogo()" class="text-ts-accent hover:text-ts-accent/80">
-                        {{ 'product.customization_remove' | translate }}
-                      </button>
+              @if (hasClientInputs) {
+                <div class="mb-4 rounded-xl border border-ts-line/40 bg-ts-bg/60 p-4">
+                  <div class="flex flex-wrap items-start justify-between gap-3">
+                    <div>
+                      <h4 class="text-sm font-semibold text-ts-ink">{{ 'product.customization_client_inputs_title' | translate }}</h4>
+                      <p class="text-xs text-ts-ink-soft">{{ 'product.customization_client_inputs_subtitle' | translate }}</p>
                     </div>
-                  }
-                  @if (customLogoError) {
-                    <p class="mt-2 text-xs text-red-500">{{ customLogoError | translate }}</p>
-                  }
-                </div>
-
-                <div class="rounded-xl border border-ts-line/40 bg-ts-bg-soft/60 p-3">
-                  <div #customizationPreview class="relative aspect-[4/3] overflow-hidden rounded-lg bg-ts-bg-soft/60 border border-ts-line/30">
-                    @if (customizationBaseImageUrl) {
-                      <img [src]="customizationBaseImageUrl" [alt]="producto.name" class="w-full h-full object-cover">
-                    } @else {
-                      <div class="w-full h-full flex items-center justify-center text-xs text-ts-ink-soft">
-                        {{ 'product.customization_missing_base' | translate }}
+                    <span class="text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-full">
+                      {{ 'product.customization_required_badge' | translate }}
+                    </span>
+                  </div>
+                  <div class="mt-4 space-y-3">
+                    @if (requiresNote) {
+                      <div>
+                        <label class="block text-xs font-medium text-ts-ink mb-1">{{ 'product.customization_note_label' | translate }}</label>
+                        <textarea
+                          rows="3"
+                          [value]="clientNote"
+                          (input)="onClientNoteChange($event)"
+                          class="w-full px-3 py-2 rounded-lg border border-ts-line/60 bg-ts-bg-soft/60 text-sm text-ts-ink focus:ring-2 focus:ring-ts-accent/40 focus:border-ts-accent"
+                          [placeholder]="'product.customization_note_placeholder' | translate"></textarea>
+                        @if (clientInputErrors.note) {
+                          <p class="mt-1 text-xs text-red-500">{{ clientInputErrors.note | translate }}</p>
+                        }
                       </div>
                     }
-
-                    <div class="absolute border-2 border-dashed border-ts-accent/60 rounded-lg pointer-events-none" [ngStyle]="customizationAreaStyle"></div>
-
-                    @if (customLogoPreview) {
-                      <img
-                        [src]="customLogoPreview"
-                        alt="Logo preview"
-                        draggable="false"
-                        (mousedown)="startCustomizationDrag($event)"
-                        (touchstart)="startCustomizationDrag($event)"
-                        class="absolute object-contain drop-shadow-lg cursor-move select-none"
-                        [ngStyle]="customizationOverlayStyle">
-                    } @else {
-                      <div class="absolute flex items-center justify-center text-[10px] text-ts-ink-soft bg-ts-bg/50 border border-ts-accent/30 rounded-lg cursor-move select-none"
-                           (mousedown)="startCustomizationDrag($event)"
-                           (touchstart)="startCustomizationDrag($event)"
-                           [ngStyle]="customizationOverlayStyle">
-                        {{ 'product.customization_placeholder' | translate }}
+                    @if (requiresLink) {
+                      <div>
+                        <label class="block text-xs font-medium text-ts-ink mb-1">{{ 'product.customization_link_label' | translate }}</label>
+                        <input
+                          type="url"
+                          [value]="clientLink"
+                          (input)="onClientLinkChange($event)"
+                          class="w-full px-3 py-2 rounded-lg border border-ts-line/60 bg-ts-bg-soft/60 text-sm text-ts-ink focus:ring-2 focus:ring-ts-accent/40 focus:border-ts-accent"
+                          [placeholder]="'product.customization_link_placeholder' | translate">
+                        @if (clientInputErrors.link) {
+                          <p class="mt-1 text-xs text-red-500">{{ clientInputErrors.link | translate }}</p>
+                        }
                       </div>
+                    }
+                    @if (clientInputErrors.logo) {
+                      <p class="text-xs text-red-500">{{ clientInputErrors.logo | translate }}</p>
                     }
                   </div>
-                  <p class="mt-2 text-xs text-ts-ink-soft">{{ 'product.customization_hint' | translate }}</p>
                 </div>
-              </div>
+              }
+
+              @if (showLogoCustomization) {
+                @if (hasMultipleZones) {
+                  <div class="space-y-5">
+                    <div class="flex flex-wrap items-center justify-between gap-3">
+                      <div>
+                        <p class="text-sm font-semibold text-ts-ink">Placement zones</p>
+                        <p class="text-xs text-ts-ink-soft">Upload a logo per zone. Max {{ maxTotalLogos }} total.</p>
+                      </div>
+                      <span class="text-xs font-semibold text-ts-ink bg-ts-bg/60 border border-ts-line/40 px-3 py-1 rounded-full">
+                        {{ totalUploadedLogos }} / {{ maxTotalLogos }} logos
+                      </span>
+                    </div>
+
+                    <div class="grid lg:grid-cols-2 gap-4">
+                      @for (zone of customizationZones; track zone.id; let i = $index) {
+                        <div class="rounded-xl border border-ts-line/40 bg-ts-bg-soft/50 p-4">
+                          <div class="flex items-center justify-between mb-3">
+                            <div class="flex items-center gap-2">
+                              <span class="w-6 h-6 rounded-full bg-ts-accent/20 text-ts-accent text-xs font-bold flex items-center justify-center">{{ i + 1 }}</span>
+                              <h4 class="text-sm font-semibold text-ts-ink">{{ zone.name }}</h4>
+                              @if (zone.required) {
+                                <span class="text-[11px] text-red-600 bg-red-50 px-2 py-0.5 rounded-full">Required</span>
+                              }
+                            </div>
+                            @if (getZoneCustomization(zone.id)) {
+                              <span class="text-[11px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">Logo added</span>
+                            }
+                          </div>
+
+                          <div>
+                            <label class="block text-xs font-medium text-ts-ink mb-2">
+                              {{ 'product.customization_upload_label' | translate }} ({{ zone.name }})
+                            </label>
+                            <input
+                              type="file"
+                              accept="image/*"
+                              (change)="onZoneLogoSelected($event, zone)"
+                              [disabled]="!canUploadMoreLogos && !getZoneCustomization(zone.id)"
+                              class="block w-full text-xs text-ts-ink file:mr-4 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-ts-accent/20 file:text-ts-ink hover:file:bg-ts-accent/30 disabled:opacity-60">
+                            @if (getZoneError(zone.id)) {
+                              <p class="mt-2 text-xs text-red-500">{{ getZoneError(zone.id) | translate }}</p>
+                            }
+                            @if (getZoneCustomization(zone.id)) {
+                              <div class="mt-2 flex items-center justify-between text-xs text-ts-ink-soft">
+                                <span>{{ getZoneCustomization(zone.id)?.file?.name }}</span>
+                                <button type="button" (click)="clearZoneLogo(zone.id)" class="text-ts-accent hover:text-ts-accent/80">
+                                  {{ 'product.customization_remove' | translate }}
+                                </button>
+                              </div>
+                            }
+                          </div>
+
+                          <div class="mt-3 rounded-lg border border-ts-line/40 bg-ts-bg-soft/60 p-2">
+                            <div class="flex items-center justify-between text-xs text-ts-ink-soft mb-2">
+                              <span>Logo size</span>
+                              <span>{{ getZoneScale(zone) }}%</span>
+                            </div>
+                            <input
+                              type="range"
+                              min="60"
+                              max="200"
+                              [value]="getZoneScale(zone)"
+                              [disabled]="!getZoneCustomization(zone.id)"
+                              (input)="onZoneScaleChange(zone, $any($event.target).valueAsNumber)"
+                              class="w-full accent-[#A8C5A4]">
+
+                            <div class="relative aspect-[4/3] overflow-hidden rounded-lg bg-ts-bg-soft/60 border border-ts-line/30 mt-2" #zonePreview>
+                            @if (getZoneBaseImage(zone)) {
+                              <img [src]="getZoneBaseImage(zone)" [alt]="zone.name" class="w-full h-full object-cover">
+                            } @else {
+                              <div class="w-full h-full bg-gradient-to-br from-ts-bg-soft/70 to-ts-bg/50"></div>
+                            }
+
+                              <div class="absolute border-2 border-dashed border-ts-accent/60 rounded-lg pointer-events-none"
+                                   [ngStyle]="getZonePlacementStyle(zone)"></div>
+
+                              @if (getZoneCustomization(zone.id)) {
+                                <img
+                                  [src]="getZoneCustomization(zone.id)?.preview"
+                                  alt="Logo preview"
+                                  class="absolute object-contain drop-shadow-lg cursor-move select-none"
+                                  (mousedown)="startZoneDrag($event, zone, zonePreview)"
+                                  (touchstart)="startZoneDrag($event, zone, zonePreview)"
+                                  [ngStyle]="getZonePlacementStyle(zone)">
+                              } @else {
+                                <div class="absolute flex items-center justify-center text-[10px] text-ts-ink-soft bg-ts-bg/50 border border-ts-accent/30 rounded-lg select-none"
+                                     [ngStyle]="getZonePlacementStyle(zone)">
+                                  {{ 'product.customization_placeholder' | translate }}
+                                </div>
+                              }
+                            </div>
+                            <p class="mt-2 text-xs text-ts-ink-soft">{{ 'product.customization_hint' | translate }}</p>
+                          </div>
+                        </div>
+                      }
+                    </div>
+                  </div>
+                } @else {
+                  <div class="space-y-4">
+                    <div>
+                      <label class="block text-sm font-medium text-ts-ink mb-2">{{ 'product.customization_upload_label' | translate }}</label>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        (change)="onCustomLogoSelected($event)"
+                        class="block w-full text-sm text-ts-ink file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-ts-accent/20 file:text-ts-ink hover:file:bg-ts-accent/30">
+                      @if (customLogoName) {
+                        <div class="mt-2 flex items-center justify-between text-xs text-ts-ink-soft">
+                          <span>{{ customLogoName }}</span>
+                          <button type="button" (click)="clearCustomLogo()" class="text-ts-accent hover:text-ts-accent/80">
+                            {{ 'product.customization_remove' | translate }}
+                          </button>
+                        </div>
+                      }
+                      @if (customLogoError) {
+                        <p class="mt-2 text-xs text-red-500">{{ customLogoError | translate }}</p>
+                      }
+                    </div>
+
+                    <div class="rounded-xl border border-ts-line/40 bg-ts-bg-soft/60 p-3">
+                      <div #customizationPreview class="relative aspect-[4/3] overflow-hidden rounded-lg bg-ts-bg-soft/60 border border-ts-line/30">
+                      @if (customizationBaseImageUrl) {
+                        <img [src]="customizationBaseImageUrl" [alt]="producto.name" class="w-full h-full object-cover">
+                      } @else {
+                        <div class="w-full h-full bg-gradient-to-br from-ts-bg-soft/70 to-ts-bg/50"></div>
+                      }
+
+                        <div class="absolute border-2 border-dashed border-ts-accent/60 rounded-lg pointer-events-none" [ngStyle]="customizationAreaStyle"></div>
+
+                        @if (customLogoPreview) {
+                          <img
+                            [src]="customLogoPreview"
+                            alt="Logo preview"
+                            draggable="false"
+                            (mousedown)="startCustomizationDrag($event)"
+                            (touchstart)="startCustomizationDrag($event)"
+                            class="absolute object-contain drop-shadow-lg cursor-move select-none"
+                            [ngStyle]="customizationOverlayStyle">
+                        } @else {
+                          <div class="absolute flex items-center justify-center text-[10px] text-ts-ink-soft bg-ts-bg/50 border border-ts-accent/30 rounded-lg cursor-move select-none"
+                               (mousedown)="startCustomizationDrag($event)"
+                               (touchstart)="startCustomizationDrag($event)"
+                               [ngStyle]="customizationOverlayStyle">
+                            {{ 'product.customization_placeholder' | translate }}
+                          </div>
+                        }
+                      </div>
+                      <p class="mt-2 text-xs text-ts-ink-soft">{{ 'product.customization_hint' | translate }}</p>
+                    </div>
+                  </div>
+                }
+              }
             </div>
           }
         </div>
@@ -297,7 +442,7 @@
             }
           </button>
           @if (addError) {
-            <p class="text-sm text-red-500 text-center">{{ addError }}</p>
+            <p class="text-sm text-red-500 text-center">{{ addError | translate }}</p>
           }
 
           <!-- Request Consultation -->

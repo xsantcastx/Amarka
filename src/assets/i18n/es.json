@@ -79,6 +79,8 @@
     "my_orders": "Mis Pedidos",
     "name": "Nombre",
     "email": "Correo electrónico",
+    "password": "Contraseña",
+    "confirm_password": "Confirmar contraseña",
     "phone": "Teléfono",
     "company": "Empresa",
     "not_provided": "No proporcionado",
@@ -153,7 +155,9 @@
     "cancel_order": "Cancelar Pedido",
     "contact_support": "Contactar Soporte",
     "download_invoice": "Descargar Factura",
-    "my_profile": "Mi Perfil"
+    "my_profile": "Mi Perfil",
+    "no_account": "Â¿No tienes cuenta?",
+    "already_have_account": "�Ya tienes cuenta?"
   },
   "common": {
     "loading": "Cargando...",
@@ -190,7 +194,18 @@
     "customization_placeholder": "Ãrea del logo",
     "customization_hint": "La vista previa se actualiza al instante con tu imagen. Arrastra para ajustar.",
     "customization_invalid_file": "Sube una imagen vÃ¡lida.",
-    "customization_file_too_large": "El archivo es muy grande. MÃ¡ximo 5MB."
+    "customization_file_too_large": "El archivo es muy grande. MÃ¡ximo 5MB.",
+    "max_logos_reached": "Has alcanzado el mÃ¡ximo de logos.",
+    "customization_client_inputs_title": "Detalles del pedido",
+    "customization_client_inputs_subtitle": "Comparte notas y enlaces para preparar tu pedido personalizado.",
+    "customization_required_badge": "Requerido",
+    "customization_note_label": "Nota",
+    "customization_note_placeholder": "Agrega tallas, ubicaciÃ³n u otras instrucciones...",
+    "customization_link_label": "Enlace de referencia",
+    "customization_link_placeholder": "Pega un enlace a tu logo, guÃ­a de marca o ejemplo",
+    "customization_note_required": "Por favor agrega tu nota.",
+    "customization_link_required": "Por favor agrega tu enlace.",
+    "customization_logo_required": "Por favor sube un archivo de logo."
   },
   "home": {
     "hero": {

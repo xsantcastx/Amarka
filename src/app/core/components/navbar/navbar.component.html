@@ -1,7 +1,7 @@
 <header class="app-navbar fixed inset-x-0 top-0 z-50">
   <!-- Top rail -->
   <div class="bg-ts-paper border-b border-ts-line shadow-sm">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 flex items-center gap-4">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 grid grid-cols-[auto,1fr,auto] items-center gap-4">
       <!-- Left: logo -->
       <div class="flex items-center gap-3 flex-shrink-0">
         <a routerLink="/">
@@ -11,7 +11,7 @@
 
       <!-- Center: search -->
       <div
-        class="hidden md:flex items-stretch w-full max-w-[420px] rounded-xl overflow-hidden border border-ts-line bg-ts-paper shadow-lvl1">
+        class="hidden md:flex items-stretch w-full max-w-[420px] mx-auto rounded-xl overflow-hidden border border-ts-line bg-ts-paper shadow-lvl1">
         <input type="search" [placeholder]="'nav.search_placeholder' | translate"
           class="flex-1 px-3 text-ts-ink bg-transparent focus:outline-none" #navSearch
           (keydown.enter)="goToSearch(navSearch.value)">
@@ -22,7 +22,7 @@
       </div>
 
       <!-- Right: account / cart / menu -->
-      <div class="flex items-center gap-4 text-xs text-ts-ink">
+      <div class="flex items-center gap-4 text-xs text-ts-ink justify-self-end">
         <div class="hidden lg:flex flex-col leading-tight">
           @if (('common.hello' | translate) !== 'common.hello') {
           <span class="text-ts-ink-soft">{{ 'common.hello' | translate }}</span>
@@ -55,7 +55,7 @@
 
   <!-- Secondary nav -->
   <div class="bg-ts-bg border-b border-ts-line">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-12 flex items-center gap-4 overflow-x-auto">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-12 flex items-center justify-center gap-4 overflow-x-auto">
       @for (link of navLinks; track link.href) {
       <a [routerLink]="link.href" routerLinkActive="active"
         [routerLinkActiveOptions]="link.exact ? exactMatchOption : partialMatchOption"

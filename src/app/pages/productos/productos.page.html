@@ -234,18 +234,7 @@
                 </div>
 
                 <!-- Stock Badge -->
-                @if (producto.stock !== undefined) {
-                  <div class="mb-4">
-                    <span
-                      class="inline-flex items-center rounded-full px-2 py-1 text-xs font-semibold"
-                      [class]="producto.stock > 10 ? 'bg-emerald-100 text-emerald-800' : producto.stock > 0 ? 'bg-amber-100 text-amber-800' : 'bg-rose-100 text-rose-800'">
-                      <svg class="mr-1 h-3 w-3" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-                        <circle cx="10" cy="10" r="8"/>
-                      </svg>
-                      {{ producto.stock > 0 ? producto.stock + ' en stock' : 'Sin stock' }}
-                    </span>
-                  </div>
-                }
+                
 
                 @let priceInfo = getDisplayPrice(producto);
                 @if (priceInfo) {

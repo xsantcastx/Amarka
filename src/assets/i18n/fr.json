@@ -53,7 +53,18 @@
     "customization_placeholder": "Logo area",
     "customization_hint": "Preview updates instantly with your uploaded image. Drag to reposition.",
     "customization_invalid_file": "Please upload a valid image file.",
-    "customization_file_too_large": "File is too large. Max 5MB."
+    "customization_file_too_large": "File is too large. Max 5MB.",
+    "max_logos_reached": "Vous avez atteint le nombre maximal de logos.",
+    "customization_client_inputs_title": "DÃ©tails de la commande",
+    "customization_client_inputs_subtitle": "Partagez les notes et liens pour prÃ©parer votre commande personnalisÃ©e.",
+    "customization_required_badge": "Requis",
+    "customization_note_label": "Note",
+    "customization_note_placeholder": "Ajoutez des tailles, l'emplacement ou des instructions...",
+    "customization_link_label": "Lien de rÃ©fÃ©rence",
+    "customization_link_placeholder": "Collez un lien vers votre logo, guide de marque ou exemple",
+    "customization_note_required": "Veuillez ajouter votre note.",
+    "customization_link_required": "Veuillez ajouter votre lien.",
+    "customization_logo_required": "Veuillez tÃ©lÃ©verser un fichier de logo."
   },
   "products": {
     "hero": {
@@ -64,7 +75,7 @@
     },
     "valentine_banner": {
       "badge": "Limited-time",
-      "title": "Valentine edit: engraved gifts with heart",
+      "title": "Valentine: engraved gifts with love",
       "subtitle": "Order by February 10 to ensure on-time delivery."
     },
     "cta": {
@@ -174,6 +185,9 @@
     "no_orders_description": "Vous n'avez pas encore passé de commande. Commencez vos achats pour voir vos commandes ici.",
     "start_shopping": "Commencer les Achats",
     "tracking": "Suivi",
+    "email": "E-mail",
+    "password": "Mot de passe",
+    "confirm_password": "Confirmer le mot de passe",
     "shipping_address": "Adresse de Livraison",
     "quantity": "Quantité",
     "reorder": "Commander à Nouveau",
@@ -183,6 +197,8 @@
     "contact_support": "Contacter le Support",
     "download_invoice": "Télécharger la Facture",
     "my_profile": "Mon Profil",
+    "no_account": "Vous n'avez pas de compte ?",
+    "already_have_account": "Vous avez deja un compte?",
     "logout": "Déconnexion"
   },
   "admin": {

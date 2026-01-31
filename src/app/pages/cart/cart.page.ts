@@ -29,6 +29,8 @@ interface CartViewModel {
     customization?: {
       logoUrl: string;
       logoFilename?: string;
+      note?: string;
+      link?: string;
     };
     qty: number;
   }>;
@@ -114,7 +116,9 @@ export class CartPage implements OnInit {
         customizationId: item.customizationId,
         customization: item.customization ? {
           logoUrl: item.customization.logoUrl,
-          logoFilename: item.customization.logoFilename
+          logoFilename: item.customization.logoFilename,
+          note: item.customization.note,
+          link: item.customization.link
         } : undefined,
         qty: item.qty
       })) || [],

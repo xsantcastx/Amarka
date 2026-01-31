@@ -184,6 +184,26 @@
                         <p class="text-sm text-ts-ink-soft">
                           {{ 'client.quantity' | translate }}: {{ item.quantity || item.qty }} × ${{ (item.price || item.unitPrice || 0).toFixed(2) }}
                         </p>
+                        @if (item.customization?.logoUrl) {
+                          <div class="mt-2 flex items-center gap-2 text-xs text-ts-ink-soft">
+                            <img [src]="item.customization?.logoUrl" alt="Logo" class="w-8 h-8 object-contain bg-ts-bg-soft border border-ts-line rounded-md">
+                            <span>{{ item.customization?.logoFilename || ('admin.orders.logo_uploaded' | translate) }}</span>
+                          </div>
+                        }
+                        @if (item.customization?.note || item.customization?.link) {
+                          <div class="mt-2 space-y-1 text-xs text-ts-ink-soft">
+                            <div *ngIf="item.customization?.note">
+                              <span class="font-semibold text-ts-ink">{{ 'product.customization_note_label' | translate }}:</span>
+                              <span class="ml-1">{{ item.customization?.note }}</span>
+                            </div>
+                            <div *ngIf="item.customization?.link">
+                              <span class="font-semibold text-ts-ink">{{ 'product.customization_link_label' | translate }}:</span>
+                              <a [href]="item.customization?.link" target="_blank" rel="noopener" class="ml-1 text-ts-accent hover:text-ts-accent/80">
+                                {{ item.customization?.link }}
+                              </a>
+                            </div>
+                          </div>
+                        }
                       </div>
                       <div class="text-right">
                         <p class="font-semibold text-primary">

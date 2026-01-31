@@ -84,6 +84,8 @@
     "my_orders": "My Orders",
     "name": "Name",
     "email": "Email",
+    "password": "Password",
+    "confirm_password": "Confirm password",
     "phone": "Phone",
     "company": "Company",
     "not_provided": "Not provided",
@@ -158,7 +160,9 @@
     "cancel_order": "Cancel Order",
     "contact_support": "Contact Support",
     "download_invoice": "Download Invoice",
-    "my_profile": "My Profile"
+    "my_profile": "My Profile",
+    "no_account": "Don't have an account?",
+    "already_have_account": "Already have an account?"
   },
   "common": {
     "active": "Active",
@@ -195,12 +199,23 @@
     "customization_placeholder": "Logo area",
     "customization_hint": "Preview updates instantly with your uploaded image. Drag to reposition.",
     "customization_invalid_file": "Please upload a valid image file.",
-    "customization_file_too_large": "File is too large. Max 5MB."
+    "customization_file_too_large": "File is too large. Max 5MB.",
+    "max_logos_reached": "You've reached the maximum number of logos.",
+    "customization_client_inputs_title": "Order details",
+    "customization_client_inputs_subtitle": "Share the notes and links we'll use to prepare your custom order.",
+    "customization_required_badge": "Required",
+    "customization_note_label": "Note",
+    "customization_note_placeholder": "Add sizing, placement notes, or special instructions...",
+    "customization_link_label": "Reference link",
+    "customization_link_placeholder": "Paste a link to your logo, brand guide, or example",
+    "customization_note_required": "Please add your note.",
+    "customization_link_required": "Please add your link.",
+    "customization_logo_required": "Please upload a logo file."
   },
   "home": {
     "loading": "Loading content...",
     "hero": {
-      "badge": "Most-loved engraved gifts",
+      "badge": "Leaving a MARK with LOVE",
       "title": "Premium engraved gifts crafted to keep",
       "subtitle": "Laser-sharp engraving on glass, wood, metal, and leather with gift-ready packaging. Fast turnaround for milestones, corporate gifts, and everyday wins.",
       "view_collection": "View collection",
@@ -1111,7 +1126,7 @@
     },
     "valentine_banner": {
       "badge": "Limited-time",
-      "title": "Valentine edit: engraved gifts with heart",
+      "title": "Valentine: engraved gifts with love",
       "subtitle": "Order by February 10 to ensure on-time delivery."
     },
     "cta": {

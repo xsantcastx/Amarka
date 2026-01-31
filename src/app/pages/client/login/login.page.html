@@ -159,7 +159,7 @@
             [disabled]="isLoading"
             class="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed">
             @if (isLoading) {
-              <div class="app-spinner h-6 w-6" style="--spinner-size: 48px;"><img src="/Logo.jpg" alt="Loading" width="96" height="96"></div>
+              <div class="app-spinner h-6 w-6" style="--spinner-size: 24px;"></div>
               <span class="text-xs tracking-[0.38em] text-white/70">{{ 'common.loading' | translate }}</span>
             } @else {
               <span>{{ 'client.login' | translate }}</span>

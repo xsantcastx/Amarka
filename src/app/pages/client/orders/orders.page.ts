@@ -30,6 +30,12 @@ export interface OrderItem {
   price?: number;
   image?: string;
   imageUrl?: string;
+  customization?: {
+    logoUrl?: string;
+    logoFilename?: string;
+    note?: string;
+    link?: string;
+  };
 }
 
 @Component({

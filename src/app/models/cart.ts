@@ -42,6 +42,8 @@ export interface CartItemCustomization {
   logoFilename?: string;
   baseImageUrl?: string;
   placement: CustomizationPlacement;
+  note?: string;
+  link?: string;
   // Multi-zone support
   zones?: ZoneCustomization[];
 }
