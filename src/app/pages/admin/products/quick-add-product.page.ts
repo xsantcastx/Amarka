@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
@@ -13,7 +13,7 @@ import { TagService } from '../../../services/tag.service';
 import { StorageService, UploadProgress } from '../../../services/storage.service';
 import { MediaService } from '../../../services/media.service';
 import { BenefitTemplateService } from '../../../services/benefit-template.service';
-import { BulkPricingTier, Product, ProductBenefit, ProductVariant } from '../../../models/product';
+import { BulkPricingTier, Product, ProductBenefit, ProductVariant, CustomizationZone, ProductCustomizationPlacement } from '../../../models/product';
 import { Category, Model, Tag } from '../../../models/catalog';
 import { BenefitTemplate } from '../../../models/benefit-template';
 import { MediaCreateInput, MEDIA_VALIDATION } from '../../../models/media';
@@ -35,7 +35,7 @@ interface VariantDraft extends ProductVariant {
   templateUrl: './quick-add-product.page.html',
   styleUrl: './quick-add-product.page.scss'
 })
-export class QuickAddProductComponent extends LoadingComponentBase implements OnInit {
+export class QuickAddProductComponent extends LoadingComponentBase implements OnInit, OnDestroy {
   private authService = inject(AuthService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
@@ -119,6 +119,47 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
   slugManuallyEdited = false;
   seoManuallyEdited = false;
 
+  // Multi-zone customization
+  customizationZones: CustomizationZone[] = [];
+  maxTotalLogos = 5;
+  showAddZoneForm = false;
+  newZoneName = '';
+  newZoneId = '';
+  zoneIdManuallyEdited = false;
+
+  // Preset zone templates for common product types
+  readonly zonePresets: { name: string; zones: Omit<CustomizationZone, 'id'>[] }[] = [
+    {
+      name: 'T-Shirt',
+      zones: [
+        { name: 'Front', placement: { x: 35, y: 25, width: 30, height: 25 } },
+        { name: 'Back', placement: { x: 35, y: 25, width: 30, height: 25 } },
+        { name: 'Left Sleeve', placement: { x: 10, y: 30, width: 15, height: 15 } },
+        { name: 'Right Sleeve', placement: { x: 75, y: 30, width: 15, height: 15 } }
+      ]
+    },
+    {
+      name: 'Mug',
+      zones: [
+        { name: 'Left Side', placement: { x: 10, y: 35, width: 35, height: 30 } },
+        { name: 'Right Side', placement: { x: 55, y: 35, width: 35, height: 30 } }
+      ]
+    },
+    {
+      name: 'Cap/Hat',
+      zones: [
+        { name: 'Front', placement: { x: 30, y: 20, width: 40, height: 30 } },
+        { name: 'Back', placement: { x: 35, y: 50, width: 30, height: 20 } }
+      ]
+    },
+    {
+      name: 'Single Zone',
+      zones: [
+        { name: 'Logo Area', placement: { x: 35, y: 35, width: 30, height: 30 } }
+      ]
+    }
+  ];
+
   successMessage = '';
   readonly brandName = this.brandConfig.siteName;
 
@@ -144,6 +185,7 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
       customizationWidth: [30, [Validators.min(1), Validators.max(100)]],
       customizationHeight: [30, [Validators.min(1), Validators.max(100)]],
       customizationRotation: [0],
+      maxTotalLogos: [5, [Validators.min(1), Validators.max(20)]],
       featuredOnHome: [false],
       featuredPriority: [0, [Validators.min(0)]],
       // SEO fields
@@ -239,6 +281,7 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
         customizationWidth: product.customization?.placement?.width ?? 30,
         customizationHeight: product.customization?.placement?.height ?? 30,
         customizationRotation: product.customization?.placement?.rotation ?? 0,
+        maxTotalLogos: product.customization?.maxTotalLogos ?? 5,
         featuredOnHome: product.featuredOnHome === true,
         featuredPriority: product.featuredPriority ?? 0,
         metaTitle: product.seo?.title || '',
@@ -247,6 +290,13 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
       }, { emitEvent: false });
 
       this.selectedCollections = [...(product.collectionIds || [])];
+
+      // Load customization zones
+      this.customizationZones = (product.customization?.zones || []).map(zone => ({
+        ...zone,
+        placement: { ...zone.placement }
+      }));
+      this.maxTotalLogos = product.customization?.maxTotalLogos ?? 5;
 
       // Load cover preview
       if (product.imageUrl) {
@@ -473,11 +523,30 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
       height: this.clamp(formValue.customizationHeight, 1, 100, 30),
       rotation: this.parseNumber(formValue.customizationRotation, 0)
     };
+
+    // Build zones array with validated placements
+    const zones = this.customizationZones.map(zone => ({
+      id: zone.id,
+      name: zone.name,
+      placement: {
+        x: this.clamp(zone.placement.x, 0, 100, 35),
+        y: this.clamp(zone.placement.y, 0, 100, 35),
+        width: this.clamp(zone.placement.width, 1, 100, 30),
+        height: this.clamp(zone.placement.height, 1, 100, 30),
+        rotation: this.parseNumber(zone.placement.rotation, 0)
+      },
+      baseImageUrl: zone.baseImageUrl || undefined,
+      required: zone.required || undefined,
+      maxLogos: zone.maxLogos || undefined
+    }));
+
     return {
       customizable,
       customization: {
         baseImageUrl: baseImageUrl || undefined,
-        placement
+        placement,
+        zones: zones.length > 0 ? zones : undefined,
+        maxTotalLogos: this.parseNumber(formValue.maxTotalLogos, 5)
       }
     };
   }
@@ -1154,5 +1223,195 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
     this.existingVideoUrl = '';
     this.videoUploadProgress = 0;
     this.videoUploadComplete = false;
+  }
+
+  // ===== Multi-Zone Customization Management =====
+
+  /**
+   * Apply a preset zone configuration
+   */
+  applyZonePreset(preset: { name: string; zones: Omit<CustomizationZone, 'id'>[] }) {
+    this.customizationZones = preset.zones.map(zone => ({
+      ...zone,
+      id: this.generateSlug(zone.name),
+      placement: { ...zone.placement }
+    }));
+    this.showAddZoneForm = false;
+  }
+
+  /**
+   * Add a new customization zone
+   */
+  addCustomizationZone() {
+    const name = this.newZoneName.trim();
+    if (!name) return;
+
+    const id = this.newZoneId.trim() || this.generateSlug(name);
+
+    // Check for duplicate IDs
+    if (this.customizationZones.some(z => z.id === id)) {
+      this.setError('A zone with this ID already exists');
+      return;
+    }
+
+    const newZone: CustomizationZone = {
+      id,
+      name,
+      placement: {
+        x: 35,
+        y: 35,
+        width: 30,
+        height: 30,
+        rotation: 0
+      }
+    };
+
+    this.customizationZones.push(newZone);
+    this.resetZoneForm();
+  }
+
+  /**
+   * Remove a customization zone
+   */
+  removeCustomizationZone(index: number) {
+    this.customizationZones.splice(index, 1);
+  }
+
+  /**
+   * Move zone up in the list
+   */
+  moveZoneUp(index: number) {
+    if (index <= 0) return;
+    const zone = this.customizationZones.splice(index, 1)[0];
+    this.customizationZones.splice(index - 1, 0, zone);
+  }
+
+  /**
+   * Move zone down in the list
+   */
+  moveZoneDown(index: number) {
+    if (index >= this.customizationZones.length - 1) return;
+    const zone = this.customizationZones.splice(index, 1)[0];
+    this.customizationZones.splice(index + 1, 0, zone);
+  }
+
+  /**
+   * Update zone placement values
+   */
+  updateZonePlacement(zone: CustomizationZone, field: keyof ProductCustomizationPlacement, value: number) {
+    zone.placement[field] = this.clamp(value,
+      field === 'width' || field === 'height' ? 1 : (field === 'rotation' ? -180 : 0),
+      field === 'rotation' ? 180 : 100,
+      zone.placement[field] ?? (field === 'rotation' ? 0 : 30)
+    );
+  }
+
+  /**
+   * Toggle zone required state
+   */
+  toggleZoneRequired(zone: CustomizationZone) {
+    zone.required = !zone.required;
+  }
+
+  /**
+   * Reset the new zone form
+   */
+  private resetZoneForm() {
+    this.newZoneName = '';
+    this.newZoneId = '';
+    this.zoneIdManuallyEdited = false;
+    this.showAddZoneForm = false;
+  }
+
+  /**
+   * Auto-generate zone ID from name
+   */
+  onZoneNameChange() {
+    if (this.zoneIdManuallyEdited) return;
+    this.newZoneId = this.generateSlug(this.newZoneName);
+  }
+
+  /**
+   * Mark zone ID as manually edited
+   */
+  onZoneIdChange() {
+    this.zoneIdManuallyEdited = !!this.newZoneId;
+  }
+
+  /**
+   * Duplicate an existing zone
+   */
+  duplicateZone(zone: CustomizationZone) {
+    let newId = zone.id + '-copy';
+    let counter = 1;
+    while (this.customizationZones.some(z => z.id === newId)) {
+      newId = `${zone.id}-copy-${counter}`;
+      counter++;
+    }
+
+    const duplicate: CustomizationZone = {
+      ...zone,
+      id: newId,
+      name: zone.name + ' (Copy)',
+      placement: { ...zone.placement }
+    };
+
+    const index = this.customizationZones.indexOf(zone);
+    this.customizationZones.splice(index + 1, 0, duplicate);
+  }
+
+  /**
+   * Check if using multi-zone mode
+   */
+  get isMultiZoneMode(): boolean {
+    return this.customizationZones.length > 0;
+  }
+
+  /**
+   * Get total zones count
+   */
+  get totalZonesCount(): number {
+    return this.customizationZones.length;
+  }
+
+  // ===== Memory Cleanup =====
+
+  ngOnDestroy() {
+    // Revoke blob URLs to prevent memory leaks
+    if (this.coverPreview?.startsWith('blob:')) {
+      URL.revokeObjectURL(this.coverPreview);
+    }
+
+    if (this.videoPreview?.startsWith('blob:')) {
+      URL.revokeObjectURL(this.videoPreview);
+    }
+
+    // Clean up gallery previews
+    for (const preview of this.galleryPreviews) {
+      if (preview?.startsWith('blob:')) {
+        URL.revokeObjectURL(preview);
+      }
+    }
+
+    // Clean up variant image previews
+    for (const variant of this.variantDrafts) {
+      if (variant.imagePreview?.startsWith('blob:')) {
+        URL.revokeObjectURL(variant.imagePreview);
+      }
+    }
+
+    // Clean up collection hero preview
+    if (this.newCollectionHeroPreview?.startsWith('blob:')) {
+      URL.revokeObjectURL(this.newCollectionHeroPreview);
+    }
+
+    // Clear arrays to help GC
+    this.galleryFiles = [];
+    this.galleryPreviews = [];
+    this.variantDrafts = [];
+    this.customizationZones = [];
+    this.bulkPricingTiers = [];
+    this.currentBenefits = [];
+    this.currentSpecs = {};
   }
 }

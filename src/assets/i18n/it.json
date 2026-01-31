@@ -630,7 +630,30 @@
     "need_categories_and_models": "Devi prima creare categorie e modelli.",
     "need_category": "Devi prima creare una categoria.",
     "need_model": "Devi prima creare un modello.",
-    "goto_catalog": "Vai al Catalogo"
+    "goto_catalog": "Vai al Catalogo",
+    "title": "Admin",
+    "dashboard": {
+      "title": "Dashboard",
+      "subtitle": "Panoramica di performance e operazioni."
+    },
+    "quick_actions": "Azioni rapide",
+    "total_products": "Totale prodotti",
+    "total_orders": "Totale ordini",
+    "gallery_images": "Immagini galleria",
+    "total_users": "Totale utenti",
+    "pending_reviews": "Recensioni in sospeso",
+    "needs_moderation": "Richiede moderazione",
+    "total_revenue": "Ricavi totali",
+    "add_product": "Aggiungi prodotto",
+    "upload_image": "Carica immagine",
+    "manage_products": "Gestisci prodotti",
+    "manage_orders": "Gestisci ordini",
+    "manage_gallery": "Gestisci galleria",
+    "recent_activity": "Attivita recente",
+    "no_recent_activity": "Nessuna attivita recente.",
+    "catalog": {
+      "title": "Catalogo"
+    }
   },
   "common": {
     "loading": "Caricamento...",
@@ -647,4 +670,3 @@
     "saving": "Salvataggio..."
   }
 }
-

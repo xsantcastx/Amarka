@@ -1,43 +1,31 @@
-<!-- Admin Sidebar -->
-<app-admin-sidebar />
+<div class="min-h-screen bg-ts-bg md:flex">
+  <app-admin-sidebar class="hidden md:block"></app-admin-sidebar>
 
-<div class="md:ml-64 min-h-screen bg-gradient-to-b from-ts-bg via-ts-bg-soft to-ts-bg">
-  
-  <!-- Admin Header -->
-  <div class="bg-ts-paper border-b border-ts-line shadow-sm">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-      <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-        <div class="flex items-center gap-4 w-full md:w-auto">
-          <div class="w-10 h-10 bg-gradient-to-br from-ts-accent to-ts-accent-soft rounded-full flex items-center justify-center shadow-md flex-shrink-0">
-            <svg class="w-6 h-6 text-ts-ink" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+  <div class="flex-1 md:pl-64">
+    <!-- Header -->
+    <div class="bg-ts-paper border-b border-ts-line shadow-sm">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div class="flex items-center gap-3 w-full md:w-auto">
+          <div class="w-11 h-11 bg-gradient-to-br from-ts-accent to-ts-accent-soft rounded-xl flex items-center justify-center shadow-md flex-shrink-0">
+            <svg class="w-6 h-6 text-ts-paper" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
             </svg>
           </div>
-          <div class="flex-1 min-w-0">
-            <h1 class="text-lg md:text-xl font-bold heading-display text-ts-ink truncate">{{ 'admin.title' | translate }}</h1>
-            <p class="text-xs md:text-sm text-ts-ink-soft truncate">{{ 'admin.welcome' | translate }}, {{ userProfile?.displayName }}</p>
+          <div>
+            <h1 class="text-lg md:text-xl font-bold text-ts-ink">{{ 'admin.dashboard.title' | translate }}</h1>
+            <p class="text-sm text-ts-ink-soft">{{ 'admin.dashboard.subtitle' | translate }}</p>
           </div>
         </div>
         <div class="flex items-center gap-2 w-full md:w-auto">
-          <a routerLink="/" class="flex-1 md:flex-initial px-3 md:px-4 py-2 text-sm bg-ts-bg-soft hover:bg-ts-bg border border-ts-line rounded-xl transition-all duration-300 flex items-center justify-center gap-2 text-ts-ink-soft hover:text-ts-accent">
-            <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
-            </svg>
-            <span class="hidden sm:inline">{{ 'nav.home' | translate }}</span>
+          <a routerLink="/" class="flex-1 md:flex-initial text-xs md:text-sm text-ts-ink-soft hover:text-ts-ink transition-colors text-center">
+            {{ 'nav.home' | translate }}
           </a>
-          <button
-            (click)="logout()"
-            class="flex-1 md:flex-initial px-3 md:px-4 py-2 text-sm bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-600 hover:text-red-700 rounded-xl transition-all duration-300 flex items-center justify-center gap-2">
-            <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
-            </svg>
-            <span class="hidden sm:inline">{{ 'client.logout' | translate }}</span>
+          <button (click)="logout()" class="flex-1 md:flex-initial px-3 md:px-4 py-2 text-xs md:text-sm bg-red-50 hover:bg-red-100 border border-red-200 text-red-700 rounded-xl transition-all duration-300">
+            {{ 'client.logout' | translate }}
           </button>
         </div>
       </div>
     </div>
-  </div>
 
   @if (isLoading) {
     <!-- Loading State -->
@@ -150,11 +138,10 @@
           <p class="text-sm text-ts-ink-soft">{{ 'admin.pending_reviews' | translate }}</p>
           @if (stats && stats.pendingReviews > 0) {
             <span class="inline-block mt-2 px-2 py-1 bg-rose-500/20 text-rose-500 text-xs font-medium rounded-full border border-rose-500/30">
-              Needs Moderation
+              {{ 'admin.needs_moderation' | translate }}
             </span>
           }
         </div>
-      </div>
 
         <!-- Revenue Card -->
         <div class="bg-ts-paper backdrop-blur-sm rounded-2xl shadow-lg p-6 border border-ts-line hover:border-ts-accent/50 hover:shadow-xl transition-all duration-300 group">
@@ -174,6 +161,7 @@
           <p class="text-sm text-ts-ink-soft">{{ 'admin.total_revenue' | translate }}</p>
           <p class="text-xs text-ts-ink-soft/60 mt-1">{{ stats?.currencyCode }}</p>
         </div>
+      </div>
 
       <div class="grid lg:grid-cols-3 gap-6">
         

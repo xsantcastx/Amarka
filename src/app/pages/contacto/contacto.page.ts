@@ -24,7 +24,7 @@ interface ContactFormData {
 @Component({
   selector: 'app-contacto-page',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, TranslateModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule, PageHeaderComponent],
   templateUrl: './contacto.page.html',
   styleUrl: './contacto.page.scss'
 })

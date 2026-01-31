@@ -1,209 +1,272 @@
-﻿<section class="section-gap bg-ts-bg">
-  <div class="page-container">
-    <div class="luxury-hero">
-      <div class="luxury-hero__content">
-        <span class="badge">Contact Us</span>
-        <h1 class="luxury-hero__title">{{ heroTitle }}</h1>
-        <p class="luxury-hero__subtitle">
-          {{ heroSubtitle }}
-        </p>
-        <div class="luxury-hero__actions">
-          <a routerLink="/servicios" class="btn-secondary">View services</a>
-          @if (whatsappNumber) {
-            <a [href]="getWhatsAppUrl()" target="_blank" class="btn-primary">WhatsApp our team</a>
-          }
-        </div>
-      </div>
-      <div class="luxury-hero__media">
-        <div class="badge absolute top-3.5 right-3.5 shadow-soft">Miami & destinations</div>
-      <img [src]="heroImage" alt="Contact Amarka Engraving" loading="lazy" />
-      </div>
-    </div>
-  </div>
-</section>
+<section class="bg-ts-bg min-h-screen">
+  <!-- Premium Page Header -->
+  <app-page-header
+    title="contact.title"
+    subtitle="contact.subtitle"
+    [breadcrumbs]="breadcrumbs"
+    badgeText="contact.badge"
+    icon="contact"
+    variant="featured">
+  </app-page-header>
 
-<section class="section-gap bg-ts-bg-soft">
-  <div class="page-container">
-    <div class="grid lg:grid-cols-2 gap-12 items-start">
-
-      <!-- Form -->
-      <div class="bg-ts-paper border border-ts-line rounded-2xl shadow-soft p-8">
-        <div class="mb-8 space-y-2">
-          <h2 class="font-serif text-3xl text-ts-ink">Share Your Vision</h2>
-          <p class="text-ts-ink-soft">Tell us about your personalized gift needs. We respond within one business day with custom recommendations.</p>
+  <div class="page-container section-gap">
+    <div class="contact-layout">
+      <!-- Contact Form -->
+      <div class="contact-form-card">
+        <div class="contact-form-header">
+          <h2 class="contact-form-title font-serif">{{ 'contact.form.title' | translate }}</h2>
+          <p class="contact-form-subtitle">{{ 'contact.form.subtitle' | translate }}</p>
         </div>
 
-        <div *ngIf="submitSuccess"
-             class="mb-6 p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl">
-          Thank you. Your message has been sent.
-        </div>
+        <!-- Success Message -->
+        @if (submitSuccess) {
+          <div class="contact-alert contact-alert--success">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+            <span>{{ 'contact.form.success' | translate }}</span>
+          </div>
+        }
 
-        <div *ngIf="submitError"
-             class="mb-6 p-4 bg-rose-50 border border-rose-200 text-rose-800 rounded-xl">
-          {{ submitErrorMessage || 'Something went wrong. Please try again.' }}
-        </div>
+        <!-- Error Message -->
+        @if (submitError) {
+          <div class="contact-alert contact-alert--error">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span>{{ submitErrorMessage || ('contact.form.error' | translate) }}</span>
+          </div>
+        }
 
-        <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="space-y-5">
-          <div class="grid md:grid-cols-2 gap-5">
-            <div class="md:col-span-1">
-              <label for="nombre" class="block text-sm font-semibold text-ts-ink mb-1">Full name *</label>
+        <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="contact-form">
+          <div class="contact-form-grid">
+            <!-- Name -->
+            <div class="contact-field">
+              <label for="nombre" class="contact-label">{{ 'contact.form.name' | translate }} *</label>
               <input type="text" id="nombre" formControlName="nombre"
-                class="w-full px-4 py-3 rounded-xl border border-ts-line bg-white text-ts-ink placeholder:text-ts-ink-soft focus:outline-none focus:ring-2 focus:ring-ts-accent focus:border-ts-accent-soft transition">
-              <p *ngIf="getFieldError('nombre')" class="mt-1 text-sm text-rose-700">{{getFieldError('nombre')}}</p>
+                class="contact-input"
+                [class.contact-input--error]="isFieldInvalid('nombre')"
+                [class.contact-input--valid]="isFieldValid('nombre')">
+              @if (getFieldError('nombre')) {
+                <p class="contact-error">{{ getFieldError('nombre') }}</p>
+              }
             </div>
-            <div class="md:col-span-1">
-              <label for="email" class="block text-sm font-semibold text-ts-ink mb-1">Email *</label>
+
+            <!-- Email -->
+            <div class="contact-field">
+              <label for="email" class="contact-label">{{ 'contact.form.email' | translate }} *</label>
               <input type="email" id="email" formControlName="email"
-                class="w-full px-4 py-3 rounded-xl border border-ts-line bg-white text-ts-ink placeholder:text-ts-ink-soft focus:outline-none focus:ring-2 focus:ring-ts-accent focus:border-ts-accent-soft transition">
-              <p *ngIf="getFieldError('email')" class="mt-1 text-sm text-rose-700">{{getFieldError('email')}}</p>
+                class="contact-input"
+                [class.contact-input--error]="isFieldInvalid('email')"
+                [class.contact-input--valid]="isFieldValid('email')">
+              @if (getFieldError('email')) {
+                <p class="contact-error">{{ getFieldError('email') }}</p>
+              }
             </div>
-            <div class="md:col-span-1">
-              <label for="telefono" class="block text-sm font-semibold text-ts-ink mb-1">Phone *</label>
+
+            <!-- Phone -->
+            <div class="contact-field">
+              <label for="telefono" class="contact-label">{{ 'contact.form.phone' | translate }} *</label>
               <input type="tel" id="telefono" formControlName="telefono" (input)="formatPhoneNumber($event)"
-                class="w-full px-4 py-3 rounded-xl border border-ts-line bg-white text-ts-ink placeholder:text-ts-ink-soft focus:outline-none focus:ring-2 focus:ring-ts-accent focus:border-ts-accent-soft transition">
-              <p *ngIf="getFieldError('telefono')" class="mt-1 text-sm text-rose-700">{{getFieldError('telefono')}}</p>
+                class="contact-input"
+                [class.contact-input--error]="isFieldInvalid('telefono')"
+                [class.contact-input--valid]="isFieldValid('telefono')">
+              @if (getFieldError('telefono')) {
+                <p class="contact-error">{{ getFieldError('telefono') }}</p>
+              }
             </div>
-            <div class="md:col-span-1">
-              <label for="empresa" class="block text-sm font-semibold text-ts-ink mb-1">Company (optional)</label>
-              <input type="text" id="empresa" formControlName="empresa"
-                class="w-full px-4 py-3 rounded-xl border border-ts-line bg-white text-ts-ink placeholder:text-ts-ink-soft focus:outline-none focus:ring-2 focus:ring-ts-accent focus:border-ts-accent-soft transition">
+
+            <!-- Company -->
+            <div class="contact-field">
+              <label for="empresa" class="contact-label">{{ 'contact.form.company' | translate }}</label>
+              <input type="text" id="empresa" formControlName="empresa" class="contact-input">
             </div>
-            <div class="md:col-span-1">
-              <label for="eventDate" class="block text-sm font-semibold text-ts-ink mb-1">Needed by date</label>
+
+            <!-- Event Date -->
+            <div class="contact-field">
+              <label for="eventDate" class="contact-label">{{ 'contact.form.date' | translate }}</label>
               <input type="text" id="eventDate" formControlName="eventDate" placeholder="MM / DD / YYYY"
-                class="w-full px-4 py-3 rounded-xl border border-ts-line bg-white text-ts-ink placeholder:text-ts-ink-soft focus:outline-none focus:ring-2 focus:ring-ts-accent focus:border-ts-accent-soft transition">
+                class="contact-input">
             </div>
-            <div class="md:col-span-1">
-              <label for="location" class="block text-sm font-semibold text-ts-ink mb-1">Shipping to</label>
-              <input type="text" id="location" formControlName="location" placeholder="City, State or ZIP"
-                class="w-full px-4 py-3 rounded-xl border border-ts-line bg-white text-ts-ink placeholder:text-ts-ink-soft focus:outline-none focus:ring-2 focus:ring-ts-accent focus:border-ts-accent-soft transition">
+
+            <!-- Location -->
+            <div class="contact-field">
+              <label for="location" class="contact-label">{{ 'contact.form.location' | translate }}</label>
+              <input type="text" id="location" formControlName="location" [placeholder]="'contact.form.location_placeholder' | translate"
+                class="contact-input">
             </div>
-            <div class="md:col-span-1">
-              <label for="guestCount" class="block text-sm font-semibold text-ts-ink mb-1">Quantity needed</label>
-              <input type="text" id="guestCount" formControlName="guestCount" placeholder="Approx. number of items"
-                class="w-full px-4 py-3 rounded-xl border border-ts-line bg-white text-ts-ink placeholder:text-ts-ink-soft focus:outline-none focus:ring-2 focus:ring-ts-accent focus:border-ts-accent-soft transition">
+
+            <!-- Quantity -->
+            <div class="contact-field">
+              <label for="guestCount" class="contact-label">{{ 'contact.form.quantity' | translate }}</label>
+              <input type="text" id="guestCount" formControlName="guestCount" [placeholder]="'contact.form.quantity_placeholder' | translate"
+                class="contact-input">
             </div>
-            <div class="md:col-span-1">
-              <label for="budget" class="block text-sm font-semibold text-ts-ink mb-1">Budget range</label>
+
+            <!-- Budget -->
+            <div class="contact-field">
+              <label for="budget" class="contact-label">{{ 'contact.form.budget' | translate }}</label>
               <input type="text" id="budget" formControlName="budget" placeholder="e.g., $500 - $2,000"
-                class="w-full px-4 py-3 rounded-xl border border-ts-line bg-white text-ts-ink placeholder:text-ts-ink-soft focus:outline-none focus:ring-2 focus:ring-ts-accent focus:border-ts-accent-soft transition">
+                class="contact-input">
             </div>
           </div>
 
-          <div>
-            <label for="mensaje" class="block text-sm font-semibold text-ts-ink mb-1">Tell us about your project *</label>
-            <textarea id="mensaje" formControlName="mensaje" rows="5" placeholder="Describe what you're looking to create, any engraving details, occasion, or special requests..."
-              class="w-full px-4 py-3 rounded-xl border border-ts-line bg-white text-ts-ink placeholder:text-ts-ink-soft focus:outline-none focus:ring-2 focus:ring-ts-accent focus:border-ts-accent-soft transition resize-none"></textarea>
-            <p *ngIf="getFieldError('mensaje')" class="mt-1 text-sm text-rose-700">{{getFieldError('mensaje')}}</p>
+          <!-- Message -->
+          <div class="contact-field contact-field--full">
+            <label for="mensaje" class="contact-label">{{ 'contact.form.message' | translate }} *</label>
+            <textarea id="mensaje" formControlName="mensaje" rows="5"
+              [placeholder]="'contact.form.message_placeholder' | translate"
+              class="contact-input contact-textarea"
+              [class.contact-input--error]="isFieldInvalid('mensaje')"
+              [class.contact-input--valid]="isFieldValid('mensaje')"></textarea>
+            @if (getFieldError('mensaje')) {
+              <p class="contact-error">{{ getFieldError('mensaje') }}</p>
+            }
           </div>
 
-          <div class="flex items-start gap-3">
+          <!-- Privacy Checkbox -->
+          <div class="contact-checkbox">
             <input type="checkbox" id="privacidad" formControlName="aceptarPrivacidad"
-              class="mt-1 w-4 h-4 text-ts-accent border-ts-line rounded focus:ring-ts-accent bg-ts-paper">
-            <label for="privacidad" class="text-sm text-ts-ink-soft">
-              I agree to the privacy policy.
+              class="contact-checkbox-input">
+            <label for="privacidad" class="contact-checkbox-label">
+              {{ 'contact.form.privacy' | translate }}
             </label>
           </div>
-          <p *ngIf="contactForm.get('aceptarPrivacidad')?.errors?.['required'] && contactForm.get('aceptarPrivacidad')?.touched"
-             class="text-sm text-rose-700">
-            Please confirm you accept the privacy policy.
-          </p>
+          @if (contactForm.get('aceptarPrivacidad')?.errors?.['required'] && contactForm.get('aceptarPrivacidad')?.touched) {
+            <p class="contact-error">{{ 'contact.form.privacy_required' | translate }}</p>
+          }
 
-          <button type="submit" [disabled]="isSubmitting"
-            class="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed">
-            <span *ngIf="!isSubmitting">Send message</span>
-            <span *ngIf="isSubmitting" class="flex items-center justify-center gap-2">
-              <div class="app-spinner" style="--spinner-size: 72px;"><img src="/Logo Clear.png" alt="Loading" width="96" height="96"></div>
-              Sending…
-            </span>
+          <!-- Submit Button -->
+          <button type="submit" [disabled]="isSubmitting" class="btn btn--primary contact-submit">
+            @if (!isSubmitting) {
+              <span>{{ 'contact.form.submit' | translate }}</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+              </svg>
+            } @else {
+              <span class="contact-submit-loading">
+                <svg class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span>{{ 'contact.form.submitting' | translate }}</span>
+              </span>
+            }
           </button>
         </form>
       </div>
 
-      <!-- Contact details -->
-      <div class="space-y-6">
-        <div class="bg-ts-paper border border-ts-line rounded-2xl p-8 shadow-soft">
-          <h2 class="font-serif text-3xl text-ts-ink mb-2">How to reach us</h2>
-          <p class="text-ts-ink-soft mb-6">Prefer to chat directly? Call, email, or message us on WhatsApp.</p>
+      <!-- Contact Information -->
+      <div class="contact-info">
+        <!-- Direct Contact Card -->
+        <div class="contact-info-card">
+          <h2 class="contact-info-title font-serif">{{ 'contact.info.title' | translate }}</h2>
+          <p class="contact-info-subtitle">{{ 'contact.info.subtitle' | translate }}</p>
 
-          <div class="space-y-5">
-            <div class="flex gap-4 items-start">
-              <div class="w-12 h-12 rounded-full bg-ts-bg-soft border border-ts-line flex items-center justify-center">
-                <svg class="w-6 h-6 text-ts-ink" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657 13.414 20.9a2 2 0 0 1-2.828 0l-4.243-4.243a8 8 0 1 1 11.314 0Z"/>
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+          <div class="contact-info-list">
+            <!-- Location -->
+            <div class="contact-info-item">
+              <div class="contact-info-icon">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
                 </svg>
               </div>
-              <div>
-                <h3 class="font-semibold text-lg text-ts-ink">{{ contactAddress || 'Service Area' }}</h3>
-                <p class="text-ts-ink-soft">Serving customers across the US with fast, reliable shipping for personalized gifts.</p>
+              <div class="contact-info-content">
+                <h3 class="contact-info-label">{{ contactAddress || 'Service Area' }}</h3>
+                <p class="contact-info-text">{{ 'contact.info.location_text' | translate }}</p>
               </div>
             </div>
 
-            <div class="flex gap-4 items-start">
-              <div class="w-12 h-12 rounded-full bg-ts-bg-soft border border-ts-line flex items-center justify-center">
-                <svg class="w-6 h-6 text-ts-ink" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M22 12q0 .861-.111 1.695a1.15 1.15 0 0 1-.809.95 20.23 20.23 0 0 1-3.105.68 1.15 1.15 0 0 1-1.205-.663l-.692-1.614a1.15 1.15 0 0 1 .153-1.164l.142-.184c.24-.312.317-.722.208-1.1a8.013 8.013 0 0 0-.493-1.215 8.05 8.05 0 0 0-4.16-3.913 8.23 8.23 0 0 0-1.236-.404 1.15 1.15 0 0 0-1.14.37l-.425.5a1.15 1.15 0 0 1-1.092.382l-1.742-.353a1.15 1.15 0 0 1-.905-1.06l-.133-1.836A1.15 1.15 0 0 1 5.52 2.12 19.91 19.91 0 0 1 11.684 2C17.522 2 22 7.373 22 12Z"/>
+            <!-- Phone -->
+            <div class="contact-info-item">
+              <div class="contact-info-icon">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
                 </svg>
               </div>
-              <div>
-                <h3 class="font-semibold text-lg text-ts-ink">Phone & WhatsApp</h3>
+              <div class="contact-info-content">
+                <h3 class="contact-info-label">{{ 'contact.info.phone' | translate }}</h3>
                 @if (contactPhone) {
-                  <p class="text-ts-ink-soft">
-                    <a [href]="'tel:' + contactPhone" class="text-ts-ink hover:text-ts-accent transition-colors">{{ contactPhone }}</a>
-                    @if (whatsappNumber) {
-                      <br>
-                      <a [href]="getWhatsAppUrl()" target="_blank" class="text-ts-accent hover:text-ts-ink transition-colors">Message us on WhatsApp</a>
-                    }
-                  </p>
+                  <a [href]="'tel:' + contactPhone" class="contact-info-link">{{ contactPhone }}</a>
+                  @if (whatsappNumber) {
+                    <a [href]="getWhatsAppUrl()" target="_blank" class="contact-info-link contact-info-link--accent">
+                      {{ 'contact.info.whatsapp' | translate }}
+                    </a>
+                  }
                 } @else {
-                  <p class="text-ts-ink-soft">Contact information not available</p>
+                  <p class="contact-info-text">{{ 'contact.info.not_available' | translate }}</p>
                 }
               </div>
             </div>
 
-            <div class="flex gap-4 items-start">
-              <div class="w-12 h-12 rounded-full bg-ts-bg-soft border border-ts-line flex items-center justify-center">
-                <svg class="w-6 h-6 text-ts-ink" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m4 4 16 16M4 20 20 4"/>
+            <!-- Email -->
+            <div class="contact-info-item">
+              <div class="contact-info-icon">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                 </svg>
               </div>
-              <div>
-                <h3 class="font-semibold text-lg text-ts-ink">Email</h3>
+              <div class="contact-info-content">
+                <h3 class="contact-info-label">{{ 'contact.info.email_label' | translate }}</h3>
                 @if (contactEmail) {
-                  <a [href]="'mailto:' + contactEmail" class="text-ts-accent hover:text-ts-ink transition-colors">{{ contactEmail }}</a>
+                  <a [href]="'mailto:' + contactEmail" class="contact-info-link contact-info-link--accent">{{ contactEmail }}</a>
                 } @else {
-                  <p class="text-ts-ink-soft">Email not available</p>
+                  <p class="contact-info-text">{{ 'contact.info.not_available' | translate }}</p>
                 }
               </div>
             </div>
 
-            <div class="flex gap-4 items-start">
-              <div class="w-12 h-12 rounded-full bg-ts-bg-soft border border-ts-line flex items-center justify-center">
-                <svg class="w-6 h-6 text-ts-ink" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+            <!-- Hours -->
+            <div class="contact-info-item">
+              <div class="contact-info-icon">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                 </svg>
               </div>
-              <div>
-                <h3 class="font-semibold text-lg text-ts-ink">Business Hours</h3>
-                <p class="text-ts-ink-soft">Mon – Fri: 9:00 AM – 6:00 PM EST<br>Sat: 10:00 AM – 4:00 PM EST</p>
+              <div class="contact-info-content">
+                <h3 class="contact-info-label">{{ 'contact.info.hours' | translate }}</h3>
+                <p class="contact-info-text">{{ 'contact.info.hours_weekday' | translate }}<br>{{ 'contact.info.hours_weekend' | translate }}</p>
               </div>
             </div>
           </div>
         </div>
 
+        <!-- WhatsApp CTA -->
         @if (whatsappNumber) {
-          <div class="bg-gradient-to-r from-ts-accent to-ts-accent-soft rounded-2xl p-8 text-ts-ink shadow-soft">
-            <h3 class="font-serif text-2xl mb-3">Prefer a quick chat?</h3>
-            <p class="text-ts-ink mb-4">Tap below to start a WhatsApp conversation with our design team.</p>
-            <a [href]="getWhatsAppUrl()" target="_blank" class="btn-primary">
-              Open WhatsApp
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 7l5 5-5 5M6 12h12"/>
+          <div class="contact-whatsapp-cta">
+            <h3 class="contact-whatsapp-title font-serif">{{ 'contact.whatsapp.title' | translate }}</h3>
+            <p class="contact-whatsapp-text">{{ 'contact.whatsapp.text' | translate }}</p>
+            <a [href]="getWhatsAppUrl()" target="_blank" class="btn btn--primary">
+              <span>{{ 'contact.whatsapp.button' | translate }}</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
               </svg>
             </a>
           </div>
         }
+
+        <!-- Trust Badges -->
+        <div class="contact-trust">
+          <div class="contact-trust-item">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+            </svg>
+            <span>{{ 'contact.trust.secure' | translate }}</span>
+          </div>
+          <div class="contact-trust-item">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+            </svg>
+            <span>{{ 'contact.trust.fast' | translate }}</span>
+          </div>
+          <div class="contact-trust-item">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+            </svg>
+            <span>{{ 'contact.trust.crafted' | translate }}</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>

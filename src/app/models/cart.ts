@@ -16,12 +16,34 @@ export interface CustomizationPlacement {
   rotation?: number;
 }
 
+/**
+ * Represents a single logo placed in a zone
+ */
+export interface ZoneLogo {
+  logoUrl: string;
+  logoFilename?: string;
+  placement: CustomizationPlacement;  // Can override zone default placement
+  uploadedAt?: Date;
+}
+
+/**
+ * Represents customization for a specific zone
+ */
+export interface ZoneCustomization {
+  zoneId: string;
+  zoneName: string;
+  baseImageUrl?: string;
+  logos: ZoneLogo[];
+}
+
 export interface CartItemCustomization {
   id?: string;
-  logoUrl: string;
+  logoUrl: string;           // Legacy single logo support
   logoFilename?: string;
   baseImageUrl?: string;
   placement: CustomizationPlacement;
+  // Multi-zone support
+  zones?: ZoneCustomization[];
 }
 
 // ===== Cart Item =====

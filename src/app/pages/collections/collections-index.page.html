@@ -1,62 +1,113 @@
 <section class="bg-ts-bg min-h-screen">
-  <app-page-header title="collections.title" subtitle="collections.subtitle" [breadcrumbs]="breadcrumbs"
-    icon="collections">
+  <!-- Premium Page Header -->
+  <app-page-header
+    title="collections.title"
+    subtitle="collections.subtitle"
+    [breadcrumbs]="breadcrumbs"
+    badgeText="collections.badge"
+    icon="collections"
+    variant="featured">
   </app-page-header>
 
-  <div class="page-container py-10 space-y-8 relative">
+  <div class="page-container section-gap">
+    <!-- Loading State -->
     @if (isLoading) {
-    <div class="absolute inset-0 flex items-center justify-center bg-ts-bg/80 backdrop-blur-sm z-10">
-      <div class="text-center space-y-3">
-        <div class="app-spinner" style="--spinner-size: 64px;"><img src="/Logo Clear.png" alt="Loading" width="80"
-            height="80"></div>
-        <p class="text-ts-ink-soft text-sm">{{ 'collections.loading' | translate }}</p>
+      <div class="collections-loading">
+        <div class="collections-grid">
+          @for (i of [1,2,3,4,5,6]; track i) {
+            <div class="collection-card collection-card--skeleton">
+              <div class="collection-card__image-skeleton"></div>
+              <div class="collection-card__content-skeleton">
+                <div class="skeleton-badge"></div>
+                <div class="skeleton-title"></div>
+                <div class="skeleton-text"></div>
+              </div>
+            </div>
+          }
+        </div>
       </div>
-    </div>
-    }
-    @if (isLoading) {
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      @for (i of [1,2,3,4,5,6]; track i) {
-      <div class="h-72 rounded-2xl bg-ts-paper border border-ts-line animate-pulse"></div>
-      }
-    </div>
     } @else if (!collections.length) {
-    <div class="rounded-2xl bg-ts-paper border border-ts-line p-10 text-center">
-      <h3 class="text-xl font-semibold text-ts-ink mb-2">{{ 'collections.empty.title' | translate }}</h3>
-      <p class="text-ts-ink-soft">{{ 'collections.empty.body' | translate }}</p>
-    </div>
+      <!-- Empty State -->
+      <div class="collections-empty">
+        <div class="collections-empty__icon">
+          <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+          </svg>
+        </div>
+        <h3 class="collections-empty__title font-serif">{{ 'collections.empty.title' | translate }}</h3>
+        <p class="collections-empty__body">{{ 'collections.empty.body' | translate }}</p>
+        <a routerLink="/" class="btn btn--primary mt-6">
+          <span>{{ 'collections.empty.cta' | translate }}</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+          </svg>
+        </a>
+      </div>
     } @else {
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-      @for (collection of collections; track collection.slug) {
-      <a [routerLink]="['/collections', collection.slug]"
-        class="block group rounded-2xl bg-ts-paper border border-ts-line shadow-sm overflow-hidden hover:border-ts-accent/50 hover:shadow-lg transition-all duration-300">
-        <div class="aspect-[4/3] bg-ts-bg-soft overflow-hidden">
-          @if (collection.heroImageUrl) {
-          <img [src]="collection.heroImageUrl" [alt]="collection.name"
-            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
-          } @else {
-          <div class="w-full h-full flex items-center justify-center text-ts-ink-soft">
-            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </div>
-          }
+      <!-- Collections Grid -->
+      <div class="collections-grid">
+        @for (collection of collections; track collection.slug; let i = $index) {
+          <a
+            [routerLink]="['/collections', collection.slug]"
+            class="collection-card group"
+            [class.collection-card--featured]="i === 0">
+
+            <!-- Image Container -->
+            <div class="collection-card__image">
+              @if (collection.heroImageUrl) {
+                <img
+                  [src]="collection.heroImageUrl"
+                  [alt]="collection.name"
+                  class="collection-card__img"
+                  loading="lazy">
+                <div class="collection-card__overlay"></div>
+              } @else {
+                <div class="collection-card__placeholder">
+                  <svg class="w-12 h-12 text-ts-ink-soft" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                  </svg>
+                </div>
+              }
+
+              <!-- Hover Indicator -->
+              <div class="collection-card__hover-indicator">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Content -->
+            <div class="collection-card__content">
+              <span class="collection-card__label">{{ 'collections.card.label' | translate }}</span>
+              <h3 class="collection-card__title font-serif">{{ collection.name }}</h3>
+              @if (collection.description) {
+                <p class="collection-card__description">{{ collection.description }}</p>
+              }
+              <span class="collection-card__cta">
+                <span>{{ 'collections.card.cta' | translate }}</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+              </span>
+            </div>
+          </a>
+        }
+      </div>
+
+      <!-- Bottom CTA -->
+      <div class="collections-cta">
+        <div class="collections-cta__content">
+          <h3 class="collections-cta__title font-serif">{{ 'collections.cta.title' | translate }}</h3>
+          <p class="collections-cta__text">{{ 'collections.cta.text' | translate }}</p>
         </div>
-        <div class="p-5 space-y-2">
-          <div class="text-sm uppercase tracking-wide text-ts-ink-soft">{{ 'collections.card.label' | translate }}</div>
-          <h3 class="text-xl font-semibold text-ts-ink">{{ collection.name }}</h3>
-          @if (collection.description) {
-          <p class="text-sm text-ts-ink-soft line-clamp-2">{{ collection.description }}</p>
-          }
-          <div class="flex items-center gap-2 text-sm font-semibold text-ts-accent group-hover:text-ts-ink">
-            <span>{{ 'collections.card.cta' | translate }}</span>
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-            </svg>
-          </div>
-        </div>
-      </a>
-      }
-    </div>
+        <a routerLink="/contact" class="btn btn--primary">
+          <span>{{ 'collections.cta.button' | translate }}</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+          </svg>
+        </a>
+      </div>
     }
   </div>
 </section>

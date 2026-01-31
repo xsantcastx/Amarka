@@ -75,10 +75,10 @@ export class AdminDashboardComponent extends LoadingComponentBase implements OnI
 
   getActivityColor(type: AdminActivityItem['type']): string {
     const colors: Record<AdminActivityItem['type'], string> = {
-      order: 'bg-bitcoin-orange/20 text-bitcoin-orange border border-bitcoin-orange/30',
-      product: 'bg-bitcoin-gold/20 text-bitcoin-gold border border-bitcoin-gold/30',
-      gallery: 'bg-luxury-gold/20 text-luxury-gold border border-luxury-gold/30',
-      user: 'bg-bitcoin-orange/20 text-bitcoin-orange border border-bitcoin-orange/30'
+      order: 'bg-ts-accent/15 text-ts-accent border border-ts-accent/30',
+      product: 'bg-ts-accent-soft/15 text-ts-accent-soft border border-ts-accent-soft/30',
+      gallery: 'bg-emerald-50 text-emerald-600 border border-emerald-200',
+      user: 'bg-amber-50 text-amber-600 border border-amber-200'
     };
     return colors[type];
   }

@@ -1,106 +1,160 @@
 <section class="bg-ts-bg min-h-screen">
+  <!-- Premium Page Header with Hero Image -->
   <app-page-header
     [title]="title"
     [subtitle]="subtitle"
     [breadcrumbs]="breadcrumbs"
-    icon="collections">
+    [heroImage]="collection?.heroImageUrl || ''"
+    [overlayOpacity]="0.65"
+    badgeText="collections.card.label"
+    icon="collections"
+    [variant]="collection?.heroImageUrl ? 'hero' : 'featured'">
   </app-page-header>
 
-  <div class="page-container py-8 space-y-8">
-    <!-- Hero summary -->
-    <div class="rounded-3xl border border-ts-line bg-white shadow-sm p-6 lg:p-8 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-      <div class="space-y-3">
-        <p class="badge">Curated collection</p>
-        <h2 class="text-3xl font-serif text-ts-ink leading-tight">{{ title }}</h2>
-        <div class="flex flex-wrap gap-3 text-sm text-ts-ink-soft">
-          <span class="px-3 py-1 rounded-full border border-ts-line bg-ts-bg-soft">{{ filtered.length || products.length }} items</span>
-          <span class="px-3 py-1 rounded-full border border-ts-line bg-ts-bg-soft">Personalised & ready to ship</span>
+  <div class="page-container section-gap">
+    <!-- Collection Summary Card -->
+    <div class="collection-summary">
+      <div class="collection-summary__info">
+        <div class="collection-summary__stats">
+          <span class="collection-summary__stat">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+            </svg>
+            <span>{{ filtered.length || products.length }} {{ 'collections.items' | translate }}</span>
+          </span>
+          <span class="collection-summary__stat">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
+            </svg>
+            <span>{{ 'collections.personalized' | translate }}</span>
+          </span>
         </div>
       </div>
-      <div class="grid grid-cols-2 gap-3 w-full lg:w-auto">
-        @if (filtered.length > 0) {
-          <div class="rounded-2xl overflow-hidden border border-ts-line bg-ts-bg-soft aspect-square">
-            <img [src]="filtered[0]?.imageUrl || filtered[0]?.coverImage" alt="{{filtered[0]?.name}}" class="w-full h-full object-cover" loading="lazy">
-          </div>
-        }
-        @if (filtered.length > 1) {
-          <div class="rounded-2xl overflow-hidden border border-ts-line bg-ts-bg-soft aspect-square">
-            <img [src]="filtered[1]?.imageUrl || filtered[1]?.coverImage" alt="{{filtered[1]?.name}}" class="w-full h-full object-cover" loading="lazy">
-          </div>
-        }
-      </div>
+
+      @if (filtered.length > 0) {
+        <div class="collection-summary__preview">
+          @for (product of filtered.slice(0, 3); track product.id) {
+            <div class="collection-summary__preview-item">
+              <img [src]="product.imageUrl || product.coverImage" [alt]="product.name" loading="lazy">
+            </div>
+          }
+          @if (filtered.length > 3) {
+            <div class="collection-summary__preview-more">
+              +{{ filtered.length - 3 }}
+            </div>
+          }
+        </div>
+      }
     </div>
 
-    <!-- Controls -->
-    <div class="rounded-2xl border border-ts-line bg-surface shadow-lvl1 p-4 lg:p-5 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 sticky top-[calc(var(--nav-height)+0.75rem)] z-10 backdrop-blur supports-[backdrop-filter]:bg-surface/80">
-      <div class="flex-1">
-        <div class="relative">
-          <input
-            type="text"
-            [(ngModel)]="searchTerm"
-            (input)="applyFilters()"
-            placeholder="Search gifts..."
-            class="w-full pl-10 pr-4 py-3 bg-ts-bg-soft border border-ts-line rounded-xl text-ts-ink placeholder-ts-ink-soft focus:ring-2 focus:ring-primary focus:border-primary shadow-lvl1">
-          <svg class="w-5 h-5 text-ts-ink-soft absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M4 11a7 7 0 1114 0 7 7 0 01-14 0z"></path>
-          </svg>
-        </div>
+    <!-- Filters & Controls -->
+    <div class="collection-controls">
+      <!-- Search -->
+      <div class="collection-controls__search">
+        <svg class="collection-controls__search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M4 11a7 7 0 1114 0 7 7 0 01-14 0z"></path>
+        </svg>
+        <input
+          type="text"
+          [(ngModel)]="searchTerm"
+          (input)="applyFilters()"
+          [placeholder]="'collections.search_placeholder' | translate"
+          class="collection-controls__search-input">
       </div>
-      <div class="flex flex-wrap items-center gap-3">
-        <div class="flex items-center gap-2">
-          <label class="text-sm text-ts-ink-soft">Sort</label>
-          <select [(ngModel)]="sort" (change)="applyFilters()" class="px-3 py-2 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink focus:ring-2 focus:ring-primary focus:border-primary shadow-lvl1">
-            <option value="newest">Newest</option>
-            <option value="price-asc">Price: Low to High</option>
-            <option value="price-desc">Price: High to Low</option>
+
+      <!-- Sort & Actions -->
+      <div class="collection-controls__actions">
+        <div class="collection-controls__sort">
+          <label class="collection-controls__sort-label">{{ 'collections.sort' | translate }}</label>
+          <select [(ngModel)]="sort" (change)="applyFilters()" class="collection-controls__sort-select">
+            <option value="newest">{{ 'collections.sort_newest' | translate }}</option>
+            <option value="price-asc">{{ 'collections.sort_price_low' | translate }}</option>
+            <option value="price-desc">{{ 'collections.sort_price_high' | translate }}</option>
           </select>
         </div>
-        <button class="px-4 py-2 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink hover:border-primary shadow-lvl1" (click)="clearFilters()">Clear</button>
+
+        @if (searchTerm || selectedTags.size > 0) {
+          <button type="button" (click)="clearFilters()" class="collection-controls__clear">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+            <span>{{ 'collections.clear_filters' | translate }}</span>
+          </button>
+        }
       </div>
     </div>
 
-    <!-- Tags filter -->
+    <!-- Tags Filter -->
     @if (tags.length) {
-      <div class="flex flex-wrap gap-2">
+      <div class="collection-tags">
         @for (tag of tags; track tag) {
           <button
             type="button"
             (click)="toggleTag(tag)"
-            class="px-3 py-1.5 rounded-full border text-sm transition-all shadow-lvl0"
-            [class.bg-primary/15]="selectedTags.has(tag)"
-            [class.text-accent]="selectedTags.has(tag)"
-            [class.border-primary/40]="selectedTags.has(tag)"
-            [class.text-ts-ink-soft]="!selectedTags.has(tag)"
-            [class.border-ts-line]="!selectedTags.has(tag)">
+            class="collection-tag"
+            [class.collection-tag--active]="selectedTags.has(tag)">
             {{ tag }}
           </button>
         }
       </div>
     }
 
-    <!-- Grid -->
+    <!-- Products Grid -->
     @if (isLoading) {
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        @for (i of [1,2,3,4,5,6]; track i) {
-          <div class="bg-ts-paper border border-ts-line rounded-2xl h-72 animate-pulse"></div>
+      <div class="collection-grid">
+        @for (i of [1,2,3,4,5,6,7,8]; track i) {
+          <div class="product-skeleton">
+            <div class="product-skeleton__image"></div>
+            <div class="product-skeleton__content">
+              <div class="product-skeleton__title"></div>
+              <div class="product-skeleton__price"></div>
+            </div>
+          </div>
+        }
+      </div>
+    } @else if (filtered.length === 0) {
+      <div class="collection-empty">
+        <div class="collection-empty__icon">
+          <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-4.35-4.35M4 11a7 7 0 1114 0 7 7 0 01-14 0z"></path>
+          </svg>
+        </div>
+        @if (products.length === 0) {
+          <h3 class="collection-empty__title font-serif">{{ 'collections.no_products_title' | translate }}</h3>
+          <p class="collection-empty__text">{{ 'collections.no_products_text' | translate }}</p>
+        } @else {
+          <h3 class="collection-empty__title font-serif">{{ 'collections.no_results_title' | translate }}</h3>
+          <p class="collection-empty__text">{{ 'collections.no_results_text' | translate }}</p>
+          <button type="button" (click)="clearFilters()" class="btn btn--secondary mt-4">
+            {{ 'collections.clear_filters' | translate }}
+          </button>
         }
       </div>
     } @else {
-      @if (filtered.length === 0) {
-        <div class="bg-ts-paper border border-ts-line rounded-2xl p-10 text-center">
-          @if (products.length === 0) {
-            <p class="text-ts-ink-soft">No products in this collection yet.</p>
-          } @else {
-            <p class="text-ts-ink-soft">No products match your filters.</p>
-          }
-        </div>
-      } @else {
-        <div class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          @for (product of filtered; track product.id) {
-            <ts-product-card [product]="product"></ts-product-card>
-          }
-        </div>
-      }
+      <div class="collection-grid">
+        @for (product of filtered; track product.id) {
+          <ts-product-card [product]="product"></ts-product-card>
+        }
+      </div>
+
+      <!-- Results Count -->
+      <div class="collection-results-count">
+        {{ 'collections.showing' | translate }} <strong>{{ filtered.length }}</strong> {{ 'collections.of' | translate }} <strong>{{ products.length }}</strong> {{ 'collections.items' | translate }}
+      </div>
     }
+
+    <!-- Related Collections CTA -->
+    <div class="collection-related">
+      <div class="collection-related__content">
+        <h3 class="collection-related__title font-serif">{{ 'collections.explore_more' | translate }}</h3>
+        <p class="collection-related__text">{{ 'collections.explore_text' | translate }}</p>
+      </div>
+      <a routerLink="/collections" class="btn btn--secondary">
+        <span>{{ 'collections.view_all' | translate }}</span>
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+        </svg>
+      </a>
+    </div>
   </div>
 </section>

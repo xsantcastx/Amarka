@@ -11,8 +11,8 @@ import { ModelService } from '../../../services/model.service';
 import { SeoSchemaService } from '../../../services/seo-schema.service';
 import { BrandConfigService } from '../../../core/services/brand-config.service';
 import { ProductReviewService } from '../../../services/product-review.service';
-import { BulkPricingTier, Product, ProductVariant } from '../../../models/product';
-import { CartItemCustomization } from '../../../models/cart';
+import { BulkPricingTier, Product, ProductVariant, CustomizationZone } from '../../../models/product';
+import { CartItemCustomization, ZoneCustomization, ZoneLogo } from '../../../models/cart';
 import { Media } from '../../../models/media';
 import { Category } from '../../../models/catalog';
 import { Model } from '../../../models/catalog';
@@ -70,6 +70,7 @@ export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
   addSuccess = false;
   addError = '';
   private routeSubscription?: Subscription;
+  // Legacy single-zone customization
   customLogoPreview: string | null = null;
   customLogoName = '';
   customLogoError = '';
@@ -79,6 +80,11 @@ export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
   private dragOffsetX = 0;
   private dragOffsetY = 0;
   @ViewChild('customizationPreview') customizationPreviewRef?: ElementRef<HTMLDivElement>;
+
+  // Multi-zone customization
+  activeZoneId: string | null = null;
+  zoneCustomizations: Map<string, { file: File; preview: string; placement?: { x: number; y: number } }> = new Map();
+  zoneErrors: Map<string, string> = new Map();
 
   async ngOnInit() {
     // Subscribe to route param changes to reload when navigating between products
@@ -159,6 +165,8 @@ export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
     this.customLogoError = '';
     this.customPlacementOverride = null;
     this.customLogoFile = null;
+    // Reset multi-zone state
+    this.resetMultiZoneCustomization();
   }
 
   private async loadProductMediaAssets(): Promise<void> {
@@ -363,6 +371,139 @@ export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
     this.customLogoError = '';
     this.customPlacementOverride = null;
     this.customLogoFile = null;
+  }
+
+  // ===== Multi-Zone Customization Methods =====
+
+  get customizationZones(): CustomizationZone[] {
+    return this.producto?.customization?.zones || [];
+  }
+
+  get hasMultipleZones(): boolean {
+    return this.customizationZones.length > 0;
+  }
+
+  get maxTotalLogos(): number {
+    return this.producto?.customization?.maxTotalLogos || 5;
+  }
+
+  get totalUploadedLogos(): number {
+    return this.zoneCustomizations.size + (this.customLogoFile ? 1 : 0);
+  }
+
+  get canUploadMoreLogos(): boolean {
+    return this.totalUploadedLogos < this.maxTotalLogos;
+  }
+
+  setActiveZone(zoneId: string | null) {
+    this.activeZoneId = zoneId;
+  }
+
+  getZoneCustomization(zoneId: string) {
+    return this.zoneCustomizations.get(zoneId);
+  }
+
+  getZoneError(zoneId: string): string {
+    return this.zoneErrors.get(zoneId) || '';
+  }
+
+  onZoneLogoSelected(event: Event, zone: CustomizationZone) {
+    if (!isPlatformBrowser(this.platformId)) return;
+
+    const input = event.target as HTMLInputElement;
+    if (!input.files || input.files.length === 0) return;
+
+    const file = input.files[0];
+    const validation = this.storageService.validateImageFile(file);
+
+    if (!validation.valid) {
+      this.zoneErrors.set(zone.id, validation.error?.includes('size')
+        ? 'product.customization_file_too_large'
+        : 'product.customization_invalid_file');
+      return;
+    }
+
+    if (!this.canUploadMoreLogos && !this.zoneCustomizations.has(zone.id)) {
+      this.zoneErrors.set(zone.id, 'product.max_logos_reached');
+      return;
+    }
+
+    this.zoneErrors.delete(zone.id);
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const preview = typeof reader.result === 'string' ? reader.result : '';
+      this.zoneCustomizations.set(zone.id, {
+        file,
+        preview,
+        placement: { x: zone.placement.x, y: zone.placement.y }
+      });
+      this.cdr.detectChanges();
+    };
+    reader.readAsDataURL(file);
+  }
+
+  clearZoneLogo(zoneId: string) {
+    this.zoneCustomizations.delete(zoneId);
+    this.zoneErrors.delete(zoneId);
+    if (this.activeZoneId === zoneId) {
+      this.activeZoneId = null;
+    }
+    this.cdr.detectChanges();
+  }
+
+  clearAllZoneLogos() {
+    this.zoneCustomizations.clear();
+    this.zoneErrors.clear();
+    this.activeZoneId = null;
+    this.cdr.detectChanges();
+  }
+
+  getZonePlacementStyle(zone: CustomizationZone) {
+    const customization = this.zoneCustomizations.get(zone.id);
+    const placement = customization?.placement || zone.placement;
+    return {
+      top: `${this.clampPercent(placement.y, 0, 100, 35)}%`,
+      left: `${this.clampPercent(placement.x, 0, 100, 35)}%`,
+      width: `${this.clampPercent(zone.placement.width, 1, 100, 30)}%`,
+      height: `${this.clampPercent(zone.placement.height, 1, 100, 30)}%`,
+      transform: `rotate(${this.clampPercent(zone.placement.rotation, -180, 180, 0)}deg)`,
+      transformOrigin: 'center'
+    };
+  }
+
+  buildZoneCustomizations(): ZoneCustomization[] {
+    const zones: ZoneCustomization[] = [];
+
+    for (const zone of this.customizationZones) {
+      const customization = this.zoneCustomizations.get(zone.id);
+      if (customization) {
+        zones.push({
+          zoneId: zone.id,
+          zoneName: zone.name,
+          baseImageUrl: zone.baseImageUrl,
+          logos: [{
+            logoUrl: customization.preview, // Will be replaced with actual URL after upload
+            logoFilename: customization.file.name,
+            placement: {
+              x: customization.placement?.x ?? zone.placement.x,
+              y: customization.placement?.y ?? zone.placement.y,
+              width: zone.placement.width,
+              height: zone.placement.height,
+              rotation: zone.placement.rotation
+            }
+          }]
+        });
+      }
+    }
+
+    return zones;
+  }
+
+  private resetMultiZoneCustomization() {
+    this.zoneCustomizations.clear();
+    this.zoneErrors.clear();
+    this.activeZoneId = null;
   }
 
   private normalizeBulkPricingTiers(tiers?: BulkPricingTier[]): BulkPricingTier[] {
@@ -1041,5 +1182,24 @@ export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
       this.routeSubscription.unsubscribe();
     }
     this.removeDragListeners();
+
+    // Memory cleanup: Revoke object URLs to prevent memory leaks
+    if (this.customLogoPreview?.startsWith('blob:')) {
+      URL.revokeObjectURL(this.customLogoPreview);
+    }
+
+    // Clean up zone customization previews
+    for (const [, customization] of this.zoneCustomizations) {
+      if (customization.preview?.startsWith('blob:')) {
+        URL.revokeObjectURL(customization.preview);
+      }
+    }
+    this.zoneCustomizations.clear();
+    this.zoneErrors.clear();
+
+    // Clear image caches to free memory
+    this.variantImageCache = {};
+    this.galleryImages = [];
+    this.carouselImages = [];
   }
 }

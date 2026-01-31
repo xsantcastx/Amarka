@@ -280,17 +280,46 @@
   "collections": {
     "title": "Colecciones",
     "subtitle": "Lanzamientos curados como Regalos para Hombres, Recuerdos de Boda y sets grabados personalizados.",
+    "badge": "Colecciones curadas",
     "loading": "Cargando colecciones...",
     "empty": {
       "title": "Aún no hay colecciones",
-      "body": "Crea una colecci?n en Admin -> Collections y aparecer? aqu? autom?ticamente."
+      "body": "Crea una colección en Admin -> Collections y aparecerá aquí automáticamente.",
+      "cta": "Volver al inicio"
     },
     "card": {
       "label": "Colección",
       "cta": "Comprar ahora"
-    }
+    },
+    "cta": {
+      "title": "¿Buscas algo único?",
+      "text": "Contáctanos para grabado personalizado, pedidos al por mayor o consulta de regalos.",
+      "button": "Contáctanos"
+    },
+    "items": "artículos",
+    "personalized": "Personalizado y listo para enviar",
+    "search_placeholder": "Buscar regalos...",
+    "sort": "Ordenar",
+    "sort_newest": "Más reciente",
+    "sort_price_low": "Precio: menor a mayor",
+    "sort_price_high": "Precio: mayor a menor",
+    "clear_filters": "Limpiar filtros",
+    "showing": "Mostrando",
+    "of": "de",
+    "no_products_title": "Aún no hay productos en esta colección",
+    "no_products_text": "Vuelve pronto para ver novedades.",
+    "no_results_title": "Ningún producto coincide con tus filtros",
+    "no_results_text": "Intenta ajustar tu búsqueda o filtros.",
+    "explore_more": "Explora más colecciones",
+    "explore_text": "Descubre más ideas de regalos curados para cada ocasión.",
+    "view_all": "Ver todas las colecciones"
   },
   "admin": {
+    "title": "Admin",
+    "dashboard": {
+      "title": "Panel",
+      "subtitle": "Resumen de rendimiento y operaciones."
+    },
     "total_products": "Total de Productos",
     "total_orders": "Total de Pedidos",
     "gallery_images": "Imágenes de Galería",
@@ -750,7 +779,10 @@
     "need_categories_and_models": "Necesitas crear categorías y modelos primero.",
     "need_category": "Necesitas crear una categoría primero.",
     "need_model": "Necesitas crear un modelo primero.",
-    "goto_catalog": "Ir al Catálogo"
+    "goto_catalog": "Ir al Catálogo",
+    "needs_moderation": "Requiere moderacion",
+    "recent_activity": "Actividad reciente",
+    "no_recent_activity": "No hay actividad reciente."
   },
   "footer": {
     "description": "Grabado premium y regalos personalizados hechos para durar. Desde premios corporativos hasta recuerdos de hitos importantes, grabamos con precisión y entregamos listos para regalar.",
@@ -1088,8 +1120,6 @@
     "weight": "Peso",
     "chip_type": "Tipo de chip",
     "cooling": "Refrigeraci?n",
-    "dimensions": "Dimensiones",
-    "weight": "Peso",
     "operating_temp": "Temperatura de operaci?n",
     "network": "Red",
     "voltage": "Voltaje",

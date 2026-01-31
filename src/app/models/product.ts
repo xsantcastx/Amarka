@@ -50,9 +50,24 @@ export interface ProductCustomizationPlacement {
   rotation?: number; // Degrees
 }
 
+/**
+ * Defines a placement zone for logo customization
+ * Each zone represents an area on the product where a logo can be placed
+ */
+export interface CustomizationZone {
+  id: string;                    // Unique zone identifier (e.g., 'front', 'back', 'sleeve')
+  name: string;                  // Display name (e.g., 'Front', 'Back', 'Left Sleeve')
+  placement: ProductCustomizationPlacement;
+  baseImageUrl?: string;         // Optional zone-specific base image (for different views)
+  required?: boolean;            // Whether this zone requires a logo
+  maxLogos?: number;             // Max logos for this zone (default 1)
+}
+
 export interface ProductCustomizationConfig {
   baseImageUrl?: string;
-  placement?: ProductCustomizationPlacement;
+  placement?: ProductCustomizationPlacement;  // Legacy single-zone placement
+  zones?: CustomizationZone[];                // Multi-zone placements
+  maxTotalLogos?: number;                     // Max total logos across all zones (default 5)
 }
 
 export interface BulkPricingTier {

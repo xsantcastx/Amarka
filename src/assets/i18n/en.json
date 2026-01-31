@@ -54,10 +54,15 @@
     "login_subtitle": "Welcome Back",
     "login_description": "Sign in to manage your orders, saved gifts, and personalised settings.",
     "login_form_description": "Sign in to continue purchasing, tracking, and managing your engraved gifts.",
+    "access": "Access",
     "register": "Register",
     "register_subtitle": "Join Amarka",
     "register_description": "Create your account to save favourites, track orders, and personalise gifting.",
     "create_account": "Create Account",
+    "create_access": "Create Account",
+    "register_form_hint": "All fields marked * are required. Passwords must be at least {{minLength}} characters.",
+    "account_settings": "Account Settings",
+    "user_profile": "User Profile",
     "unified_dashboard_title": "Unified Dashboard",
     "unified_dashboard_description": "Track orders, manage favourites, and access your personalised gift recommendations in one place.",
     "secure_account_title": "Secure Account",
@@ -165,7 +170,9 @@
     "saving": "Saving...",
     "hello": "Hello",
     "search": "Search",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "back": "Back",
+    "back_to_home": "Back to home"
   },
   "product": {
     "in_stock": "in stock",
@@ -279,19 +286,63 @@
   "collections": {
     "title": "Collections",
     "subtitle": "Curated drops like Gifts for Men, Wedding Keepsakes, and bespoke engraved sets.",
+    "badge": "Curated collections",
     "loading": "Loading collections...",
     "empty": {
       "title": "No collections yet",
-      "body": "Create a collection in Admin -> Collections and it will appear here automatically."
+      "body": "Create a collection in Admin -> Collections and it will appear here automatically.",
+      "cta": "Back to home"
     },
     "card": {
       "label": "Collection",
       "cta": "Shop now"
-    }
+    },
+    "cta": {
+      "title": "Looking for something unique?",
+      "text": "Contact us for custom engraving, bulk orders, or personalized gift consultation.",
+      "button": "Get in touch"
+    },
+    "items": "items",
+    "personalized": "Personalized & ready to ship",
+    "search_placeholder": "Search gifts...",
+    "sort": "Sort",
+    "sort_newest": "Newest",
+    "sort_price_low": "Price: Low to High",
+    "sort_price_high": "Price: High to Low",
+    "clear_filters": "Clear filters",
+    "showing": "Showing",
+    "of": "of",
+    "no_products_title": "No products in this collection yet",
+    "no_products_text": "Check back soon for new arrivals.",
+    "no_results_title": "No products match your filters",
+    "no_results_text": "Try adjusting your search or filters.",
+    "explore_more": "Explore more collections",
+    "explore_text": "Discover more curated gift ideas for every occasion.",
+    "view_all": "View all collections"
   },
   "admin": {
     "title": "Admin",
+    "dashboard": {
+      "title": "Dashboard",
+      "subtitle": "Store performance and operations overview."
+    },
+    "quick_actions": "Quick actions",
+    "total_products": "Total products",
+    "total_orders": "Total orders",
+    "gallery_images": "Gallery images",
+    "total_users": "Total users",
+    "pending_reviews": "Pending reviews",
+    "needs_moderation": "Needs moderation",
+    "total_revenue": "Total revenue",
+    "add_product": "Add product",
+    "upload_image": "Upload image",
+    "manage_products": "Manage products",
+    "manage_orders": "Manage orders",
+    "manage_gallery": "Manage gallery",
     "manage_users": "Manage Users",
+    "catalog": {
+      "title": "Catalog"
+    },
     "users_description": "Review user accounts, roles, and access.",
     "search_users": "Search users",
     "search_users_placeholder": "Search by name or email...",
@@ -735,7 +786,58 @@
     "need_categories_and_models": "You need to create categories and models first.",
     "need_category": "You need to create a category first.",
     "need_model": "You need to create a model first.",
-    "goto_catalog": "Go to Catalog"
+    "goto_catalog": "Go to Catalog",
+    "recent_activity": "Recent activity",
+    "no_recent_activity": "No recent activity yet."
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "Share details about your personalized gift needs. We respond within one business day.",
+    "badge": "Get in touch",
+    "form": {
+      "title": "Share Your Vision",
+      "subtitle": "Tell us about your personalized gift needs. We respond within one business day with custom recommendations.",
+      "name": "Full name",
+      "email": "Email",
+      "phone": "Phone",
+      "company": "Company (optional)",
+      "date": "Needed by date",
+      "location": "Shipping to",
+      "location_placeholder": "City, State or ZIP",
+      "quantity": "Quantity needed",
+      "quantity_placeholder": "Approx. number of items",
+      "budget": "Budget range",
+      "message": "Tell us about your project",
+      "message_placeholder": "Describe what you're looking to create, any engraving details, occasion, or special requests...",
+      "privacy": "I agree to the privacy policy.",
+      "privacy_required": "Please confirm you accept the privacy policy.",
+      "submit": "Send message",
+      "submitting": "Sending...",
+      "success": "Thank you! Your message has been sent.",
+      "error": "Something went wrong. Please try again."
+    },
+    "info": {
+      "title": "How to reach us",
+      "subtitle": "Prefer to chat directly? Call, email, or message us on WhatsApp.",
+      "location_text": "Serving customers across the US with fast, reliable shipping.",
+      "phone": "Phone & WhatsApp",
+      "whatsapp": "Message us on WhatsApp",
+      "email_label": "Email",
+      "hours": "Business Hours",
+      "hours_weekday": "Mon – Fri: 9:00 AM – 6:00 PM EST",
+      "hours_weekend": "Sat: 10:00 AM – 4:00 PM EST",
+      "not_available": "Not available"
+    },
+    "whatsapp": {
+      "title": "Prefer a quick chat?",
+      "text": "Tap below to start a WhatsApp conversation with our design team.",
+      "button": "Open WhatsApp"
+    },
+    "trust": {
+      "secure": "Secure & private",
+      "fast": "Fast response",
+      "crafted": "Crafted with care"
+    }
   },
   "footer": {
     "description": "Premium engraving and personalized gifts crafted to keep. From corporate awards to milestone keepsakes, we engrave with precision and deliver gift-ready.",

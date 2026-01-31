@@ -1,2 +1,189 @@
-/* Register page styles */
-/* Using TailwindCSS - minimal custom styles needed */
+// Register Page - Premium Boutique Styling
+:host {
+  display: block;
+}
+
+// Premium Badge
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--ts-accent);
+  background: color-mix(in srgb, var(--ts-accent) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ts-accent) 30%, transparent);
+  border-radius: var(--radius-full);
+}
+
+// Feature Cards
+.feature-card {
+  border-radius: var(--radius-lg);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-2);
+  }
+}
+
+// Form Card Premium Styling
+.auth-form-card {
+  background: var(--ts-paper);
+  border: 1px solid var(--ts-line);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-2);
+}
+
+// Input Focus Enhancements
+.auth-input {
+  transition: all 0.2s ease;
+
+  &:focus {
+    border-color: var(--ts-accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--ts-accent) 15%, transparent);
+  }
+}
+
+// Trust Indicators
+.trust-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--ts-ink-soft);
+
+  svg {
+    color: var(--ts-accent);
+  }
+}
+
+// Alert Messages
+.auth-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius-lg);
+  font-size: 0.875rem;
+
+  &--error {
+    background: color-mix(in srgb, #ef4444 10%, var(--ts-paper));
+    border: 1px solid color-mix(in srgb, #ef4444 25%, transparent);
+    color: #b91c1c;
+  }
+}
+
+// Divider
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--ts-ink-soft);
+
+  &::before,
+  &::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--ts-line);
+  }
+}
+
+// Link Styling
+.auth-link {
+  font-weight: 600;
+  color: var(--ts-accent);
+  text-decoration: none;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: var(--ts-ink);
+  }
+}
+
+// Back Link
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--ts-ink-soft);
+  text-decoration: none;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: var(--ts-accent);
+  }
+}
+
+// Password Strength Indicator
+.password-strength {
+  display: flex;
+  gap: 0.25rem;
+  margin-top: 0.5rem;
+
+  &__bar {
+    height: 4px;
+    flex: 1;
+    border-radius: var(--radius-full);
+    background: var(--ts-line);
+    transition: background 0.2s ease;
+
+    &--weak {
+      background: #ef4444;
+    }
+
+    &--medium {
+      background: #f59e0b;
+    }
+
+    &--strong {
+      background: #10b981;
+    }
+  }
+}
+
+// Seasonal Valentine overrides
+:root[data-season='valentine'] {
+  .badge {
+    color: var(--season-rose, #e16888);
+    background: color-mix(in srgb, var(--season-rose, #e16888) 10%, transparent);
+    border-color: color-mix(in srgb, var(--season-rose, #e16888) 30%, transparent);
+  }
+
+  .trust-item svg {
+    color: var(--season-rose, #e16888);
+  }
+
+  .auth-link {
+    color: var(--season-rose, #e16888);
+
+    &:hover {
+      color: var(--season-berry, #782440);
+    }
+  }
+
+  // Focus states for inputs
+  input:focus,
+  select:focus {
+    border-color: var(--season-rose, #e16888) !important;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--season-rose, #e16888) 15%, transparent) !important;
+  }
+
+  // Background blobs get valentine tint
+  .pointer-events-none > div {
+    background: color-mix(in srgb, var(--season-rose, #e16888) 10%, transparent) !important;
+  }
+
+  // Password strength bar gets valentine color for strong
+  .password-strength__bar--strong {
+    background: var(--season-rose, #e16888);
+  }
+}

@@ -1,2 +1,320 @@
 // Page Header Component Styles
-// Inherits global styles from main theme
+// Premium boutique design for acrylic handcrafted storefront
+
+// CSS custom property for accent color override
+:host {
+  --page-header-accent: var(--ts-accent);
+  display: block;
+}
+
+// Background image support
+.page-hero__bg-image {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.page-hero__bg-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.page-hero__bg-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--ts-bg) 70%, transparent) 0%,
+    color-mix(in srgb, var(--ts-bg) 85%, transparent) 50%,
+    var(--ts-bg) 100%
+  );
+}
+
+// Decorative gradient blobs
+.page-hero__decor {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.15;
+  pointer-events: none;
+  will-change: transform;
+  animation: float 8s ease-in-out infinite;
+}
+
+.page-hero__decor--1 {
+  top: -10%;
+  left: 15%;
+  width: clamp(200px, 35vw, 400px);
+  height: clamp(200px, 35vw, 400px);
+  background: var(--page-header-accent);
+}
+
+.page-hero__decor--2 {
+  bottom: -15%;
+  right: 10%;
+  width: clamp(180px, 30vw, 350px);
+  height: clamp(180px, 30vw, 350px);
+  background: var(--ts-accent-soft);
+  animation-delay: -4s;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(10px, -15px) scale(1.05);
+  }
+}
+
+// Subtle pattern overlay
+.page-hero__pattern {
+  position: absolute;
+  inset: 0;
+  opacity: 0.02;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23a8c5a4' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
+// Badge styling
+.page-hero__badge {
+  margin-bottom: clamp(0.5rem, 2vw, 0.75rem);
+}
+
+.page-hero__badge-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.85rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--page-header-accent);
+  background: color-mix(in srgb, var(--page-header-accent) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--page-header-accent) 25%, transparent);
+  border-radius: var(--radius-full);
+}
+
+// Title highlight styling
+.page-hero__title-highlight {
+  background: linear-gradient(
+    135deg,
+    var(--page-header-accent) 0%,
+    var(--ts-accent-soft) 50%,
+    var(--page-header-accent) 100%
+  );
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 5s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+// Actions slot
+.page-hero__actions {
+  margin-top: clamp(1rem, 3vw, 1.5rem);
+
+  &:empty {
+    display: none;
+  }
+}
+
+// Icon wrapper enhanced styling
+.page-hero__icon-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--page-header-accent);
+}
+
+.page-hero__icon-badge {
+  position: absolute;
+  top: -0.5rem;
+  right: -0.5rem;
+  min-width: 1.25rem;
+  height: 1.25rem;
+  padding: 0 0.35rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: white;
+  background: var(--page-header-accent);
+  border-radius: var(--radius-full);
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--page-header-accent) 40%, transparent);
+}
+
+// Extra content slot
+.page-hero__extra {
+  &:empty {
+    display: none;
+  }
+
+  &:not(:empty) {
+    margin-top: clamp(1.5rem, 4vw, 2rem);
+  }
+}
+
+// Decorative bottom border
+.page-hero__border {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in srgb, var(--page-header-accent) 20%, transparent) 20%,
+    color-mix(in srgb, var(--page-header-accent) 35%, transparent) 50%,
+    color-mix(in srgb, var(--page-header-accent) 20%, transparent) 80%,
+    transparent 100%
+  );
+}
+
+// Variant: Featured (more prominent)
+.page-hero--featured {
+  .page-hero__decor {
+    opacity: 0.2;
+  }
+
+  .page-hero__title {
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+  }
+
+  .page-hero__inner {
+    padding-bottom: clamp(2.5rem, 6vw, 4rem);
+  }
+}
+
+// Variant: Minimal (less decorative)
+.page-hero--minimal {
+  .page-hero__decor,
+  .page-hero__pattern {
+    display: none;
+  }
+
+  .page-hero__inner {
+    padding-bottom: clamp(1.25rem, 4vw, 2rem);
+  }
+}
+
+// Variant: Hero (full hero style)
+.page-hero--hero {
+  min-height: clamp(300px, 40vh, 450px);
+  display: flex;
+  align-items: flex-end;
+
+  .page-hero__inner {
+    padding-bottom: clamp(3rem, 8vw, 5rem);
+  }
+
+  .page-hero__title {
+    font-size: clamp(2.75rem, 6vw, 5rem);
+  }
+
+  .page-hero__decor {
+    opacity: 0.25;
+  }
+}
+
+// Centered alignment
+.page-hero--centered {
+  .page-hero__content {
+    text-align: center;
+    justify-items: center;
+
+    @media (min-width: 1024px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .page-hero__heading {
+    align-items: center;
+  }
+
+  .page-hero__breadcrumbs-list {
+    justify-content: center;
+  }
+
+  .page-hero__subtitle {
+    margin-inline: auto;
+  }
+}
+
+// Seasonal theme overrides
+:root[data-season='valentine'] {
+  .page-hero__decor--1 {
+    background: var(--season-rose, #e16888);
+  }
+
+  .page-hero__decor--2 {
+    background: var(--season-berry, #782440);
+  }
+
+  .page-hero__badge-text {
+    color: var(--season-rose, #e16888);
+    background: color-mix(in srgb, var(--season-rose, #e16888) 10%, transparent);
+    border-color: color-mix(in srgb, var(--season-rose, #e16888) 25%, transparent);
+  }
+
+  .page-hero__title-highlight {
+    background: linear-gradient(
+      135deg,
+      var(--season-rose, #e16888) 0%,
+      var(--season-berry, #782440) 50%,
+      var(--season-rose, #e16888) 100%
+    );
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .page-hero__decor {
+    filter: blur(40px);
+  }
+
+  .page-hero--hero {
+    min-height: clamp(250px, 35vh, 350px);
+  }
+}
+
+@media (max-width: 480px) {
+  .page-hero__decor--1 {
+    left: -10%;
+  }
+
+  .page-hero__decor--2 {
+    right: -10%;
+  }
+
+  .page-hero__badge-text {
+    font-size: 0.65rem;
+    padding: 0.3rem 0.7rem;
+  }
+}
+
+// Reduced motion preference
+@media (prefers-reduced-motion: reduce) {
+  .page-hero__decor,
+  .page-hero__title-highlight {
+    animation: none;
+  }
+}

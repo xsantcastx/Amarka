@@ -1,66 +1,344 @@
+// Contact Page - Premium Boutique Styling
 :host {
   display: block;
 }
 
-.luxury-hero {
+// Layout
+.contact-layout {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1.5rem;
-  align-items: center;
-  padding: clamp(1.5rem, 5vw, 2.5rem);
-  border: 1px solid var(--ts-line);
-  border-radius: 26px;
-  background: linear-gradient(135deg, color-mix(in srgb, var(--ts-paper) 94%, transparent), color-mix(in srgb, var(--ts-bg-soft) 90%, transparent));
-  box-shadow: 0 22px 48px -34px rgba(29, 42, 57, 0.35);
+  gap: clamp(2rem, 5vw, 3rem);
+  align-items: start;
 
-  @media (min-width: 960px) {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    padding: clamp(2rem, 5vw, 3rem);
+  @media (min-width: 1024px) {
+    grid-template-columns: 1.2fr 1fr;
   }
 }
 
-.luxury-hero__content {
-  display: grid;
-  gap: 0.75rem;
+// Form Card
+.contact-form-card {
+  background: var(--ts-paper);
+  border: 1px solid var(--ts-line);
+  border-radius: var(--radius-lg);
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  box-shadow: var(--shadow-1);
 }
 
-// Removed .luxury-hero__eyebrow - now using global .badge utility
+.contact-form-header {
+  margin-bottom: clamp(1.5rem, 4vw, 2rem);
+}
 
-.luxury-hero__title {
-  font-size: clamp(2rem, 4vw, 2.6rem);
+.contact-form-title {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  color: var(--ts-ink);
+  margin: 0 0 0.5rem;
+}
+
+.contact-form-subtitle {
+  font-size: 0.95rem;
+  color: var(--ts-ink-soft);
   margin: 0;
+}
+
+// Alert Messages
+.contact-alert {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius-md);
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+
+  &--success {
+    background: color-mix(in srgb, #10b981 10%, var(--ts-paper));
+    border: 1px solid color-mix(in srgb, #10b981 25%, transparent);
+    color: #047857;
+  }
+
+  &--error {
+    background: color-mix(in srgb, #ef4444 10%, var(--ts-paper));
+    border: 1px solid color-mix(in srgb, #ef4444 25%, transparent);
+    color: #b91c1c;
+  }
+}
+
+// Form
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.contact-form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+
+  @media (min-width: 640px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+// Form Fields
+.contact-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+
+  &--full {
+    grid-column: 1 / -1;
+  }
+}
+
+.contact-label {
+  font-size: 0.85rem;
+  font-weight: 600;
   color: var(--ts-ink);
 }
 
-.luxury-hero__subtitle {
-  margin: 0;
-  color: var(--ts-ink-soft);
-  font-size: 1.05rem;
-  line-height: 1.6;
-}
-
-.luxury-hero__actions {
-  display: flex;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-  margin-top: 0.5rem;
-}
-
-// Removed .luxury-hero__cta and .luxury-hero__badge - now using global .btn-primary, .btn-secondary, and .badge utilities
-
-.luxury-hero__media {
-  position: relative;
-  border-radius: 22px;
-  overflow: hidden;
+.contact-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  color: var(--ts-ink);
   background: var(--ts-bg-soft);
-  min-height: 260px;
+  border: 1px solid var(--ts-line);
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
 
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
+  &::placeholder {
+    color: var(--ts-ink-soft);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: var(--ts-accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--ts-accent) 15%, transparent);
+    background: var(--ts-paper);
+  }
+
+  &--error {
+    border-color: #ef4444;
+    background: color-mix(in srgb, #ef4444 5%, var(--ts-bg-soft));
+
+    &:focus {
+      box-shadow: 0 0 0 3px color-mix(in srgb, #ef4444 15%, transparent);
+    }
+  }
+
+  &--valid {
+    border-color: #10b981;
   }
 }
 
-// Removed .luxury-hero__badge - now using global .badge utility
+.contact-textarea {
+  resize: none;
+  min-height: 120px;
+}
+
+.contact-error {
+  font-size: 0.8rem;
+  color: #ef4444;
+  margin: 0.25rem 0 0;
+}
+
+// Checkbox
+.contact-checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.contact-checkbox-input {
+  width: 1rem;
+  height: 1rem;
+  margin-top: 0.15rem;
+  accent-color: var(--ts-accent);
+  cursor: pointer;
+}
+
+.contact-checkbox-label {
+  font-size: 0.9rem;
+  color: var(--ts-ink-soft);
+  cursor: pointer;
+}
+
+// Submit Button
+.contact-submit {
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.contact-submit-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+// Contact Info Section
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.contact-info-card {
+  background: var(--ts-paper);
+  border: 1px solid var(--ts-line);
+  border-radius: var(--radius-lg);
+  padding: clamp(1.5rem, 4vw, 2rem);
+  box-shadow: var(--shadow-1);
+}
+
+.contact-info-title {
+  font-size: clamp(1.35rem, 2.5vw, 1.75rem);
+  color: var(--ts-ink);
+  margin: 0 0 0.35rem;
+}
+
+.contact-info-subtitle {
+  font-size: 0.9rem;
+  color: var(--ts-ink-soft);
+  margin: 0 0 1.5rem;
+}
+
+.contact-info-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.contact-info-item {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.contact-info-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--ts-bg-soft);
+  border: 1px solid var(--ts-line);
+  color: var(--ts-accent);
+}
+
+.contact-info-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.contact-info-label {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--ts-ink);
+  margin: 0;
+}
+
+.contact-info-text {
+  font-size: 0.9rem;
+  color: var(--ts-ink-soft);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.contact-info-link {
+  display: block;
+  font-size: 0.9rem;
+  color: var(--ts-ink);
+  text-decoration: none;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: var(--ts-accent);
+  }
+
+  &--accent {
+    color: var(--ts-accent);
+
+    &:hover {
+      color: var(--ts-ink);
+    }
+  }
+}
+
+// WhatsApp CTA
+.contact-whatsapp-cta {
+  padding: clamp(1.5rem, 4vw, 2rem);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(
+    135deg,
+    var(--ts-accent) 0%,
+    var(--ts-accent-soft) 100%
+  );
+  text-align: center;
+}
+
+.contact-whatsapp-title {
+  font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+  color: var(--ts-ink);
+  margin: 0 0 0.5rem;
+}
+
+.contact-whatsapp-text {
+  font-size: 0.9rem;
+  color: var(--ts-ink);
+  opacity: 0.85;
+  margin: 0 0 1.25rem;
+}
+
+// Trust Badges
+.contact-trust {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+  background: var(--ts-bg-soft);
+  border: 1px solid var(--ts-line);
+  border-radius: var(--radius-lg);
+}
+
+.contact-trust-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--ts-ink-soft);
+
+  svg {
+    color: var(--ts-accent);
+  }
+}
+
+// Seasonal Valentine overrides
+:root[data-season='valentine'] {
+  .contact-info-icon {
+    color: var(--season-rose, #e16888);
+  }
+
+  .contact-input:focus {
+    border-color: var(--season-rose, #e16888);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--season-rose, #e16888) 15%, transparent);
+  }
+
+  .contact-whatsapp-cta {
+    background: linear-gradient(
+      135deg,
+      var(--season-rose, #e16888) 0%,
+      color-mix(in srgb, var(--season-rose, #e16888) 70%, var(--season-berry, #782440)) 100%
+    );
+  }
+
+  .contact-trust-item svg {
+    color: var(--season-rose, #e16888);
+  }
+}

@@ -139,12 +139,22 @@ export class HomePageComponent extends LoadingComponentBase implements OnInit {
 
   private async loadFeaturedProductsAsync() {
     try {
-      const products = await this.productsService
+      // First try to get products explicitly marked as featured on home
+      let products = await this.productsService
         .getFeaturedOnHomeProducts(Math.max(this.featuredRotationWindow, 8))
         .pipe(take(1))
         .toPromise();
 
-      this.isSeasonalFeatured = false;
+      // Fallback: if no explicitly featured products, get latest published products
+      if (!products || products.length === 0) {
+        this.logger.debug('No products marked as featuredOnHome, falling back to latest products');
+        products = await this.productsService
+          .getFeaturedProducts(Math.max(this.featuredRotationWindow, 8))
+          .pipe(take(1))
+          .toPromise();
+      }
+
+      this.isSeasonalFeatured = !!this.activeSeasonalTheme?.featuredProductsTag;
       this.featuredProductsAll = products || [];
       this.featuredRotationIndex = 0;
       this.refreshFeaturedRotation();
@@ -185,22 +195,46 @@ export class HomePageComponent extends LoadingComponentBase implements OnInit {
   }
 
   private dedupeHomeProducts() {
+    const keyOf = (product: Product) => product.id || product.slug || product.name || '';
+    const uniqueList = (list: Product[]) => {
+      const seen = new Set<string>();
+      return list.filter(product => {
+        const key = keyOf(product);
+        if (!key) return true;
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      });
+    };
+
+    this.featuredProductsAll = uniqueList(
+      this.featuredProductsAll.length ? this.featuredProductsAll : this.featuredProducts
+    );
+    this.heroProducts = uniqueList(this.heroProducts);
+
     const seen = new Set<string>();
-    const keepUnique = (list: Product[]) =>
-      list.filter(p => {
-        const key = p.id || p.slug || p.name;
+    const markSeen = (list: Product[]) => {
+      for (const product of list) {
+        const key = keyOf(product);
+        if (key) {
+          seen.add(key);
+        }
+      }
+    };
+    markSeen(this.featuredProductsAll);
+    markSeen(this.heroProducts);
+
+    const filterAgainstSeen = (list: Product[]) =>
+      uniqueList(list).filter(product => {
+        const key = keyOf(product);
         if (!key) return true;
         if (seen.has(key)) return false;
         seen.add(key);
         return true;
       });
 
-    this.heroProducts = keepUnique(this.heroProducts);
-    this.featuredProductsAll = keepUnique(
-      this.featuredProductsAll.length ? this.featuredProductsAll : this.featuredProducts
-    );
-    this.bestSellerProducts = keepUnique(this.bestSellerProducts);
-    this.newArrivalProducts = keepUnique(this.newArrivalProducts);
+    this.bestSellerProducts = filterAgainstSeen(this.bestSellerProducts);
+    this.newArrivalProducts = filterAgainstSeen(this.newArrivalProducts);
     this.featuredRotationIndex = 0;
     this.refreshFeaturedRotation();
   }
