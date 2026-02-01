@@ -3,19 +3,9 @@
   <section class="relative py-16 lg:py-24 overflow-hidden">
     <div class="absolute inset-0 bg-gradient-to-r from-accent/5 to-primary/5"></div>
     <div class="relative max-w-7xl mx-auto px-6">
-      <!-- Breadcrumb -->
-      <nav class="mb-8">
-        <ol class="flex items-center space-x-2 text-sm text-ts-ink-soft">
-          <li><a routerLink="/" class="hover:text-ts-accent transition-colors">{{ 'checkout.breadcrumb.home' | translate }}</a></li>
-          <li class="text-ts-ink-soft/50">/</li>
-          <li><a routerLink="/cart" class="hover:text-ts-accent transition-colors">{{ 'checkout.breadcrumb.cart' | translate }}</a></li>
-          <li class="text-ts-ink-soft/50">/</li>
-          <li><a routerLink="/checkout/review" class="hover:text-ts-accent transition-colors">{{ 'checkout.breadcrumb.review' | translate }}</a></li>
-          <li class="text-ts-ink-soft/50">/</li>
-          <li class="text-primary font-medium">{{ 'checkout.breadcrumb.payment' | translate }}</li>
-        </ol>
-      </nav>
-      
+      <!-- Checkout Progress Indicator -->
+      <app-checkout-progress [currentStep]="'payment'"></app-checkout-progress>
+
       <!-- Header -->
       <div class="text-center">
         <h1 class="font-serif text-4xl lg:text-6xl text-ts-ink mb-6 leading-tight">

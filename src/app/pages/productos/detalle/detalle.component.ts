@@ -11,6 +11,7 @@ import { ModelService } from '../../../services/model.service';
 import { SeoSchemaService } from '../../../services/seo-schema.service';
 import { BrandConfigService } from '../../../core/services/brand-config.service';
 import { ProductReviewService } from '../../../services/product-review.service';
+import { AnalyticsService } from '../../../services/analytics.service';
 import { BulkPricingTier, Product, ProductVariant, CustomizationZone } from '../../../models/product';
 import { CartItemCustomization, ZoneCustomization, ZoneLogo } from '../../../models/cart';
 import { Media } from '../../../models/media';
@@ -37,6 +38,7 @@ export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
   private categoryService = inject(CategoryService);
   private modelService = inject(ModelService);
   private reviewService = inject(ProductReviewService);
+  private analyticsService = inject(AnalyticsService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private titleService = inject(Title);
@@ -69,6 +71,7 @@ export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
   addInProgress = false;
   addSuccess = false;
   addError = '';
+  linkCopied = false;
   private routeSubscription?: Subscription;
   // Legacy single-zone customization
   customLogoPreview: string | null = null;
@@ -159,6 +162,11 @@ export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
       this.updatePlaceholderSlots();
       this.prepareCarouselImages();
       this.updateSEO();
+
+      // Track product view for analytics
+      if (isPlatformBrowser(this.platformId)) {
+        this.analyticsService.trackViewItem(this.producto);
+      }
 
       void this.loadProductosRelacionados();
     } catch (error) {
@@ -1043,6 +1051,68 @@ export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
 
   goBack() {
     this.router.navigate(['/productos']);
+  }
+
+  // Social Share Methods
+  private getProductUrl(): string {
+    if (isPlatformBrowser(this.platformId)) {
+      return window.location.href;
+    }
+    return `https://amarka.com/products/${this.producto?.slug || ''}`;
+  }
+
+  shareOnWhatsApp() {
+    if (!isPlatformBrowser(this.platformId) || !this.producto) return;
+    const url = this.getProductUrl();
+    const text = `Check out ${this.producto.name} on Amarka!`;
+    window.open(`https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}`, '_blank');
+    this.analyticsService.trackSocialShare('whatsapp', 'product', this.producto.id);
+  }
+
+  shareOnFacebook() {
+    if (!isPlatformBrowser(this.platformId) || !this.producto) return;
+    const url = this.getProductUrl();
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank', 'width=600,height=400');
+    this.analyticsService.trackSocialShare('facebook', 'product', this.producto.id);
+  }
+
+  shareOnPinterest() {
+    if (!isPlatformBrowser(this.platformId) || !this.producto) return;
+    const url = this.getProductUrl();
+    const imageUrl = this.coverImage?.url || this.producto.imageUrl || '';
+    const description = this.producto.name;
+    window.open(`https://pinterest.com/pin/create/button/?url=${encodeURIComponent(url)}&media=${encodeURIComponent(imageUrl)}&description=${encodeURIComponent(description)}`, '_blank', 'width=600,height=400');
+    this.analyticsService.trackSocialShare('pinterest', 'product', this.producto.id);
+  }
+
+  async copyProductLink() {
+    if (!isPlatformBrowser(this.platformId)) return;
+    const url = this.getProductUrl();
+    try {
+      await navigator.clipboard.writeText(url);
+      this.linkCopied = true;
+      this.cdr.detectChanges();
+      this.analyticsService.trackSocialShare('copy_link', 'product', this.producto?.id);
+      setTimeout(() => {
+        this.linkCopied = false;
+        this.cdr.detectChanges();
+      }, 2000);
+    } catch {
+      // Fallback for older browsers
+      const textarea = document.createElement('textarea');
+      textarea.value = url;
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+      this.linkCopied = true;
+      this.cdr.detectChanges();
+      this.analyticsService.trackSocialShare('copy_link', 'product', this.producto?.id);
+      setTimeout(() => {
+        this.linkCopied = false;
+        this.cdr.detectChanges();
+      }, 2000);
+    }
   }
 
   openLightbox(imageUrl?: string, altText?: string) {

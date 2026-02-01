@@ -8,10 +8,12 @@ import { AddressService } from '../../services/address.service';
 import { ShippingService, ShippingMethod } from '../../services/shipping.service';
 import { SettingsService, AppSettings } from '../../services/settings.service';
 import { PromoCodeService } from '../../services/promo-code.service';
+import { AnalyticsService } from '../../services/analytics.service';
 import { Auth } from '@angular/fire/auth';
 import { map, startWith } from 'rxjs/operators';
 import { combineLatest, Observable } from 'rxjs';
 import { PageHeaderComponent, Breadcrumb } from '../../shared/components/page-header/page-header.component';
+import { CheckoutProgressComponent } from '../../shared/components/checkout-progress/checkout-progress.component';
 import { Address } from '../../models/cart';
 
 interface CartViewModel {
@@ -47,7 +49,7 @@ interface CartViewModel {
 @Component({
   standalone: true,
   selector: 'ts-cart-page',
-  imports: [CommonModule, RouterLink, TranslateModule, PageHeaderComponent, ReactiveFormsModule],
+  imports: [CommonModule, RouterLink, TranslateModule, PageHeaderComponent, ReactiveFormsModule, CheckoutProgressComponent],
   templateUrl: './cart.page.html',
   styleUrls: ['./cart.page.scss']
 })
@@ -60,6 +62,7 @@ export class CartPage implements OnInit {
   private settingsService = inject(SettingsService);
   private translate = inject(TranslateService);
   private promoCodeService = inject(PromoCodeService);
+  private analyticsService = inject(AnalyticsService);
   cart = inject(CartService);
 
   // State
@@ -587,6 +590,10 @@ export class CartPage implements OnInit {
       }
     }
 
+    // Track checkout progress - moving from shipping to payment
+    this.analyticsService.trackCheckoutProgress(2, 'shipping', cartSnapshot);
+    this.analyticsService.trackBeginCheckout(cartSnapshot);
+
     // Navigate directly to payment
     this.router.navigate(['/checkout/payment']);
   }
@@ -624,6 +631,7 @@ export class CartPage implements OnInit {
 
       if (!result.valid) {
         this.promoCodeError.set(result.error || 'Invalid promo code');
+        this.analyticsService.trackPromoCodeApplied(code, 0, false);
         return;
       }
 
@@ -634,6 +642,9 @@ export class CartPage implements OnInit {
       if (result.promoCode?.id) {
         await this.promoCodeService.incrementUsage(result.promoCode.id);
       }
+
+      // Track successful promo code application
+      this.analyticsService.trackPromoCodeApplied(code.toUpperCase(), result.discountAmount!, true);
 
       this.promoCodeSuccess.set(`Promo code applied! You save ${this.formatCurrency(result.discountAmount!)}`);
       this.promoCodeInput.set('');

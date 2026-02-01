@@ -1,11 +1,14 @@
-import { Component, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, inject, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CategoryService } from '../../../services/category.service';
 import { SettingsService, AppSettings } from '../../../services/settings.service';
 import { BrandConfigService } from '../../services/brand-config.service';
+import { Firestore, collection, addDoc, query, where, getDocs } from '@angular/fire/firestore';
+import { AnalyticsService } from '../../../services/analytics.service';
 
 interface Category {
   id?: string;
@@ -19,7 +22,7 @@ interface Category {
 @Component({
   selector: 'app-footer',
   standalone: true,
-  imports: [CommonModule, RouterModule, TranslateModule],
+  imports: [CommonModule, RouterModule, TranslateModule, FormsModule],
   template: `
     <footer class="py-14 bg-ts-bg border-t border-ts-line">
       <div class="page-container">
@@ -87,6 +90,50 @@ interface Category {
           </div>
         </div>
 
+        <!-- Newsletter Signup -->
+        <div class="border-t border-ts-line pt-8 mb-8">
+          <div class="max-w-xl mx-auto text-center">
+            <h3 class="text-lg font-semibold text-ts-ink mb-2">{{ 'footer.newsletter_title' | translate }}</h3>
+            <p class="text-ts-ink-soft text-sm mb-4">{{ 'footer.newsletter_description' | translate }}</p>
+
+            @if (newsletterSuccess) {
+              <div class="p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-700 text-sm">
+                {{ 'footer.newsletter_success' | translate }}
+              </div>
+            } @else {
+              <form (ngSubmit)="subscribeNewsletter()" class="flex flex-col sm:flex-row gap-3">
+                <input
+                  type="email"
+                  [(ngModel)]="newsletterEmail"
+                  name="newsletterEmail"
+                  required
+                  [placeholder]="'footer.newsletter_placeholder' | translate"
+                  class="flex-1 px-4 py-3 bg-ts-bg-soft border border-ts-line rounded-xl text-ts-ink placeholder:text-ts-ink-soft focus:ring-2 focus:ring-accent focus:border-accent"
+                  [disabled]="newsletterLoading">
+                <button
+                  type="submit"
+                  [disabled]="newsletterLoading || !newsletterEmail"
+                  class="px-6 py-3 bg-accent text-neutral rounded-xl font-semibold hover:bg-accent/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap">
+                  @if (newsletterLoading) {
+                    <span class="flex items-center gap-2">
+                      <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                      </svg>
+                      {{ 'common.loading' | translate }}
+                    </span>
+                  } @else {
+                    {{ 'footer.newsletter_subscribe' | translate }}
+                  }
+                </button>
+              </form>
+              @if (newsletterError) {
+                <p class="mt-2 text-sm text-rose-600">{{ newsletterError }}</p>
+              }
+            }
+          </div>
+        </div>
+
         <div class="border-t border-ts-line pt-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4 text-ts-ink-soft text-sm">
           <p class="m-0">&copy; {{ currentYear }} {{ siteName }}. {{ 'footer.rights' | translate }}</p>
           <div class="flex gap-4">
@@ -103,9 +150,18 @@ export class FooterComponent implements OnInit {
   private categoryService = inject(CategoryService);
   private settingsService = inject(SettingsService);
   private brandConfig = inject(BrandConfigService);
+  private firestore = inject(Firestore);
+  private platformId = inject(PLATFORM_ID);
+  private analyticsService = inject(AnalyticsService);
 
   categories: Category[] = [];
   currentYear = new Date().getFullYear();
+
+  // Newsletter state
+  newsletterEmail = '';
+  newsletterLoading = false;
+  newsletterSuccess = false;
+  newsletterError = '';
 
   // Brand defaults; overwritten by brand config + settings
   siteName = '';
@@ -191,5 +247,51 @@ export class FooterComponent implements OnInit {
     if (!this.whatsappNumber) return '#';
     const cleanNumber = this.whatsappNumber.replace(/\D/g, '');
     return `https://wa.me/${cleanNumber}`;
+  }
+
+  async subscribeNewsletter() {
+    if (!this.newsletterEmail || !isPlatformBrowser(this.platformId)) return;
+
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(this.newsletterEmail)) {
+      this.newsletterError = 'Please enter a valid email address';
+      return;
+    }
+
+    this.newsletterLoading = true;
+    this.newsletterError = '';
+
+    try {
+      const subscribersRef = collection(this.firestore, 'newsletter_subscribers');
+
+      // Check if email already exists
+      const existingQuery = query(subscribersRef, where('email', '==', this.newsletterEmail.toLowerCase()));
+      const existingDocs = await getDocs(existingQuery);
+
+      if (!existingDocs.empty) {
+        this.newsletterError = 'This email is already subscribed';
+        this.newsletterLoading = false;
+        return;
+      }
+
+      // Add new subscriber
+      await addDoc(subscribersRef, {
+        email: this.newsletterEmail.toLowerCase(),
+        subscribedAt: new Date(),
+        source: 'footer',
+        active: true
+      });
+
+      this.newsletterSuccess = true;
+      this.newsletterEmail = '';
+
+      // Track successful newsletter signup
+      this.analyticsService.trackNewsletterSignup('footer');
+    } catch (error) {
+      this.newsletterError = 'Failed to subscribe. Please try again.';
+    } finally {
+      this.newsletterLoading = false;
+    }
   }
 }

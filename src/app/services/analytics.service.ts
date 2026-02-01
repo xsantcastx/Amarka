@@ -171,6 +171,32 @@ export class AnalyticsService {
     });
   }
 
+  trackViewItem(product: Product, currency?: string): void {
+    const item = this.buildItemFromProduct(product, 1);
+    const value = product.price || 0;
+
+    this.logEventSafely('view_item', {
+      currency: currency || 'USD',
+      value,
+      items: [item]
+    });
+  }
+
+  trackViewItemList(products: Product[], listName: string, currency?: string): void {
+    if (!products?.length) return;
+
+    const items = products.slice(0, 10).map((product, index) => ({
+      ...this.buildItemFromProduct(product, 1),
+      index
+    }));
+
+    this.logEventSafely('view_item_list', {
+      item_list_id: listName.toLowerCase().replace(/\s+/g, '_'),
+      item_list_name: listName,
+      items
+    });
+  }
+
   trackAddToCart(product: Product, quantity: number = 1, currency?: string): void {
     const item = this.buildItemFromProduct(product, quantity);
     const value = (product.price || 0) * quantity;
@@ -179,6 +205,55 @@ export class AnalyticsService {
       currency: currency || 'USD',
       value,
       items: [item]
+    });
+  }
+
+  trackRemoveFromCart(product: Product, quantity: number = 1, currency?: string): void {
+    const item = this.buildItemFromProduct(product, quantity);
+    const value = (product.price || 0) * quantity;
+
+    this.logEventSafely('remove_from_cart', {
+      currency: currency || 'USD',
+      value,
+      items: [item]
+    });
+  }
+
+  trackCheckoutProgress(step: number, stepName: string, cart?: Cart): void {
+    const params: Record<string, any> = {
+      checkout_step: step,
+      checkout_step_name: stepName
+    };
+
+    if (cart) {
+      params['currency'] = cart.currency || 'USD';
+      params['value'] = cart.total ?? cart.subtotal ?? 0;
+      params['coupon'] = cart.promoCode || undefined;
+    }
+
+    this.logEventSafely('checkout_progress', params);
+  }
+
+  trackNewsletterSignup(source: string = 'footer'): void {
+    this.logEventSafely('newsletter_signup', {
+      source,
+      page_location: this.isBrowser ? window.location.href : undefined
+    });
+  }
+
+  trackSocialShare(platform: string, contentType: string, itemId?: string): void {
+    this.logEventSafely('share', {
+      method: platform,
+      content_type: contentType,
+      item_id: itemId
+    });
+  }
+
+  trackPromoCodeApplied(code: string, discountAmount: number, success: boolean): void {
+    this.logEventSafely('promo_code_applied', {
+      coupon: code,
+      discount_amount: discountAmount,
+      success
     });
   }
 

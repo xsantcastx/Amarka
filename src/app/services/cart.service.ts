@@ -513,6 +513,28 @@ export class CartService {
     const currentCart = this.cartState$.value;
     if (!currentCart) return;
 
+    // Find the item being removed for analytics tracking
+    const removedItem = currentCart.items.find(item =>
+      item.productId === productId
+      && item.variantId === variantId
+      && (customizationId ? item.customizationId === customizationId : !item.customizationId)
+    );
+
+    // Track removal in analytics
+    if (removedItem) {
+      const productForAnalytics = {
+        id: removedItem.productId,
+        name: removedItem.name,
+        price: removedItem.unitPrice,
+        sku: removedItem.sku,
+        slug: '',
+        status: 'published',
+        size: '',
+        imageUrl: removedItem.imageUrl || ''
+      } as Product;
+      this.analyticsService.trackRemoveFromCart(productForAnalytics, removedItem.qty, currentCart.currency);
+    }
+
     currentCart.items = currentCart.items.filter(item => !(
       item.productId === productId
       && item.variantId === variantId

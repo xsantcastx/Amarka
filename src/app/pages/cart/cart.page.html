@@ -12,6 +12,11 @@
     [compact]="true">
   </app-page-header>
 
+  <!-- Checkout Progress Indicator -->
+  <div class="max-w-4xl mx-auto px-4 lg:px-6">
+    <app-checkout-progress [currentStep]="'cart'"></app-checkout-progress>
+  </div>
+
   <!-- Cart Content -->
   <section class="max-w-4xl mx-auto px-4 lg:px-6 py-12">
     <div class="space-y-8" *ngIf="(vm$ | async) as vm">

@@ -1,6 +1,9 @@
 <div class="min-h-screen bg-ts-bg py-12 px-4">
   <div class="max-w-4xl mx-auto">
-    
+
+    <!-- Checkout Progress Indicator -->
+    <app-checkout-progress [currentStep]="'confirmation'"></app-checkout-progress>
+
     <!-- Loading State -->
     @if (loading()) {
       <div class="text-center py-20 space-y-3">

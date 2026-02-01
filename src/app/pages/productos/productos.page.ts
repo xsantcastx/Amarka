@@ -12,6 +12,7 @@ import { CartService } from '../../services/cart.service';
 import { SettingsService } from '../../services/settings.service';
 import { MetaService } from '../../services/meta.service';
 import { ThemeService } from '../../services/theme.service';
+import { AnalyticsService } from '../../services/analytics.service';
 import { Product } from '../../models/product';
 import { Category, Model, Tag } from '../../models/catalog';
 import { Media } from '../../models/media';
@@ -38,6 +39,7 @@ export class ProductosPageComponent extends LoadingComponentBase implements OnIn
   private settingsService = inject(SettingsService);
   private metaService = inject(MetaService);
   private themeService = inject(ThemeService);
+  private analyticsService = inject(AnalyticsService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
 
@@ -204,6 +206,11 @@ export class ProductosPageComponent extends LoadingComponentBase implements OnIn
       this.extractAllTags();
       this.applyFilters();
       this.forceUpdate();
+
+      // Track product list view for analytics
+      if (this.allProducts.length > 0) {
+        this.analyticsService.trackViewItemList(this.allProducts, 'Products Page');
+      }
 
       if (publishedProducts.length === 0) {
         return;

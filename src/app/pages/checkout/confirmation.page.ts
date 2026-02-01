@@ -6,6 +6,7 @@ import { Auth } from '@angular/fire/auth';
 import { CartService } from '../../services/cart.service';
 import { InvoiceService } from '../../services/invoice.service';
 import { AnalyticsService } from '../../services/analytics.service';
+import { CheckoutProgressComponent } from '../../shared/components/checkout-progress/checkout-progress.component';
 
 interface OrderItem {
   productId: string;
@@ -39,7 +40,7 @@ interface Order {
 @Component({
   standalone: true,
   selector: 'app-confirmation',
-  imports: [CommonModule],
+  imports: [CommonModule, CheckoutProgressComponent],
   templateUrl: './confirmation.page.html',
   styleUrls: ['./confirmation.page.scss']
 })

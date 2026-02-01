@@ -13,11 +13,12 @@ import { AddressService } from '../../services/address.service';
 import { Address } from '../../models/cart';
 import { AnalyticsService } from '../../services/analytics.service';
 import { TranslateModule } from '@ngx-translate/core';
+import { CheckoutProgressComponent } from '../../shared/components/checkout-progress/checkout-progress.component';
 
 @Component({
   standalone: true,
   selector: 'ts-payment-page',
-  imports: [CommonModule, ReactiveFormsModule, TranslateModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule, CheckoutProgressComponent],
   templateUrl: './payment.page.html',
   styleUrls: ['./payment.page.scss']
 })

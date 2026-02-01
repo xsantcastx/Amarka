@@ -899,7 +899,13 @@
     "contact": "Contact",
     "rights": "All rights reserved.",
     "privacy": "Privacy",
-    "terms": "Terms"
+    "terms": "Terms",
+    "newsletter_title": "Stay Updated",
+    "newsletter_description": "Subscribe to get exclusive offers, new arrivals, and engraving inspiration delivered to your inbox.",
+    "newsletter_placeholder": "Enter your email",
+    "newsletter_subscribe": "Subscribe",
+    "newsletter_success": "Thank you for subscribing! Check your inbox for a welcome discount.",
+    "newsletter_already_subscribed": "This email is already subscribed."
   },
   "cart": {
     "your": "Your",
@@ -973,6 +979,12 @@
       "cart": "Cart",
       "review": "Review",
       "payment": "Payment"
+    },
+    "steps": {
+      "cart": "Cart",
+      "shipping": "Shipping",
+      "payment": "Payment",
+      "confirmation": "Done"
     },
     "review_title": "Review Your",
     "review_title_highlight": "Order",
@@ -1219,6 +1231,7 @@
     "units_available": "{{count}} units available",
     "pre_order": "Pre-order",
     "back_to_products": "Back to products",
+    "share_product": "Share this product",
     "warranty_included": "Warranty included",
     "warranty_coverage": "Includes standard manufacturer warranty.",
     "high_performance": "Premium craftsmanship",

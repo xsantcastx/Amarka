@@ -850,7 +850,13 @@
     "contact": "Contacto",
     "rights": "Todos los derechos reservados.",
     "privacy": "Privacidad",
-    "terms": "Términos"
+    "terms": "Términos",
+    "newsletter_title": "Mantente Actualizado",
+    "newsletter_description": "Suscríbete para recibir ofertas exclusivas, novedades e inspiración de grabado en tu bandeja de entrada.",
+    "newsletter_placeholder": "Ingresa tu correo",
+    "newsletter_subscribe": "Suscribirse",
+    "newsletter_success": "¡Gracias por suscribirte! Revisa tu bandeja de entrada para un descuento de bienvenida.",
+    "newsletter_already_subscribed": "Este correo ya está suscrito."
   },
   "cart": {
     "your": "Tu",
@@ -924,6 +930,12 @@
       "cart": "Carrito",
       "review": "Revisar",
       "payment": "Pago"
+    },
+    "steps": {
+      "cart": "Carrito",
+      "shipping": "Envío",
+      "payment": "Pago",
+      "confirmation": "Listo"
     },
     "review_title": "Revisa Tu",
     "review_title_highlight": "Pedido",
@@ -1170,6 +1182,7 @@
     "units_available": "{{count}} unidades disponibles",
     "pre_order": "Pre-orden",
     "back_to_products": "Volver a productos",
+    "share_product": "Compartir este producto",
     "warranty_included": "Garant?a incluida",
     "warranty_coverage": "Incluye garant?a est?ndar del fabricante.",
     "high_performance": "Alto rendimiento",

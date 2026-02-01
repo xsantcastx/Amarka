@@ -16,4 +16,4 @@ Allow: /contacto/
 Allow: /datos-tecnicos/
 
 # Sitemap location
-Sitemap: https://theluxmining.com/sitemap.xml
+Sitemap: https://amarka.com/sitemap.xml
