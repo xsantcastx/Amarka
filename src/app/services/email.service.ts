@@ -1,5 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { addDoc, collection, Firestore } from '@angular/fire/firestore';
+import { Functions, httpsCallable } from '@angular/fire/functions';
 import { SettingsService } from './settings.service';
 import { BrandConfigService } from '../core/services/brand-config.service';
 
@@ -19,9 +20,40 @@ export interface ContactFormData {
 @Injectable({ providedIn: 'root' })
 export class EmailService {
   private db = inject(Firestore);
+  private functions = inject(Functions);
   private settingsService = inject(SettingsService);
   private brandConfig = inject(BrandConfigService);
   private brandName = this.brandConfig.siteName;
+
+  private shouldUseBrevo(provider: string): boolean {
+    return String(provider || '').toLowerCase() === 'brevo';
+  }
+
+  private async sendViaBrevo(payload: {
+    to: string;
+    subject: string;
+    html: string;
+    replyTo?: { email: string; name?: string };
+  }): Promise<{ success: boolean }> {
+    const callable = httpsCallable<
+      { to: string; subject: string; html: string; replyTo?: { email: string; name?: string } },
+      { success: boolean }
+    >(this.functions, 'sendBrevoEmail');
+
+    const result = await callable(payload);
+    return result.data;
+  }
+
+  private async sendViaFirestoreMail(to: string, subject: string, html: string) {
+    const docRef = await addDoc(collection(this.db, 'mail'), {
+      to: [to],
+      message: {
+        subject,
+        html
+      }
+    });
+    return docRef;
+  }
 
   async sendCartEmail(payload: { contact: any, items: any[] }) {
     const { contact, items } = payload;
@@ -40,7 +72,10 @@ export class EmailService {
       return { success: true, disabled: true };
     }
     
-    const recipientEmail = settings.contactEmail || this.brandConfig.site.contact.email;
+    const recipientEmail =
+      settings.notificationEmail ||
+      settings.contactEmail ||
+      this.brandConfig.site.contact.email;
     console.log(`[EmailService] Sending cart email to: ${recipientEmail}`);
     
     const rows = items.map((i, idx) =>
@@ -75,20 +110,31 @@ export class EmailService {
       </div>`;
 
     try {
+      const subject = this.brandConfig.emails.notifications?.['cartShare']?.subject
+        || `${this.brandName} | Cart selection`;
+
+      if (this.shouldUseBrevo(settings.emailProvider)) {
+        const result = await this.sendViaBrevo({
+          to: recipientEmail,
+          subject,
+          html,
+          replyTo: {
+            email: String(contact.email || ''),
+            name: String(contact.name || contact.email || '')
+          }
+        });
+        console.log('Email sent via Brevo:', result);
+        return result;
+      }
+
       // Write to Firestore - the Trigger Email extension will automatically send this
-      const docRef = await addDoc(collection(this.db, 'mail'), {
-        to: [recipientEmail], // Use recipient from settings
-        message: { 
-          subject: this.brandConfig.emails.notifications?.['cartShare']?.subject || `${this.brandName} | Cart selection`, 
-          html 
-        }
-      });
-      
+      const docRef = await this.sendViaFirestoreMail(recipientEmail, subject, html);
       console.log('Email queued successfully with ID:', docRef.id, 'to:', recipientEmail);
       return docRef;
-    } catch (error) {
+    } catch (error: any) {
       console.error('Failed to queue email:', error);
-      throw new Error('Unable to send the email. Please try again later.');
+      const message = error?.message || 'Unable to send the email. Please try again later.';
+      throw new Error(message);
     }
   }
 
@@ -100,7 +146,10 @@ export class EmailService {
 
     // Get settings with force refresh to ensure we have latest values
     const settings = await this.settingsService.getSettings(true);
-    const recipientEmail = settings.contactEmail || this.brandConfig.site.contact.email;
+    const recipientEmail =
+      settings.notificationEmail ||
+      settings.contactEmail ||
+      this.brandConfig.site.contact.email;
     console.log(`[EmailService] Sending contact form to: ${recipientEmail}`);
 
     const html = `
@@ -131,20 +180,31 @@ export class EmailService {
       </div>`;
 
     try {
+      const subject = this.brandConfig.emails.notifications?.['contact']?.subject?.replace('{name}', formData.nombre)
+        || `${this.brandName} | Contact from ${formData.nombre}`;
+
+      if (this.shouldUseBrevo(settings.emailProvider)) {
+        const result = await this.sendViaBrevo({
+          to: recipientEmail,
+          subject,
+          html,
+          replyTo: {
+            email: String(formData.email || ''),
+            name: String(formData.nombre || formData.email || '')
+          }
+        });
+        console.log('Contact email sent via Brevo:', result);
+        return result;
+      }
+
       // Write to Firestore - the Trigger Email extension will automatically send this
-      const docRef = await addDoc(collection(this.db, 'mail'), {
-        to: [recipientEmail], // Use recipient from settings
-        message: { 
-          subject: this.brandConfig.emails.notifications?.['contact']?.subject?.replace('{name}', formData.nombre) || `${this.brandName} | Contact from ${formData.nombre}`, 
-          html 
-        }
-      });
-      
+      const docRef = await this.sendViaFirestoreMail(recipientEmail, subject, html);
       console.log('Contact email queued successfully with ID:', docRef.id, 'to:', recipientEmail);
       return docRef;
-    } catch (error) {
+    } catch (error: any) {
       console.error('Failed to queue contact email:', error);
-      throw new Error('Unable to send your message right now. Please try again later.');
+      const message = error?.message || 'Unable to send your message right now. Please try again later.';
+      throw new Error(message);
     }
   }
   /**
@@ -152,14 +212,26 @@ export class EmailService {
    */
   async queueEmail(emailData: { to: string; subject: string; html: string }): Promise<{ success: boolean }> {
     try {
-      const docRef = await addDoc(collection(this.db, 'mail'), {
-        to: [emailData.to],
-        message: {
+      const settings = await this.settingsService.getSettings(true);
+
+      if (this.shouldUseBrevo(settings.emailProvider)) {
+        const result = await this.sendViaBrevo({
+          to: emailData.to,
           subject: emailData.subject,
           html: emailData.html
+        });
+        if (!result.success) {
+          return { success: false };
         }
-      });
-      
+        return { success: true };
+      }
+
+      const docRef = await this.sendViaFirestoreMail(
+        emailData.to,
+        emailData.subject,
+        emailData.html
+      );
+
       console.log('[EmailService] Email queued successfully with ID:', docRef.id);
       return { success: true };
     } catch (error) {

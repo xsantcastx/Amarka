@@ -10,6 +10,7 @@ import {
   updateProfile,
   sendPasswordResetEmail
 } from '@angular/fire/auth';
+import { Functions, httpsCallable } from '@angular/fire/functions';
 import { 
   Firestore, 
   doc, 
@@ -49,6 +50,7 @@ export interface UserProfile {
 export class AuthService {
   private auth = inject(Auth);
   private firestore = inject(Firestore);
+  private functions = inject(Functions);
   private settingsService = inject(SettingsService);
   private emailService = inject(EmailService);
   private brandConfig = inject(BrandConfigService);
@@ -398,6 +400,19 @@ export class AuthService {
    */
   async sendPasswordReset(email: string): Promise<void> {
     try {
+      const settings = await this.settingsService.getSettings();
+      const provider = (settings.emailProvider || '').toLowerCase();
+
+      if (provider === 'brevo') {
+        const callable = httpsCallable<{ email: string }, { success: boolean }>(
+          this.functions,
+          'sendPasswordResetBrevo'
+        );
+        await callable({ email });
+        this.logger.debug('AuthService password reset email sent via Brevo to', email);
+        return;
+      }
+
       await sendPasswordResetEmail(this.auth, email);
       this.logger.debug('AuthService password reset email sent to', email);
     } catch (error: any) {

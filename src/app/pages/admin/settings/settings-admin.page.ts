@@ -205,9 +205,7 @@ export class SettingsAdminComponent extends LoadingComponentBase implements OnIn
         color: 'purple',
         expanded: false,
         settings: [
-          { key: 'stripePublicKey', label: 'Stripe Public Key', type: 'text', value: this.currentSettings.stripePublicKey, placeholder: 'pk_test_...' },
-          { key: 'stripeSecretKey', label: 'Stripe Secret Key', type: 'text', value: this.currentSettings.stripeSecretKey, placeholder: 'sk_test_...', sensitive: true },
-          { key: 'stripeWebhookSecret', label: 'Stripe Webhook Secret', type: 'text', value: this.currentSettings.stripeWebhookSecret, placeholder: 'whsec_...', sensitive: true },
+          { key: 'stripePublicKey', label: 'Stripe Public Key', type: 'text', value: this.currentSettings.stripePublicKey, placeholder: 'pk_test_...', description: 'Secret keys are stored as Firebase function secrets (not in Firestore).' },
           { key: 'stripeCurrency', label: 'Currency Code', type: 'select', value: this.currentSettings.stripeCurrency, options: [
             { label: 'USD - US Dollar', value: 'usd' },
             { label: 'EUR - Euro', value: 'eur' },
@@ -241,8 +239,8 @@ export class SettingsAdminComponent extends LoadingComponentBase implements OnIn
             { label: 'Brevo (Sendinblue)', value: 'brevo' },
             { label: 'Mailgun', value: 'mailgun' },
             { label: 'AWS SES', value: 'ses' }
-          ]},
-          { key: 'emailApiKey', label: 'Email API Key', type: 'text', value: this.currentSettings.emailApiKey, placeholder: 'your-api-key', sensitive: true },
+          ], description: 'API keys are stored as Firebase function secrets (not in Firestore).' },
+          { key: 'notificationEmail', label: 'Notification Recipient Email', type: 'text', value: this.currentSettings.notificationEmail, placeholder: 'alerts@example.com', description: 'Where contact and admin notification emails should be delivered.' },
           { key: 'emailFrom', label: 'From Email Address', type: 'text', value: this.currentSettings.emailFrom, placeholder: 'noreply@example.com' },
           { key: 'emailFromName', label: 'From Name', type: 'text', value: this.currentSettings.emailFromName, placeholder: 'Your Store' }
         ]
@@ -300,19 +298,18 @@ export class SettingsAdminComponent extends LoadingComponentBase implements OnIn
       });
 
       // CRITICAL: Ensure empty strings don't overwrite existing values
-      // If a sensitive field is empty/undefined, preserve the existing value from Firestore
-      if (!updatedSettings.stripeSecretKey && this.currentSettings?.stripeSecretKey) {
-        updatedSettings.stripeSecretKey = this.currentSettings.stripeSecretKey;
-      }
+      // Preserve non-secret fields when inputs are empty
       if (!updatedSettings.stripePublicKey && this.currentSettings?.stripePublicKey) {
         updatedSettings.stripePublicKey = this.currentSettings.stripePublicKey;
-      }
-      if (!updatedSettings.emailApiKey && this.currentSettings?.emailApiKey) {
-        updatedSettings.emailApiKey = this.currentSettings.emailApiKey;
       }
       if (!updatedSettings.recaptchaSiteKey && this.currentSettings?.recaptchaSiteKey) {
         updatedSettings.recaptchaSiteKey = this.currentSettings.recaptchaSiteKey;
       }
+
+      // Secrets are managed via Firebase function secrets; clear stored values in Firestore.
+      updatedSettings.emailApiKey = '';
+      updatedSettings.stripeSecretKey = '';
+      updatedSettings.stripeWebhookSecret = '';
 
       // Normalize social media URLs
       updatedSettings.facebookUrl = this.normalizeSocialMediaUrl(updatedSettings.facebookUrl, 'facebook.com');

@@ -262,8 +262,8 @@ service cloud.firestore {
     match /settings/{settingId} {
       // Allow admins to read and write all settings documents
       allow read, write: if isAdmin();
-      // Allow public read for public-facing settings
-      allow read: if settingId in ['public', 'app'];
+      // Allow public read for public-facing settings only
+      allow read: if settingId == 'public';
     }
 
     // Theme configs

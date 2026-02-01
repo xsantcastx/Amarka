@@ -11,51 +11,37 @@ dotenv.config();
 admin.initializeApp();
 const db = admin.firestore();
 
+const withBrevoSecrets = functions.runWith({ secrets: ["BREVO_API_KEY"] });
+const withStripeSecrets = functions.runWith({
+  secrets: ["STRIPE_SECRET_KEY", "STRIPE_WEBHOOK_SECRET"],
+});
+
 /**
- * Get Stripe configuration from Firestore settings
- * Falls back to environment variables if not found
+ * Get Stripe configuration from function secrets
  */
 async function getStripeConfig(): Promise<{ secretKey: string; webhookSecret: string | null }> {
-  try {
-    const settingsDoc = await db.collection("settings").doc("app").get();
-    const settings = settingsDoc.data();
-
-    if (settings?.stripeSecretKey) {
-      console.log("✓ Using Stripe secret key from Firestore settings");
-      
-      // Use webhook secret from Firestore if available, otherwise fall back to env
-      const webhookSecret = settings.stripeWebhookSecret || process.env.STRIPE_WEBHOOK_SECRET || null;
-      
-      if (settings.stripeWebhookSecret) {
-        console.log("✓ Using Stripe webhook secret from Firestore settings");
-      } else if (process.env.STRIPE_WEBHOOK_SECRET) {
-        console.log("✓ Using Stripe webhook secret from environment variables");
-      }
-      
-      return {
-        secretKey: settings.stripeSecretKey,
-        webhookSecret,
-      };
-    }
-  } catch (error) {
-    console.error("Error fetching Stripe config from Firestore:", error);
-  }
-
-  // Fallback to environment variables
   const envKey = process.env.STRIPE_SECRET_KEY || functions.config().stripe?.secret_key;
-  if (!envKey || envKey.startsWith("sk_test_51QJ7ZtP9wy1example")) {
-    console.warn("⚠️  Stripe secret key not configured in Firestore or .env file!");
+  const envWebhook =
+    process.env.STRIPE_WEBHOOK_SECRET ||
+    functions.config().stripe?.webhook_secret ||
+    null;
+
+  if (!envKey) {
+    throw new Error("Stripe secret key not configured. Set STRIPE_SECRET_KEY secret.");
   }
-  
-  console.log("✓ Using Stripe secret key from environment variables");
+
+  console.log("Using Stripe secret key from function secrets");
+  if (envWebhook) {
+    console.log("Using Stripe webhook secret from function secrets");
+  }
   return {
-    secretKey: envKey || "sk_test_placeholder",
-    webhookSecret: process.env.STRIPE_WEBHOOK_SECRET || null,
+    secretKey: envKey,
+    webhookSecret: envWebhook,
   };
 }
 
 /**
- * Get initialized Stripe instance with config from Firestore
+ * Get initialized Stripe instance with config from function secrets
  */
 async function getStripe(): Promise<Stripe> {
   const config = await getStripeConfig();
@@ -63,6 +49,281 @@ async function getStripe(): Promise<Stripe> {
     apiVersion: "2023-10-16",
   });
 }
+
+interface EmailConfig {
+  provider: string;
+  apiKey: string | null;
+  fromEmail: string;
+  fromName: string;
+  contactEmail: string;
+  notificationEmail: string;
+}
+
+async function getEmailConfig(): Promise<EmailConfig> {
+  try {
+    const settingsDoc = await db.collection("settings").doc("app").get();
+    const settings = settingsDoc.data() || {};
+
+    const provider = String(settings.emailProvider || "").toLowerCase();
+    const apiKeyFromSecret = (
+      process.env.BREVO_API_KEY ||
+      functions.config().brevo?.api_key ||
+      ""
+    ).trim();
+    const apiKey = apiKeyFromSecret || null;
+
+    const contactEmail = String(settings.contactEmail || "").trim();
+    const notificationEmail = String(settings.notificationEmail || "").trim();
+    const fromEmail = String(settings.emailFrom || contactEmail || notificationEmail || "").trim();
+    const fromName = String(settings.emailFromName || settings.siteName || "Amarka").trim();
+
+    return {
+      provider,
+      apiKey: apiKey || null,
+      fromEmail,
+      fromName,
+      contactEmail,
+      notificationEmail,
+    };
+  } catch (error) {
+    console.error("Error fetching email config from Firestore:", error);
+  }
+
+  return {
+    provider: "",
+    apiKey: (process.env.BREVO_API_KEY || functions.config().brevo?.api_key || "").trim() || null,
+    fromEmail: "",
+    fromName: "Amarka",
+    contactEmail: "",
+    notificationEmail: "",
+  };
+}
+
+const normalizeEmail = (value: string): string => value.trim().toLowerCase();
+
+const isAllowedRecipient = (to: string, config: EmailConfig): boolean => {
+  const allowed = [
+    config.contactEmail,
+    config.notificationEmail,
+    config.fromEmail,
+  ]
+    .filter(Boolean)
+    .map(normalizeEmail);
+
+  return allowed.includes(normalizeEmail(to));
+};
+
+/**
+ * Send email via Brevo API
+ */
+export const sendBrevoEmail = withBrevoSecrets.https.onCall(
+  withFlag("emailNotifications", async (data: any) => {
+    const to = typeof data?.to === "string" ? data.to.trim() : "";
+    const subject = typeof data?.subject === "string" ? data.subject.trim() : "";
+    const html = typeof data?.html === "string" ? data.html.trim() : "";
+    const replyToEmail = typeof data?.replyTo?.email === "string" ? data.replyTo.email.trim() : "";
+    const replyToName = typeof data?.replyTo?.name === "string" ? data.replyTo.name.trim() : "";
+
+    if (!to || !subject || !html) {
+      throw new functions.https.HttpsError(
+        "invalid-argument",
+        "to, subject, and html are required"
+      );
+    }
+
+    const config = await getEmailConfig();
+
+    if (config.provider && config.provider !== "brevo") {
+      console.error("sendBrevoEmail blocked: provider not brevo", {
+        provider: config.provider,
+      });
+      throw new functions.https.HttpsError(
+        "failed-precondition",
+        "Email provider is not set to Brevo"
+      );
+    }
+
+    if (!config.apiKey) {
+      console.error("sendBrevoEmail blocked: Brevo API key missing");
+      throw new functions.https.HttpsError(
+        "failed-precondition",
+        "Brevo API key is not configured"
+      );
+    }
+
+    if (!config.fromEmail) {
+      console.error("sendBrevoEmail blocked: From email missing");
+      throw new functions.https.HttpsError(
+        "failed-precondition",
+        "From email address is not configured"
+      );
+    }
+
+    if (!isAllowedRecipient(to, config)) {
+      console.error("sendBrevoEmail blocked: recipient not allowed", {
+        to,
+        allowed: [
+          config.contactEmail,
+          config.notificationEmail,
+          config.fromEmail,
+        ].filter(Boolean),
+      });
+      throw new functions.https.HttpsError(
+        "permission-denied",
+        "Recipient is not allowed"
+      );
+    }
+
+    const fetchFn = (globalThis as any).fetch as any;
+    if (!fetchFn) {
+      throw new functions.https.HttpsError("internal", "Fetch is not available");
+    }
+
+    const payload: Record<string, any> = {
+      sender: {
+        name: config.fromName || "Amarka",
+        email: config.fromEmail,
+      },
+      to: [{ email: to }],
+      subject,
+      htmlContent: html,
+    };
+
+    if (replyToEmail) {
+      payload.replyTo = {
+        email: replyToEmail,
+        name: replyToName || replyToEmail,
+      };
+    }
+
+    const response = await fetchFn("https://api.brevo.com/v3/smtp/email", {
+      method: "POST",
+      headers: {
+        accept: "application/json",
+        "content-type": "application/json",
+        "api-key": config.apiKey,
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text().catch(() => "");
+      console.error("Brevo send error:", response.status, errorText, {
+        keyLength: config.apiKey?.length || 0,
+        keyStartsWithXkeysib: config.apiKey?.startsWith("xkeysib-") || false,
+      });
+      throw new functions.https.HttpsError(
+        "internal",
+        `Brevo send failed (${response.status})`
+      );
+    }
+
+    const result = await response.json().catch(() => ({}));
+    return {
+      success: true,
+      messageId: result?.messageId || null,
+    };
+  })
+);
+
+/**
+ * Send password reset email via Brevo
+ */
+export const sendPasswordResetBrevo = withBrevoSecrets.https.onCall(
+  withFlag("emailNotifications", async (data: any) => {
+    const email = typeof data?.email === "string" ? data.email.trim() : "";
+
+    if (!email) {
+      throw new functions.https.HttpsError("invalid-argument", "email is required");
+    }
+
+    const config = await getEmailConfig();
+
+    if (config.provider && config.provider !== "brevo") {
+      throw new functions.https.HttpsError(
+        "failed-precondition",
+        "Email provider is not set to Brevo"
+      );
+    }
+
+    if (!config.apiKey) {
+      throw new functions.https.HttpsError(
+        "failed-precondition",
+        "Brevo API key is not configured"
+      );
+    }
+
+    if (!config.fromEmail) {
+      throw new functions.https.HttpsError(
+        "failed-precondition",
+        "From email address is not configured"
+      );
+    }
+
+    let resetLink = "";
+    try {
+      resetLink = await admin.auth().generatePasswordResetLink(email);
+    } catch (error: any) {
+      const code = error?.code || "";
+      if (code === "auth/user-not-found") {
+        return { success: true };
+      }
+      console.error("Error generating password reset link:", error);
+      throw new functions.https.HttpsError("internal", "Failed to generate reset link");
+    }
+
+    const brandName = config.fromName || "Amarka";
+    const subject = `Reset your ${brandName} password`;
+    const html = `
+      <div style="font-family:Arial, sans-serif; color:#111827; line-height:1.6;">
+        <h2 style="margin:0 0 12px;">Reset your password</h2>
+        <p>We received a request to reset your ${brandName} password.</p>
+        <p style="margin:24px 0;">
+          <a href="${resetLink}" style="background:#111827;color:#ffffff;text-decoration:none;padding:12px 18px;border-radius:6px;display:inline-block;">
+            Reset password
+          </a>
+        </p>
+        <p>If the button doesn't work, copy and paste this link into your browser:</p>
+        <p style="word-break:break-all;">${resetLink}</p>
+        <p style="font-size:12px;color:#6b7280;margin-top:24px;">If you didn't request this, you can ignore this email.</p>
+      </div>
+    `;
+
+    const fetchFn = (globalThis as any).fetch as any;
+    if (!fetchFn) {
+      throw new functions.https.HttpsError("internal", "Fetch is not available");
+    }
+
+    const response = await fetchFn("https://api.brevo.com/v3/smtp/email", {
+      method: "POST",
+      headers: {
+        accept: "application/json",
+        "content-type": "application/json",
+        "api-key": config.apiKey,
+      },
+      body: JSON.stringify({
+        sender: {
+          name: brandName,
+          email: config.fromEmail,
+        },
+        to: [{ email }],
+        subject,
+        htmlContent: html,
+      }),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text().catch(() => "");
+      console.error("Brevo reset send error:", response.status, errorText);
+      throw new functions.https.HttpsError(
+        "internal",
+        `Brevo send failed (${response.status})`
+      );
+    }
+
+    return { success: true };
+  })
+);
 
 // Shipping rates by country (in USD)
 const SHIPPING_RATES = {
@@ -350,7 +611,7 @@ export const cartReprice = functions.https.onCall(
  * POST /checkout/create-payment-intent
  * Body: { cartId: string, orderId?: string }
  */
-export const createPaymentIntent = functions.https.onCall(
+export const createPaymentIntent = withStripeSecrets.https.onCall(
   withFlag("payments", async (data: any, context: any) => {
   try {
     // Verify user authentication
@@ -518,7 +779,7 @@ export const createPaymentIntent = functions.https.onCall(
  * POST /webhooks/stripe
  * Processes payment_intent.succeeded and payment_intent.payment_failed events
  */
-export const handleStripeWebhook = functions.https.onRequest(
+export const handleStripeWebhook = withStripeSecrets.https.onRequest(
   withFlag("payments", async (req, res) => {
   // Only accept POST requests
   if (req.method !== "POST") {
@@ -859,7 +1120,7 @@ async function handlePaymentCanceled(paymentIntent: Stripe.PaymentIntent, webhoo
  * POST /custom-orders/create-payment-link
  * Body: { customOrderId: string }
  */
-export const createCustomOrderPaymentLink = functions.https.onCall(
+export const createCustomOrderPaymentLink = withStripeSecrets.https.onCall(
   withFlag("payments", async (data: any, context: any) => {
   try {
     // Verify user authentication and admin role
@@ -1015,7 +1276,7 @@ export const createCustomOrderPaymentLink = functions.https.onCall(
  * Handle webhook events for custom order payment links
  * This is called automatically when Stripe Payment Link checkout completes
  */
-export const handleCustomOrderPayment = functions.https.onRequest(
+export const handleCustomOrderPayment = withStripeSecrets.https.onRequest(
   withFlag("payments", async (req, res) => {
   // Only accept POST requests
   if (req.method !== "POST") {
@@ -1092,4 +1353,5 @@ export const handleCustomOrderPayment = functions.https.onRequest(
   }
   })
 );
+
 
