@@ -290,7 +290,8 @@ service cloud.firestore {
           // Allow hardcoded safe emails
           request.resource.data.to[0] in ['support@amarka.com', 'hello@amarka.com', 'xsantcastx@xsantcastx.com']
           // OR allow email from settings (admins can configure it)
-          || request.resource.data.to[0] == get(/databases/$(database)/documents/settings/app-settings).data.contactEmail
+          || request.resource.data.to[0] == get(/databases/$(database)/documents/settings/app).data.contactEmail
+          || request.resource.data.to[0] == get(/databases/$(database)/documents/settings/public).data.contactEmail
         );
       
       allow read: if false;

@@ -7,6 +7,7 @@ import { CartService } from '../../services/cart.service';
 import { AddressService } from '../../services/address.service';
 import { ShippingService, ShippingMethod } from '../../services/shipping.service';
 import { SettingsService, AppSettings } from '../../services/settings.service';
+import { PromoCodeService } from '../../services/promo-code.service';
 import { Auth } from '@angular/fire/auth';
 import { map, startWith } from 'rxjs/operators';
 import { combineLatest, Observable } from 'rxjs';
@@ -37,8 +38,10 @@ interface CartViewModel {
   subtotal: number;
   shipping: number;
   tax: number;
+  discount: number;
   total: number;
   currency: string;
+  promoCode?: string;
 }
 
 @Component({
@@ -56,10 +59,15 @@ export class CartPage implements OnInit {
   private shippingService = inject(ShippingService);
   private settingsService = inject(SettingsService);
   private translate = inject(TranslateService);
+  private promoCodeService = inject(PromoCodeService);
   cart = inject(CartService);
 
   // State
   showAddressForm = signal(false);
+  promoCodeInput = signal('');
+  promoCodeError = signal('');
+  promoCodeSuccess = signal('');
+  applyingPromoCode = signal(false);
   savingAddress = signal(false);
   calculatingShipping = signal(false);
   addresses = signal<Address[]>([]);
@@ -125,8 +133,10 @@ export class CartPage implements OnInit {
       subtotal: cart?.subtotal || 0,
       shipping: cart?.shipping || 0,
       tax: cart?.tax || 0,
+      discount: cart?.discount || 0,
       total: cart?.total || 0,
-      currency: cart?.currency || 'USD'
+      currency: cart?.currency || 'USD',
+      promoCode: cart?.promoCode
     }))
   );
 
@@ -603,5 +613,62 @@ export class CartPage implements OnInit {
       style: 'currency',
       currency
     }).format(amount);
+  }
+
+  /**
+   * Apply promo code
+   */
+  async applyPromoCode() {
+    const code = this.promoCodeInput().trim();
+    if (!code) {
+      this.promoCodeError.set('Please enter a promo code');
+      return;
+    }
+
+    this.applyingPromoCode.set(true);
+    this.promoCodeError.set('');
+    this.promoCodeSuccess.set('');
+
+    try {
+      const cartSnapshot = this.cart.snapshot();
+      const subtotal = cartSnapshot?.subtotal || 0;
+      const userId = this.auth.currentUser?.uid;
+
+      const result = await this.promoCodeService.validatePromoCode(code, subtotal, userId);
+
+      if (!result.valid) {
+        this.promoCodeError.set(result.error || 'Invalid promo code');
+        return;
+      }
+
+      // Apply the discount
+      await this.cart.applyDiscount(result.discountAmount!, code.toUpperCase());
+
+      // Increment usage count
+      if (result.promoCode?.id) {
+        await this.promoCodeService.incrementUsage(result.promoCode.id);
+      }
+
+      this.promoCodeSuccess.set(`Promo code applied! You save ${this.formatCurrency(result.discountAmount!)}`);
+      this.promoCodeInput.set('');
+    } catch (error: any) {
+      console.error('Error applying promo code:', error);
+      this.promoCodeError.set('Error applying promo code');
+    } finally {
+      this.applyingPromoCode.set(false);
+    }
+  }
+
+  /**
+   * Remove promo code
+   */
+  async removePromoCode() {
+    try {
+      await this.cart.removeDiscount();
+      this.promoCodeSuccess.set('');
+      this.promoCodeError.set('');
+    } catch (error: any) {
+      console.error('Error removing promo code:', error);
+    }
   }
 }

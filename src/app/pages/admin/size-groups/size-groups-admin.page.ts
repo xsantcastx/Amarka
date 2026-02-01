@@ -2,7 +2,6 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
-import { AdminQuickActionsComponent } from '../../../shared/components/admin-quick-actions/admin-quick-actions.component';
 import { SizeGroupService } from '../../../services/size-group.service';
 import { SizeGroup } from '../../../models/catalog';
 import { LoadingComponentBase } from '../../../core/classes/loading-component.base';
@@ -10,7 +9,7 @@ import { LoadingComponentBase } from '../../../core/classes/loading-component.ba
 @Component({
   selector: 'app-size-groups-admin',
   standalone: true,
-  imports: [CommonModule, FormsModule, TranslateModule, AdminQuickActionsComponent],
+  imports: [CommonModule, FormsModule, TranslateModule],
   templateUrl: './size-groups-admin.page.html',
   styleUrls: ['./size-groups-admin.page.scss']
 })

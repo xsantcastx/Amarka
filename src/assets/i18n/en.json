@@ -960,7 +960,12 @@
       "title": "Shipping Method",
       "required": "Required",
       "calculating": "Calculating shipping rates..."
-    }
+    },
+    "promo_code": "Promo Code",
+    "enter_promo_code": "Enter promo code",
+    "apply": "Apply",
+    "remove": "Remove",
+    "discount": "Discount"
   },
   "checkout": {
     "breadcrumb": {

@@ -29,8 +29,10 @@
 }
 
 .material-card__thumb {
-  background-size: cover;
+  background-size: contain;
   background-position: center;
+  background-repeat: no-repeat;
+  background-color: #f9fafb;
   aspect-ratio: 4/3;
 }
 

@@ -7,7 +7,7 @@
     <a [routerLink]="getProductRoute()" class="block aspect-[4/3] overflow-hidden cursor-pointer">
       <img [src]="product.imageUrl || 'assets/placeholder-product.jpg'"
            [alt]="product.name"
-           class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+           class="w-full h-full object-contain bg-gray-50 group-hover:scale-105 transition-transform duration-500"
            loading="lazy" />
     </a>
     <div class="p-6 space-y-3 flex flex-col flex-1">
@@ -34,7 +34,7 @@
       <a [routerLink]="getProductRoute()" class="block w-48 aspect-[4/3] overflow-hidden rounded-xl cursor-pointer">
         <img [src]="product.imageUrl || 'assets/placeholder-product.jpg'"
              [alt]="product.name"
-             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+             class="w-full h-full object-contain bg-gray-50 group-hover:scale-105 transition-transform duration-500"
              loading="lazy" />
       </a>
       <div class="flex-1 p-6 space-y-3">

@@ -1,0 +1,249 @@
+<div class="min-h-screen bg-ts-bg">
+  <app-admin-sidebar class="hidden md:block"></app-admin-sidebar>
+
+  <div class="flex-1 md:pl-64">
+    <!-- Header -->
+    <div class="relative overflow-hidden">
+      <div class="absolute -top-24 right-0 h-56 w-56 rounded-full bg-ts-accent/15 blur-3xl"></div>
+      <div class="absolute -top-12 right-40 h-40 w-40 rounded-full bg-ts-ink/5 blur-3xl"></div>
+      <div class="bg-ts-paper/90 backdrop-blur border-b border-ts-line">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div class="flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <div class="flex items-center gap-3">
+                <a routerLink="/admin" class="text-ts-ink hover:text-ts-accent transition-colors">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                  </svg>
+                </a>
+                <div>
+                  <h1 class="text-2xl font-semibold text-ts-ink">Discount Codes</h1>
+                  <p class="text-sm text-ts-ink-soft">Create and manage promotional discount codes</p>
+                </div>
+              </div>
+            </div>
+            <button (click)="addNew()" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-accent text-neutral font-semibold hover:bg-accent/90 transition-colors">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+              </svg>
+              Add Promo Code
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+      <!-- Messages -->
+      @if (message) {
+        <div class="rounded-2xl border px-4 py-3 text-sm"
+             [class.border-emerald-200]="messageType === 'success'"
+             [class.bg-emerald-50/80]="messageType === 'success'"
+             [class.text-emerald-700]="messageType === 'success'"
+             [class.border-rose-200]="messageType === 'error'"
+             [class.bg-rose-50/80]="messageType === 'error'"
+             [class.text-rose-700]="messageType === 'error'">
+          {{ message }}
+        </div>
+      }
+
+      <!-- Loading State -->
+      @if (isLoading) {
+        <div class="bg-ts-paper border border-ts-line rounded-2xl shadow-sm p-12 text-center">
+          <div class="app-spinner" style="--spinner-size: 72px;">
+            <img src="/Logo Clear.png" alt="Loading" width="96" height="96">
+          </div>
+          <p class="mt-4 text-ts-ink-soft">Loading...</p>
+        </div>
+      } @else if (promoCodes.length === 0) {
+        <!-- Empty State -->
+        <div class="bg-ts-paper border border-ts-line rounded-2xl shadow-sm p-12 text-center">
+          <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-accent/15 flex items-center justify-center">
+            <svg class="w-8 h-8 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+            </svg>
+          </div>
+          <p class="text-ts-ink-soft mb-4">No promo codes yet</p>
+          <button (click)="addNew()" class="px-5 py-2.5 bg-accent text-neutral rounded-xl font-semibold hover:bg-accent/90 transition-colors">
+            Create First Code
+          </button>
+        </div>
+      } @else {
+        <!-- Table -->
+        <div class="bg-ts-paper border border-ts-line rounded-2xl shadow-sm overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full">
+              <thead class="bg-ts-bg-soft border-b border-ts-line">
+                <tr>
+                  <th class="px-6 py-4 text-left text-ts-ink-soft text-sm font-medium">Code</th>
+                  <th class="px-6 py-4 text-left text-ts-ink-soft text-sm font-medium">Type</th>
+                  <th class="px-6 py-4 text-left text-ts-ink-soft text-sm font-medium">Value</th>
+                  <th class="px-6 py-4 text-left text-ts-ink-soft text-sm font-medium">Uses</th>
+                  <th class="px-6 py-4 text-left text-ts-ink-soft text-sm font-medium">Valid Until</th>
+                  <th class="px-6 py-4 text-left text-ts-ink-soft text-sm font-medium">Status</th>
+                  <th class="px-6 py-4 text-right text-ts-ink-soft text-sm font-medium">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (promo of promoCodes; track promo.id) {
+                  <tr class="border-b border-ts-line hover:bg-ts-bg-soft/50 transition-colors">
+                    <td class="px-6 py-4">
+                      <span class="font-mono text-ts-ink bg-ts-bg-soft px-2 py-1 rounded-lg border border-ts-line">{{ promo.code }}</span>
+                    </td>
+                    <td class="px-6 py-4 text-ts-ink-soft capitalize">{{ promo.type }}</td>
+                    <td class="px-6 py-4 text-ts-ink font-semibold">{{ formatValue(promo) }}</td>
+                    <td class="px-6 py-4 text-ts-ink-soft">
+                      {{ promo.currentUses || 0 }}{{ promo.maxUses ? '/' + promo.maxUses : '' }}
+                    </td>
+                    <td class="px-6 py-4 text-ts-ink-soft">{{ formatDate(promo.validUntil) }}</td>
+                    <td class="px-6 py-4">
+                      <span [class]="getStatusClass(promo)" class="flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full"
+                              [class.bg-emerald-500]="getStatusText(promo) === 'Active'"
+                              [class.bg-slate-400]="getStatusText(promo) === 'Inactive'"
+                              [class.bg-rose-500]="getStatusText(promo) === 'Expired' || getStatusText(promo) === 'Limit Reached'"
+                              [class.bg-amber-500]="getStatusText(promo) === 'Scheduled'"></span>
+                        {{ getStatusText(promo) }}
+                      </span>
+                    </td>
+                    <td class="px-6 py-4 text-right">
+                      <button (click)="toggleActive(promo)"
+                              class="text-ts-ink-soft hover:text-ts-ink mr-3 transition-colors"
+                              [title]="promo.active ? 'Deactivate' : 'Activate'">
+                        <svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          @if (promo.active) {
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                          } @else {
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                          }
+                        </svg>
+                      </button>
+                      <button (click)="edit(promo)" class="text-blue-600 hover:text-blue-500 mr-3 transition-colors">Edit</button>
+                      <button (click)="delete(promo)" class="text-rose-600 hover:text-rose-500 transition-colors">Delete</button>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      }
+
+    </div>
+  </div>
+
+  <!-- Modal -->
+  @if (showModal) {
+    <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+      <div class="bg-ts-paper rounded-2xl border border-ts-line shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div class="p-6 border-b border-ts-line">
+          <h2 class="text-xl font-semibold text-ts-ink">{{ isEditMode ? 'Edit' : 'New' }} Promo Code</h2>
+        </div>
+        <div class="p-6 space-y-4">
+          <!-- Code -->
+          <div>
+            <label class="block text-sm font-medium text-ts-ink-soft mb-2">Code</label>
+            <div class="flex gap-2">
+              <input type="text"
+                     [(ngModel)]="selectedPromoCode.code"
+                     placeholder="e.g., SUMMER2024"
+                     class="flex-1 px-4 py-2.5 bg-ts-bg-soft border border-ts-line rounded-xl text-ts-ink uppercase placeholder:normal-case focus:ring-2 focus:ring-accent focus:border-accent">
+              <button (click)="generateCode()"
+                      type="button"
+                      class="px-4 py-2.5 bg-ts-bg-soft border border-ts-line rounded-xl text-ts-ink hover:border-ts-accent transition-colors">
+                Generate
+              </button>
+            </div>
+          </div>
+
+          <!-- Type & Value -->
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-ts-ink-soft mb-2">Discount Type</label>
+              <select [(ngModel)]="selectedPromoCode.type"
+                      class="w-full px-4 py-2.5 bg-ts-bg-soft border border-ts-line rounded-xl text-ts-ink focus:ring-2 focus:ring-accent focus:border-accent">
+                <option value="percentage">Percentage (%)</option>
+                <option value="fixed">Fixed Amount ($)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-ts-ink-soft mb-2">
+                Value {{ selectedPromoCode.type === 'percentage' ? '(%)' : '($)' }}
+              </label>
+              <input type="number"
+                     [(ngModel)]="selectedPromoCode.value"
+                     [min]="0"
+                     [max]="selectedPromoCode.type === 'percentage' ? 100 : 99999"
+                     class="w-full px-4 py-2.5 bg-ts-bg-soft border border-ts-line rounded-xl text-ts-ink focus:ring-2 focus:ring-accent focus:border-accent">
+            </div>
+          </div>
+
+          <!-- Usage Limits -->
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-ts-ink-soft mb-2">Max Uses (optional)</label>
+              <input type="number"
+                     [(ngModel)]="selectedPromoCode.maxUses"
+                     placeholder="Unlimited"
+                     min="1"
+                     class="w-full px-4 py-2.5 bg-ts-bg-soft border border-ts-line rounded-xl text-ts-ink placeholder:text-ts-ink-soft focus:ring-2 focus:ring-accent focus:border-accent">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-ts-ink-soft mb-2">Min Order Amount (optional)</label>
+              <input type="number"
+                     [(ngModel)]="selectedPromoCode.minOrderAmount"
+                     placeholder="No minimum"
+                     min="0"
+                     step="0.01"
+                     class="w-full px-4 py-2.5 bg-ts-bg-soft border border-ts-line rounded-xl text-ts-ink placeholder:text-ts-ink-soft focus:ring-2 focus:ring-accent focus:border-accent">
+            </div>
+          </div>
+
+          <!-- Validity Dates -->
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-ts-ink-soft mb-2">Valid From (optional)</label>
+              <input type="date"
+                     [(ngModel)]="selectedPromoCode.validFromDate"
+                     class="w-full px-4 py-2.5 bg-ts-bg-soft border border-ts-line rounded-xl text-ts-ink focus:ring-2 focus:ring-accent focus:border-accent">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-ts-ink-soft mb-2">Valid Until (optional)</label>
+              <input type="date"
+                     [(ngModel)]="selectedPromoCode.validUntilDate"
+                     class="w-full px-4 py-2.5 bg-ts-bg-soft border border-ts-line rounded-xl text-ts-ink focus:ring-2 focus:ring-accent focus:border-accent">
+            </div>
+          </div>
+
+          <!-- Active Status -->
+          <div>
+            <label class="flex items-center gap-3 cursor-pointer">
+              <input type="checkbox"
+                     [(ngModel)]="selectedPromoCode.active"
+                     class="w-5 h-5 rounded border-ts-line bg-ts-bg-soft text-accent focus:ring-accent">
+              <span class="text-sm text-ts-ink-soft">Active</span>
+            </label>
+          </div>
+
+          <!-- Current Uses (Edit Mode Only) -->
+          @if (isEditMode && selectedPromoCode.currentUses) {
+            <div class="p-4 bg-ts-bg-soft rounded-xl border border-ts-line">
+              <p class="text-sm text-ts-ink-soft">
+                This code has been used <span class="text-ts-ink font-semibold">{{ selectedPromoCode.currentUses }}</span> times
+              </p>
+            </div>
+          }
+        </div>
+        <div class="p-6 border-t border-ts-line flex justify-end gap-3">
+          <button (click)="closeModal()" class="px-5 py-2.5 border border-ts-line text-ts-ink-soft rounded-xl hover:bg-ts-bg-soft transition-colors">
+            Cancel
+          </button>
+          <button (click)="save()" class="px-5 py-2.5 bg-accent text-neutral rounded-xl font-semibold hover:bg-accent/90 transition-colors">
+            {{ isEditMode ? 'Update' : 'Create' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+</div>

@@ -911,7 +911,12 @@
       "title": "Método de Envío",
       "required": "Requerido",
       "calculating": "Calculando tarifas de envío..."
-    }
+    },
+    "promo_code": "Código Promocional",
+    "enter_promo_code": "Ingresa código promocional",
+    "apply": "Aplicar",
+    "remove": "Eliminar",
+    "discount": "Descuento"
   },
   "checkout": {
     "breadcrumb": {

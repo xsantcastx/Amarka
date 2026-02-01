@@ -22,8 +22,10 @@
 
 .product-card__image {
   aspect-ratio: 4/3;
-  background-size: cover;
+  background-size: contain;
   background-position: center;
+  background-repeat: no-repeat;
+  background-color: #f9fafb;
 }
 
 .product-card__content {

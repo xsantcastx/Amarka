@@ -689,7 +689,7 @@ export class CartService {
 
     // Create new empty cart with same uid
     const emptyCart = this.createEmptyCart(currentCart.uid || '');
-    
+
     // Update Firestore if cart has an ID
     if (currentCart.id && !currentCart.id.startsWith('anon_')) {
       const cartRef = doc(this.firestore, `carts/${currentCart.id}`);
@@ -698,5 +698,29 @@ export class CartService {
 
     // Update local state
     this.cartState$.next(emptyCart);
+  }
+
+  /**
+   * Apply a discount to the cart
+   */
+  async applyDiscount(discountAmount: number, promoCode: string): Promise<void> {
+    const currentCart = this.cartState$.value;
+    if (!currentCart) return;
+
+    currentCart.discount = discountAmount;
+    currentCart.promoCode = promoCode;
+    await this.saveCart(currentCart);
+  }
+
+  /**
+   * Remove discount from cart
+   */
+  async removeDiscount(): Promise<void> {
+    const currentCart = this.cartState$.value;
+    if (!currentCart) return;
+
+    currentCart.discount = 0;
+    currentCart.promoCode = undefined;
+    await this.saveCart(currentCart);
   }
 }

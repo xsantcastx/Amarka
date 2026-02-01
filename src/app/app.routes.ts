@@ -233,6 +233,12 @@ export const routes: Routes = [
     title: routeTitle('Sitemap Generator')
   },
   {
+    path: 'admin/discounts',
+    loadComponent: () => import('./pages/admin/discounts/discounts-admin.page').then(m => m.DiscountsAdminPage),
+    canActivate: [adminGuard],
+    title: routeTitle('Discounts')
+  },
+  {
     path: 'maintenance',
     loadComponent: () => import('./pages/maintenance/maintenance.page').then(m => m.MaintenancePage),
     title: maintenanceTitle

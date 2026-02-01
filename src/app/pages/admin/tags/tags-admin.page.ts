@@ -2,7 +2,6 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
-import { AdminQuickActionsComponent } from '../../../shared/components/admin-quick-actions/admin-quick-actions.component';
 import { TagService } from '../../../services/tag.service';
 import { Tag } from '../../../models/catalog';
 import { LoadingComponentBase } from '../../../core/classes/loading-component.base';
@@ -10,7 +9,7 @@ import { LoadingComponentBase } from '../../../core/classes/loading-component.ba
 @Component({
   selector: 'app-tags-admin',
   standalone: true,
-  imports: [CommonModule, FormsModule, TranslateModule, AdminQuickActionsComponent],
+  imports: [CommonModule, FormsModule, TranslateModule],
   templateUrl: './tags-admin.page.html',
   styleUrls: ['./tags-admin.page.scss']
 })

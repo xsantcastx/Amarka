@@ -496,7 +496,60 @@
                 <span class="text-ts-ink-soft">{{ 'cart.tax' | translate }}</span>
                 <span class="text-ts-ink font-medium">${{ vm.tax.toFixed(2) }}</span>
               </div>
-              
+
+              <!-- Promo Code Input -->
+              <div class="pt-3 border-t border-ts-line">
+                <label class="block text-sm font-medium text-ts-ink-soft mb-2">{{ 'cart.promo_code' | translate }}</label>
+                @if (vm.promoCode) {
+                  <!-- Applied promo code -->
+                  <div class="flex items-center justify-between p-3 bg-success/10 border border-success/30 rounded-lg">
+                    <div class="flex items-center gap-2">
+                      <svg class="w-5 h-5 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                      </svg>
+                      <span class="font-mono text-ts-ink font-semibold">{{ vm.promoCode }}</span>
+                    </div>
+                    <button (click)="removePromoCode()" class="text-error hover:text-error/80 text-sm font-medium">
+                      {{ 'cart.remove' | translate }}
+                    </button>
+                  </div>
+                  <div class="flex justify-between items-center text-sm mt-2 text-success">
+                    <span>{{ 'cart.discount' | translate }}</span>
+                    <span class="font-medium">-${{ vm.discount.toFixed(2) }}</span>
+                  </div>
+                } @else {
+                  <!-- Promo code input form -->
+                  <div class="flex gap-2">
+                    <input
+                      type="text"
+                      [value]="promoCodeInput()"
+                      (input)="promoCodeInput.set($any($event.target).value)"
+                      placeholder="{{ 'cart.enter_promo_code' | translate }}"
+                      class="flex-1 px-3 py-2 bg-ts-bg-soft border border-ts-line rounded-lg text-ts-ink uppercase placeholder:normal-case focus:ring-2 focus:ring-accent focus:border-accent"
+                      [disabled]="applyingPromoCode()">
+                    <button
+                      (click)="applyPromoCode()"
+                      [disabled]="applyingPromoCode() || !promoCodeInput()"
+                      class="px-4 py-2 bg-accent hover:bg-accent/90 text-neutral rounded-lg font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                      @if (applyingPromoCode()) {
+                        <svg class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+                          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                      } @else {
+                        {{ 'cart.apply' | translate }}
+                      }
+                    </button>
+                  </div>
+                  @if (promoCodeError()) {
+                    <p class="mt-2 text-sm text-error">{{ promoCodeError() }}</p>
+                  }
+                  @if (promoCodeSuccess()) {
+                    <p class="mt-2 text-sm text-success">{{ promoCodeSuccess() }}</p>
+                  }
+                }
+              </div>
+
               <!-- Total -->
               <div class="pt-4 border-t-2 border-accent/30">
                 <div class="flex justify-between items-center">
