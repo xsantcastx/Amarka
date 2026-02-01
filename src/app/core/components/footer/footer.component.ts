@@ -7,7 +7,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CategoryService } from '../../../services/category.service';
 import { SettingsService, AppSettings } from '../../../services/settings.service';
 import { BrandConfigService } from '../../services/brand-config.service';
-import { Firestore, collection, addDoc, query, where, getDocs } from '@angular/fire/firestore';
+import { Firestore, collection, addDoc } from '@angular/fire/firestore';
 import { AnalyticsService } from '../../../services/analytics.service';
 
 interface Category {
@@ -264,17 +264,6 @@ export class FooterComponent implements OnInit {
 
     try {
       const subscribersRef = collection(this.firestore, 'newsletter_subscribers');
-
-      // Check if email already exists
-      const existingQuery = query(subscribersRef, where('email', '==', this.newsletterEmail.toLowerCase()));
-      const existingDocs = await getDocs(existingQuery);
-
-      if (!existingDocs.empty) {
-        this.newsletterError = 'This email is already subscribed';
-        this.newsletterLoading = false;
-        return;
-      }
-
       // Add new subscriber
       await addDoc(subscribersRef, {
         email: this.newsletterEmail.toLowerCase(),

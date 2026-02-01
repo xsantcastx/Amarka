@@ -298,6 +298,22 @@ service cloud.firestore {
       allow update, delete: if false;
     }
 
+    // Newsletter subscribers - allow public signup with validation, admin read
+    match /newsletter_subscribers/{subscriberId} {
+      allow read: if isAdmin();
+      allow create: if resource == null
+        && request.resource.data.keys().hasOnly(['email', 'subscribedAt', 'source', 'active'])
+        && request.resource.data.email is string
+        && request.resource.data.email.size() > 3
+        && request.resource.data.email.size() <= 320
+        && request.resource.data.email.matches('^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$')
+        && request.resource.data.subscribedAt is timestamp
+        && request.resource.data.source is string
+        && request.resource.data.source.size() <= 50
+        && request.resource.data.active is bool;
+      allow update, delete: if isAdmin();
+    }
+
     // Custom Orders - Admin only (for creating custom invoices with payment links)
     match /customOrders/{orderId} {
       // Only admins can read custom orders

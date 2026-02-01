@@ -1,19 +1,20 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { ProductReviewService } from '../../../services/product-review.service';
 import { ProductsService } from '../../../services/products.service';
 import { AuthService } from '../../../services/auth.service';
 import { ProductReview } from '../../../models/review';
 import { Product } from '../../../models/product';
-import { AdminQuickActionsComponent } from '../../../shared/components/admin-quick-actions/admin-quick-actions.component';
+import { AdminSidebarComponent } from '../../../shared/components/admin-sidebar/admin-sidebar.component';
 
 @Component({
   selector: 'app-admin-reviews',
   standalone: true,
-  imports: [CommonModule, FormsModule, AdminQuickActionsComponent],
+  imports: [CommonModule, FormsModule, RouterLink, AdminSidebarComponent],
   templateUrl: './reviews.page.html',
-  styleUrl: './reviews.page.scss'
+  styleUrls: ['./reviews.page.scss']
 })
 export class AdminReviewsPage implements OnInit {
   reviews = signal<ProductReview[]>([]);
@@ -168,17 +169,17 @@ export class AdminReviewsPage implements OnInit {
 
   getStatusClass(status: string): string {
     switch (status) {
-      case 'approved': return 'bg-green-500/20 text-green-400 border-green-500/30';
-      case 'rejected': return 'bg-red-500/20 text-red-400 border-red-500/30';
-      case 'pending': return 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30';
-      default: return 'bg-bitcoin-gray/20 text-bitcoin-gray border-bitcoin-gray/30';
+      case 'approved': return 'bg-emerald-50 text-emerald-700 border-emerald-200';
+      case 'rejected': return 'bg-rose-50 text-rose-700 border-rose-200';
+      case 'pending': return 'bg-amber-50 text-amber-700 border-amber-200';
+      default: return 'bg-ts-bg-soft text-ts-ink-soft border-ts-line';
     }
   }
 
   getFilterButtonClass(status: 'all' | 'pending' | 'approved' | 'rejected'): string {
     const isActive = this.selectedStatus() === status;
     return isActive
-      ? 'px-4 py-2 bg-bitcoin-orange text-white font-semibold rounded-lg'
-      : 'px-4 py-2 bg-bitcoin-dark/60 text-bitcoin-gray hover:text-white border border-bitcoin-gray/20 hover:border-bitcoin-orange/40 rounded-lg transition-all';
+      ? 'px-4 py-2 rounded-full bg-accent text-neutral text-sm font-semibold shadow-sm'
+      : 'px-4 py-2 rounded-full border border-ts-line text-ts-ink-soft text-sm font-semibold hover:text-ts-ink hover:border-ts-ink/30 transition-colors';
   }
 }

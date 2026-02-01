@@ -80,6 +80,11 @@ export class CartPage implements OnInit {
   cartId = signal<string | null>(null);
   shippingSettings = signal<AppSettings | null>(null);
 
+  // Guest checkout state
+  isGuestCheckout = signal(false);
+  guestEmail = signal('');
+  guestEmailError = signal('');
+
   // Breadcrumbs for navigation
   breadcrumbs: Breadcrumb[] = [
     { label: 'nav.home', url: '/', icon: 'home' },

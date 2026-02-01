@@ -319,7 +319,22 @@ export class ProductReviewService {
       return snapshot.docs.map(doc => this.convertToReview(doc.id, doc.data()));
     } catch (error) {
       void 0;
-      return [];
+      try {
+        const reviewsRef = collection(this.firestore, 'productReviews');
+        const q = status
+          ? query(reviewsRef, where('status', '==', status))
+          : query(reviewsRef);
+        const snapshot = await getDocs(q);
+        const reviews = snapshot.docs.map(doc => this.convertToReview(doc.id, doc.data()));
+        return reviews.sort((a, b) => {
+          const aTime = a.createdAt?.getTime ? a.createdAt.getTime() : 0;
+          const bTime = b.createdAt?.getTime ? b.createdAt.getTime() : 0;
+          return bTime - aTime;
+        });
+      } catch (fallbackError) {
+        void 0;
+        return [];
+      }
     }
   }
 

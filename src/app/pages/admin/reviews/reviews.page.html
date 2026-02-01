@@ -1,239 +1,260 @@
-<div class="min-h-screen bg-bitcoin-dark p-6">
-  <div class="max-w-7xl mx-auto">
-    <!-- Quick Actions Navigation -->
-    <app-admin-quick-actions currentPage="/admin/reviews"></app-admin-quick-actions>
+<div class="min-h-screen bg-ts-bg">
+  <app-admin-sidebar class="hidden md:block"></app-admin-sidebar>
 
+  <div class="flex-1 md:pl-64">
     <!-- Header -->
-    <div class="mb-8">
-      <h1 class="font-serif text-4xl bitcoin-gradient-text mb-2">Review Management</h1>
-      <p class="text-bitcoin-gray">Moderate customer reviews and respond to feedback</p>
-    </div>
-
-    <!-- Error Message -->
-    @if (error()) {
-      <div class="mb-6 p-4 bg-red-500/20 border border-red-500/30 rounded-xl text-red-300">
-        {{ error() }}
-      </div>
-    }
-
-    <!-- Status Filter -->
-    <div class="mb-6 flex flex-wrap gap-3">
-      <button
-        type="button"
-        (click)="filterByStatus('pending')"
-        [class]="getFilterButtonClass('pending')">
-        Pending
-      </button>
-      <button
-        type="button"
-        (click)="filterByStatus('approved')"
-        [class]="getFilterButtonClass('approved')">
-        Approved
-      </button>
-      <button
-        type="button"
-        (click)="filterByStatus('rejected')"
-        [class]="getFilterButtonClass('rejected')">
-        Rejected
-      </button>
-      <button
-        type="button"
-        (click)="filterByStatus('all')"
-        [class]="getFilterButtonClass('all')">
-        All Reviews
-      </button>
-    </div>
-
-    <!-- Loading State -->
-    @if (loading()) {
-      <div class="flex items-center justify-center py-16">
-        <div class="app-spinner" style="--spinner-size: 72px;"><img src="/Logo Clear.png" alt="Loading" width="96" height="96"></div>
-      </div>
-    }
-
-    <!-- Reviews List -->
-    @else if (reviews().length === 0) {
-      <div class="text-center py-16">
-        <svg class="w-16 h-16 text-bitcoin-gray/30 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path>
-        </svg>
-        <p class="text-bitcoin-gray text-lg">No {{ selectedStatus() === 'all' ? '' : selectedStatus() }} reviews found</p>
-      </div>
-    } @else {
-      <div class="space-y-4">
-        @for (review of reviews(); track review.id) {
-          <div class="p-6 bg-bitcoin-dark/60 border border-bitcoin-gray/20 rounded-xl hover:border-bitcoin-orange/30 transition-all">
-            <!-- Review Header -->
-            <div class="flex items-start justify-between mb-4">
-              <div class="flex-1">
-                <div class="flex items-center gap-3 mb-2">
-                  <!-- Status Badge -->
-                  <span class="px-3 py-1 text-xs font-semibold rounded-full border" [class]="getStatusClass(review.status)">
-                    {{ review.status | uppercase }}
-                  </span>
-                  
-                  <!-- Verified Badge -->
-                  @if (review.verified) {
-                    <span class="text-xs bg-bitcoin-orange/20 text-bitcoin-orange px-2 py-1 rounded-full border border-bitcoin-orange/30">
-                      ✓ Verified Purchase
-                    </span>
-                  }
-                </div>
-
-                <!-- Product Name -->
-                <h3 class="text-xl font-semibold text-white mb-1">{{ getProductName(review.productId) }}</h3>
-
-                <!-- Rating -->
-                <div class="flex items-center gap-2 mb-2">
-                  <div class="flex gap-1">
-                    @for (star of getStarArray(review.rating); track $index) {
-                      <svg class="w-5 h-5 text-bitcoin-orange" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                      </svg>
-                    }
-                  </div>
-                  <span class="text-sm text-bitcoin-gray">{{ review.rating }}/5</span>
-                </div>
-
-                <!-- Reviewer Info -->
-                <p class="text-sm text-bitcoin-gray">
-                  By {{ review.userName }} ({{ review.userEmail }}) • {{ formatDate(review.createdAt) }}
-                </p>
-              </div>
-
-              <!-- Helpful Count -->
-              <div class="text-right">
-                <div class="flex items-center gap-1 text-bitcoin-gray">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"></path>
-                  </svg>
-                  <span class="text-sm">{{ review.helpful }}</span>
-                </div>
+    <div class="relative overflow-hidden">
+      <div class="absolute -top-24 right-0 h-56 w-56 rounded-full bg-ts-accent/15 blur-3xl"></div>
+      <div class="absolute -top-12 right-40 h-40 w-40 rounded-full bg-ts-ink/5 blur-3xl"></div>
+      <div class="bg-ts-paper/90 backdrop-blur border-b border-ts-line">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div class="flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+              <a routerLink="/admin" class="text-ts-ink hover:text-ts-accent transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                </svg>
+              </a>
+              <div>
+                <h1 class="text-2xl font-semibold text-ts-ink">Reviews</h1>
+                <p class="text-sm text-ts-ink-soft">Moderate product feedback and publish approved reviews.</p>
               </div>
             </div>
-
-            <!-- Review Content -->
-            <div class="mb-4">
-              <h4 class="text-lg font-semibold text-white mb-2">{{ review.title }}</h4>
-              <p class="text-bitcoin-gray leading-relaxed">{{ review.comment }}</p>
-            </div>
-
-            <!-- Admin Response (if exists) -->
-            @if (review.adminResponse) {
-              <div class="mb-4 p-4 bg-bitcoin-orange/10 border-l-4 border-bitcoin-orange rounded">
-                <p class="text-sm font-semibold text-bitcoin-orange mb-2">
-                  Response from {{ review.adminResponse.respondedBy }}
-                </p>
-                <p class="text-sm text-bitcoin-gray">{{ review.adminResponse.message }}</p>
-                <p class="text-xs text-bitcoin-gray/70 mt-2">{{ formatDate(review.adminResponse.respondedAt) }}</p>
+            <div class="flex flex-wrap items-center gap-3">
+              <div class="rounded-full border border-ts-line bg-ts-bg-soft px-4 py-2 text-xs text-ts-ink-soft">
+                Showing {{ reviews().length }} {{ selectedStatus() === 'all' ? 'total' : selectedStatus() }} review(s)
               </div>
-            }
-
-            <!-- Action Buttons -->
-            <div class="flex flex-wrap gap-3 pt-4 border-t border-bitcoin-gray/20">
-              @if (review.status === 'pending') {
-                <button
-                  type="button"
-                  (click)="approveReview(review.id!)"
-                  [disabled]="submitting()"
-                  class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg transition-all disabled:opacity-50">
-                  ✓ Approve
-                </button>
-                <button
-                  type="button"
-                  (click)="rejectReview(review.id!)"
-                  [disabled]="submitting()"
-                  class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-lg transition-all disabled:opacity-50">
-                  ✕ Reject
-                </button>
-              }
-
-              @if (review.status === 'approved') {
-                <button
-                  type="button"
-                  (click)="rejectReview(review.id!)"
-                  [disabled]="submitting()"
-                  class="px-4 py-2 bg-red-500/80 hover:bg-red-500 text-white font-semibold rounded-lg transition-all disabled:opacity-50">
-                  ✕ Unapprove
-                </button>
-              }
-
-              @if (review.status === 'rejected') {
-                <button
-                  type="button"
-                  (click)="approveReview(review.id!)"
-                  [disabled]="submitting()"
-                  class="px-4 py-2 bg-green-500/80 hover:bg-green-500 text-white font-semibold rounded-lg transition-all disabled:opacity-50">
-                  ✓ Approve
-                </button>
-              }
-
               <button
                 type="button"
-                (click)="openResponseModal(review)"
-                [disabled]="submitting()"
-                class="px-4 py-2 bg-bitcoin-orange/80 hover:bg-bitcoin-orange text-white font-semibold rounded-lg transition-all disabled:opacity-50">
-                💬 {{ review.adminResponse ? 'Edit Response' : 'Add Response' }}
-              </button>
-
-              <button
-                type="button"
-                (click)="deleteReview(review.id!)"
-                [disabled]="submitting()"
-                class="px-4 py-2 bg-transparent border-2 border-red-500/50 text-red-400 hover:bg-red-500/20 hover:border-red-500 font-semibold rounded-lg transition-all disabled:opacity-50">
-                🗑 Delete
+                (click)="loadReviews()"
+                class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-ts-bg-soft border border-ts-line text-ts-ink hover:border-ts-accent transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v6h6M20 20v-6h-6M20 8a8 8 0 00-14.9-3M4 16a8 8 0 0014.9 3"></path>
+                </svg>
+                Refresh
               </button>
             </div>
           </div>
-        }
+        </div>
       </div>
-    }
+    </div>
+
+    <!-- Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+      <!-- Error Message -->
+      @if (error()) {
+        <div class="rounded-2xl border border-rose-200 bg-rose-50/80 px-4 py-3 text-sm text-rose-700">
+          {{ error() }}
+        </div>
+      }
+
+      <!-- Status Filter -->
+      <div class="flex flex-wrap gap-2">
+        <button
+          type="button"
+          (click)="filterByStatus('pending')"
+          [class]="getFilterButtonClass('pending')">
+          Pending
+        </button>
+        <button
+          type="button"
+          (click)="filterByStatus('approved')"
+          [class]="getFilterButtonClass('approved')">
+          Approved
+        </button>
+        <button
+          type="button"
+          (click)="filterByStatus('rejected')"
+          [class]="getFilterButtonClass('rejected')">
+          Rejected
+        </button>
+        <button
+          type="button"
+          (click)="filterByStatus('all')"
+          [class]="getFilterButtonClass('all')">
+          All Reviews
+        </button>
+      </div>
+
+      <!-- Loading State -->
+      @if (loading()) {
+        <div class="bg-ts-paper border border-ts-line rounded-2xl shadow-sm p-12 text-center">
+          <div class="app-spinner" style="--spinner-size: 72px;">
+            <img src="/Logo Clear.png" alt="Loading" width="96" height="96">
+          </div>
+          <p class="mt-4 text-ts-ink-soft">Loading reviews...</p>
+        </div>
+      }
+
+      <!-- Empty State -->
+      @else if (reviews().length === 0) {
+        <div class="bg-ts-paper border border-ts-line rounded-2xl shadow-sm p-12 text-center">
+          <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-ts-accent/15 flex items-center justify-center">
+            <svg class="w-8 h-8 text-ts-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path>
+            </svg>
+          </div>
+          <p class="text-ts-ink-soft text-lg">No {{ selectedStatus() === 'all' ? '' : selectedStatus() }} reviews found</p>
+          <p class="text-sm text-ts-ink-soft mt-2">New reviews appear here when customers submit feedback.</p>
+        </div>
+      } @else {
+        <div class="space-y-4">
+          @for (review of reviews(); track review.id) {
+            <div class="bg-ts-paper border border-ts-line rounded-2xl shadow-sm p-6">
+              <div class="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+                <div class="flex-1">
+                  <div class="flex flex-wrap items-center gap-2 mb-4">
+                    <span class="px-3 py-1 text-xs font-semibold rounded-full border" [class]="getStatusClass(review.status)">
+                      {{ review.status | uppercase }}
+                    </span>
+                    @if (review.verified) {
+                      <span class="px-3 py-1 text-xs font-semibold rounded-full border border-emerald-200 bg-emerald-50 text-emerald-700">
+                        Verified purchase
+                      </span>
+                    }
+                  </div>
+
+                  <div class="flex flex-wrap items-start justify-between gap-4">
+                    <div>
+                      <h3 class="text-lg font-semibold text-ts-ink">{{ getProductName(review.productId) }}</h3>
+                      <p class="text-xs text-ts-ink-soft mt-1">
+                        Submitted {{ formatDate(review.createdAt) }} by {{ review.userName }} ({{ review.userEmail }})
+                      </p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <div class="flex gap-1">
+                        @for (star of getStarArray(review.rating); track $index) {
+                          <svg class="w-4 h-4 text-amber-500" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                          </svg>
+                        }
+                      </div>
+                      <span class="text-sm text-ts-ink-soft">{{ review.rating }}/5</span>
+                    </div>
+                  </div>
+
+                  <div class="mt-4">
+                    <h4 class="text-base font-semibold text-ts-ink">{{ review.title }}</h4>
+                    <p class="text-sm text-ts-ink-soft leading-relaxed mt-2">{{ review.comment }}</p>
+                  </div>
+
+                  @if (review.adminResponse) {
+                    <div class="mt-4 rounded-xl border border-ts-line bg-ts-bg-soft p-4">
+                      <p class="text-xs font-semibold text-ts-ink-soft">Response from {{ review.adminResponse.respondedBy }}</p>
+                      <p class="text-sm text-ts-ink mt-2">{{ review.adminResponse.message }}</p>
+                      <p class="text-xs text-ts-ink-soft mt-2">{{ formatDate(review.adminResponse.respondedAt) }}</p>
+                    </div>
+                  }
+                </div>
+
+                <div class="flex flex-wrap gap-2 lg:flex-col lg:min-w-[180px]">
+                  @if (review.status === 'pending') {
+                    <button
+                      type="button"
+                      (click)="approveReview(review.id!)"
+                      [disabled]="submitting()"
+                      class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 text-white text-sm font-semibold hover:bg-emerald-500 transition-colors disabled:opacity-50">
+                      Approve
+                    </button>
+                    <button
+                      type="button"
+                      (click)="rejectReview(review.id!)"
+                      [disabled]="submitting()"
+                      class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-rose-200 text-rose-700 text-sm font-semibold hover:bg-rose-50 transition-colors disabled:opacity-50">
+                      Reject
+                    </button>
+                  }
+
+                  @if (review.status === 'approved') {
+                    <button
+                      type="button"
+                      (click)="rejectReview(review.id!)"
+                      [disabled]="submitting()"
+                      class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-rose-200 text-rose-700 text-sm font-semibold hover:bg-rose-50 transition-colors disabled:opacity-50">
+                      Unapprove
+                    </button>
+                  }
+
+                  @if (review.status === 'rejected') {
+                    <button
+                      type="button"
+                      (click)="approveReview(review.id!)"
+                      [disabled]="submitting()"
+                      class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 text-white text-sm font-semibold hover:bg-emerald-500 transition-colors disabled:opacity-50">
+                      Approve
+                    </button>
+                  }
+
+                  <button
+                    type="button"
+                    (click)="openResponseModal(review)"
+                    [disabled]="submitting()"
+                    class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-ts-line text-ts-ink text-sm font-semibold hover:border-ts-accent transition-colors disabled:opacity-50">
+                    {{ review.adminResponse ? 'Edit Response' : 'Add Response' }}
+                  </button>
+
+                  <button
+                    type="button"
+                    (click)="deleteReview(review.id!)"
+                    [disabled]="submitting()"
+                    class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-rose-200 text-rose-700 text-sm font-semibold hover:bg-rose-50 transition-colors disabled:opacity-50">
+                    Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </div>
   </div>
 
   <!-- Admin Response Modal -->
   @if (selectedReview()) {
-    <div class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-         (click)="closeResponseModal()">
-      <div class="bg-bitcoin-dark border-2 border-bitcoin-orange/30 rounded-2xl max-w-2xl w-full p-6 shadow-2xl shadow-bitcoin-orange/20"
-           (click)="$event.stopPropagation()">
-        <h3 class="text-2xl font-serif bitcoin-gradient-text mb-4">Admin Response</h3>
-
-        <!-- Review Being Responded To -->
-        <div class="mb-6 p-4 bg-bitcoin-dark/60 border border-bitcoin-gray/20 rounded-xl">
-          <p class="text-sm text-bitcoin-gray mb-2">Responding to:</p>
-          <h4 class="text-lg font-semibold text-white mb-1">{{ selectedReview()!.title }}</h4>
-          <p class="text-sm text-bitcoin-gray">by {{ selectedReview()!.userName }}</p>
+    <div class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4" (click)="closeResponseModal()">
+      <div class="bg-ts-paper border border-ts-line rounded-2xl max-w-2xl w-full p-6 shadow-xl" (click)="$event.stopPropagation()">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-xl font-semibold text-ts-ink">Admin response</h3>
+          <button type="button" (click)="closeResponseModal()" class="text-ts-ink-soft hover:text-ts-ink transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
         </div>
 
-        <!-- Response Textarea -->
+        <div class="mb-6 rounded-xl border border-ts-line bg-ts-bg-soft p-4">
+          <p class="text-xs text-ts-ink-soft">Responding to</p>
+          <h4 class="text-base font-semibold text-ts-ink mt-1">{{ selectedReview()!.title }}</h4>
+          <p class="text-xs text-ts-ink-soft">by {{ selectedReview()!.userName }}</p>
+        </div>
+
         <div class="mb-6">
-          <label for="admin-response" class="block text-sm font-semibold text-bitcoin-gray mb-2">
-            Your Response
+          <label for="admin-response" class="block text-sm font-semibold text-ts-ink-soft mb-2">
+            Your response
           </label>
           <textarea
             id="admin-response"
             [(ngModel)]="adminResponse"
             rows="6"
             placeholder="Write your response to this review..."
-            class="w-full px-4 py-3 rounded-xl bg-bitcoin-dark/60 border border-bitcoin-gray/20 text-white placeholder-bitcoin-gray/50 focus:ring-2 focus:ring-bitcoin-orange focus:border-bitcoin-orange resize-none"></textarea>
-          <p class="text-xs text-bitcoin-gray/70 mt-1">
+            class="w-full px-4 py-3 rounded-xl bg-ts-bg-soft border border-ts-line text-ts-ink placeholder-ts-ink-soft focus:ring-2 focus:ring-accent focus:border-accent resize-none"></textarea>
+          <p class="text-xs text-ts-ink-soft mt-1">
             {{ adminResponse().length }} characters
           </p>
         </div>
 
-        <!-- Modal Actions -->
-        <div class="flex gap-3">
+        <div class="flex flex-wrap gap-3">
           <button
             type="button"
             (click)="submitResponse()"
             [disabled]="submitting() || !adminResponse().trim()"
-            class="px-6 py-3 bg-bitcoin-orange hover:bg-bitcoin-orange/90 text-white font-bold rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+            class="px-6 py-3 bg-accent text-neutral font-semibold rounded-xl hover:bg-accent/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
             {{ submitting() ? 'Submitting...' : 'Submit Response' }}
           </button>
           <button
             type="button"
             (click)="closeResponseModal()"
-            class="px-6 py-3 bg-transparent border-2 border-bitcoin-gray/30 text-bitcoin-gray hover:border-bitcoin-orange/50 hover:text-bitcoin-orange rounded-xl transition-all">
+            class="px-6 py-3 border border-ts-line text-ts-ink rounded-xl hover:border-ts-accent transition-colors">
             Cancel
           </button>
         </div>
@@ -241,4 +262,3 @@
     </div>
   }
 </div>
-
