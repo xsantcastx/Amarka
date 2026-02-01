@@ -100,7 +100,7 @@ export class TagService {
       const docRef = await addDoc(tagsCol, tagData);
       return docRef.id;
     } catch (error) {
-      console.error('Error adding tag:', error);
+      void 0;
       throw error;
     }
   }
@@ -144,7 +144,7 @@ export class TagService {
       
       await updateDoc(docRef, updateData);
     } catch (error) {
-      console.error('Error updating tag:', error);
+      void 0;
       throw error;
     }
   }
@@ -157,7 +157,7 @@ export class TagService {
       const docRef = doc(this.firestore, `${this.collectionName}/${id}`);
       await deleteDoc(docRef);
     } catch (error) {
-      console.error('Error deleting tag:', error);
+      void 0;
       throw error;
     }
   }
@@ -182,7 +182,7 @@ export class TagService {
 
       return true;
     } catch (error) {
-      console.error('Error checking slug:', error);
+      void 0;
       return false;
     }
   }

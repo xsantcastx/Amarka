@@ -17,16 +17,16 @@ export class SeedService {
    * Seed all initial data
    */
   async seedAll(): Promise<void> {
-    console.log('🌱 Starting seed process...');
+    void 0;
     
     try {
       const categoryIds = await this.seedCategories();
       const modelIds = await this.seedModels(categoryIds);
       await this.seedTemplates(categoryIds, modelIds);
       
-      console.log('✅ Seed completed successfully!');
+      void 0;
     } catch (error) {
-      console.error('❌ Seed failed:', error);
+      void 0;
       throw error;
     }
   }
@@ -35,7 +35,7 @@ export class SeedService {
    * Seed categories (grosor-based: 12mm, 15mm, 20mm)
    */
   private async seedCategories(): Promise<Record<string, string>> {
-    console.log('📁 Seeding categories...');
+    void 0;
     
     const categories: Omit<Category, 'id'>[] = [
       {
@@ -81,16 +81,16 @@ export class SeedService {
       if (!exists) {
         const id = await this.categoryService.addCategory(category);
         ids[category.slug] = id;
-        console.log(`  ✓ Created category: ${category.name}`);
+        void 0;
       } else {
         // Update existing category to ensure it has active: true
         const existingCat = await this.categoryService.getCategoryBySlug(category.slug).toPromise();
         if (existingCat && existingCat.id) {
           await this.categoryService.updateCategory(existingCat.id, { active: true });
           ids[category.slug] = existingCat.id;
-          console.log(`  ✓ Updated category to active: ${category.name}`);
+          void 0;
         } else {
-          console.log(`  ⊘ Category already exists: ${category.name}`);
+          void 0;
         }
       }
     }
@@ -102,13 +102,13 @@ export class SeedService {
    * Seed mining hardware models from productos.json product names
    */
   private async seedModels(categoryIds: Record<string, string>): Promise<Record<string, string>> {
-    console.log('🎨 Seeding models...');
+    void 0;
     
     // Get the first available category as default (or use '12mm' if it exists)
     const defaultCategoryId = categoryIds['12mm'] || Object.values(categoryIds)[0];
     
     if (!defaultCategoryId) {
-      console.warn('⚠️ No categories found. Skipping model seeding.');
+      void 0;
       return {};
     }
     
@@ -218,16 +218,16 @@ export class SeedService {
       if (!exists) {
         const id = await this.modelService.addModel(model);
         ids[model.slug] = id;
-        console.log(`  ✓ Created model: ${model.name}`);
+        void 0;
       } else {
         // Update existing model to ensure it has active: true
         const existingModel = await this.modelService.getModelBySlug(model.slug).toPromise();
         if (existingModel && existingModel.id) {
           await this.modelService.updateModel(existingModel.id, { active: true });
           ids[model.slug] = existingModel.id;
-          console.log(`  ✓ Updated model to active: ${model.name}`);
+          void 0;
         } else {
-          console.log(`  ⊘ Model already exists: ${model.name}`);
+          void 0;
         }
       }
     }
@@ -242,7 +242,7 @@ export class SeedService {
     categoryIds: Record<string, string>,
     modelIds: Record<string, string>
   ): Promise<void> {
-    console.log('📝 Seeding templates...');
+    void 0;
     
     // Global description template
     const globalDescTemplate: Omit<Template, 'id'> = {
@@ -282,17 +282,17 @@ export class SeedService {
 
     for (const template of templates) {
       await this.templateService.addTemplate(template);
-      console.log(`  ✓ Created ${template.type} template (${template.scope})`);
+      void 0;
     }
 
-    console.log('✅ Templates seeded');
+    void 0;
   }
 
   /**
    * Seed benefit templates
    */
   async seedBenefitTemplates(): Promise<void> {
-    console.log('🎨 Seeding benefit templates...');
+    void 0;
     
     let created = 0;
     let skipped = 0;
@@ -300,14 +300,14 @@ export class SeedService {
     for (const template of DEFAULT_BENEFIT_TEMPLATES) {
       try {
         await this.benefitTemplateService.createTemplate(template);
-        console.log(`  ✓ Created template: ${template.name}`);
+        void 0;
         created++;
       } catch (error) {
-        console.error(`  ✗ Error creating template ${template.name}:`, error);
+        void 0;
         skipped++;
       }
     }
 
-    console.log(`✅ Benefit templates seeded: ${created} created, ${skipped} skipped`);
+    void 0;
   }
 }

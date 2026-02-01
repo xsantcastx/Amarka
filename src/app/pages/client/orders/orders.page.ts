@@ -106,7 +106,7 @@ export class OrdersPageComponent implements OnInit {
 
       this.orders.set(orders);
     } catch (error) {
-      console.error('Error loading orders:', error);
+      void 0;
       this.errorMessage.set('client.errors.load_orders_failed');
     } finally {
       this.isLoading.set(false);
@@ -140,7 +140,7 @@ export class OrdersPageComponent implements OnInit {
     try {
       await this.authService.signOutUser('/client/login');
     } catch (error) {
-      console.error('Logout error:', error);
+      void 0;
     }
   }
 
@@ -159,10 +159,10 @@ export class OrdersPageComponent implements OnInit {
   }
 
   async downloadInvoice(orderId?: string, orderNumber?: string) {
-    console.log('[downloadInvoice] Called with:', { orderId, orderNumber });
+    void 0;
     
     if (!orderId) {
-      console.error('[downloadInvoice] Order ID not found');
+      void 0;
       alert('Order ID not found.');
       return;
     }
@@ -172,17 +172,17 @@ export class OrdersPageComponent implements OnInit {
       const order = this.orders().find(o => o.id === orderId);
       
       if (!order) {
-        console.error('[downloadInvoice] Order not found in list');
+        void 0;
         alert('Order not found. Please try again.');
         return;
       }
       
       // Generate and download the PDF invoice
-      console.log(`[downloadInvoice] Generating invoice for order ${order.orderNumber}`);
+      void 0;
       await this.invoiceService.generateInvoice(order);
       
     } catch (error) {
-      console.error('[downloadInvoice] Error generating invoice:', error);
+      void 0;
       alert('Failed to generate invoice. Please try again or contact support.');
     }
   }
@@ -190,11 +190,11 @@ export class OrdersPageComponent implements OnInit {
   async reorder(order: Order) {
     try {
       // TODO: Add items to cart and navigate to checkout
-      console.log('Reordering:', order);
+      void 0;
       alert(`Reordering ${order.itemCount} items from order ${order.orderNumber}`);
       // this.router.navigate(['/cart']);
     } catch (error) {
-      console.error('Error reordering:', error);
+      void 0;
       alert('Failed to reorder. Please try again.');
     }
   }
@@ -225,11 +225,11 @@ export class OrdersPageComponent implements OnInit {
       // Reload orders to reflect the change
       await this.loadOrders();
       
-      console.log(`[cancelOrder] Order ${orderNumber} cancelled successfully`);
+      void 0;
       alert(`Order #${orderNumber || orderId} has been cancelled successfully.`);
       
     } catch (error: any) {
-      console.error('Error cancelling order:', error);
+      void 0;
       this.errorMessage.set('client.errors.cancel_order_failed');
       alert('Failed to cancel order. Please contact support.');
     } finally {
@@ -243,7 +243,7 @@ export class OrdersPageComponent implements OnInit {
       return;
     }
     // TODO: Navigate to review page or open modal
-    console.log(`Leaving review for order ${orderId}`);
+    void 0;
     alert('Product review feature will be available soon!');
   }
 }

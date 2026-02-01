@@ -115,7 +115,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
       this.startCollectionRotation();
     } catch (error) {
-      console.error('Error loading collections for navbar:', error);
+      void 0;
       this.collectionLinks = [];
       this.collections = [];
     }
@@ -219,13 +219,13 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   closeUserMenu(): void {
-    console.log('Closing user menu');
+    void 0;
     this.showUserMenu = false;
   }
 
   // Auth methods
   async logout(): Promise<void> {
-    console.log('Logging out user');
+    void 0;
     await this.authService.signOutUser('/client/login');
     this.closeMobile();
     this.closeUserMenu();

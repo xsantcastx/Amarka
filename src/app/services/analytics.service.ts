@@ -43,7 +43,7 @@ export class AnalyticsService {
     try {
       this.analytics = inject(Analytics);
     } catch (error) {
-      console.warn('Analytics not available:', error);
+      void 0;
     }
 
     this.consentService.consent$.subscribe(consent => {
@@ -275,7 +275,7 @@ export class AnalyticsService {
       try {
         action(this.analytics);
       } catch (error) {
-        console.error('Analytics action failed:', error);
+        void 0;
       }
     });
   }
@@ -294,7 +294,7 @@ export class AnalyticsService {
     }
 
     if (!this.measurementId) {
-      console.warn('GA4 measurement ID is not configured.');
+      void 0;
       return false;
     }
 
@@ -308,7 +308,7 @@ export class AnalyticsService {
         return this.analyticsReady;
       })
       .catch(error => {
-        console.error('Failed to initialize GA4:', error);
+        void 0;
         return false;
       })
       .finally(() => {

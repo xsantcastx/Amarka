@@ -33,7 +33,7 @@ export class CollectionsIndexPageComponent implements OnInit {
         .sort((a, b) => a.name.localeCompare(b.name));
       this.cdr.detectChanges();
     } catch (err) {
-      console.error('Error loading collections', err);
+      void 0;
       this.collections = [];
     } finally {
       this.isLoading = false;

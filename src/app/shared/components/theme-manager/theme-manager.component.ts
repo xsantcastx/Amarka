@@ -167,7 +167,7 @@ export class ThemeManagerComponent implements OnDestroy {
       await this.themeService.saveTheme(this.draft, scope);
       this.themeService.previewThemeUpdate(null);
     } catch (error) {
-      console.error('Failed to save theme', error);
+      void 0;
     } finally {
       this.setSaving(false);
     }
@@ -179,7 +179,7 @@ export class ThemeManagerComponent implements OnDestroy {
       await this.themeService.resetTheme(scope);
       this.themeService.previewThemeUpdate(null);
     } catch (error) {
-      console.error('Failed to reset theme', error);
+      void 0;
     } finally {
       this.setSaving(false);
     }
@@ -205,7 +205,7 @@ export class ThemeManagerComponent implements OnDestroy {
       await this.themeService.savePalettePreset(this.presetName.trim(), this.draft.palette, scope);
       this.presetName = '';
     } catch (error) {
-      console.error('Failed to save preset', error);
+      void 0;
     } finally {
       this.setSaving(false);
     }
@@ -216,7 +216,7 @@ export class ThemeManagerComponent implements OnDestroy {
     try {
       await this.themeService.deletePalettePreset(preset.id, scope);
     } catch (error) {
-      console.error('Failed to delete preset', error);
+      void 0;
     } finally {
       this.setSaving(false);
     }
@@ -325,7 +325,7 @@ export class ThemeManagerComponent implements OnDestroy {
       if (this.isSaving || this.isApplyingPreset) {
         return;
       }
-      this.save(this.scope).catch(error => console.error('Theme auto-save failed', error));
+      this.save(this.scope).catch(error => void 0);
     }, 750);
   }
 

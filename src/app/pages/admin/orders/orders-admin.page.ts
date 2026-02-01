@@ -136,7 +136,7 @@ export class OrdersAdminComponent implements OnInit {
       }
       
       if (profile.role !== 'admin') {
-        console.log('Access denied: User is not admin');
+        void 0;
         this.router.navigate(['/']);
         return;
       }
@@ -188,7 +188,7 @@ export class OrdersAdminComponent implements OnInit {
       this.orders.set(orders);
       this.isLoading.set(false);
     }, (error) => {
-      console.error('Error loading orders:', error);
+      void 0;
       this.errorMessage.set('Failed to load orders');
       this.isLoading.set(false);
     });
@@ -323,7 +323,7 @@ export class OrdersAdminComponent implements OnInit {
       
       this.closeStatusModal();
     } catch (error) {
-      console.error('Error updating status:', error);
+      void 0;
       this.errorMessage.set('Failed to update status');
       setTimeout(() => this.errorMessage.set(''), 3000);
     }
@@ -344,7 +344,7 @@ export class OrdersAdminComponent implements OnInit {
       
       this.trackingNumber = '';
     } catch (error) {
-      console.error('Error updating tracking:', error);
+      void 0;
       this.errorMessage.set('Failed to update tracking number');
       setTimeout(() => this.errorMessage.set(''), 3000);
     }

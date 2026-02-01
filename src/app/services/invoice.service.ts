@@ -70,7 +70,7 @@ export class InvoiceService {
       try {
         doc.addImage(logo, 'PNG', margin, 12, 36, 14);
       } catch (err) {
-        console.warn('[Invoice] Logo render failed, using text fallback', err);
+        void 0;
         doc.setFontSize(18);
         doc.setTextColor(this.primaryColor.r, this.primaryColor.g, this.primaryColor.b);
         doc.text(this.brandName, margin, 22);

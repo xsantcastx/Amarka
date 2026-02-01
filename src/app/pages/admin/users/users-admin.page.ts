@@ -115,7 +115,7 @@ export class UsersAdminComponent extends LoadingComponentBase implements OnInit 
         this.successMessage = '';
       }, 3000);
     } catch (error) {
-      console.error('Error updating user role:', error);
+      void 0;
       this.errorMessage = 'Failed to update user role';
     }
   }
@@ -138,7 +138,7 @@ export class UsersAdminComponent extends LoadingComponentBase implements OnInit 
         this.successMessage = '';
       }, 3000);
     } catch (error) {
-      console.error('Error updating user status:', error);
+      void 0;
       this.errorMessage = 'Failed to update user status';
     }
   }
@@ -186,7 +186,7 @@ export class UsersAdminComponent extends LoadingComponentBase implements OnInit 
     try {
       await this.authService.signOutUser('/client/login');
     } catch (error) {
-      console.error('Logout error:', error);
+      void 0;
     }
   }
 }

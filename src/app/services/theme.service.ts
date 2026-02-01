@@ -374,7 +374,7 @@ export class ThemeService {
     try {
       await setDoc(ref, DEFAULT_THEME);
     } catch (error) {
-      console.warn('[theme] Global theme missing; default applied locally. Seed with admin rights when available.', error);
+      void 0;
     }
   }
 
@@ -568,7 +568,7 @@ export class ThemeService {
       try {
         localStorage.setItem(THEME_CACHE_KEY, JSON.stringify(theme));
       } catch (error) {
-        console.warn('[theme] Unable to cache theme', error);
+        void 0;
       }
     }
   }
@@ -673,7 +673,7 @@ export class ThemeService {
         this.previewTheme.set(parsed);
       }
     } catch (error) {
-      console.warn('[theme] Failed to load cached theme', error);
+      void 0;
     }
   }
 

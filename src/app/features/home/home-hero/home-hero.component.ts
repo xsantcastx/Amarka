@@ -93,7 +93,7 @@ export class HomeHeroComponent implements OnInit, OnDestroy {
       await this.settingsService.getSettings(true);
       this.rotatingImages = this.settingsService.getHeroImages();
     } catch (error) {
-      console.error('Error loading hero images:', error);
+      void 0;
       this.rotatingImages = [];
     }
   }

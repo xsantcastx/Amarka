@@ -198,7 +198,7 @@ export class CartPage implements OnInit {
           void this.onAddressChange(defaultAddr.id);
         }
       },
-      error: (err) => console.error('Failed to load addresses:', err)
+      error: (err) => void 0
     });
   }
 
@@ -227,9 +227,9 @@ export class CartPage implements OnInit {
             phoneE164: address.phoneE164,
             email: address.email
           });
-          console.log('Shipping address saved to cart:', address);
+          void 0;
         } catch (error) {
-          console.error('Error saving shipping address:', error);
+          void 0;
         }
       }
       
@@ -262,10 +262,10 @@ export class CartPage implements OnInit {
           .subscribe({
             next: (response) => {
               this.calculatingShipping.set(false);
-              console.log('Cart totals updated with new shipping method:', response.totals);
+              void 0;
             },
             error: (error) => {
-              console.error('Error updating shipping method:', error);
+              void 0;
               this.calculatingShipping.set(false);
             }
           });
@@ -281,10 +281,6 @@ export class CartPage implements OnInit {
     if (!cartSnapshot || !cartSnapshot.id) return;
 
     this.calculatingShipping.set(true);
-
-    if (this.applyStaticShipping(address)) {
-      return;
-    }
 
     this.shippingService.calculateShipping(cartSnapshot.id, {
       country: address.country,
@@ -315,7 +311,7 @@ export class CartPage implements OnInit {
         this.calculatingShipping.set(false);
       },
       error: (err) => {
-        console.error('Shipping calculation error:', err);
+        void 0;
         if (!this.applyStaticShipping(address, true)) {
           this.calculatingShipping.set(false);
         }
@@ -423,7 +419,7 @@ export class CartPage implements OnInit {
 
     // Prevent duplicate submissions
     if (this.savingAddress()) {
-      console.log('Already saving address, please wait...');
+      void 0;
       return;
     }
 
@@ -432,9 +428,9 @@ export class CartPage implements OnInit {
     try {
       const addressData = this.addressForm.value as Omit<Address, 'id' | 'userId' | 'createdAt' | 'updatedAt'>;
       
-      console.log('Creating new address:', addressData);
+      void 0;
       const addressId = await this.addressService.createAddress(addressData);
-      console.log('Address created with ID:', addressId);
+      void 0;
       
       // Hide the form and reset it immediately to prevent re-submission
       this.showAddressForm.set(false);
@@ -445,7 +441,7 @@ export class CartPage implements OnInit {
       if (user) {
         this.addressService.getUserAddresses(user.uid).subscribe({
           next: (addresses) => {
-            console.log('Loaded addresses after save:', addresses.length);
+            void 0;
             this.addresses.set(addresses);
             
             // Auto-select the newly created address
@@ -457,12 +453,12 @@ export class CartPage implements OnInit {
             }
           },
           error: (err) => {
-            console.error('Failed to reload addresses:', err);
+            void 0;
           }
         });
       }
     } catch (err: any) {
-      console.error('Failed to save address:', err);
+      void 0;
       alert('Failed to save address: ' + err.message);
     } finally {
       this.savingAddress.set(false);
@@ -487,7 +483,7 @@ export class CartPage implements OnInit {
 
     try {
       await this.addressService.deleteAddress(addressId);
-      console.log('Address deleted:', addressId);
+      void 0;
       
       // Reload addresses
       this.loadUserAddresses();
@@ -500,7 +496,7 @@ export class CartPage implements OnInit {
         this.selectedShippingMethod.set(null);
       }
     } catch (err: any) {
-      console.error('Failed to delete address:', err);
+      void 0;
       alert('Failed to delete address: ' + err.message);
     }
   }
@@ -532,12 +528,7 @@ export class CartPage implements OnInit {
     }
 
     // Check if address and shipping are selected
-    console.log('Checkout validation:', {
-      selectedAddress: this.selectedAddress(),
-      selectedShippingMethod: this.selectedShippingMethod(),
-      formAddressId: this.checkoutForm.value.addressId,
-      formShippingMethodId: this.checkoutForm.value.shippingMethodId
-    });
+    void 0;
 
     const address = this.selectedAddress() 
       || this.addresses().find(a => a.id === this.checkoutForm.value.addressId);
@@ -563,16 +554,11 @@ export class CartPage implements OnInit {
     const cartSnapshot = this.cart.snapshot();
     if (!cartSnapshot || !cartSnapshot.total || cartSnapshot.total <= 0) {
       alert('Cart totals are not calculated. Please refresh the page and try again.');
-      console.error('Cart snapshot:', cartSnapshot);
+      void 0;
       return;
     }
 
-    console.log('Proceeding to payment with cart:', {
-      id: cartSnapshot.id,
-      total: cartSnapshot.total,
-      shipping: cartSnapshot.shipping,
-      shippingMethodId: cartSnapshot.shippingMethodId
-    });
+    void 0;
 
     // Persist selections to the cart so the payment step has everything it needs
     if (cartSnapshot.id) {
@@ -597,7 +583,7 @@ export class CartPage implements OnInit {
           await this.cart.updateShippingCost(methodCost, methodId);
         }
       } catch (persistError) {
-        console.error('Failed to persist checkout selections:', persistError);
+        void 0;
       }
     }
 
@@ -652,7 +638,7 @@ export class CartPage implements OnInit {
       this.promoCodeSuccess.set(`Promo code applied! You save ${this.formatCurrency(result.discountAmount!)}`);
       this.promoCodeInput.set('');
     } catch (error: any) {
-      console.error('Error applying promo code:', error);
+      void 0;
       this.promoCodeError.set('Error applying promo code');
     } finally {
       this.applyingPromoCode.set(false);
@@ -668,7 +654,7 @@ export class CartPage implements OnInit {
       this.promoCodeSuccess.set('');
       this.promoCodeError.set('');
     } catch (error: any) {
-      console.error('Error removing promo code:', error);
+      void 0;
     }
   }
 }

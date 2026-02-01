@@ -184,7 +184,7 @@ export class PromoCodeService {
         discountAmount
       };
     } catch (error: any) {
-      console.error('Error validating promo code:', error);
+      void 0;
       return { valid: false, error: 'Error validating promo code' };
     }
   }

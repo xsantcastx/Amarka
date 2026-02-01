@@ -50,7 +50,7 @@ export class HomeHeroComponent implements OnInit, OnDestroy {
   rotatingImages: HeroImage[] = [];
 
   async ngOnInit() {
-    console.log('🚀 HomeHero ngOnInit CALLED');
+    void 0;
     await this.loadHeroImages();
     if (isPlatformBrowser(this.platformId)) {
       this.startAutoPlay();
@@ -69,9 +69,9 @@ export class HomeHeroComponent implements OnInit, OnDestroy {
       const settings = await this.settingsService.getSettings(true);
       this.rotatingImages = this.settingsService.getHeroImages();
       
-      console.log('✅ Loaded', this.rotatingImages.length, 'hero images');
+      void 0;
     } catch (error) {
-      console.error('Error loading hero images:', error);
+      void 0;
       this.rotatingImages = [];
     }
   }

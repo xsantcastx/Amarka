@@ -74,7 +74,7 @@ export class CategoriesAdminComponent extends LoadingComponentBase implements On
       this.loadCategories();
       this.closeModal();
     } catch (error: any) {
-      console.error('Error saving category:', error);
+      void 0;
       this.showMessage('Error saving category: ' + error.message, 'error');
     }
   }
@@ -87,7 +87,7 @@ export class CategoriesAdminComponent extends LoadingComponentBase implements On
       this.showMessage('Category deleted successfully', 'success');
       this.loadCategories();
     } catch (error: any) {
-      console.error('Error deleting category:', error);
+      void 0;
       this.showMessage('Error deleting category: ' + error.message, 'error');
     }
   }

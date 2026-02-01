@@ -72,6 +72,6 @@ bootstrapApplication(AppComponent, appConfig)
     window.setTimeout(() => hideInitialLoader(), LOADER_MAX_VISIBLE_MS);
   })
   .catch((err) => {
-    console.error(err);
+    void 0;
     hideInitialLoader();
   });

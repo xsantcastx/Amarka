@@ -14,7 +14,7 @@ const waitForAuthState = async (auth: Auth): Promise<User | null> => {
       await maybeAuthStateReady.call(auth);
       return auth.currentUser;
     } catch (error) {
-      console.error('[AuthGuard] authStateReady() failed, falling back to listener:', error);
+      void 0;
     }
   }
 
@@ -26,7 +26,7 @@ const waitForAuthState = async (auth: Auth): Promise<User | null> => {
         resolve(user);
       },
       (err) => {
-        console.error('[AuthGuard] onAuthStateChanged error:', err);
+        void 0;
         unsubscribe();
         resolve(null);
       }
@@ -48,7 +48,7 @@ export const authGuard: CanActivateFn = (route, state) => {
   return from(waitForAuthState(auth)).pipe(
     switchMap(async (currentUser): Promise<boolean | UrlTree> => {
       if (!currentUser) {
-        console.warn('[AuthGuard] No authenticated user detected; redirecting to login');
+        void 0;
         return loginUrlTree();
       }
 
@@ -57,7 +57,7 @@ export const authGuard: CanActivateFn = (route, state) => {
         const profile = await authService.getUserProfile(currentUser.uid);
 
         if (!profile) {
-          console.warn('[AuthGuard] Missing user profile; forcing sign-out');
+          void 0;
           await authService.signOutUser(null);
           return loginUrlTree();
         }
@@ -72,7 +72,7 @@ export const authGuard: CanActivateFn = (route, state) => {
             const timeSinceLogin = Date.now() - lastLogin.getTime();
 
             if (timeSinceLogin > sessionTimeoutMs) {
-              console.info('[AuthGuard] Session timeout exceeded; redirecting to login');
+              void 0;
               await authService.signOutUser(null);
               return loginUrlTree({ sessionExpired: 'true' });
             }
@@ -81,7 +81,7 @@ export const authGuard: CanActivateFn = (route, state) => {
 
         return true;
       } catch (error) {
-        console.error('[AuthGuard] Error resolving authenticated route:', error);
+        void 0;
         await authService.signOutUser(null).catch(() => undefined);
         return loginUrlTree();
       }

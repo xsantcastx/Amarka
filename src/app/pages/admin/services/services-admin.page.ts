@@ -62,7 +62,7 @@ export class ServicesAdminPage implements OnInit {
         this.isLoading = false;
       },
       error: (err) => {
-        console.error('Failed to load services', err);
+        void 0;
         this.isLoading = false;
       }
     });
@@ -142,7 +142,7 @@ export class ServicesAdminPage implements OnInit {
       }
       this.startCreate();
     } catch (error) {
-      console.error('Failed to save service', error);
+      void 0;
     } finally {
       this.isSaving = false;
     }
@@ -154,7 +154,7 @@ export class ServicesAdminPage implements OnInit {
     try {
       await this.serviceService.deleteService(item.id);
     } catch (error) {
-      console.error('Failed to delete service', error);
+      void 0;
     }
   }
 
@@ -200,14 +200,14 @@ export class ServicesAdminPage implements OnInit {
             }
           },
           error: (err) => {
-            console.error('Upload failed:', err);
+            void 0;
             this.uploadProgress = null;
             reject(err);
           }
         });
       });
     } catch (error) {
-      console.error('Image upload error:', error);
+      void 0;
       this.uploadProgress = null;
       return null;
     }

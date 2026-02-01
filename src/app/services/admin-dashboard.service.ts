@@ -115,7 +115,7 @@ export class AdminDashboardService {
         recentActivity
       };
     } catch (error) {
-      console.error('[AdminDashboardService] Error in getDashboardStats:', error);
+      void 0;
       return {
         totalProducts: 0,
         totalOrders: 0,
@@ -221,7 +221,7 @@ export class AdminDashboardService {
         recentActivity
       };
     } catch (error) {
-      console.error('[AdminDashboardService] Error building analytics snapshot:', error);
+      void 0;
       return {
         period,
         currencyCode,
@@ -277,7 +277,7 @@ export class AdminDashboardService {
       const data = snapshot.data();
       return this.normalizeNumber(data.count);
     } catch (error) {
-      console.warn(`[AdminDashboardService] Falling back to manual count for ${path}:`, (error as Error).message);
+      void 0;
       const snapshot = await getDocs(ref);
       return snapshot.size;
     }
@@ -292,7 +292,7 @@ export class AdminDashboardService {
       const data = snapshot.data();
       return this.normalizeNumber(data.count);
     } catch (error) {
-      console.warn('[AdminDashboardService] Falling back to manual gallery count:', (error as Error).message);
+      void 0;
       const snapshot = await getDocs(mediaRef);
       let count = 0;
       snapshot.forEach(docSnap => {
@@ -314,7 +314,7 @@ export class AdminDashboardService {
       const data = snapshot.data();
       return this.normalizeNumber(data.count);
     } catch (error) {
-      console.warn('[AdminDashboardService] Falling back to manual pending reviews count:', (error as Error).message);
+      void 0;
       const snapshot = await getDocs(reviewsRef);
       let count = 0;
       snapshot.forEach(docSnap => {
@@ -347,7 +347,7 @@ export class AdminDashboardService {
 
       return { total, pending, revenue };
     } catch (error) {
-      console.warn('[AdminDashboardService] Falling back to manual order summary:', (error as Error).message);
+      void 0;
       const snapshot = await getDocs(ordersRef);
       let pending = 0;
       let revenue = 0;
@@ -483,7 +483,7 @@ export class AdminDashboardService {
         };
       });
     } catch (error) {
-      console.warn('[AdminDashboardService] Gallery query fell back to manual filtering:', (error as Error).message);
+      void 0;
       const snapshot = await getDocs(query(ref, orderBy('uploadedAt', 'desc'), limit(limitCount * 2)));
 
       return snapshot.docs
@@ -548,10 +548,7 @@ export class AdminDashboardService {
     try {
       return await getDocs(query(ref, ...constraints));
     } catch (error) {
-      console.warn(
-        `[AdminDashboardService] Falling back to ${fallbackOrderField} for ${collectionPath}:`,
-        (error as Error).message
-      );
+      void 0;
       return getDocs(query(ref, orderBy(fallbackOrderField, 'desc'), limit(limitCount)));
     }
   }
@@ -705,7 +702,7 @@ export class AdminDashboardService {
         average: Math.round(averageValue * 100) / 100
       };
     } catch (error) {
-      console.warn('[AdminDashboardService] Aggregate orders fallback:', (error as Error).message);
+      void 0;
       const snapshot = await getDocs(query(ordersRef, orderBy('createdAt', 'desc')));
 
       let countValue = 0;
@@ -752,10 +749,7 @@ export class AdminDashboardService {
       const snapshot = await getCountFromServer(query(ref, ...constraints));
       return this.normalizeNumber(snapshot.data().count);
     } catch (error) {
-      console.warn(
-        `[AdminDashboardService] Count fallback for ${collectionPath}:`,
-        (error as Error).message
-      );
+      void 0;
       const fallbackRef = await getDocs(
         query(ref, orderBy(options?.fallbackField ?? timestampField, 'desc'))
       );

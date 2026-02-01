@@ -47,7 +47,7 @@ export abstract class LoadingComponentBase {
       this.cdr.detectChanges();
       return result;
     } catch (error) {
-      console.error('Error in withLoading:', error);
+      void 0;
       this.isLoading = false;
       
       if (showError) {

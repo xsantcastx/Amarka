@@ -72,7 +72,7 @@ export class ProductReviewService {
         reason: 'You must purchase this product before leaving a review' 
       };
     } catch (error) {
-      console.error('Error checking review eligibility:', error);
+      void 0;
       return { 
         canReview: false, 
         reason: 'Unable to verify purchase. Please try again later.' 
@@ -102,7 +102,7 @@ export class ProductReviewService {
       const doc = snapshot.docs[0];
       return this.convertToReview(doc.id, doc.data());
     } catch (error) {
-      console.error('Error fetching user review:', error);
+      void 0;
       return null;
     }
   }
@@ -125,10 +125,10 @@ export class ProductReviewService {
 
       const docRef = await addDoc(reviewsRef, reviewData);
       
-      console.log('Review submitted successfully:', docRef.id);
+      void 0;
       return docRef.id;
     } catch (error) {
-      console.error('Error submitting review:', error);
+      void 0;
       throw new Error('Failed to submit review. Please try again.');
     }
   }
@@ -151,7 +151,7 @@ export class ProductReviewService {
       
       return snapshot.docs.map(doc => this.convertToReview(doc.id, doc.data()));
     } catch (error) {
-      console.error('Error fetching product reviews:', error);
+      void 0;
       // Fallback without index: query by productId only and filter locally
       try {
         const reviewsRef = collection(this.firestore, 'productReviews');
@@ -172,7 +172,7 @@ export class ProductReviewService {
           .slice(0, limitCount);
         return reviews;
       } catch (fallbackError) {
-        console.error('Fallback review fetch failed:', fallbackError);
+        void 0;
         return [];
       }
     }
@@ -220,7 +220,7 @@ export class ProductReviewService {
         verifiedPurchaseCount: verifiedCount
       };
     } catch (error) {
-      console.error('Error calculating review summary:', error);
+      void 0;
       return {
         averageRating: 0,
         totalReviews: 0,
@@ -260,7 +260,7 @@ export class ProductReviewService {
         });
       }
     } catch (error) {
-      console.error('Error marking review as helpful:', error);
+      void 0;
       throw error;
     }
   }
@@ -276,7 +276,7 @@ export class ProductReviewService {
         updatedAt: serverTimestamp()
       });
     } catch (error) {
-      console.error('Error updating review status:', error);
+      void 0;
       throw error;
     }
   }
@@ -296,7 +296,7 @@ export class ProductReviewService {
         updatedAt: serverTimestamp()
       });
     } catch (error) {
-      console.error('Error adding admin response:', error);
+      void 0;
       throw error;
     }
   }
@@ -318,7 +318,7 @@ export class ProductReviewService {
       
       return snapshot.docs.map(doc => this.convertToReview(doc.id, doc.data()));
     } catch (error) {
-      console.error('Error fetching all reviews:', error);
+      void 0;
       return [];
     }
   }
@@ -331,7 +331,7 @@ export class ProductReviewService {
       const reviewRef = doc(this.firestore, `productReviews/${reviewId}`);
       await deleteDoc(reviewRef);
     } catch (error) {
-      console.error('Error deleting review:', error);
+      void 0;
       throw error;
     }
   }

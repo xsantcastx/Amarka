@@ -125,7 +125,7 @@ export class ModelsAdminComponent extends LoadingComponentBase implements OnInit
       await this.loadModels();
       this.showMessage('admin.models.messages.bulk_deleted', 'success', { count });
     } catch (error) {
-      console.error('Bulk delete error:', error);
+      void 0;
       this.setError('Failed to delete models');
     }
   }
@@ -146,7 +146,7 @@ export class ModelsAdminComponent extends LoadingComponentBase implements OnInit
       await this.loadModels();
       this.showMessage('admin.models.messages.bulk_activated', 'success');
     } catch (error) {
-      console.error('Bulk activate error:', error);
+      void 0;
       this.setError('Failed to activate models');
     }
   }
@@ -167,7 +167,7 @@ export class ModelsAdminComponent extends LoadingComponentBase implements OnInit
       await this.loadModels();
       this.showMessage('admin.models.messages.bulk_deactivated', 'success');
     } catch (error) {
-      console.error('Bulk deactivate error:', error);
+      void 0;
       this.setError('Failed to deactivate models');
     }
   }
@@ -188,7 +188,7 @@ export class ModelsAdminComponent extends LoadingComponentBase implements OnInit
       const snapshot = await firstValueFrom(this.categoryService.getAllCategories());
       this.categories = snapshot;
     } catch (error) {
-      console.error('[ModelsAdmin] Failed to load categories:', error);
+      void 0;
     }
   }
 
@@ -278,7 +278,7 @@ export class ModelsAdminComponent extends LoadingComponentBase implements OnInit
       await this.loadModels();
       this.closeModal();
     } catch (error) {
-      console.error('[ModelsAdmin] Error saving model:', error);
+      void 0;
       this.showMessage('admin.models.messages.save_failed', 'error');
     } finally {
       this.isSaving = false;
@@ -310,7 +310,7 @@ export class ModelsAdminComponent extends LoadingComponentBase implements OnInit
       await this.loadCategories();
       this.closeCategoryModal();
     } catch (error) {
-      console.error('[ModelsAdmin] Error saving category:', error);
+      void 0;
       this.showMessage('admin.models.categories.messages.save_failed', 'error');
     } finally {
       this.isCategorySaving = false;
@@ -335,7 +335,7 @@ export class ModelsAdminComponent extends LoadingComponentBase implements OnInit
       this.showMessage('admin.models.messages.deleted', 'success');
       await this.loadModels();
     } catch (error) {
-      console.error('[ModelsAdmin] Error deleting model:', error);
+      void 0;
       this.showMessage('admin.models.messages.delete_failed', 'error');
     }
   }
@@ -371,7 +371,7 @@ export class ModelsAdminComponent extends LoadingComponentBase implements OnInit
       await this.loadCategories();
       this.showMessage('admin.models.categories.messages.bulk_activated', 'success');
     } catch (error) {
-      console.error('[ModelsAdmin] Bulk activate categories error:', error);
+      void 0;
       this.showMessage('admin.models.categories.messages.bulk_failed', 'error');
     }
   }
@@ -391,7 +391,7 @@ export class ModelsAdminComponent extends LoadingComponentBase implements OnInit
       await this.loadCategories();
       this.showMessage('admin.models.categories.messages.bulk_deactivated', 'success');
     } catch (error) {
-      console.error('[ModelsAdmin] Bulk deactivate categories error:', error);
+      void 0;
       this.showMessage('admin.models.categories.messages.bulk_failed', 'error');
     }
   }
@@ -412,7 +412,7 @@ export class ModelsAdminComponent extends LoadingComponentBase implements OnInit
       await this.loadCategories();
       this.showMessage('admin.models.categories.messages.bulk_deleted', 'success', { count });
     } catch (error) {
-      console.error('[ModelsAdmin] Bulk delete categories error:', error);
+      void 0;
       this.showMessage('admin.models.categories.messages.bulk_failed', 'error');
     }
   }
@@ -435,7 +435,7 @@ export class ModelsAdminComponent extends LoadingComponentBase implements OnInit
       this.showMessage('admin.models.categories.messages.deleted', 'success');
       await this.loadCategories();
     } catch (error) {
-      console.error('[ModelsAdmin] Error deleting category:', error);
+      void 0;
       this.showMessage('admin.models.categories.messages.delete_failed', 'error');
     }
   }

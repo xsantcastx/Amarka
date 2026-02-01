@@ -57,7 +57,7 @@ export class WhatsappButtonComponent implements OnInit {
       const settings = await this.settingsService.getSettings();
       this.whatsappNumber = settings.whatsappNumber || '';
     } catch (error) {
-      console.error('Error loading WhatsApp settings:', error);
+      void 0;
     }
   }
 

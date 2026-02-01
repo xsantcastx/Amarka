@@ -39,7 +39,7 @@ function extractStoragePath(urlOrPath: string): string | null {
       return decodeURIComponent(match[1]);
     }
   } catch (error) {
-    console.warn('Failed to parse storage URL:', error);
+    void 0;
   }
 
   return null;
@@ -178,7 +178,7 @@ export class GalleryService {
         await deleteObject(imageRef);
       }
     } catch (error) {
-      console.error('Error deleting image from storage:', error);
+      void 0;
     }
   }
 

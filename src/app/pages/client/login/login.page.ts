@@ -57,7 +57,7 @@ export class LoginPageComponent {
       // Execute reCAPTCHA if enabled
       const recaptchaToken = await this.recaptchaService.execute('login');
       if (recaptchaToken) {
-        console.log('[LoginPage] reCAPTCHA token obtained for login');
+        void 0;
       }
 
       const { email, password } = this.loginForm.value;
@@ -66,7 +66,7 @@ export class LoginPageComponent {
       // Redirect to profile page
       this.router.navigate(['/client/profile']);
     } catch (error: any) {
-      console.error('Login error:', error);
+      void 0;
       
       // Handle specific Firebase errors
       if (error.code === 'auth/user-not-found') {

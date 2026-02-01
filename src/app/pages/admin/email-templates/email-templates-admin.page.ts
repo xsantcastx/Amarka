@@ -80,7 +80,7 @@ export class EmailTemplatesAdminComponent extends LoadingComponentBase implement
       await this.loadTemplates();
       this.closeModal();
     } catch (error: any) {
-      console.error('Error saving template:', error);
+      void 0;
       this.showMessage('Error saving template: ' + error.message, 'error');
     }
   }
@@ -93,7 +93,7 @@ export class EmailTemplatesAdminComponent extends LoadingComponentBase implement
       this.showMessage('Template deleted successfully', 'success');
       await this.loadTemplates();
     } catch (error: any) {
-      console.error('Error deleting template:', error);
+      void 0;
       this.showMessage('Error deleting template: ' + error.message, 'error');
     }
   }

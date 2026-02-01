@@ -61,9 +61,9 @@ export class GalleryUploaderComponent implements OnInit {
   private async loadExistingMedia() {
     try {
       this.existingMedia = await this.mediaService.getMediaByIds(this.existingMediaIds);
-      console.log('✅ Loaded existing media:', this.existingMedia.length);
+      void 0;
     } catch (error) {
-      console.error('❌ Error loading existing media:', error);
+      void 0;
     }
   }
 
@@ -125,7 +125,7 @@ export class GalleryUploaderComponent implements OnInit {
           continue;
         }
       } catch (error) {
-        console.error('Error getting dimensions:', error);
+        void 0;
         this.errorMessage = `Failed to load image ${file.name}`;
         continue;
       }
@@ -168,9 +168,9 @@ export class GalleryUploaderComponent implements OnInit {
       // Update parent component
       this.emitMediaIds();
 
-      console.log('✅ Media removed from gallery:', mediaId);
+      void 0;
     } catch (error) {
-      console.error('❌ Error removing media:', error);
+      void 0;
       this.errorMessage = 'Failed to remove image';
     }
   }
@@ -252,10 +252,10 @@ export class GalleryUploaderComponent implements OnInit {
       preview.mediaId = mediaId;
       preview.uploading = false;
 
-      console.log('✅ Gallery image uploaded:', mediaId);
+      void 0;
 
     } catch (error) {
-      console.error('❌ Error uploading gallery image:', error);
+      void 0;
       preview.error = 'Upload failed';
       preview.uploading = false;
     }

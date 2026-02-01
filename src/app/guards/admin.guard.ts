@@ -13,7 +13,7 @@ const waitForAuthState = async (auth: Auth): Promise<User | null> => {
       await maybeAuthStateReady.call(auth);
       return auth.currentUser;
     } catch (error) {
-      console.error('[AdminGuard] authStateReady() failed, falling back to listener:', error);
+      void 0;
     }
   }
 
@@ -25,7 +25,7 @@ const waitForAuthState = async (auth: Auth): Promise<User | null> => {
         resolve(user);
       },
       (err) => {
-        console.error('[AdminGuard] onAuthStateChanged error:', err);
+        void 0;
         unsubscribe();
         resolve(null);
       }
@@ -45,7 +45,7 @@ export const adminGuard: CanActivateFn = (route, state) => {
   return from(waitForAuthState(auth)).pipe(
     switchMap((currentUser) => {
       if (!currentUser) {
-        console.warn('[AdminGuard] No authenticated user; redirecting to login');
+        void 0;
         return of(loginUrlTree);
       }
 
@@ -55,11 +55,11 @@ export const adminGuard: CanActivateFn = (route, state) => {
             return true;
           }
 
-          console.warn('[AdminGuard] Authenticated user lacks admin role; redirecting to home');
+          void 0;
           return router.createUrlTree(['/']);
         }),
         catchError((error) => {
-          console.error('[AdminGuard] Error validating admin status:', error);
+          void 0;
           return of(loginUrlTree);
         })
       );

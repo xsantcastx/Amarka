@@ -142,7 +142,7 @@ export class SoloMinersPageComponent extends LoadingComponentBase implements OnI
       this.soloMinerProducts = soloProducts.map(product => this.mapProductToCard(product));
       this.hasFirestoreData = true;
     } catch (error) {
-      console.error('[SoloMinersPage] Unable to load solo miner catalog from Firestore:', error);
+      void 0;
       this.seedFallbackSoloMiners();
     }
   }

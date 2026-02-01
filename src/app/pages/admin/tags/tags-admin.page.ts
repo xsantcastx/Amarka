@@ -74,7 +74,7 @@ export class TagsAdminComponent extends LoadingComponentBase implements OnInit {
       this.loadTags();
       this.closeModal();
     } catch (error: any) {
-      console.error('Error saving tag:', error);
+      void 0;
       this.showMessage('Error saving tag: ' + error.message, 'error');
     }
   }
@@ -87,7 +87,7 @@ export class TagsAdminComponent extends LoadingComponentBase implements OnInit {
       this.showMessage('Tag deleted successfully', 'success');
       this.loadTags();
     } catch (error: any) {
-      console.error('Error deleting tag:', error);
+      void 0;
       this.showMessage('Error deleting tag: ' + error.message, 'error');
     }
   }

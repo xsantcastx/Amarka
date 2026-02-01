@@ -39,7 +39,7 @@ export class HeroImagesManagerComponent implements OnInit {
         this.heroImages = [];
       }
     } catch (error) {
-      console.error('Error loading all hero images:', error);
+      void 0;
       this.heroImages = [];
     }
   }
@@ -73,7 +73,7 @@ export class HeroImagesManagerComponent implements OnInit {
   async saveImage() {
     if (!this.editingImage) return;
 
-    console.log('Saving image:', this.editingImage);
+    void 0;
 
     // Validate
     if (!this.editingImage.url || !this.editingImage.title) {
@@ -83,14 +83,14 @@ export class HeroImagesManagerComponent implements OnInit {
 
     // Update the image in the array
     const index = this.heroImages.findIndex(img => img.id === this.editingImage!.id);
-    console.log('Image index in array:', index);
-    console.log('Current heroImages array:', this.heroImages);
+    void 0;
+    void 0;
     
     if (index !== -1) {
       this.heroImages[index] = { ...this.editingImage };
-      console.log('Updated image at index', index);
+      void 0;
     } else {
-      console.warn('Image not found in array! This should not happen.');
+      void 0;
     }
 
     await this.saveAllImages();
@@ -174,7 +174,7 @@ export class HeroImagesManagerComponent implements OnInit {
           }
         },
         error: (error) => {
-          console.error('Upload error:', error);
+          void 0;
           this.showMessage('Failed to upload image', 'error');
           this.uploadingImage = false;
         },
@@ -184,7 +184,7 @@ export class HeroImagesManagerComponent implements OnInit {
         }
       });
     } catch (error) {
-      console.error('Upload error:', error);
+      void 0;
       this.showMessage('Failed to upload image', 'error');
       this.uploadingImage = false;
     }
@@ -195,7 +195,7 @@ export class HeroImagesManagerComponent implements OnInit {
       await this.settingsService.updateHeroImages(this.heroImages);
       this.showMessage('Hero images updated! Refresh the home page to see changes.', 'success');
     } catch (error) {
-      console.error('Error saving images:', error);
+      void 0;
       this.showMessage('Failed to save images', 'error');
     }
   }

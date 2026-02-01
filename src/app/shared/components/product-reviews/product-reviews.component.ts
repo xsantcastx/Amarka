@@ -58,7 +58,7 @@ export class ProductReviewsComponent implements OnInit {
       this.reviews.set(reviews);
       this.summary.set(summary);
     } catch (err: any) {
-      console.error('Error loading reviews:', err);
+      void 0;
       this.error.set('Failed to load reviews');
     } finally {
       this.loading.set(false);
@@ -87,7 +87,7 @@ export class ProductReviewsComponent implements OnInit {
       }
       this.cdr.detectChanges();
     } catch (err) {
-      console.error('Error checking review eligibility:', err);
+      void 0;
     }
   }
 
@@ -149,7 +149,7 @@ export class ProductReviewsComponent implements OnInit {
       }, 3000);
 
     } catch (err: any) {
-      console.error('Error submitting review:', err);
+      void 0;
       this.error.set(err.message || 'Failed to submit review. Please try again.');
     } finally {
       this.submitting.set(false);
@@ -167,7 +167,7 @@ export class ProductReviewsComponent implements OnInit {
       await this.reviewService.markHelpful(reviewId, user.uid);
       await this.loadReviews(); // Reload to update helpful count
     } catch (err: any) {
-      console.error('Error marking review as helpful:', err);
+      void 0;
       this.error.set('Failed to update. Please try again.');
     }
   }

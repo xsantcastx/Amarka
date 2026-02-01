@@ -162,7 +162,7 @@ export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
 
       void this.loadProductosRelacionados();
     } catch (error) {
-      console.error('Error loading product:', error);
+      void 0;
       this.router.navigate(['/404']);
     } finally {
       this.loading = false;
@@ -217,7 +217,7 @@ export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
         this.galleryImages = [];
       }
     } catch (error) {
-      console.error('Error loading product media:', error);
+      void 0;
       if (!this.coverImage && this.producto.imageUrl) {
         this.coverImage = this.createMediaFromUrl(this.producto.imageUrl, this.producto.name);
       }
@@ -847,7 +847,7 @@ export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
           variant.imageUrl = media.url;
         }
       } catch (error) {
-        console.error('Error resolving variant image:', error);
+        void 0;
       }
     }
   }
@@ -902,7 +902,7 @@ export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
         this.cdr.detectChanges();
       }
     } catch (error) {
-      console.error('Error loading related products:', error);
+      void 0;
       this.productosRelacionados = [];
     }
   }
@@ -1253,7 +1253,7 @@ export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
         this.cdr.detectChanges();
       }, 2400);
     } catch (error: any) {
-      console.error('Error adding product to cart:', error);
+      void 0;
       this.addError = error?.message || 'Could not add to cart';
     } finally {
       this.addInProgress = false;
@@ -1449,7 +1449,7 @@ export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
           resolved.push(this.createMediaFromUrl(url, productName));
           continue;
         } catch (storageError) {
-          console.warn('Unable to resolve storage path for gallery image', entry, storageError);
+          void 0;
         }
       }
 
@@ -1460,7 +1460,7 @@ export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
           resolved.push(media);
         }
       } catch (mediaError) {
-        console.warn('Unable to load media by ID', entry, mediaError);
+        void 0;
       }
     }
 

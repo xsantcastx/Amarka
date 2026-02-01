@@ -145,22 +145,22 @@ export class ProductosPageComponent extends LoadingComponentBase implements OnIn
       if (categoriesResult.status === 'fulfilled') {
         this.categories = categoriesResult.value ?? [];
       } else if (categoriesResult.reason) {
-        console.error('Error loading categories:', categoriesResult.reason);
+        void 0;
       }
 
       if (modelsResult.status === 'fulfilled') {
         this.models = modelsResult.value ?? [];
       } else if (modelsResult.reason) {
-        console.error('Error loading models:', modelsResult.reason);
+        void 0;
       }
 
       if (tagsResult.status === 'fulfilled') {
         this.tags = tagsResult.value ?? [];
       } else if (tagsResult.reason) {
-        console.error('Error loading tags:', tagsResult.reason);
+        void 0;
       }
     } catch (error) {
-      console.error('Error loading filter options:', error);
+      void 0;
     } finally {
       this.forceUpdate();
     }
@@ -177,7 +177,7 @@ export class ProductosPageComponent extends LoadingComponentBase implements OnIn
       const productsPromise = firstValueFrom(this.productsService.getAllProducts());
       const publicSettingsPromise = this.settingsService.getPublicSettings()
         .catch(error => {
-          console.error('Error loading public settings:', error);
+          void 0;
           return null;
         });
 
@@ -217,7 +217,7 @@ export class ProductosPageComponent extends LoadingComponentBase implements OnIn
           this.forceUpdate();
         })
         .catch(error => {
-          console.error('Error loading product covers:', error);
+          void 0;
         });
     });
   }
@@ -240,7 +240,7 @@ export class ProductosPageComponent extends LoadingComponentBase implements OnIn
               return { ...product, imageUrl: product.coverImage };
             }
           } catch (error) {
-            console.error('Error loading cover for product:', product.name, error);
+            void 0;
           }
         }
         
@@ -373,7 +373,7 @@ export class ProductosPageComponent extends LoadingComponentBase implements OnIn
         this.markRecentlyAdded(productKey);
       }
     } catch (error) {
-      console.error('Error adding to cart:', error);
+      void 0;
     } finally {
       this.addingProductId = null;
       this.forceUpdate();

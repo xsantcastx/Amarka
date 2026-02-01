@@ -146,7 +146,7 @@ export class ProductsAdminComponent extends LoadingComponentBase implements OnIn
     this.navigationSubscription = this.router.events.subscribe(async (event) => {
       if (event instanceof NavigationEnd && event.url.includes('/admin/products')) {
         // Reload master data and products when navigating back to this page
-        console.log('📍 Navigated to products admin, reloading data...');
+        void 0;
         await this.loadMasterData();
         await this.loadProducts();
       }
@@ -178,7 +178,7 @@ export class ProductsAdminComponent extends LoadingComponentBase implements OnIn
         }
         
         if (profile.role !== 'admin') {
-          console.log('Access denied: User is not admin');
+          void 0;
           this.router.navigate(['/']);
           resolve();
           return;
@@ -197,11 +197,11 @@ export class ProductsAdminComponent extends LoadingComponentBase implements OnIn
         new Promise<Category[]>((resolve) => {
           this.categoryService.getAllCategories().subscribe({
             next: (data) => {
-              console.log('✅ Categories loaded:', data.length, data);
+              void 0;
               resolve(data);
             },
             error: (err) => {
-              console.error('❌ Error loading categories:', err);
+              void 0;
               resolve([]);
             }
           });
@@ -209,11 +209,11 @@ export class ProductsAdminComponent extends LoadingComponentBase implements OnIn
         new Promise<Model[]>((resolve) => {
           this.modelService.getAllModels().subscribe({
             next: (data) => {
-              console.log('✅ Models loaded:', data.length, data);
+              void 0;
               resolve(data);
             },
             error: (err) => {
-              console.error('❌ Error loading models:', err);
+              void 0;
               resolve([]);
             }
           });
@@ -221,11 +221,11 @@ export class ProductsAdminComponent extends LoadingComponentBase implements OnIn
         new Promise<Tag[]>((resolve) => {
           this.tagService.getActiveTags().subscribe({
             next: (data) => {
-              console.log('✅ Tags loaded:', data.length, data);
+              void 0;
               resolve(data);
             },
             error: (err) => {
-              console.error('❌ Error loading tags:', err);
+              void 0;
               resolve([]);
             }
           });
@@ -233,11 +233,11 @@ export class ProductsAdminComponent extends LoadingComponentBase implements OnIn
         new Promise<BenefitTemplate[]>((resolve) => {
           this.benefitTemplateService.getActiveTemplates().subscribe({
             next: (data) => {
-              console.log('✅ Benefit templates loaded:', data.length, data);
+              void 0;
               resolve(data);
             },
             error: (err) => {
-              console.error('❌ Error loading benefit templates:', err);
+              void 0;
               resolve([]);
             }
           });
@@ -250,18 +250,18 @@ export class ProductsAdminComponent extends LoadingComponentBase implements OnIn
       this.benefitTemplates = templates;
       this.availableTagNames = tags.map(tag => tag.name);
 
-      console.log('📊 Final counts - Categories:', this.categories.length, 'Models:', this.models.length, 'Tags:', this.tags.length);
+      void 0;
 
       // Warn if data is missing
       if (this.categories.length === 0 || this.models.length === 0) {
-        console.warn('⚠️ Master data not found! Please run seed at /admin/seed');
+        void 0;
         this.errorMessage = '⚠️ Categories or Models not found. Please run seed first at /admin/seed';
       }
 
       this.buildCatalogOptions();
       this.applyCatalogFilter();
     } catch (error) {
-      console.error('Error loading master data:', error);
+      void 0;
       this.errorMessage = 'Failed to load categories/models. Please run seed first.';
     }
   }
@@ -278,11 +278,7 @@ export class ProductsAdminComponent extends LoadingComponentBase implements OnIn
       this.products = products;
       // Debug: Check if timestamps are present
       if (products.length > 0) {
-        console.log('📅 Product timestamps:', {
-          sample: products[0].name,
-          createdAt: products[0].createdAt,
-          updatedAt: products[0].updatedAt
-        });
+        void 0;
       }
     }, true); // Show error messages automatically
   }
@@ -322,21 +318,21 @@ export class ProductsAdminComponent extends LoadingComponentBase implements OnIn
     });
 
     this.catalogOptions = options.sort((a, b) => a.label.localeCompare(b.label));
-    console.log('Built catalog options:', this.catalogOptions.length);
+    void 0;
   }
 
   applyCatalogFilter(term: string = this.catalogSearchTerm) {
     const normalized = term.trim().toLowerCase();
     if (!normalized) {
       this.filteredCatalogOptions = [...this.catalogOptions];
-      console.log('Showing all catalog options:', this.filteredCatalogOptions.length);
+      void 0;
       return;
     }
 
     this.filteredCatalogOptions = this.catalogOptions.filter(option =>
       option.label.toLowerCase().includes(normalized)
     );
-    console.log(`Filtered to ${this.filteredCatalogOptions.length} options for term: "${term}"`);
+    void 0;
   }
 
   onCatalogSearch(value: string) {
@@ -554,7 +550,7 @@ export class ProductsAdminComponent extends LoadingComponentBase implements OnIn
       }
 
     } catch (error) {
-      console.error('Error generating auto-fill:', error);
+      void 0;
       this.templateWarnings.push('Error loading templates - please check your configuration');
       this.showTemplateWarning = true;
     } finally {
@@ -925,9 +921,9 @@ export class ProductsAdminComponent extends LoadingComponentBase implements OnIn
   }
 
   async openEditModal(product: any) {
-    console.log('📝 Opening edit for product:');
-    console.log('   - ID:', product.id);
-    console.log('   - Name:', product.name);
+    void 0;
+    void 0;
+    void 0;
     
     // Navigate to quick-add page with product ID for editing
     this.router.navigate(['/admin/products/quick-add'], { 
@@ -980,7 +976,7 @@ export class ProductsAdminComponent extends LoadingComponentBase implements OnIn
     try {
       dimensions = await this.mediaService.getImageDimensions(file);
     } catch (error) {
-      console.error('Error getting image dimensions:', error);
+      void 0;
       this.errorMessage = 'Failed to load image. Please try another file.';
       return;
     }
@@ -999,7 +995,7 @@ export class ProductsAdminComponent extends LoadingComponentBase implements OnIn
     }
 
     this.coverPreview = URL.createObjectURL(file);
-    console.log(`✅ Cover image selected: ${dimensions.width}x${dimensions.height}px`);
+    void 0;
   }
 
   onGalleryFilesSelected(event: Event) {
@@ -1036,7 +1032,7 @@ export class ProductsAdminComponent extends LoadingComponentBase implements OnIn
   // Handle gallery media IDs from GalleryUploaderComponent
   onGalleryMediaIdsChange(mediaIds: string[]) {
     this.galleryMediaIds = mediaIds;
-    console.log('✅ Gallery media IDs updated:', mediaIds.length);
+    void 0;
   }
 
   // Get current product slug for gallery uploader
@@ -1107,24 +1103,17 @@ export class ProductsAdminComponent extends LoadingComponentBase implements OnIn
         ? slug !== this.selectedProduct.slug 
         : true; // Always check for new products
       
-      console.log('🔍 Slug validation:', {
-        isEditMode: this.isEditMode,
-        selectedProductId: this.selectedProduct?.id,
-        oldSlug: this.selectedProduct?.slug,
-        newSlug: slug,
-        slugChanged,
-        willCheckDuplicate: slugChanged
-      });
+      void 0;
       
       if (slugChanged) {
-        console.log('🔎 Calling slugExists with:');
-        console.log('  - slug:', slug);
-        console.log('  - excludeId:', this.selectedProduct?.id);
+        void 0;
+        void 0;
+        void 0;
         const slugExists = await this.productsService.slugExists(
           slug,
           this.selectedProduct?.id
         );
-        console.log('📋 Slug exists check result:', slugExists);
+        void 0;
         if (slugExists) {
           this.errorMessage = 'admin.duplicate_slug';
           this.isSaving = false;
@@ -1218,7 +1207,7 @@ export class ProductsAdminComponent extends LoadingComponentBase implements OnIn
         this.successMessage = '';
       }, 3000);
     } catch (error) {
-      console.error('Error saving product:', error);
+      void 0;
       this.errorMessage = 'admin.error_occurred';
     } finally {
       this.isSaving = false;
@@ -1257,7 +1246,7 @@ export class ProductsAdminComponent extends LoadingComponentBase implements OnIn
         try {
           await this.mediaService.deleteMedia(existingCover);
         } catch (error) {
-          console.warn('Could not delete old media:', error);
+          void 0;
         }
       }
 
@@ -1298,7 +1287,7 @@ export class ProductsAdminComponent extends LoadingComponentBase implements OnIn
       };
 
       const mediaId = await this.mediaService.createMedia(mediaInput);
-      console.log('✅ Media document created:', mediaId);
+      void 0;
 
       this.isUploading = false;
       this.selectedCoverFile = null;
@@ -1308,16 +1297,16 @@ export class ProductsAdminComponent extends LoadingComponentBase implements OnIn
 
     } catch (error) {
       this.isUploading = false;
-      console.error('❌ Error uploading cover image:', error);
+      void 0;
       throw error;
     }
   }
 
   openDeleteConfirm(product: Product) {
-    console.log('Opening delete confirm for product:', product);
+    void 0;
     this.productToDelete = product;
     this.showDeleteConfirm = true;
-    console.log('showDeleteConfirm set to:', this.showDeleteConfirm);
+    void 0;
   }
 
   closeDeleteConfirm() {
@@ -1326,45 +1315,45 @@ export class ProductsAdminComponent extends LoadingComponentBase implements OnIn
   }
 
   async confirmDelete() {
-    console.log('Confirm delete called for:', this.productToDelete);
+    void 0;
     if (!this.productToDelete || !this.productToDelete.id) {
-      console.error('No product to delete or missing ID');
+      void 0;
       return;
     }
 
     this.isLoading = true;
 
     try {
-      console.log('Attempting to delete product ID:', this.productToDelete.id);
+      void 0;
       
       // Delete image from storage
       if (this.productToDelete.imageUrl) {
         try {
-          console.log('Deleting image:', this.productToDelete.imageUrl);
+          void 0;
           await this.storageService.deleteFile(this.productToDelete.imageUrl);
-          console.log('Image deleted successfully');
+          void 0;
         } catch (error) {
-          console.warn('Could not delete image:', error);
+          void 0;
         }
       }
 
       // Delete product from Firestore
-      console.log('Deleting product from Firestore...');
+      void 0;
       await this.productsService.deleteProduct(this.productToDelete.id);
-      console.log('Product deleted successfully from Firestore');
+      void 0;
       
       this.successMessage = 'admin.deleted_successfully';
       this.closeDeleteConfirm();
       
-      console.log('Reloading products list...');
+      void 0;
       await this.loadProducts();
-      console.log('Products reloaded');
+      void 0;
 
       setTimeout(() => {
         this.successMessage = '';
       }, 3000);
     } catch (error) {
-      console.error('Error deleting product:', error);
+      void 0;
       this.errorMessage = 'admin.error_occurred';
       setTimeout(() => {
         this.errorMessage = '';
@@ -1378,7 +1367,7 @@ export class ProductsAdminComponent extends LoadingComponentBase implements OnIn
     try {
       await this.authService.signOutUser('/client/login');
     } catch (error) {
-      console.error('Logout error:', error);
+      void 0;
     }
   }
 
@@ -1532,11 +1521,11 @@ export class ProductsAdminComponent extends LoadingComponentBase implements OnIn
     const modelId = this.productForm.get('modelId')?.value;
     const name = this.productForm.get('name')?.value;
 
-    console.log('🔄 Auto-load triggered:', { categoryId, modelId, name, descriptionLocked: this.descriptionLocked, seoLocked: this.seoLocked });
+    void 0;
 
     // Need at least category and model
     if (!categoryId || !modelId) {
-      console.log('⏭️ Skipping auto-load: missing category or model');
+      void 0;
       return;
     }
 
@@ -1546,7 +1535,7 @@ export class ProductsAdminComponent extends LoadingComponentBase implements OnIn
     this.isAutoFilling = true; // Prevent lock state changes during auto-fill
 
     try {
-      console.log('📡 Fetching template data...');
+      void 0;
       
       // Generate template data
       const generated = await this.productsService.generateProductData({
@@ -1557,34 +1546,34 @@ export class ProductsAdminComponent extends LoadingComponentBase implements OnIn
         finish: this.productForm.get('finish')?.value
       } as any);
 
-      console.log('📦 Generated data:', generated);
+      void 0;
       this.autoFillPreview = generated;
 
       // Auto-apply to unlocked fields
       if (!this.descriptionLocked && generated.description) {
-        console.log('✍️ Applying description (unlocked)');
+        void 0;
         this.productForm.patchValue({ description: generated.description }, { emitEvent: false });
       } else {
-        console.log('🔒 Description locked, not updating');
+        void 0;
       }
       
       if (!this.seoLocked) {
         if (generated.seoTitle) {
-          console.log('✍️ Applying SEO title (unlocked)');
+          void 0;
           this.productForm.patchValue({ seoTitle: generated.seoTitle }, { emitEvent: false });
         }
         if (generated.seoMeta) {
-          console.log('✍️ Applying SEO meta (unlocked)');
+          void 0;
           this.productForm.patchValue({ seoMeta: generated.seoMeta }, { emitEvent: false });
         }
       } else {
-        console.log('🔒 SEO locked, not updating');
+        void 0;
       }
 
-      console.log('✅ Auto-loaded templates successfully');
+      void 0;
 
     } catch (error) {
-      console.error('❌ Error auto-loading templates:', error);
+      void 0;
     } finally {
       this.isGenerating = false;
       this.isAutoFilling = false;
@@ -1723,13 +1712,13 @@ export class ProductsAdminComponent extends LoadingComponentBase implements OnIn
         // ISO string or date string
         date = new Date(timestamp);
       } else {
-        console.error('formatTimestamp: Unknown timestamp format:', timestamp);
+        void 0;
         return 'Invalid Date';
       }
       
       // Check if date is valid
       if (isNaN(date.getTime())) {
-        console.error('formatTimestamp: Invalid date created from:', timestamp);
+        void 0;
         return 'Invalid Date';
       }
       
@@ -1758,7 +1747,7 @@ export class ProductsAdminComponent extends LoadingComponentBase implements OnIn
         year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined
       });
     } catch (error) {
-      console.error('Error formatting timestamp:', error, 'Input:', timestamp);
+      void 0;
       return 'Error';
     }
   }

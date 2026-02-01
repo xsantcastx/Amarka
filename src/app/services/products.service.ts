@@ -78,7 +78,7 @@ export class ProductsService {
         tags: [...new Set(finalTags)] // Remove duplicates
       };
     } catch (error) {
-      console.error('Error generating product data:', error);
+      void 0;
       throw error;
     }
   }
@@ -263,7 +263,7 @@ export class ProductsService {
       const docRef = await addDoc(productsCol, cleanedData);
       return docRef.id;
     } catch (error) {
-      console.error('Error adding product:', error);
+      void 0;
       throw error;
     }
   }
@@ -289,7 +289,7 @@ export class ProductsService {
         await this.checkLowStockAlert(id, updates.stock, updates.name || 'Product');
       }
     } catch (error) {
-      console.error('Error updating product:', error);
+      void 0;
       throw error;
     }
   }
@@ -303,7 +303,7 @@ export class ProductsService {
       
       // Only send alert if lowStockAlerts is enabled and stock is below threshold
       if (settings.lowStockAlerts && stock <= settings.lowStockThreshold) {
-        console.log(`[ProductsService] Low stock detected for ${productName}: ${stock} units (threshold: ${settings.lowStockThreshold})`);
+        void 0;
         
         const emailData = {
           to: settings.notificationEmail || settings.contactEmail,
@@ -328,11 +328,11 @@ export class ProductsService {
         
         const result = await this.emailService.queueEmail(emailData);
         if (result.success) {
-          console.log(`[ProductsService] Low stock alert email queued for ${productName}`);
+          void 0;
         }
       }
     } catch (error) {
-      console.error('[ProductsService] Error sending low stock alert:', error);
+      void 0;
       // Don't throw - alert failure shouldn't break product update
     }
   }
@@ -374,7 +374,7 @@ export class ProductsService {
       const docRef = doc(this.firestore, `products/${id}`);
       await deleteDoc(docRef);
     } catch (error) {
-      console.error('Error deleting product:', error);
+      void 0;
       throw error;
     }
   }
@@ -384,9 +384,9 @@ export class ProductsService {
    */
   async slugExists(slug: string, excludeId?: string): Promise<boolean> {
     try {
-      console.log('🔎 slugExists called with:');
-      console.log('  - slug:', slug);
-      console.log('  - excludeId:', excludeId);
+      void 0;
+      void 0;
+      void 0;
       const productsCol = collection(this.firestore, 'products');
       const q = query(
         productsCol,
@@ -395,40 +395,40 @@ export class ProductsService {
       const snapshot = await getDocs(q);
       
       const foundDocs = snapshot.docs.map(d => ({ id: d.id, slug: d.data()['slug'] }));
-      console.log('📄 Found documents:', foundDocs);
-      console.log('📄 Number of documents found:', foundDocs.length);
+      void 0;
+      void 0;
       
       if (snapshot.empty) {
-        console.log('✅ No documents found, slug is available');
+        void 0;
         return false;
       }
 
       // If excludeId is provided, check if the found document is different
       if (excludeId) {
         const foundIds = snapshot.docs.map(d => d.id);
-        console.log('🔍 Exclude check:');
-        console.log('  - excludeId:', excludeId);
-        console.log('  - excludeId type:', typeof excludeId);
-        console.log('  - foundIds:', foundIds);
-        console.log('  - foundIds[0]:', foundIds[0]);
-        console.log('  - foundIds[0] type:', typeof foundIds[0]);
-        console.log('  - Are they equal?:', foundIds[0] === excludeId);
+        void 0;
+        void 0;
+        void 0;
+        void 0;
+        void 0;
+        void 0;
+        void 0;
         
         const hasDifferent = snapshot.docs.some(doc => {
           const matches = doc.id === excludeId;
-          console.log(`  - Comparing: "${doc.id}" === "${excludeId}" = ${matches}`);
+          void 0;
           return doc.id !== excludeId;
         });
         
-        console.log('  - hasDifferent:', hasDifferent);
-        console.log('  - returning:', hasDifferent);
+        void 0;
+        void 0;
         return hasDifferent;
       }
 
-      console.log('❌ Slug exists (no exclude ID provided)');
+      void 0;
       return true;
     } catch (error) {
-      console.error('Error checking slug:', error);
+      void 0;
       return false;
     }
   }

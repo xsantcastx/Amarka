@@ -86,7 +86,7 @@ export class CustomOrdersAdminComponent implements OnInit {
       if (!profile) return;
       
       if (profile.role !== 'admin') {
-        console.log('Access denied: User is not admin');
+        void 0;
         this.router.navigate(['/']);
         return;
       }
@@ -177,7 +177,7 @@ export class CustomOrdersAdminComponent implements OnInit {
       this.customOrders.set(orders);
       this.isLoading.set(false);
     }, (error) => {
-      console.error('Error loading custom orders:', error);
+      void 0;
       this.errorMessage.set('Failed to load custom orders');
       this.isLoading.set(false);
     });
@@ -271,7 +271,7 @@ export class CustomOrdersAdminComponent implements OnInit {
       
       this.closeCreateModal();
     } catch (error: any) {
-      console.error('Error creating custom order:', error);
+      void 0;
       this.errorMessage.set(error.message || 'Failed to create custom order');
       setTimeout(() => this.errorMessage.set(''), 5000);
     } finally {
@@ -290,12 +290,12 @@ export class CustomOrdersAdminComponent implements OnInit {
 
       const result = await createPaymentLink({ customOrderId: orderId });
       
-      console.log('Payment link created:', result.data);
+      void 0;
       
       this.successMessage.set('Payment link generated successfully!');
       setTimeout(() => this.successMessage.set(''), 3000);
     } catch (error: any) {
-      console.error('Error generating payment link:', error);
+      void 0;
       this.errorMessage.set(error.message || 'Failed to generate payment link');
       setTimeout(() => this.errorMessage.set(''), 5000);
     } finally {
@@ -309,7 +309,7 @@ export class CustomOrdersAdminComponent implements OnInit {
       this.successMessage.set('Payment link copied to clipboard!');
       setTimeout(() => this.successMessage.set(''), 3000);
     } catch (error) {
-      console.error('Error copying to clipboard:', error);
+      void 0;
       this.errorMessage.set('Failed to copy link');
       setTimeout(() => this.errorMessage.set(''), 3000);
     }
@@ -396,7 +396,7 @@ export class CustomOrdersAdminComponent implements OnInit {
       this.successMessage.set('Invoice downloaded successfully!');
       setTimeout(() => this.successMessage.set(''), 3000);
     } catch (error) {
-      console.error('Error downloading invoice:', error);
+      void 0;
       this.errorMessage.set('Failed to download invoice');
       setTimeout(() => this.errorMessage.set(''), 3000);
     }

@@ -30,9 +30,9 @@ async function getStripeConfig(): Promise<{ secretKey: string; webhookSecret: st
     throw new Error("Stripe secret key not configured. Set STRIPE_SECRET_KEY secret.");
   }
 
-  console.log("Using Stripe secret key from function secrets");
+  void 0;
   if (envWebhook) {
-    console.log("Using Stripe webhook secret from function secrets");
+    void 0;
   }
   return {
     secretKey: envKey,
@@ -86,7 +86,7 @@ async function getEmailConfig(): Promise<EmailConfig> {
       notificationEmail,
     };
   } catch (error) {
-    console.error("Error fetching email config from Firestore:", error);
+    void 0;
   }
 
   return {
@@ -134,9 +134,7 @@ export const sendBrevoEmail = withBrevoSecrets.https.onCall(
     const config = await getEmailConfig();
 
     if (config.provider && config.provider !== "brevo") {
-      console.error("sendBrevoEmail blocked: provider not brevo", {
-        provider: config.provider,
-      });
+      void 0;
       throw new functions.https.HttpsError(
         "failed-precondition",
         "Email provider is not set to Brevo"
@@ -144,7 +142,7 @@ export const sendBrevoEmail = withBrevoSecrets.https.onCall(
     }
 
     if (!config.apiKey) {
-      console.error("sendBrevoEmail blocked: Brevo API key missing");
+      void 0;
       throw new functions.https.HttpsError(
         "failed-precondition",
         "Brevo API key is not configured"
@@ -152,7 +150,7 @@ export const sendBrevoEmail = withBrevoSecrets.https.onCall(
     }
 
     if (!config.fromEmail) {
-      console.error("sendBrevoEmail blocked: From email missing");
+      void 0;
       throw new functions.https.HttpsError(
         "failed-precondition",
         "From email address is not configured"
@@ -160,14 +158,7 @@ export const sendBrevoEmail = withBrevoSecrets.https.onCall(
     }
 
     if (!isAllowedRecipient(to, config)) {
-      console.error("sendBrevoEmail blocked: recipient not allowed", {
-        to,
-        allowed: [
-          config.contactEmail,
-          config.notificationEmail,
-          config.fromEmail,
-        ].filter(Boolean),
-      });
+      void 0;
       throw new functions.https.HttpsError(
         "permission-denied",
         "Recipient is not allowed"
@@ -207,11 +198,8 @@ export const sendBrevoEmail = withBrevoSecrets.https.onCall(
     });
 
     if (!response.ok) {
-      const errorText = await response.text().catch(() => "");
-      console.error("Brevo send error:", response.status, errorText, {
-        keyLength: config.apiKey?.length || 0,
-        keyStartsWithXkeysib: config.apiKey?.startsWith("xkeysib-") || false,
-      });
+      void 0;
+      void 0;
       throw new functions.https.HttpsError(
         "internal",
         `Brevo send failed (${response.status})`
@@ -268,7 +256,7 @@ export const sendPasswordResetBrevo = withBrevoSecrets.https.onCall(
       if (code === "auth/user-not-found") {
         return { success: true };
       }
-      console.error("Error generating password reset link:", error);
+      void 0;
       throw new functions.https.HttpsError("internal", "Failed to generate reset link");
     }
 
@@ -313,8 +301,8 @@ export const sendPasswordResetBrevo = withBrevoSecrets.https.onCall(
     });
 
     if (!response.ok) {
-      const errorText = await response.text().catch(() => "");
-      console.error("Brevo reset send error:", response.status, errorText);
+      void 0;
+      void 0;
       throw new functions.https.HttpsError(
         "internal",
         `Brevo send failed (${response.status})`
@@ -517,28 +505,73 @@ export const cartReprice = functions.https.onCall(
       totalWeight += itemWeight * item.qty;
     }
 
-    // Get shipping rates for the country
-    const countryRates = SHIPPING_RATES[address.country as keyof typeof SHIPPING_RATES] || DEFAULT_RATES;
+    const settingsDoc = await db.collection("settings").doc("app").get();
+    const settings = settingsDoc.data() || {};
+    const shippingTestMode = Boolean(settings.shippingTestMode);
+    const shippingEnabled = settings.shippingEnabled !== false;
+    const defaultShippingCostRaw = Number(settings.defaultShippingCost ?? 0);
+    const defaultShippingCost = Number.isFinite(defaultShippingCostRaw) ? defaultShippingCostRaw : 0;
+    const freeShippingThresholdRaw = Number(settings.freeShippingThreshold ?? 0);
+    const freeShippingThreshold = Number.isFinite(freeShippingThresholdRaw) ? freeShippingThresholdRaw : 0;
+    const shippingEstimate =
+      typeof settings.shippingEstimate === "string" ? settings.shippingEstimate : "";
+    const currency = cart.currency || "USD";
 
-    // Calculate shipping options
-    const shippingMethods: ShippingMethod[] = [
-      {
-        id: "standard",
-        name: "Standard Shipping",
-        description: `Delivery in ${countryRates.standard.transitDays} business days`,
-        cost: Math.round((countryRates.standard.baseRate + countryRates.standard.perKg * totalWeight) * 100) / 100,
-        currency: "USD",
-        estimatedDays: countryRates.standard.transitDays,
-      },
-      {
-        id: "express",
-        name: "Express Shipping",
-        description: `Fast delivery in ${countryRates.express.transitDays} business days`,
-        cost: Math.round((countryRates.express.baseRate + countryRates.express.perKg * totalWeight) * 100) / 100,
-        currency: "USD",
-        estimatedDays: countryRates.express.transitDays,
-      },
-    ];
+    const useFlatShipping = shippingTestMode || !shippingEnabled;
+
+    let shippingMethods: ShippingMethod[];
+    if (useFlatShipping) {
+      const baseCost =
+        freeShippingThreshold > 0 && subtotal >= freeShippingThreshold ? 0 : defaultShippingCost;
+      const flatCost = Math.round(baseCost * 100) / 100;
+      const label = shippingTestMode ? "Test Shipping" : "Flat Shipping";
+      const description = shippingEstimate
+        ? `${shippingTestMode ? "Test shipping" : "Flat shipping"} (${shippingEstimate})`
+        : shippingTestMode
+          ? "Test shipping rate"
+          : "Flat shipping rate";
+
+      shippingMethods = [
+        {
+          id: shippingTestMode ? "standard" : "flat-rate",
+          name: label,
+          description,
+          cost: flatCost,
+          currency,
+          estimatedDays: shippingEstimate || "N/A",
+        },
+      ];
+    } else {
+      // Get shipping rates for the country
+      const countryRates =
+        SHIPPING_RATES[address.country as keyof typeof SHIPPING_RATES] || DEFAULT_RATES;
+
+      // Calculate shipping options
+      shippingMethods = [
+        {
+          id: "standard",
+          name: "Standard Shipping",
+          description: `Delivery in ${countryRates.standard.transitDays} business days`,
+          cost:
+            Math.round(
+              (countryRates.standard.baseRate + countryRates.standard.perKg * totalWeight) * 100
+            ) / 100,
+          currency,
+          estimatedDays: countryRates.standard.transitDays,
+        },
+        {
+          id: "express",
+          name: "Express Shipping",
+          description: `Fast delivery in ${countryRates.express.transitDays} business days`,
+          cost:
+            Math.round(
+              (countryRates.express.baseRate + countryRates.express.perKg * totalWeight) * 100
+            ) / 100,
+          currency,
+          estimatedDays: countryRates.express.transitDays,
+        },
+      ];
+    }
 
     // Select shipping method (use provided ID or default to standard)
     let selectedShipping = shippingMethods.find(m => m.id === shippingMethodId);
@@ -553,7 +586,7 @@ export const cartReprice = functions.https.onCall(
     if (address.country === "US" && address.region) {
       const stateCode = address.region.toUpperCase();
       taxRate = US_STATE_TAX_RATES[stateCode] || 0;
-      console.log(`[cartReprice] US State tax for ${stateCode}: ${(taxRate * 100).toFixed(2)}%`);
+      void 0;
     }
     
     const tax = Math.round((subtotal + selectedShipping.cost) * taxRate * 100) / 100;
@@ -572,7 +605,7 @@ export const cartReprice = functions.https.onCall(
       discount,
       total,
       shippingMethod: selectedShipping.id,
-      currency: cart.currency || "USD",
+      currency,
       updatedAt: admin.firestore.FieldValue.serverTimestamp(),
     });
 
@@ -590,7 +623,7 @@ export const cartReprice = functions.https.onCall(
       },
     };
   } catch (error: any) {
-    console.error("Error in cartReprice:", error);
+    void 0;
     
     // Re-throw HttpsError as-is
     if (error instanceof functions.https.HttpsError) {
@@ -750,7 +783,7 @@ export const createPaymentIntent = withStripeSecrets.https.onCall(
       currency: currency.toUpperCase(),
     };
   } catch (error: any) {
-    console.error("Error in createPaymentIntent:", error);
+    void 0;
 
     // Re-throw HttpsError as-is
     if (error instanceof functions.https.HttpsError) {
@@ -791,7 +824,7 @@ export const handleStripeWebhook = withStripeSecrets.https.onRequest(
   const sig = req.headers["stripe-signature"];
   
   if (!sig || typeof sig !== "string") {
-    console.error("No Stripe signature found in headers");
+    void 0;
     res.status(400).send("Missing Stripe signature");
     return;
   }
@@ -801,7 +834,7 @@ export const handleStripeWebhook = withStripeSecrets.https.onRequest(
   const webhookSecret = config.webhookSecret;
 
   if (!webhookSecret) {
-    console.error("⚠️  Stripe webhook secret not configured! Add it in Admin Settings or functions/.env");
+    void 0;
     res.status(500).send("Webhook secret not configured");
     return;
   }
@@ -819,7 +852,7 @@ export const handleStripeWebhook = withStripeSecrets.https.onRequest(
       webhookSecret
     );
   } catch (err: any) {
-    console.error("Webhook signature verification failed:", err.message);
+    void 0;
     res.status(400).send(`Webhook Error: ${err.message}`);
     return;
   }
@@ -851,7 +884,7 @@ export const handleStripeWebhook = withStripeSecrets.https.onRequest(
         break;
 
       default:
-        console.log(`Unhandled event type: ${event.type}`);
+        void 0;
     }
 
     // Mark webhook as processed
@@ -862,7 +895,7 @@ export const handleStripeWebhook = withStripeSecrets.https.onRequest(
 
     res.json({ received: true });
   } catch (error: any) {
-    console.error("Error processing webhook:", error);
+    void 0;
     
     // Log error in webhook log
     await webhookLogRef.update({
@@ -880,7 +913,7 @@ export const handleStripeWebhook = withStripeSecrets.https.onRequest(
  * Handle successful payment
  */
 async function handlePaymentSuccess(paymentIntent: Stripe.PaymentIntent, webhookLogId: string) {
-  console.log("Processing payment success:", paymentIntent.id);
+  void 0;
 
   const metadata = paymentIntent.metadata;
   const cartId = metadata.cartId;
@@ -1060,14 +1093,14 @@ async function handlePaymentSuccess(paymentIntent: Stripe.PaymentIntent, webhook
   // TODO: Send order confirmation email (Step 15)
   // await sendOrderConfirmationEmail(userId, orderId, orderNumber);
 
-  console.log(`Order created successfully: ${orderNumber} (${orderId})`);
+  void 0;
 }
 
 /**
  * Handle failed payment
  */
 async function handlePaymentFailed(paymentIntent: Stripe.PaymentIntent, webhookLogId: string) {
-  console.log("Processing payment failure:", paymentIntent.id);
+  void 0;
 
   const metadata = paymentIntent.metadata;
   const userId = metadata.userId;
@@ -1095,14 +1128,14 @@ async function handlePaymentFailed(paymentIntent: Stripe.PaymentIntent, webhookL
   // TODO: Send payment failure notification email
   // await sendPaymentFailureEmail(userId, paymentIntent.id);
 
-  console.log(`Payment failed: ${paymentIntent.id}`);
+  void 0;
 }
 
 /**
  * Handle canceled payment
  */
 async function handlePaymentCanceled(paymentIntent: Stripe.PaymentIntent, webhookLogId: string) {
-  console.log("Processing payment cancellation:", paymentIntent.id);
+  void 0;
 
   // Update payment record
   const paymentRef = db.collection("payments").doc(paymentIntent.id);
@@ -1112,7 +1145,7 @@ async function handlePaymentCanceled(paymentIntent: Stripe.PaymentIntent, webhoo
     updatedAt: admin.firestore.FieldValue.serverTimestamp(),
   });
 
-  console.log(`Payment canceled: ${paymentIntent.id}`);
+  void 0;
 }
 
 /**
@@ -1239,7 +1272,7 @@ export const createCustomOrderPaymentLink = withStripeSecrets.https.onCall(
       updatedAt: admin.firestore.FieldValue.serverTimestamp(),
     });
 
-    console.log(`Payment link created for custom order ${customOrderId}: ${paymentLink.url}`);
+    void 0;
 
     // Return payment link to frontend
     return {
@@ -1248,7 +1281,7 @@ export const createCustomOrderPaymentLink = withStripeSecrets.https.onCall(
       paymentLinkId: paymentLink.id,
     };
   } catch (error: any) {
-    console.error("Error in createCustomOrderPaymentLink:", error);
+    void 0;
 
     // Re-throw HttpsError as-is
     if (error instanceof functions.https.HttpsError) {
@@ -1288,7 +1321,7 @@ export const handleCustomOrderPayment = withStripeSecrets.https.onRequest(
   const sig = req.headers["stripe-signature"];
   
   if (!sig || typeof sig !== "string") {
-    console.error("No Stripe signature found in headers");
+    void 0;
     res.status(400).send("Missing Stripe signature");
     return;
   }
@@ -1298,7 +1331,7 @@ export const handleCustomOrderPayment = withStripeSecrets.https.onRequest(
   const webhookSecret = config.webhookSecret;
 
   if (!webhookSecret) {
-    console.error("Stripe webhook secret not configured");
+    void 0;
     res.status(500).send("Webhook secret not configured");
     return;
   }
@@ -1316,7 +1349,7 @@ export const handleCustomOrderPayment = withStripeSecrets.https.onRequest(
       webhookSecret
     );
   } catch (err: any) {
-    console.error("Webhook signature verification failed:", err.message);
+    void 0;
     res.status(400).send(`Webhook Error: ${err.message}`);
     return;
   }
@@ -1330,7 +1363,7 @@ export const handleCustomOrderPayment = withStripeSecrets.https.onRequest(
       const customOrderId = session.metadata?.customOrderId;
       
       if (customOrderId) {
-        console.log(`Processing custom order payment: ${customOrderId}`);
+        void 0;
         
         // Update custom order status to paid
         const orderRef = db.collection("customOrders").doc(customOrderId);
@@ -1342,13 +1375,13 @@ export const handleCustomOrderPayment = withStripeSecrets.https.onRequest(
           updatedAt: admin.firestore.FieldValue.serverTimestamp(),
         });
         
-        console.log(`Custom order ${customOrderId} marked as paid`);
+        void 0;
       }
     }
 
     res.json({ received: true });
   } catch (error: any) {
-    console.error("Error processing custom order webhook:", error);
+    void 0;
     res.status(500).send("Webhook processing failed");
   }
   })

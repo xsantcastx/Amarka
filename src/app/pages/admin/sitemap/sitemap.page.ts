@@ -198,7 +198,7 @@ export class AdminSitemapPage implements OnInit {
       const stats = await this.sitemapService.getSitemapStats();
       this.stats.set(stats);
     } catch (err: any) {
-      console.error('Error loading sitemap stats:', err);
+      void 0;
       this.error.set('Failed to load statistics');
     } finally {
       this.loading.set(false);
@@ -217,7 +217,7 @@ export class AdminSitemapPage implements OnInit {
       this.successMessage.set('Sitemap generated successfully!');
       setTimeout(() => this.successMessage.set(null), 3000);
     } catch (err: any) {
-      console.error('Error generating sitemap:', err);
+      void 0;
       this.error.set('Failed to generate sitemap');
     } finally {
       this.loading.set(false);
@@ -233,7 +233,7 @@ export class AdminSitemapPage implements OnInit {
       this.successMessage.set('Sitemap downloaded successfully!');
       setTimeout(() => this.successMessage.set(null), 3000);
     } catch (err: any) {
-      console.error('Error downloading sitemap:', err);
+      void 0;
       this.error.set('Failed to download sitemap');
     } finally {
       this.loading.set(false);

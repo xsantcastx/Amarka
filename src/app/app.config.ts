@@ -45,7 +45,7 @@ export const appConfig: ApplicationConfig = {
         import('firebase/auth').then(({ setPersistence, browserLocalPersistence }) => {
           setPersistence(auth, browserLocalPersistence)
             .catch((error) => {
-              console.error('[Auth] Error setting persistence:', error);
+              void 0;
             });
         });
       }

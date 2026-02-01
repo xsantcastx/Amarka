@@ -36,6 +36,7 @@ export interface AppSettings {
   freeShippingThreshold: number;
   defaultShippingCost: number;
   shippingEstimate: string;
+  shippingTestMode: boolean;
   
   // Analytics
   googleAnalyticsId: string;
@@ -201,7 +202,7 @@ export class SettingsService {
       // Return default settings if none exist
       return defaults;
     } catch (error) {
-      console.error('Error getting settings:', error);
+      void 0;
       return this.getDefaultSettings();
     }
   }
@@ -226,7 +227,7 @@ export class SettingsService {
       
       return false;
     } catch (error) {
-      console.error('Error checking admin status:', error);
+      void 0;
       return false;
     }
   }
@@ -246,7 +247,7 @@ export class SettingsService {
         await maybeAuthStateReady.call(this.auth);
         return this.auth.currentUser;
       } catch (error) {
-        console.warn('[SettingsService] authStateReady() failed, falling back to listener', error);
+        void 0;
       }
     }
 
@@ -307,7 +308,7 @@ export class SettingsService {
       
       return null;
     } catch (error) {
-      console.error('Error getting public settings:', error);
+      void 0;
       return null;
     }
   }
@@ -351,7 +352,7 @@ export class SettingsService {
       this.settingsCache = settings;
       this.settingsSubject.next(settings);
     } catch (error: any) {
-      console.error('Error saving settings:', error);
+      void 0;
       throw error;
     }
   }
@@ -398,6 +399,7 @@ export class SettingsService {
       freeShippingThreshold: 100,
       defaultShippingCost: 8,
       shippingEstimate: '3-5 business days',
+      shippingTestMode: false,
       
       // Analytics
       googleAnalyticsId: '',
@@ -497,7 +499,7 @@ export class SettingsService {
       
       return activeImages;
     } catch (error) {
-      console.error('Error parsing hero images:', error);
+      void 0;
       return [];
     }
   }

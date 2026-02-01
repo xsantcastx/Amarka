@@ -94,7 +94,7 @@ export class AdminSidebarComponent {
     try {
       await this.authService.signOutUser('/client/login');
     } catch (error) {
-      console.error('Logout error:', error);
+      void 0;
     }
   }
 }

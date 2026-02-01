@@ -47,7 +47,7 @@ export class AdminReviewsPage implements OnInit {
       const reviews = await this.reviewService.getAllReviews(status);
       this.reviews.set(reviews);
     } catch (err: any) {
-      console.error('Error loading reviews:', err);
+      void 0;
       this.error.set('Failed to load reviews. Please try again.');
     } finally {
       this.loading.set(false);
@@ -61,7 +61,7 @@ export class AdminReviewsPage implements OnInit {
       products?.forEach(p => productMap.set(p.id!, p));
       this.products.set(productMap);
     } catch (err) {
-      console.error('Error loading products:', err);
+      void 0;
     }
   }
 
@@ -78,7 +78,7 @@ export class AdminReviewsPage implements OnInit {
       await this.reviewService.updateReviewStatus(reviewId, 'approved');
       await this.loadReviews();
     } catch (err: any) {
-      console.error('Error approving review:', err);
+      void 0;
       this.error.set('Failed to approve review. Please try again.');
     } finally {
       this.submitting.set(false);
@@ -93,7 +93,7 @@ export class AdminReviewsPage implements OnInit {
       await this.reviewService.updateReviewStatus(reviewId, 'rejected');
       await this.loadReviews();
     } catch (err: any) {
-      console.error('Error rejecting review:', err);
+      void 0;
       this.error.set('Failed to reject review. Please try again.');
     } finally {
       this.submitting.set(false);
@@ -108,7 +108,7 @@ export class AdminReviewsPage implements OnInit {
       await this.reviewService.deleteReview(reviewId);
       await this.loadReviews();
     } catch (err: any) {
-      console.error('Error deleting review:', err);
+      void 0;
       this.error.set('Failed to delete review. Please try again.');
     } finally {
       this.submitting.set(false);
@@ -145,7 +145,7 @@ export class AdminReviewsPage implements OnInit {
       await this.loadReviews();
       this.closeResponseModal();
     } catch (err: any) {
-      console.error('Error submitting response:', err);
+      void 0;
       this.error.set('Failed to submit response. Please try again.');
     } finally {
       this.submitting.set(false);

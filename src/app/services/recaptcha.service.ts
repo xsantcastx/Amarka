@@ -48,7 +48,7 @@ export class RecaptchaService {
         siteKey: this.resolveSiteKey(defaultSiteKey, settingsSiteKey, testSiteKey)
       };
     } catch (error) {
-      console.warn('[RecaptchaService] Failed to load settings, falling back to environment config', error);
+      void 0;
 
       return {
         enabled: environmentEnabled,
@@ -75,7 +75,7 @@ export class RecaptchaService {
       }
 
       if (!this.reportedLocalhostFallback) {
-        console.info('[RecaptchaService] Localhost detected; using Google test site key for reCAPTCHA.');
+        void 0;
         this.reportedLocalhostFallback = true;
       }
       return testSiteKey;
@@ -121,7 +121,7 @@ export class RecaptchaService {
     }
 
     if (!siteKey) {
-      console.warn('[RecaptchaService] Missing reCAPTCHA site key, skipping script load');
+      void 0;
       return;
     }
 
@@ -129,7 +129,7 @@ export class RecaptchaService {
     const environmentConfig = environment.recaptcha || {};
     const enabled = environmentConfig.enabled !== false; // Default to true if not specified
     if (!enabled) {
-      console.log('[RecaptchaService] reCAPTCHA is disabled in environment config');
+      void 0;
       return;
     }
 
@@ -172,13 +172,13 @@ export class RecaptchaService {
 
       script.onload = () => {
         this.scriptLoaded = true;
-        console.log('[RecaptchaService] reCAPTCHA script loaded successfully');
+        void 0;
         this.loadingPromise = null;
         resolve();
       };
 
       script.onerror = (error) => {
-        console.error('[RecaptchaService] Failed to load reCAPTCHA script:', error);
+        void 0;
         this.loadingPromise = null;
         reject(new Error('Failed to load reCAPTCHA script'));
       };
@@ -209,7 +209,7 @@ export class RecaptchaService {
           delete window.grecaptcha;
         }
       } catch (error) {
-        console.warn('[RecaptchaService] Unable to reset existing grecaptcha instance', error);
+        void 0;
       }
     }
   }
@@ -222,18 +222,18 @@ export class RecaptchaService {
     // Resolve configuration before attempting to execute
     const { enabled, siteKey } = await this.getCaptchaConfig();
     if (!enabled) {
-      console.log('[RecaptchaService] CAPTCHA is disabled in settings, skipping verification');
+      void 0;
       return null;
     }
 
     // Only execute in browser
     if (!this.isBrowser) {
-      console.log('[RecaptchaService] Not in browser, skipping CAPTCHA');
+      void 0;
       return null;
     }
 
     if (!siteKey) {
-      console.warn('[RecaptchaService] No reCAPTCHA site key configured, skipping execution');
+      void 0;
       return null;
     }
 
@@ -251,10 +251,10 @@ export class RecaptchaService {
                   siteKey,
                   { action }
                 );
-                console.log('[RecaptchaService] Token generated for action:', action);
+                void 0;
                 resolve(token);
               } catch (error) {
-                console.error('[RecaptchaService] Error executing reCAPTCHA:', error);
+                void 0;
                 reject(error);
               }
             });
@@ -272,7 +272,7 @@ export class RecaptchaService {
         }, 10000);
       });
     } catch (error) {
-      console.error('[RecaptchaService] CAPTCHA execution failed:', error);
+      void 0;
       throw error;
     }
   }
@@ -284,7 +284,7 @@ export class RecaptchaService {
   async verifyToken(token: string): Promise<boolean> {
     // In production, send token to your backend for verification
     // Backend should verify with Google's API using the secret key
-    console.log('[RecaptchaService] Token verification should be done server-side');
+    void 0;
     
     // For now, just check if token exists
     return !!(token && token.length > 0);
@@ -297,9 +297,9 @@ export class RecaptchaService {
     if (this.isBrowser && window.grecaptcha) {
       try {
         window.grecaptcha.reset();
-        console.log('[RecaptchaService] reCAPTCHA reset');
+        void 0;
       } catch (error) {
-        console.error('[RecaptchaService] Error resetting reCAPTCHA:', error);
+        void 0;
       }
     }
   }

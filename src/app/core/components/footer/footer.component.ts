@@ -177,7 +177,7 @@ export class FooterComponent implements OnInit {
           .slice(0, 3);
       },
       error: (error: any) => {
-        console.error('Error loading categories for footer:', error);
+        void 0;
       }
     });
   }

@@ -56,7 +56,7 @@ export class RegisterPageComponent {
       passwordControl.updateValueAndValidity();
     }
     
-    console.log('[RegisterPage] Password min length set to:', settings.passwordMinLength);
+    void 0;
   }
 
   passwordMatchValidator(group: FormGroup) {
@@ -86,7 +86,7 @@ export class RegisterPageComponent {
       // Execute reCAPTCHA if enabled
       const recaptchaToken = await this.recaptchaService.execute('register');
       if (recaptchaToken) {
-        console.log('[RegisterPage] reCAPTCHA token obtained for registration');
+        void 0;
       }
 
       const { email, password, displayName, company, phone } = this.registerForm.value;
@@ -95,7 +95,7 @@ export class RegisterPageComponent {
       // Redirect to profile page
       this.router.navigate(['/client/profile']);
     } catch (error: any) {
-      console.error('Registration error:', error);
+      void 0;
       
       // Handle specific Firebase errors
       if (error.code === 'auth/email-already-in-use') {

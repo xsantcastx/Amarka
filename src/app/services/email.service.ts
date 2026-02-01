@@ -68,7 +68,7 @@ export class EmailService {
     
     // Check if order emails are enabled
     if (!settings.orderEmailEnabled) {
-      console.log('[EmailService] Order emails are disabled in settings. Email not sent.');
+      void 0;
       return { success: true, disabled: true };
     }
     
@@ -76,7 +76,7 @@ export class EmailService {
       settings.notificationEmail ||
       settings.contactEmail ||
       this.brandConfig.site.contact.email;
-    console.log(`[EmailService] Sending cart email to: ${recipientEmail}`);
+    void 0;
     
     const rows = items.map((i, idx) =>
       `<tr><td style="padding:6px;border:1px solid #eee">${idx+1}</td>
@@ -123,16 +123,16 @@ export class EmailService {
             name: String(contact.name || contact.email || '')
           }
         });
-        console.log('Email sent via Brevo:', result);
+        void 0;
         return result;
       }
 
       // Write to Firestore - the Trigger Email extension will automatically send this
       const docRef = await this.sendViaFirestoreMail(recipientEmail, subject, html);
-      console.log('Email queued successfully with ID:', docRef.id, 'to:', recipientEmail);
+      void 0;
       return docRef;
     } catch (error: any) {
-      console.error('Failed to queue email:', error);
+      void 0;
       const message = error?.message || 'Unable to send the email. Please try again later.';
       throw new Error(message);
     }
@@ -150,7 +150,7 @@ export class EmailService {
       settings.notificationEmail ||
       settings.contactEmail ||
       this.brandConfig.site.contact.email;
-    console.log(`[EmailService] Sending contact form to: ${recipientEmail}`);
+    void 0;
 
     const html = `
       <div style="font-family:Inter,Segoe UI,Arial,sans-serif;color:#111827;line-height:1.6">
@@ -193,16 +193,16 @@ export class EmailService {
             name: String(formData.nombre || formData.email || '')
           }
         });
-        console.log('Contact email sent via Brevo:', result);
+        void 0;
         return result;
       }
 
       // Write to Firestore - the Trigger Email extension will automatically send this
       const docRef = await this.sendViaFirestoreMail(recipientEmail, subject, html);
-      console.log('Contact email queued successfully with ID:', docRef.id, 'to:', recipientEmail);
+      void 0;
       return docRef;
     } catch (error: any) {
-      console.error('Failed to queue contact email:', error);
+      void 0;
       const message = error?.message || 'Unable to send your message right now. Please try again later.';
       throw new Error(message);
     }
@@ -232,10 +232,10 @@ export class EmailService {
         emailData.html
       );
 
-      console.log('[EmailService] Email queued successfully with ID:', docRef.id);
+      void 0;
       return { success: true };
     } catch (error) {
-      console.error('[EmailService] Failed to queue email:', error);
+      void 0;
       return { success: false };
     }
   }

@@ -43,7 +43,7 @@ export class ForgotPasswordPageComponent {
       this.successMessage = 'client.forgot_password_email_sent';
       this.forgotPasswordForm.reset();
     } catch (error: any) {
-      console.error('Password reset error:', error);
+      void 0;
       this.errorMessage = 'client.errors.password_reset_failed';
     } finally {
       this.isLoading = false;

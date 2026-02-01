@@ -111,7 +111,7 @@ export class CollectionPageComponent implements OnInit {
       this.tags = Array.from(new Set(this.products.flatMap(p => p.tags || []))).slice(0, 12);
       this.applyFilters();
     } catch (err) {
-      console.error('Error loading collection products', err);
+      void 0;
       this.products = [];
       this.filtered = [];
     } finally {

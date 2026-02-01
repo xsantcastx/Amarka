@@ -55,7 +55,7 @@ export class MaintenancePage implements OnInit {
         this.response.setHeader('Retry-After', this.retryAfterSeconds.toString());
         this.response.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
       } catch (error) {
-        console.error('Error setting response headers:', error);
+        void 0;
       }
     }
   }

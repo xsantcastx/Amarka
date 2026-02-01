@@ -17,7 +17,7 @@ export class CdnService {
     this.cdnUrl = settings.cdnUrl?.trim() || '';
     
     if (this.cdnUrl) {
-      console.log('[CdnService] CDN URL configured:', this.cdnUrl);
+      void 0;
     }
   }
 

@@ -63,7 +63,7 @@ export class CartService {
       const stored = window.localStorage.getItem(this.storageKey);
       return stored ? (JSON.parse(stored) as CartItem[]) : [];
     } catch (error) {
-      console.warn('No se pudo cargar el carrito', error);
+      void 0;
       return [];
     }
   }
@@ -76,7 +76,7 @@ export class CartService {
     try {
       window.localStorage.setItem(this.storageKey, JSON.stringify(items));
     } catch (error) {
-      console.warn('No se pudo guardar el carrito', error);
+      void 0;
     }
   }
 }

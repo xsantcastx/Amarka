@@ -89,7 +89,7 @@ export class ConsentService {
         }
       }
     } catch (error) {
-      console.error('Error loading consent:', error);
+      void 0;
     }
   }
 
@@ -148,7 +148,7 @@ export class ConsentService {
       localStorage.setItem(this.CONSENT_KEY, JSON.stringify(consent));
       this.consentState.next(consent);
     } catch (error) {
-      console.error('Error saving consent:', error);
+      void 0;
     }
   }
 
@@ -200,7 +200,7 @@ export class ConsentService {
       // Reset to default denied state
       this.initializeConsentMode();
     } catch (error) {
-      console.error('Error resetting consent:', error);
+      void 0;
     }
   }
 }

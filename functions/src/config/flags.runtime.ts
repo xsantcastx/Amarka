@@ -16,7 +16,7 @@ export async function getBackendFlags() {
     const liveFlags = (snap.get("backendFlags") || {}) as Partial<typeof BackendFlags>;
     cachedFlags = { ...BackendFlags, ...liveFlags };
   } catch (error) {
-    console.warn("[flags] Using compiled backend flags:", (error as Error).message);
+    void 0;
   }
 
   return cachedFlags;

@@ -113,7 +113,7 @@ export class DiscountsAdminPage extends LoadingComponentBase implements OnInit {
       this.loadPromoCodes();
       this.closeModal();
     } catch (error: any) {
-      console.error('Error saving promo code:', error);
+      void 0;
       this.showMessage('Error saving promo code: ' + error.message, 'error');
     }
   }
@@ -126,7 +126,7 @@ export class DiscountsAdminPage extends LoadingComponentBase implements OnInit {
       this.showMessage('Promo code deleted successfully', 'success');
       this.loadPromoCodes();
     } catch (error: any) {
-      console.error('Error deleting promo code:', error);
+      void 0;
       this.showMessage('Error deleting promo code: ' + error.message, 'error');
     }
   }
@@ -140,7 +140,7 @@ export class DiscountsAdminPage extends LoadingComponentBase implements OnInit {
       });
       this.loadPromoCodes();
     } catch (error: any) {
-      console.error('Error toggling promo code:', error);
+      void 0;
       this.showMessage('Error updating promo code: ' + error.message, 'error');
     }
   }

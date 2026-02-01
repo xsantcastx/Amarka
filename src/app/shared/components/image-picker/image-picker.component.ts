@@ -135,9 +135,9 @@ export class ImagePickerComponent {
       this.imageUrl = downloadURL;
       this.imageUrlChange.emit(downloadURL);
 
-      console.log('[ImagePicker] Image uploaded successfully:', downloadURL);
+      void 0;
     } catch (error) {
-      console.error('[ImagePicker] Upload error:', error);
+      void 0;
       this.errorMessage = 'Failed to upload image. Please try again.';
     } finally {
       this.isUploading = false;
@@ -163,9 +163,9 @@ export class ImagePickerComponent {
       this.imageUrl = '';
       this.imageUrlChange.emit('');
 
-      console.log('[ImagePicker] Image removed successfully');
+      void 0;
     } catch (error) {
-      console.error('[ImagePicker] Error removing image:', error);
+      void 0;
       this.errorMessage = 'Failed to remove image';
     }
   }
@@ -180,11 +180,11 @@ export class ImagePickerComponent {
         const filePath = pathMatch[1];
         const storageRef = ref(this.storage, filePath);
         await deleteObject(storageRef);
-        console.log('[ImagePicker] Old image deleted:', filePath);
+        void 0;
       }
     } catch (error) {
       // Ignore errors if file doesn't exist
-      console.warn('[ImagePicker] Could not delete old image:', error);
+      void 0;
     }
   }
 }

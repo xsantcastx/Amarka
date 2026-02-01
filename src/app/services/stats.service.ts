@@ -25,7 +25,7 @@ export class StatsService {
   getStats(): Observable<SiteStats> {
     return from(this.fetchStats()).pipe(
       catchError(error => {
-        console.error('Error fetching stats:', error);
+        void 0;
         return of(this.getDefaultStats());
       })
     );
@@ -45,7 +45,7 @@ export class StatsService {
         }
       }
     } catch (error) {
-      console.log('Stats not found in public settings, using defaults');
+      void 0;
     }
 
     // If no pre-calculated stats, try to fetch from surveys (public read)
@@ -70,7 +70,7 @@ export class StatsService {
 
       if (snapshot.empty) {
         // Default to 98% if no surveys yet
-        console.log('No surveys found, using default satisfaction rating');
+        void 0;
         return 98;
       }
 
@@ -96,9 +96,9 @@ export class StatsService {
     } catch (error: any) {
       // If surveys collection doesn't exist or permission denied, use default
       if (error?.code === 'permission-denied' || error?.message?.includes('permission')) {
-        console.log('Surveys collection not accessible, using default satisfaction rating');
+        void 0;
       } else {
-        console.log('Error fetching customer satisfaction, using default:', error);
+        void 0;
       }
       return 98;
     }
@@ -166,12 +166,12 @@ export class StatsService {
           );
           const ordersSnapshot = await getDocs(completedOrdersQuery);
           sales = ordersSnapshot.size;
-          console.log(`Found ${sales} completed orders`);
+          void 0;
         } catch (error: any) {
           if (error?.code === 'permission-denied') {
-            console.log('No permission to read orders (expected for non-admin), using 0');
+            void 0;
           } else {
-            console.log('Could not count orders, using 0:', error);
+            void 0;
           }
           sales = 0;
         }
@@ -184,13 +184,9 @@ export class StatsService {
         yearsExperience: this.calculateYearsExperience()
       });
 
-      console.log('Stats updated successfully', {
-        totalSales: sales,
-        customerSatisfaction,
-        uptimeGuarantee: 99.9
-      });
+      void 0;
     } catch (error) {
-      console.error('Error updating public stats:', error);
+      void 0;
       throw error;
     }
   }

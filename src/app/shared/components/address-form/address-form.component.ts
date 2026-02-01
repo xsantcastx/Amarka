@@ -141,7 +141,7 @@ export class AddressFormComponent implements OnInit {
         }
       }
     } catch (err) {
-      console.error('Error parsing phone number:', err);
+      void 0;
       phoneNational = address.phoneE164?.replace(/^\+\d+/, '') || '';
     }
 
@@ -183,7 +183,7 @@ export class AddressFormComponent implements OnInit {
       const country = this.countries.find(c => c.code === countryCode);
       return `${country?.dialCode || '+1'}${cleaned}`;
     } catch (err) {
-      console.error('Error formatting phone:', err);
+      void 0;
       const country = this.countries.find(c => c.code === countryCode);
       return `${country?.dialCode || '+1'}${phone.replace(/\D/g, '')}`;
     }
@@ -292,7 +292,7 @@ export class AddressFormComponent implements OnInit {
       }, 1500);
 
     } catch (err: any) {
-      console.error('Error saving address:', err);
+      void 0;
       this.error = err.message || 'Failed to save address. Please try again.';
     } finally {
       this.submitting = false;

@@ -63,12 +63,7 @@ export class StorageService {
             thumbnailBlob = optimized.thumbnail;
             optimizedSize = webpBlob?.size || mainBlob.size;
 
-            console.log('Image optimized:', {
-              originalSize: `${this.imageOptimizer.getFileSizeMB(file).toFixed(2)}MB`,
-              optimizedSize: `${this.imageOptimizer.getFileSizeMB(mainBlob).toFixed(2)}MB`,
-              webpSize: webpBlob ? `${this.imageOptimizer.getFileSizeMB(webpBlob).toFixed(2)}MB` : 'N/A',
-              dimensions: `${optimized.width}x${optimized.height}`
-            });
+            void 0;
           }
 
           observer.next({ state: 'progress', progress: 10, optimizing: false });
@@ -101,7 +96,7 @@ export class StorageService {
           });
           observer.complete();
         } catch (error: any) {
-          console.error('Upload error:', error);
+          void 0;
           observer.next({ state: 'error', progress: 0, error: error.message });
           observer.error(error);
         }
@@ -171,7 +166,7 @@ export class StorageService {
         },
         (error) => {
           // Handle upload error
-          console.error('Upload error:', error);
+          void 0;
           observer.next({ progress: 0, error: error.message });
           observer.error(error);
         },
@@ -182,7 +177,7 @@ export class StorageService {
             observer.next({ progress: 100, downloadURL });
             observer.complete();
           } catch (error: any) {
-            console.error('Error getting download URL:', error);
+            void 0;
             observer.error(error);
           }
         }
@@ -240,7 +235,7 @@ export class StorageService {
       const fileRef = ref(this.storage, path);
       await deleteObject(fileRef);
     } catch (error) {
-      console.error('Error deleting file:', error);
+      void 0;
       throw error;
     }
   }
@@ -261,7 +256,7 @@ export class StorageService {
       }
       return null;
     } catch (error) {
-      console.error('Error parsing URL:', error);
+      void 0;
       return null;
     }
   }

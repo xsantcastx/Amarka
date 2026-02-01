@@ -51,7 +51,7 @@ export class ContactoComponent {
       this.enviado = true;
       this.formulario.reset();
     } catch (error) {
-      console.error('Error sending contact form:', error);
+      void 0;
       // Could add error handling UI here
     }
   }

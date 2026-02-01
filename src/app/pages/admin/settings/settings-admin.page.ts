@@ -225,7 +225,8 @@ export class SettingsAdminComponent extends LoadingComponentBase implements OnIn
           { key: 'shippingEnabled', label: 'Enable Shipping', type: 'boolean', value: this.currentSettings.shippingEnabled, description: 'Enable shipping options for orders' },
           { key: 'defaultShippingCost', label: 'Default Shipping Cost', type: 'number', value: this.currentSettings.defaultShippingCost, placeholder: '9.99' },
           { key: 'freeShippingThreshold', label: 'Free Shipping Threshold', type: 'number', value: this.currentSettings.freeShippingThreshold, placeholder: '100', description: 'Order total for free shipping (0 = disabled)' },
-          { key: 'shippingEstimate', label: 'Shipping Estimate', type: 'text', value: this.currentSettings.shippingEstimate, placeholder: '3-5 business days' }
+          { key: 'shippingEstimate', label: 'Shipping Estimate', type: 'text', value: this.currentSettings.shippingEstimate, placeholder: '3-5 business days' },
+          { key: 'shippingTestMode', label: 'Test Shipping Mode', type: 'boolean', value: this.currentSettings.shippingTestMode, description: 'Use default shipping cost for all orders (testing only)' }
         ]
       },
       {

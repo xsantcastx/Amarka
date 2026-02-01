@@ -115,7 +115,7 @@ export class ServiciosPageComponent implements OnInit {
         }
       },
       error: (err) => {
-        console.error('Failed to load services', err);
+        void 0;
         this.sections = this.fallback;
         this.isLoading = false;
       }
@@ -129,7 +129,7 @@ export class ServiciosPageComponent implements OnInit {
       this.heroTitle = settings.serviciosHeroTitle || this.heroTitle;
       this.heroSubtitle = settings.serviciosHeroSubtitle || this.heroSubtitle;
     } catch (error) {
-      console.error('[Servicios] Error loading hero settings:', error);
+      void 0;
     }
   }
 }

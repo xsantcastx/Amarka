@@ -73,7 +73,7 @@ export class SizeGroupsAdminComponent extends LoadingComponentBase implements On
       this.loadSizeGroups();
       this.closeModal();
     } catch (error: any) {
-      console.error('Error saving size group:', error);
+      void 0;
       this.showMessage('Error saving size group: ' + error.message, 'error');
     }
   }
@@ -86,7 +86,7 @@ export class SizeGroupsAdminComponent extends LoadingComponentBase implements On
       this.showMessage('Size group deleted successfully', 'success');
       this.loadSizeGroups();
     } catch (error: any) {
-      console.error('Error deleting size group:', error);
+      void 0;
       this.showMessage('Error deleting size group: ' + error.message, 'error');
     }
   }

@@ -73,7 +73,7 @@ export class ProfilePageComponent implements OnInit {
         this.cdr.markForCheck();
       }
     } catch (error) {
-      console.error('Error loading profile:', error);
+      void 0;
       this.errorMessage = 'client.profile_messages.load_error';
     } finally {
       this.isLoading = false;
@@ -124,7 +124,7 @@ export class ProfilePageComponent implements OnInit {
       this.successMessage = 'client.profile_messages.updated';
       this.cdr.markForCheck();
     } catch (error) {
-      console.error('Error updating profile:', error);
+      void 0;
       this.errorMessage = 'client.profile_messages.update_error';
       this.cdr.markForCheck();
     } finally {
@@ -137,7 +137,7 @@ export class ProfilePageComponent implements OnInit {
     try {
       await this.authService.signOutUser('/client/login');
     } catch (error) {
-      console.error('Logout error:', error);
+      void 0;
     }
   }
 

@@ -86,9 +86,9 @@ export class CheckoutReviewPage implements OnInit {
     )
   ]).pipe(
     map(([cart, formValue]) => {
-      console.log('[CheckoutReview] vm$ - cart:', cart, 'formValue:', formValue);
+      void 0;
       if (!cart || !cart.items.length) {
-        console.log('[CheckoutReview] vm$ - No cart or empty cart');
+        void 0;
         return null;
       }
 
@@ -114,7 +114,7 @@ export class CheckoutReviewPage implements OnInit {
         shippingMethodId: cart.shippingMethodId
       };
       
-      console.log('[CheckoutReview] vm$ - returning vm:', vm);
+      void 0;
       return vm;
     })
   );
@@ -175,13 +175,13 @@ export class CheckoutReviewPage implements OnInit {
           }
         },
         error: (err) => {
-          console.error('Failed to load addresses:', err);
+          void 0;
           this.error.set('Failed to load shipping addresses. Please try again.');
         }
       });
 
     } catch (err: any) {
-      console.error('Checkout initialization error:', err);
+      void 0;
       this.error.set(err.message || 'Failed to initialize checkout');
     } finally {
       this.loading.set(false);
@@ -213,7 +213,7 @@ export class CheckoutReviewPage implements OnInit {
             email: address.email
           });
         } catch (persistError) {
-          console.error('Failed to save shipping address to cart:', persistError);
+          void 0;
         }
       }
 
@@ -250,10 +250,6 @@ export class CheckoutReviewPage implements OnInit {
     this.calculatingShipping.set(true);
     this.error.set(null);
 
-    if (this.applyStaticShipping(address)) {
-      return;
-    }
-
     this.shippingService.calculateShipping(cart.id, {
       country: address.country,
       region: address.region,
@@ -282,7 +278,7 @@ export class CheckoutReviewPage implements OnInit {
         this.calculatingShipping.set(false);
       },
       error: (err) => {
-        console.error('Shipping calculation error:', err);
+        void 0;
         this.error.set('Failed to calculate shipping. Please try again.');
         if (!this.applyStaticShipping(address, true)) {
           this.calculatingShipping.set(false);
@@ -317,7 +313,7 @@ export class CheckoutReviewPage implements OnInit {
       const addressData = this.addressForm.value as Omit<Address, 'id' | 'userId' | 'createdAt' | 'updatedAt'>;
       const addressId = await this.addressService.createAddress(addressData);
       
-      console.log('[CheckoutReview] Address created:', addressId);
+      void 0;
       
       // Reload addresses
       const user = this.auth.currentUser;
@@ -341,7 +337,7 @@ export class CheckoutReviewPage implements OnInit {
         });
       }
     } catch (err: any) {
-      console.error('[CheckoutReview] Failed to save address:', err);
+      void 0;
       this.error.set(err.message || 'Failed to save address');
     } finally {
       this.savingAddress.set(false);
@@ -406,7 +402,7 @@ export class CheckoutReviewPage implements OnInit {
         const methodCost = shippingMethod.cost ?? cart.shipping ?? 0;
         await this.cartService.updateShippingCost(methodCost, shippingMethod.id);
       } catch (persistError) {
-        console.error('Failed to persist checkout selections:', persistError);
+        void 0;
       }
     }
 

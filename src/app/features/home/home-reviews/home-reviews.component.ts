@@ -153,7 +153,7 @@ export class HomeReviewsComponent {
 
       this.submissionMessage.set('Thanks! Your review has been saved.');
     } catch (error: any) {
-      console.error('Error saving review:', error);
+      void 0;
       this.submissionError.set(error?.message || 'Unable to save your review right now.');
     } finally {
       this.isSubmitting.set(false);
@@ -186,7 +186,7 @@ export class HomeReviewsComponent {
       this.resetForm();
       this.submissionMessage.set('Your review has been removed.');
     } catch (error: any) {
-      console.error('Error deleting review:', error);
+      void 0;
       this.submissionError.set(error?.message || 'Unable to delete your review right now.');
     } finally {
       this.isSubmitting.set(false);

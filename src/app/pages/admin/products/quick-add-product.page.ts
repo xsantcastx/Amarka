@@ -222,7 +222,7 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
           this.benefitTemplates = templates;
           this.cdr.detectChanges();
         },
-        error: (err) => console.error('Error loading benefit templates:', err)
+        error: (err) => void 0
       });
       
       this.setupFormListeners();
@@ -245,7 +245,7 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
         }
         
         if (profile.role !== 'admin') {
-          console.log('Access denied: User is not admin');
+          void 0;
           this.router.navigate(['/']);
           resolve();
           return;
@@ -344,7 +344,7 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
                 const url = await this.storageService.getDownloadUrl(item);
                 this.galleryPreviews.push(url);
               } catch (error) {
-                console.error('Error getting download URL for gallery image:', item, error);
+                void 0;
               }
             } else {
               // Try to load as media ID
@@ -354,12 +354,12 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
                   this.galleryPreviews.push(media.url);
                 }
               } catch (error) {
-                console.error('Error loading gallery image by ID:', item, error);
+                void 0;
               }
             }
           }
         } catch (error) {
-          console.error('Error loading gallery images:', error);
+          void 0;
         }
       }
 
@@ -392,7 +392,7 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
             draft.imageUrl = media.url;
           }
         } catch (error) {
-          console.error('Error loading variant image preview:', error);
+          void 0;
         }
       }
 
@@ -403,7 +403,7 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
       this.forceUpdate();
       
     } catch (error) {
-      console.error('Error loading product:', error);
+      void 0;
       this.setError('Failed to load product');
     }
   }
@@ -898,7 +898,7 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
           this.existingVideoUrl = videoUrl;
           this.selectedVideoFile = null;
         } catch (error) {
-          console.error('Error uploading video:', error);
+          void 0;
           this.errorMessage = 'Failed to upload video';
           throw error;
         } finally {
@@ -952,7 +952,7 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
         updatedAt: Timestamp.now()
       };
 
-      console.log('💾 Saving product with video:', { videoUrl, hasVideo: !!videoUrl });
+      void 0;
 
       if (this.isEditMode && this.editingProductId) {
         await this.productsService.updateProduct(this.editingProductId, productPayload);
@@ -961,12 +961,12 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
         const newId = await this.productsService.addProduct(productPayload);
         this.editingProductId = newId;
         this.successMessage = 'admin.product_created';
-        console.log('✅ Product created with ID:', newId, 'videoUrl:', videoUrl);
+        void 0;
       }
 
       this.forceUpdate();
     } catch (error) {
-      console.error('Error saving product:', error);
+      void 0;
       this.setError('Failed to save product');
     } finally {
       this.isSaving = false;
@@ -1004,7 +1004,7 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
       this.newCategoryName = '';
       this.showNewCategoryInput = false;
     } catch (error) {
-      console.error('Error creating category:', error);
+      void 0;
       this.setError('Failed to create category');
     }
   }
@@ -1031,7 +1031,7 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
       this.newModelName = '';
       this.showNewModelInput = false;
     } catch (error) {
-      console.error('Error creating model:', error);
+      void 0;
       this.setError('Failed to create model');
     }
   }
@@ -1125,7 +1125,7 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
       this.collectionSlugManuallyEdited = false;
       this.showNewCollectionInput = false;
     } catch (error) {
-      console.error('Error creating collection inline:', error);
+      void 0;
       this.setError('Failed to create collection');
     } finally {
       this.isCreatingCollection = false;

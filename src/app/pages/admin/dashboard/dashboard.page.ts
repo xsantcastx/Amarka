@@ -59,7 +59,7 @@ export class AdminDashboardComponent extends LoadingComponentBase implements OnI
     try {
       await this.authService.signOutUser('/client/login');
     } catch (error) {
-      console.error('Logout error:', error);
+      void 0;
     }
   }
 
@@ -108,7 +108,7 @@ export class AdminDashboardComponent extends LoadingComponentBase implements OnI
    */
   navigateToActivity(activity: AdminActivityItem) {
     if (!activity.entityId) {
-      console.warn('No entity ID found for activity:', activity);
+      void 0;
       return;
     }
 

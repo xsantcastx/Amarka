@@ -77,7 +77,7 @@ export class ConfirmationPage implements OnInit {
 
   private async loadOrderByPaymentIntent(paymentIntentId: string) {
     try {
-      console.log(`[Confirmation] Looking for order with payment_intent: ${paymentIntentId}`);
+      void 0;
       
       const currentUser = this.auth.currentUser;
       if (!currentUser) {
@@ -86,7 +86,7 @@ export class ConfirmationPage implements OnInit {
         return;
       }
 
-      console.log(`[Confirmation] Querying for userId: ${currentUser.uid}`);
+      void 0;
       
       // Query orders collection for the order with this payment intent
       const ordersRef = collection(this.firestore, 'orders');
@@ -98,20 +98,20 @@ export class ConfirmationPage implements OnInit {
 
       const querySnapshot = await getDocs(q);
 
-      console.log(`[Confirmation] Found ${querySnapshot.docs.length} orders`);
+      void 0;
 
       if (querySnapshot.empty) {
         // Retry if webhook hasn't processed yet
         if (this.retryCount < this.maxRetries) {
           this.retryCount++;
-          console.log(`Order not found, retrying (${this.retryCount}/${this.maxRetries})...`);
+          void 0;
           setTimeout(() => {
             this.loadOrderByPaymentIntent(paymentIntentId);
           }, 2000); // Retry every 2 seconds
           return;
         }
         
-        console.error('[Confirmation] Max retries reached, order still not found');
+        void 0;
         this.error.set('Order not found. The order may still be processing. Please check your orders page or contact support.');
         this.loading.set(false);
         return;
@@ -160,13 +160,13 @@ export class ConfirmationPage implements OnInit {
       
       // Clear the cart AFTER the order is successfully loaded
       if (!this.cartCleared) {
-        console.log('[Confirmation] Order loaded successfully, clearing cart now...');
+        void 0;
         await this.cartService.clearCart();
         this.cartCleared = true;
       }
       
     } catch (err: any) {
-      console.error('Error loading order:', err);
+      void 0;
       this.error.set('Failed to load order details. Please try again.');
       this.loading.set(false);
     }
@@ -233,10 +233,10 @@ export class ConfirmationPage implements OnInit {
     }
     
     try {
-      console.log(`Downloading invoice for order ${order.orderNumber}`);
+      void 0;
       await this.invoiceService.generateInvoice(order);
     } catch (error) {
-      console.error('Error generating invoice:', error);
+      void 0;
       alert('Failed to generate invoice. Please try again.');
     }
   }

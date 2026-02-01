@@ -32,14 +32,14 @@ export class CookieBannerComponent implements OnInit {
   }
 
   acceptAll() {
-    console.log('Accept All clicked');
+    void 0;
     this.consentService.acceptAll();
     this.showBanner = false;
     this.showSettings = false;
   }
 
   rejectAll() {
-    console.log('Reject All clicked');
+    void 0;
     this.consentService.rejectAll();
     this.showBanner = false;
     this.showSettings = false;

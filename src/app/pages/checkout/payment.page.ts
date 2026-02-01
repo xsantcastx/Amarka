@@ -71,17 +71,17 @@ export class PaymentPage implements OnInit, AfterViewInit, OnDestroy {
     const cardElementDiv = document.getElementById('card-element');
     
     if (cardElementDiv) {
-      console.log('card-element div found after', attempts, 'attempts');
+      void 0;
       await this.setupStripeElement();
       this.stripeReady.set(true);
     } else if (attempts < maxAttempts) {
-      console.log('card-element not found, attempt', attempts + 1, '/', maxAttempts);
+      void 0;
       // Wait 50ms and try again
       setTimeout(() => {
         this.waitForElementAndSetupStripe(attempts + 1, maxAttempts);
       }, 50);
     } else {
-      console.error('card-element div never appeared in DOM after', maxAttempts, 'attempts');
+      void 0;
       this.error.set('Payment form failed to load. Please refresh the page.');
     }
   }
@@ -127,14 +127,14 @@ export class PaymentPage implements OnInit, AfterViewInit, OnDestroy {
             // Prefer default address, otherwise use first available
             const defaultAddr = addresses.find(a => a.isDefault) || addresses[0];
             this.billingAddress.set(defaultAddr);
-            console.log('Billing address loaded:', defaultAddr.city, defaultAddr.region);
+            void 0;
           } else {
-            console.warn('No addresses found for user');
+            void 0;
             this.error.set('No billing address found. Please add an address in the cart page.');
           }
         },
         error: (err) => {
-          console.error('Failed to load billing address:', err);
+          void 0;
           this.error.set('Failed to load billing address. Please try again.');
         }
       });
@@ -142,7 +142,7 @@ export class PaymentPage implements OnInit, AfterViewInit, OnDestroy {
       // Don't set loading to false here - wait for Stripe element to be ready in ngAfterViewInit
 
     } catch (err: any) {
-      console.error('Payment initialization error:', err);
+      void 0;
       this.error.set(err.message || 'Failed to initialize payment');
     } finally {
       // Cart data is loaded, show the form (Stripe will initialize separately)
@@ -155,26 +155,26 @@ export class PaymentPage implements OnInit, AfterViewInit, OnDestroy {
    */
   private async setupStripeElement() {
     try {
-      console.log('Setting up Stripe card element...');
+      void 0;
       
       // Check if element exists in DOM
       const cardElementDiv = document.getElementById('card-element');
       if (!cardElementDiv) {
-        console.error('card-element div not found in DOM!');
+        void 0;
         this.error.set('Payment form container not found. Please refresh the page.');
         return;
       }
       
-      console.log('card-element div found, creating Stripe element...');
+      void 0;
       const result = await this.stripeService.createCardElement('card-element');
       
       if (result) {
         this.cardElement = result.cardElement;
-        console.log('Stripe card element created and mounted successfully');
+        void 0;
 
         // Listen for card validation errors
         this.cardElement.on('change', (event) => {
-          console.log('Card element changed:', event);
+          void 0;
           if (event.error) {
             this.cardErrors.set(event.error.message);
           } else {
@@ -184,14 +184,14 @@ export class PaymentPage implements OnInit, AfterViewInit, OnDestroy {
         
         // Listen for ready event
         this.cardElement.on('ready', () => {
-          console.log('Card element is ready for input');
+          void 0;
         });
       } else {
-        console.error('Failed to create Stripe element - result is null');
+        void 0;
         this.error.set('Failed to initialize payment form.');
       }
     } catch (err) {
-      console.error('Failed to setup Stripe element:', err);
+      void 0;
       this.error.set('Failed to load payment form. Please refresh the page.');
     }
   }
@@ -209,22 +209,16 @@ export class PaymentPage implements OnInit, AfterViewInit, OnDestroy {
     const cart = this.cart();
     const billingAddress = this.billingAddress();
 
-    console.log('Processing payment with:', {
-      hasCart: !!cart,
-      cartId: cart?.id,
-      cartTotal: cart?.total,
-      hasBillingAddress: !!billingAddress,
-      billingCity: billingAddress?.city
-    });
+    void 0;
 
     if (!cart || !billingAddress) {
-      console.error('Missing required data:', { cart, billingAddress });
+      void 0;
       this.error.set('Missing cart or billing information. Please return to cart and try again.');
       return;
     }
 
     if (!cart.id) {
-      console.error('Cart has no ID:', cart);
+      void 0;
       this.error.set('Invalid cart. Please return to cart and try again.');
       return;
     }
@@ -281,9 +275,9 @@ export class PaymentPage implements OnInit, AfterViewInit, OnDestroy {
         // CRITICAL: Create order immediately as fallback (webhook might not be configured)
         try {
           await this.createOrderFallback(paymentIntent.id, cart);
-          console.log('✓ Order created via fallback mechanism');
+          void 0;
         } catch (orderError) {
-          console.error('Failed to create order via fallback:', orderError);
+          void 0;
           // Don't throw - webhook might still create it
         }
         
@@ -306,9 +300,9 @@ export class PaymentPage implements OnInit, AfterViewInit, OnDestroy {
           // CRITICAL: Create order immediately as fallback (webhook might not be configured)
           try {
             await this.createOrderFallback(actionResult.paymentIntent.id, cart);
-            console.log('✓ Order created via fallback mechanism (3DS)');
+            void 0;
           } catch (orderError) {
-            console.error('Failed to create order via fallback (3DS):', orderError);
+            void 0;
             // Don't throw - webhook might still create it
           }
           
@@ -321,7 +315,7 @@ export class PaymentPage implements OnInit, AfterViewInit, OnDestroy {
       }
 
     } catch (err: any) {
-      console.error('Payment processing error:', err);
+      void 0;
       const code = err?.code || err?.error?.code;
       const message = err?.message || err?.error?.message;
 
@@ -425,7 +419,7 @@ export class PaymentPage implements OnInit, AfterViewInit, OnDestroy {
         updatedAt: serverTimestamp(),
       });
     } catch (err) {
-      console.warn('Could not update payment record (might not exist yet):', err);
+      void 0;
     }
 
     // Mark cart as completed
@@ -438,7 +432,7 @@ export class PaymentPage implements OnInit, AfterViewInit, OnDestroy {
         updatedAt: serverTimestamp(),
       });
     } catch (err) {
-      console.error('Failed to mark cart as completed:', err);
+      void 0;
     }
 
     // Decrement product stock
@@ -518,12 +512,12 @@ export class PaymentPage implements OnInit, AfterViewInit, OnDestroy {
           }
         }
       } catch (err) {
-        console.error(`Failed to update stock for product ${item.productId}:`, err);
+        void 0;
         // Continue with other products
       }
     }
 
-    console.log(`✓ Order created via fallback: ${orderNumber} (${orderId})`);
+    void 0;
     return orderId;
   }
 }

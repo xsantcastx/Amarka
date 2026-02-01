@@ -54,7 +54,7 @@ export class ImageOptimizationService {
       try {
         webpBlob = await this.canvasToBlob(mainCanvas, 'image/webp', quality);
       } catch (error) {
-        console.warn('WebP not supported, skipping WebP conversion');
+        void 0;
       }
 
       // Create thumbnail
@@ -69,7 +69,7 @@ export class ImageOptimizationService {
         try {
           thumbnailWebpBlob = await this.canvasToBlob(thumbCanvas, 'image/webp', quality);
         } catch (error) {
-          console.warn('WebP thumbnail not supported');
+          void 0;
         }
       }
 
@@ -82,7 +82,7 @@ export class ImageOptimizationService {
         height: dimensions.height
       };
     } catch (error) {
-      console.error('Error optimizing image:', error);
+      void 0;
       throw new Error('Failed to optimize image');
     }
   }

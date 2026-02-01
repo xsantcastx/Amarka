@@ -161,7 +161,7 @@ export class GalleryAdminComponent extends LoadingComponentBase implements OnIni
         this.setLoading(false);
       },
       error: (error) => {
-        console.error('Error loading media:', error);
+        void 0;
         this.setError('admin.gallery.messages.load_failed');
         this.errorMessageParams = {};
       }
@@ -170,15 +170,15 @@ export class GalleryAdminComponent extends LoadingComponentBase implements OnIni
 
   private subscribeToServices(): void {
     this.productsSub?.unsubscribe();
-    console.log('[Gallery Admin] Subscribing to services...');
+    void 0;
     this.productsSub = this.serviceService.getServices().subscribe({
       next: (services) => {
-        console.log('[Gallery Admin] Received services from Firestore:', services.length);
+        void 0;
         this.services = services;
-        console.log('[Gallery Admin] Loaded services:', this.services);
+        void 0;
       },
       error: (error) => {
-        console.error('[Gallery Admin] Error loading services:', error);
+        void 0;
       }
     });
   }
@@ -190,7 +190,7 @@ export class GalleryAdminComponent extends LoadingComponentBase implements OnIni
         this.availableTags = tags;
       },
       error: (error) => {
-        console.error('Error loading tags:', error);
+        void 0;
       }
     });
   }
@@ -371,14 +371,14 @@ export class GalleryAdminComponent extends LoadingComponentBase implements OnIni
               await this.storageService.deleteFile(media.url);
             } catch (storageError: any) {
               if (storageError.code !== 'storage/object-not-found') {
-                console.warn(`Storage deletion warning for ${media.id}:`, storageError);
+                void 0;
               }
             }
           }
 
           await this.mediaService.deleteMedia(media.id!);
         } catch (error) {
-          console.error(`Error deleting media ${media.id}:`, error);
+          void 0;
           throw error;
         }
       });
@@ -394,7 +394,7 @@ export class GalleryAdminComponent extends LoadingComponentBase implements OnIni
         this.successMessageParams = {};
       }, 4000);
     } catch (error: any) {
-      console.error('Error deleting project:', error);
+      void 0;
       this.errorMessage = 'admin.gallery.messages.project_delete_failed';
       this.errorMessageParams = { message: error?.message || '' };
     } finally {
@@ -468,7 +468,7 @@ export class GalleryAdminComponent extends LoadingComponentBase implements OnIni
         this.successMessageParams = {};
         this.subscribeToMedia();
       } catch (error) {
-        console.error('Error updating photo:', error);
+        void 0;
         this.errorMessage = 'admin.gallery.messages.photo_update_failed';
         this.errorMessageParams = {};
       } finally {
@@ -509,7 +509,7 @@ export class GalleryAdminComponent extends LoadingComponentBase implements OnIni
       this.successMessageParams = {};
       this.subscribeToMedia();
     } catch (error) {
-      console.error('Error updating project settings:', error);
+      void 0;
       this.errorMessage = 'admin.gallery.messages.project_update_failed';
       this.errorMessageParams = {};
     } finally {
@@ -979,7 +979,7 @@ export class GalleryAdminComponent extends LoadingComponentBase implements OnIni
             existingTag = { ...newTagData, id };
             this.availableTags = [...this.availableTags, existingTag];
           } catch (error) {
-            console.error('Error creating tag:', error);
+            void 0;
             this.errorMessage = 'admin.gallery.messages.tag_create_failed';
             this.errorMessageParams = {};
             continue;
@@ -1100,7 +1100,7 @@ export class GalleryAdminComponent extends LoadingComponentBase implements OnIni
         const validation = await this.mediaService.validateImageDimensions(file, 1600, 1200);
         
         if (!validation.valid && validation.width && validation.height) {
-          console.warn(`⚠️ Image "${file.name}" (${validation.width}x${validation.height}px) is smaller than recommended`);
+          void 0;
         }
 
         // Create altText with numbering for multiple files
@@ -1109,7 +1109,7 @@ export class GalleryAdminComponent extends LoadingComponentBase implements OnIni
           : `${sharedAltText} (${i + 1}/${this.selectedFiles.length})`;
 
         const originalSize = file.size;
-        console.log(`📤 Uploading "${file.name}" (${this.formatFileSize(originalSize)})...`);
+        void 0;
 
         // Upload with automatic optimization to WebP
         await new Promise<void>((resolve, reject) => {
@@ -1125,7 +1125,7 @@ export class GalleryAdminComponent extends LoadingComponentBase implements OnIni
                   // Log optimization results
                   const optimizedSize = progress.optimizedSize || file.size;
                   const reduction = Math.round(((originalSize - optimizedSize) / originalSize) * 100);
-                  console.log(`✅ Image optimized: ${this.formatFileSize(originalSize)} → ${this.formatFileSize(optimizedSize)} (${reduction}% reduction)`);
+                  void 0;
 
                   // Create media document with optimized URLs
                   const mediaInput: MediaCreateInput = {
@@ -1146,7 +1146,7 @@ export class GalleryAdminComponent extends LoadingComponentBase implements OnIni
 
                   await this.mediaService.createMedia(mediaInput);
                   this.uploadedCount++;
-                  console.log(`✅ Uploaded ${this.uploadedCount}/${this.totalToUpload}: ${file.name}`);
+                  void 0;
                   resolve();
                 } catch (error) {
                   reject(error);
@@ -1154,7 +1154,7 @@ export class GalleryAdminComponent extends LoadingComponentBase implements OnIni
               }
             },
             error: (error) => {
-              console.error(`❌ Error uploading ${file.name}:`, error);
+              void 0;
               reject(error);
             }
           });
@@ -1172,7 +1172,7 @@ export class GalleryAdminComponent extends LoadingComponentBase implements OnIni
         this.successMessageParams = {};
       }, 5000);
     } catch (error) {
-      console.error('Error uploading media:', error);
+      void 0;
       if (error instanceof Error && error.message === 'AUTH_REQUIRED') {
         this.errorMessage = 'admin.gallery.messages.auth_required';
         this.errorMessageParams = {};
@@ -1233,7 +1233,7 @@ export class GalleryAdminComponent extends LoadingComponentBase implements OnIni
         this.successMessageParams = {};
       }, 3000);
     } catch (error) {
-      console.error('Error updating media:', error);
+      void 0;
       this.errorMessage = 'admin.gallery.messages.media_update_failed';
       this.errorMessageParams = {};
     } finally {
@@ -1295,7 +1295,7 @@ export class GalleryAdminComponent extends LoadingComponentBase implements OnIni
         this.successMessageParams = {};
       }, 3000);
     } catch (error) {
-      console.error('Error deleting media:', error);
+      void 0;
       this.errorMessage = 'admin.gallery.messages.media_delete_failed';
       this.errorMessageParams = {};
     } finally {
@@ -1307,7 +1307,7 @@ export class GalleryAdminComponent extends LoadingComponentBase implements OnIni
     try {
       await this.authService.signOutUser('/client/login');
     } catch (error) {
-      console.error('Logout error:', error);
+      void 0;
       this.errorMessage = 'admin.gallery.messages.logout_failed';
       this.errorMessageParams = {};
     }

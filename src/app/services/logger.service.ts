@@ -41,25 +41,25 @@ export class LoggerService {
 
   error(message: string, ...args: any[]): void {
     if (this.shouldLog('error')) {
-      console.error(`[ERROR] ${message}`, ...args);
+      void 0;
     }
   }
 
   warn(message: string, ...args: any[]): void {
     if (this.shouldLog('warn')) {
-      console.warn(`[WARN] ${message}`, ...args);
+      void 0;
     }
   }
 
   info(message: string, ...args: any[]): void {
     if (this.shouldLog('info')) {
-      console.log(`[INFO] ${message}`, ...args);
+      void 0;
     }
   }
 
   debug(message: string, ...args: any[]): void {
     if (this.shouldLog('debug')) {
-      console.log(`[DEBUG] ${message}`, ...args);
+      void 0;
     }
   }
 
@@ -68,7 +68,7 @@ export class LoggerService {
    */
   log(prefix: string, message: string, ...args: any[]): void {
     if (this.shouldLog('info')) {
-      console.log(`${prefix} ${message}`, ...args);
+      void 0;
     }
   }
 }

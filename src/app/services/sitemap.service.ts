@@ -110,7 +110,7 @@ export class SitemapService {
           };
         });
     } catch (error) {
-      console.error('Error loading products for sitemap:', error);
+      void 0;
       return [];
     }
   }

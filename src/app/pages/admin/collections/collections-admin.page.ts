@@ -113,7 +113,7 @@ export class CollectionsAdminPageComponent implements OnInit {
       }
       return true;
     } catch (error) {
-      console.error('Error checking admin access:', error);
+      void 0;
       await this.router.navigate(['/']);
       return false;
     }
@@ -126,7 +126,7 @@ export class CollectionsAdminPageComponent implements OnInit {
       this.collections = await this.collectionsService.getAllCollections();
       this.cdr.detectChanges();
     } catch (error) {
-      console.error('Error loading collections:', error);
+      void 0;
       this.errorMessage = 'Failed to load collections';
       this.collections = [];
     }
@@ -246,7 +246,7 @@ export class CollectionsAdminPageComponent implements OnInit {
         this.uploadingHero = false;
         this.cdr.detectChanges();
       } catch (error) {
-        console.error('Error uploading hero image:', error);
+        void 0;
         alert('Failed to upload hero image');
         this.uploadingHero = false;
         this.isSaving = false;
@@ -281,7 +281,7 @@ export class CollectionsAdminPageComponent implements OnInit {
       await this.loadCollections();
       this.cdr.detectChanges();
     } catch (error) {
-      console.error('Error saving collection:', error);
+      void 0;
       this.isSaving = false;
       this.cdr.detectChanges();
       alert('Failed to save collection');
@@ -299,7 +299,7 @@ export class CollectionsAdminPageComponent implements OnInit {
       await this.collectionsService.deleteCollection(col.id);
       await this.loadCollections();
     } catch (error) {
-      console.error('Error deleting collection:', error);
+      void 0;
       this.errorMessage = 'Failed to delete collection';
       this.cdr.detectChanges();
     }

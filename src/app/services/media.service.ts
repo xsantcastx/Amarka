@@ -64,7 +64,7 @@ export class MediaService {
             }
           },
           (error) => {
-            console.error('❌ Upload error:', error);
+            void 0;
             reject(error);
           },
           async () => {
@@ -86,11 +86,11 @@ export class MediaService {
       };
 
       const mediaId = await this.createMedia(mediaData);
-      console.log('✅ Media uploaded successfully:', mediaId);
+      void 0;
 
       return mediaId;
     } catch (error) {
-      console.error('❌ Error uploading media file:', error);
+      void 0;
       throw error;
     }
   }
@@ -113,18 +113,18 @@ export class MediaService {
         try {
           const storageRef = ref(this.storage, media.storagePath);
           await deleteObject(storageRef);
-          console.log('✅ File deleted from storage:', media.storagePath);
+          void 0;
         } catch (storageError) {
-          console.warn('⚠️ Could not delete file from storage:', storageError);
+          void 0;
           // Continue with Firestore deletion even if storage deletion fails
         }
       }
 
       // Delete Firestore document
       await this.deleteMedia(mediaId);
-      console.log('✅ Media document deleted:', mediaId);
+      void 0;
     } catch (error) {
-      console.error('❌ Error deleting media with file:', error);
+      void 0;
       throw error;
     }
   }
@@ -143,10 +143,10 @@ export class MediaService {
       };
 
       const docRef = await addDoc(mediaCollection, mediaData as any);
-      console.log('✅ Media created with ID:', docRef.id);
+      void 0;
       return docRef.id;
     } catch (error) {
-      console.error('❌ Error creating media:', error);
+      void 0;
       throw error;
     }
   }
@@ -194,7 +194,7 @@ export class MediaService {
 
       return null;
     } catch (error) {
-      console.error('❌ Error getting media:', error);
+      void 0;
       throw error;
     }
   }
@@ -227,7 +227,7 @@ export class MediaService {
       const mediaResults = await Promise.all(mediaPromises);
       return mediaResults.filter((media) => media !== null) as Media[];
     } catch (error) {
-      console.error('❌ Error getting media by IDs:', error);
+      void 0;
       return [];
     }
   }
@@ -312,9 +312,9 @@ export class MediaService {
       const { id: _id, uploadedAt: _uploadedAt, ...safeUpdates } = updates;
 
       await updateDoc(docRef, safeUpdates as any);
-      console.log('✅ Media updated:', id);
+      void 0;
     } catch (error) {
-      console.error('❌ Error updating media:', error);
+      void 0;
       throw error;
     }
   }
@@ -328,9 +328,9 @@ export class MediaService {
     try {
       const docRef = doc(this.firestore, 'media', id);
       await deleteDoc(docRef);
-      console.log('✅ Media deleted:', id);
+      void 0;
     } catch (error) {
-      console.error('❌ Error deleting media:', error);
+      void 0;
       throw error;
     }
   }
@@ -363,9 +363,9 @@ export class MediaService {
         relatedEntityIds: relatedIds,
       });
 
-      console.log('✅ Entity reference added to media:', mediaId, entityId);
+      void 0;
     } catch (error) {
-      console.error('❌ Error adding entity reference:', error);
+      void 0;
       throw error;
     }
   }
@@ -394,9 +394,9 @@ export class MediaService {
         relatedEntityIds: relatedIds,
       });
 
-      console.log('✅ Entity reference removed from media:', mediaId, entityId);
+      void 0;
     } catch (error) {
-      console.error('❌ Error removing entity reference:', error);
+      void 0;
       throw error;
     }
   }

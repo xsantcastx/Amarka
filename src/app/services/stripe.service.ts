@@ -31,17 +31,17 @@ export class StripeService {
       const publishableKey = settings.stripePublicKey || environment.stripe.publishableKey;
       
       if (!publishableKey) {
-        console.error('No Stripe publishable key found in settings or environment');
+        void 0;
         return;
       }
 
-      console.log('Initializing Stripe with key from:', settings.stripePublicKey ? 'Settings' : 'Environment');
+      void 0;
       
       this.stripePromise = loadStripe(publishableKey);
       const stripe = await this.stripePromise;
       this.stripe$.next(stripe);
     } catch (error) {
-      console.error('Failed to initialize Stripe:', error);
+      void 0;
       // Fallback to environment key
       this.stripePromise = loadStripe(environment.stripe.publishableKey);
       const stripe = await this.stripePromise;
@@ -66,11 +66,11 @@ export class StripeService {
   } | null> {
     const stripe = await this.getStripe();
     if (!stripe) {
-      console.error('Stripe not loaded');
+      void 0;
       throw new Error('Stripe failed to load');
     }
 
-    console.log('Creating Stripe Elements with dark theme...');
+    void 0;
 
     // Create Elements instance
     const elements = stripe.elements({
@@ -104,7 +104,7 @@ export class StripeService {
       },
     });
 
-    console.log('Creating card element...');
+    void 0;
 
     // Create card element
     const cardElement = elements.create('card', {
@@ -130,20 +130,20 @@ export class StripeService {
       iconStyle: 'solid', // Use solid icons
     });
 
-    console.log('Mounting card element to #' + elementId);
+    void 0;
 
     // Mount to DOM
     const element = document.getElementById(elementId);
     if (element) {
       try {
         cardElement.mount(`#${elementId}`);
-        console.log('Card element mounted successfully');
+        void 0;
       } catch (mountError) {
-        console.error('Error mounting card element:', mountError);
+        void 0;
         throw mountError;
       }
     } else {
-      console.error('Element with id "' + elementId + '" not found in DOM');
+      void 0;
       throw new Error(`Element #${elementId} not found`);
     }
 
@@ -188,14 +188,14 @@ export class StripeService {
 
       if (result.error) {
         // Payment failed
-        console.error('Payment confirmation error:', result.error);
+        void 0;
         return { error: result.error };
       }
 
       // Payment succeeded
       return { paymentIntent: result.paymentIntent };
     } catch (error) {
-      console.error('Payment error:', error);
+      void 0;
       return { error };
     }
   }
@@ -235,12 +235,12 @@ export class StripeService {
     try {
       const result = await stripe.retrievePaymentIntent(clientSecret);
       if (result.error) {
-        console.error('Error retrieving payment intent:', result.error);
+        void 0;
         return null;
       }
       return result.paymentIntent;
     } catch (error) {
-      console.error('Error retrieving payment intent:', error);
+      void 0;
       return null;
     }
   }

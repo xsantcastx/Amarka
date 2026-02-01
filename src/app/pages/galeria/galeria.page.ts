@@ -158,7 +158,7 @@ export class GaleriaPageComponent extends LoadingComponentBase implements OnInit
       this.heroTitle = settings.galeriaHeroTitle || this.heroTitle;
       this.heroSubtitle = settings.galeriaHeroSubtitle || this.heroSubtitle;
     } catch (error) {
-      console.error('[Galeria] Error loading hero settings:', error);
+      void 0;
     }
   }
 
@@ -166,9 +166,9 @@ export class GaleriaPageComponent extends LoadingComponentBase implements OnInit
     try {
       const tags = await firstValueFrom(this.tagService.getActiveTags());
       this.availableTags = tags;
-      console.log('[Gallery] Tags loaded:', tags.length);
+      void 0;
     } catch (error) {
-      console.error('[Gallery] Error loading tags:', error);
+      void 0;
       this.availableTags = [];
     } finally {
       await this.loadGaleriaFromFirebase();
@@ -197,7 +197,7 @@ export class GaleriaPageComponent extends LoadingComponentBase implements OnInit
           return dateB.getTime() - dateA.getTime();
         });
       
-      console.log('[Gallery] Loaded from Firestore:', mediaItems.length, 'images');
+      void 0;
       
       if (mediaItems.length > 0) {
         // Group media by project name (altText)
@@ -206,7 +206,7 @@ export class GaleriaPageComponent extends LoadingComponentBase implements OnInit
         // Initialize grid cache
         this.regenerateGridCache();
       } else {
-        console.log('[Gallery] No gallery images found in Firestore');
+        void 0;
         this.allProjects = [];
         this.filteredProjects = [];
       }
@@ -273,7 +273,7 @@ export class GaleriaPageComponent extends LoadingComponentBase implements OnInit
       b.uploadedAt.getTime() - a.uploadedAt.getTime()
     );
 
-    console.log('[Gallery] Created', projects.length, 'projects from', mediaItems.length, 'images');
+    void 0;
     return projects;
   }
 
@@ -745,14 +745,14 @@ export class GaleriaPageComponent extends LoadingComponentBase implements OnInit
     if (!this.selectedProject) return;
     
     const currentImage = this.getCurrentImage();
-    console.log('[Gallery Interactions] Current image:', currentImage);
+    void 0;
     
     if (!currentImage || !currentImage.id) {
-      console.warn('[Gallery Interactions] No current image or missing ID');
+      void 0;
       return;
     }
 
-    console.log('[Gallery Interactions] Loading interactions for media ID:', currentImage.id);
+    void 0;
 
     // Reset counts immediately to prevent showing old data
     this.likeCount = 0;
@@ -771,7 +771,7 @@ export class GaleriaPageComponent extends LoadingComponentBase implements OnInit
     this.likesSubscription = this.mediaInteractionService
       .getMediaLikes(currentImage.id)
       .subscribe(likes => {
-        console.log('[Gallery Interactions] Likes loaded:', likes.length, likes);
+        void 0;
         this.currentMediaLikes = likes;
         this.likeCount = likes.length;
         
@@ -790,7 +790,7 @@ export class GaleriaPageComponent extends LoadingComponentBase implements OnInit
     this.commentsSubscription = this.mediaInteractionService
       .getMediaComments(currentImage.id)
       .subscribe(comments => {
-        console.log('[Gallery Interactions] Comments loaded:', comments.length, comments);
+        void 0;
         this.currentMediaComments = comments;
         this.commentCount = comments.length;
         
@@ -809,15 +809,15 @@ export class GaleriaPageComponent extends LoadingComponentBase implements OnInit
     }
 
     const currentImage = this.getCurrentImage();
-    console.log('[Gallery Interactions] Toggle like for image:', currentImage);
+    void 0;
     
     if (!currentImage || !currentImage.id) {
-      console.error('[Gallery Interactions] Cannot like: no current image or missing ID');
+      void 0;
       return;
     }
 
     try {
-      console.log('[Gallery Interactions] Toggling like for media ID:', currentImage.id);
+      void 0;
       const liked = await this.mediaInteractionService.toggleLike(
         currentImage.id,
         this.currentUser.uid,
@@ -825,10 +825,10 @@ export class GaleriaPageComponent extends LoadingComponentBase implements OnInit
         this.currentUser.email || ''
       );
       
-      console.log('[Gallery Interactions] Like toggled, liked:', liked);
+      void 0;
       this.currentUserLiked = liked;
     } catch (error) {
-      console.error('Error toggling like:', error);
+      void 0;
       alert('Failed to update like. Please try again.');
     }
   }
@@ -862,7 +862,7 @@ export class GaleriaPageComponent extends LoadingComponentBase implements OnInit
 
       this.newComment = '';
     } catch (error) {
-      console.error('Error submitting comment:', error);
+      void 0;
       alert('Failed to post comment. Please try again.');
     } finally {
       this.isSubmittingComment = false;
@@ -884,7 +884,7 @@ export class GaleriaPageComponent extends LoadingComponentBase implements OnInit
     try {
       await this.mediaInteractionService.deleteComment(comment.id!);
     } catch (error) {
-      console.error('Error deleting comment:', error);
+      void 0;
       alert('Failed to delete comment. Please try again.');
     }
   }

@@ -88,12 +88,12 @@ export class BenefitTemplatesAdminComponent extends LoadingComponentBase impleme
           }
         },
         error: (error) => {
-          console.error('Error loading categories:', error);
+          void 0;
           this.errorMessage = 'Failed to load categories';
         }
       });
     } catch (error) {
-      console.error('Error loading categories:', error);
+      void 0;
     }
   }
 
@@ -107,12 +107,12 @@ export class BenefitTemplatesAdminComponent extends LoadingComponentBase impleme
           this.setLoading(false);
         },
         error: (err) => {
-          console.error('Error loading templates:', err);
+          void 0;
           this.setError('Failed to load benefit templates');
         }
       });
     } catch (error) {
-      console.error('Error loading templates:', error);
+      void 0;
       this.setLoading(false);
     }
   }
@@ -187,7 +187,7 @@ export class BenefitTemplatesAdminComponent extends LoadingComponentBase impleme
       this.closeModal();
       setTimeout(() => this.successMessage = '', 3000);
     } catch (error: any) {
-      console.error('Error saving template:', error);
+      void 0;
       this.errorMessage = error.message || 'Failed to save template';
       setTimeout(() => this.errorMessage = '', 5000);
     }
@@ -201,7 +201,7 @@ export class BenefitTemplatesAdminComponent extends LoadingComponentBase impleme
       this.successMessage = `Template ${template.isActive ? 'deactivated' : 'activated'}!`;
       setTimeout(() => this.successMessage = '', 3000);
     } catch (error: any) {
-      console.error('Error toggling active:', error);
+      void 0;
       this.errorMessage = error.message || 'Failed to update template';
       setTimeout(() => this.errorMessage = '', 5000);
     }
@@ -219,7 +219,7 @@ export class BenefitTemplatesAdminComponent extends LoadingComponentBase impleme
       this.successMessage = 'Template deleted successfully!';
       setTimeout(() => this.successMessage = '', 3000);
     } catch (error: any) {
-      console.error('Error deleting template:', error);
+      void 0;
       this.errorMessage = error.message || 'Failed to delete template';
       setTimeout(() => this.errorMessage = '', 5000);
     }

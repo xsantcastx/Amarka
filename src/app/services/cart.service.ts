@@ -45,12 +45,8 @@ export class CartService {
       (window as any).checkAuthState = () => {
         const user = this.auth.currentUser;
 
-        console.log('Current User:', user ? {
-          uid: user.uid,
-          email: user.email,
-          displayName: user.displayName
-        } : 'NOT LOGGED IN');
-        console.log('Cart State:', this.cartState$.value);
+        void 0;
+        void 0;
 
         return user;
       };
@@ -121,7 +117,7 @@ export class CartService {
     docData(cartRef, { idField: 'id' }).pipe(
 
       catchError(err => {
-        console.error('[CartService] Error loading user cart:', err);
+        void 0;
         // Create empty cart with user ID
         const emptyCart = this.createEmptyCart(uid);
         emptyCart.uid = uid;
@@ -242,7 +238,7 @@ export class CartService {
    */
   private async saveCart(cart: Cart): Promise<void> {
     if (!cart.id) {
-      console.error('Cannot save cart without ID');
+      void 0;
       return;
     }
 
@@ -260,7 +256,7 @@ export class CartService {
     try {
       await setDoc(cartRef, cleanCart);
     } catch (err) {
-      console.error('Error saving cart:', err);
+      void 0;
       throw err;
     }
   }
@@ -360,7 +356,7 @@ export class CartService {
     }
 
     if (!isPlatformBrowser(this.platformId)) {
-      console.error('[CartService] Cannot create cart on server');
+      void 0;
       return null;
     }
 
@@ -420,13 +416,13 @@ export class CartService {
       
       // Check if product is out of stock and backorders are disabled
       if (stockSource <= 0 && !settings.allowBackorders) {
-        console.warn('[CartService] Product out of stock and backorders disabled:', stockLabel);
+        void 0;
         throw new Error(`Product "${stockLabel}" is out of stock`);
       }
       
       // Check if requested quantity exceeds available stock (when backorders disabled)
       if (!settings.allowBackorders && qty > stockSource) {
-        console.warn('[CartService] Requested quantity exceeds stock:', { requested: qty, available: stockSource });
+        void 0;
         throw new Error(`Only ${stockSource} units available for "${stockLabel}"`);
       }
     }
@@ -458,12 +454,7 @@ export class CartService {
           ? variant.stock
           : (product.stock || 0);
         if (newTotalQty > stockSource) {
-          console.warn('[CartService] Total cart quantity would exceed stock:', { 
-            currentQty: currentCart.items[existingItemIndex].qty, 
-            adding: qty, 
-            total: newTotalQty, 
-            available: stockSource 
-          });
+          void 0;
           const stockLabel = variantLabel ? `${product.name} (${variantLabel})` : product.name;
           throw new Error(`Cannot add more. Only ${stockSource} units available for "${stockLabel}"`);
         }
@@ -624,7 +615,7 @@ export class CartService {
       // For now, we'll just clear localStorage
       localStorage.removeItem(ANON_CART_KEY);
     } catch (err) {
-      console.error('Error deleting anonymous cart:', err);
+      void 0;
     }
   }
 
@@ -665,7 +656,7 @@ export class CartService {
       // Remove legacy cart
       localStorage.removeItem(LS_KEY);
     } catch (err) {
-      console.error('Error migrating legacy cart:', err);
+      void 0;
     }
   }
 

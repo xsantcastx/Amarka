@@ -222,7 +222,7 @@ export class ContactoPageComponent {
       this.heroTitle = settings.contactoHeroTitle || this.heroTitle;
       this.heroSubtitle = settings.contactoHeroSubtitle || this.heroSubtitle;
     } catch (error) {
-      console.error('[Contacto] Error loading settings:', error);
+      void 0;
       // Fallback to defaults
       this.contactEmail = 'hello@amarka.com';
       this.contactPhone = '+1 (305) 555-0100';
