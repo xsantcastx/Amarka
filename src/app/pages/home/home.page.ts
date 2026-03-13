@@ -73,8 +73,9 @@ export class HomePageComponent extends LoadingComponentBase implements OnInit {
       this.setLoading(true);
       this.loadAllContent();
     } else {
-      // During SSR, set loading to false to show empty state
-      this.setLoading(false);
+      // During SSR keep loading=true so the spinner renders, preventing
+      // a hydration mismatch that causes the page to appear duplicated.
+      this.setLoading(true);
     }
   }
 
@@ -289,8 +290,8 @@ export class HomePageComponent extends LoadingComponentBase implements OnInit {
 
   goToSearch(searchTerm: string) {
     if (searchTerm && searchTerm.trim()) {
-      this.router.navigate(['/catalog'], { 
-        queryParams: { search: searchTerm.trim() } 
+      this.router.navigate(['/productos'], {
+        queryParams: { search: searchTerm.trim() }
       });
     }
   }

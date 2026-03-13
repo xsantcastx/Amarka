@@ -102,7 +102,7 @@
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         @for (preview of previews; track $index; let i = $index) {
-          <div class="border-2 rounded-xl overflow-hidden bg-bitcoin-dark/40" [class.border-green-500]="preview.mediaId" [class.border-bitcoin-gray/20]="!preview.mediaId">
+          <div class="border-2 rounded-xl overflow-hidden bg-bitcoin-dark/40" [class.border-primary]="preview.mediaId" [class.border-bitcoin-gray/20]="!preview.mediaId">
             <div class="flex">
               <!-- Image Preview -->
               <div class="w-32 h-32 flex-shrink-0 bg-bitcoin-dark/60">
@@ -173,7 +173,7 @@
 
                 <!-- Upload Status -->
                 @if (preview.mediaId) {
-                  <div class="mt-2 flex items-center text-green-600">
+                  <div class="mt-2 flex items-center text-primary">
                     <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                       <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
                     </svg>

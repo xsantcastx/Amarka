@@ -1387,4 +1387,320 @@ export const handleCustomOrderPayment = withStripeSecrets.https.onRequest(
   })
 );
 
+// ─── Admin Role Management ────────────────────────────────────────────────────
+
+/**
+ * Set a user's role as a custom JWT claim.
+ * Must be called by an authenticated admin.
+ * Also updates the Firestore users document for consistency.
+ */
+export const setAdminRole = functions.https.onCall(async (data: any, context: any) => {
+  if (!context.auth) {
+    throw new functions.https.HttpsError("unauthenticated", "Must be signed in");
+  }
+
+  // Verify caller is admin via JWT claim (fast) or Firestore doc (migration fallback)
+  const callerClaim = context.auth.token?.role;
+  let callerIsAdmin = callerClaim === "admin";
+
+  if (!callerIsAdmin) {
+    const callerDoc = await db.collection("users").doc(context.auth.uid).get();
+    callerIsAdmin = callerDoc.data()?.role === "admin";
+  }
+
+  if (!callerIsAdmin) {
+    throw new functions.https.HttpsError("permission-denied", "Must be admin to set roles");
+  }
+
+  const { uid, role } = data;
+  if (!uid || typeof uid !== "string") {
+    throw new functions.https.HttpsError("invalid-argument", "uid is required");
+  }
+  if (role !== "admin" && role !== "client") {
+    throw new functions.https.HttpsError("invalid-argument", "role must be 'admin' or 'client'");
+  }
+
+  // Set custom JWT claim
+  await admin.auth().setCustomUserClaims(uid, { role });
+
+  // Keep Firestore in sync
+  await db.collection("users").doc(uid).update({
+    role,
+    updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+  });
+
+  return { success: true, uid, role };
+});
+
+/**
+ * Sync the caller's JWT custom claim from their Firestore role.
+ * Call on login to ensure the claim matches the Firestore role (migration helper).
+ */
+export const syncUserClaims = functions.https.onCall(async (_data: any, context: any) => {
+  if (!context.auth) {
+    throw new functions.https.HttpsError("unauthenticated", "Must be signed in");
+  }
+
+  const uid = context.auth.uid;
+  const currentClaim = context.auth.token?.role as string | undefined;
+
+  const userDoc = await db.collection("users").doc(uid).get();
+  const firestoreRole: string = userDoc.data()?.role || "client";
+
+  if (currentClaim !== firestoreRole) {
+    await admin.auth().setCustomUserClaims(uid, { role: firestoreRole });
+    return { updated: true, role: firestoreRole };
+  }
+
+  return { updated: false, role: currentClaim };
+});
+
+// ─── JWT Claim Auto-Sync Trigger ──────────────────────────────────────────────
+
+/**
+ * Firestore trigger: whenever a user document's `role` field changes,
+ * immediately propagate it to their Firebase Auth custom JWT claim.
+ * This means the Firestore fallback in security rules is no longer needed.
+ */
+export const onUserRoleChanged = functions.firestore
+  .document("users/{userId}")
+  .onWrite(async (change: functions.Change<functions.firestore.DocumentSnapshot>, context: functions.EventContext) => {
+    const before = change.before.exists ? change.before.data() : null;
+    const after = change.after.exists ? change.after.data() : null;
+
+    const roleBefore = before?.role ?? null;
+    const roleAfter = after?.role ?? null;
+
+    // Skip if role didn't change or document was deleted
+    if (roleBefore === roleAfter || !after) return;
+
+    const userId = context.params.userId;
+    const role = typeof roleAfter === "string" ? roleAfter : "client";
+
+    await admin.auth().setCustomUserClaims(userId, { role });
+    functions.logger.info(`JWT claim updated: user=${userId} role=${role}`);
+  });
+
+/**
+ * One-time migration: backfill JWT custom claims for all users that already
+ * have a `role` field in Firestore but whose JWT claim is missing or stale.
+ * Call once from the Admin panel after deploying; safe to call multiple times.
+ */
+export const migrateAdminClaims = functions.https.onCall(async (_data: any, context: any) => {
+  if (!context.auth) {
+    throw new functions.https.HttpsError("unauthenticated", "Must be signed in");
+  }
+
+  // Only an existing admin (via JWT claim OR Firestore doc during migration) can run this
+  const callerClaim = context.auth.token?.role;
+  let callerIsAdmin = callerClaim === "admin";
+  if (!callerIsAdmin) {
+    const callerDoc = await db.collection("users").doc(context.auth.uid).get();
+    callerIsAdmin = callerDoc.data()?.role === "admin";
+  }
+  if (!callerIsAdmin) {
+    throw new functions.https.HttpsError("permission-denied", "Must be admin");
+  }
+
+  const snapshot = await db.collection("users").where("role", "in", ["admin", "client"]).get();
+  const updates: Promise<void>[] = [];
+  let updated = 0;
+
+  for (const doc of snapshot.docs) {
+    const role: string = doc.data().role || "client";
+    updates.push(
+      admin.auth().setCustomUserClaims(doc.id, { role }).then(() => { updated++; })
+    );
+  }
+
+  await Promise.allSettled(updates);
+  functions.logger.info(`migrateAdminClaims: backfilled ${updated} users`);
+  return { success: true, updated };
+});
+
+// ─── Promo Code Validation ────────────────────────────────────────────────────
+
+/**
+ * Validate a promo code server-side and return discount details.
+ * Replaces the insecure pattern of public Firestore reads on promoCodes.
+ */
+export const validatePromoCode = functions.https.onCall(async (data: any, _context: any) => {
+  const rawCode = typeof data?.code === "string" ? data.code.trim() : "";
+  const cartTotal: number = typeof data?.cartTotal === "number" ? data.cartTotal : 0;
+
+  if (!rawCode) {
+    throw new functions.https.HttpsError("invalid-argument", "code is required");
+  }
+
+  // Sanitize: only allow alphanumeric, dashes, underscores
+  const code = rawCode.toUpperCase().replace(/[^A-Z0-9_-]/g, "");
+  if (code !== rawCode.toUpperCase()) {
+    return { valid: false, reason: "invalid_format" };
+  }
+
+  const promoDoc = await db.collection("promoCodes").doc(code).get();
+  if (!promoDoc.exists) {
+    return { valid: false, reason: "not_found" };
+  }
+
+  const promo = promoDoc.data()!;
+
+  if (!promo.active) {
+    return { valid: false, reason: "inactive" };
+  }
+
+  const now = admin.firestore.Timestamp.now();
+  if (promo.validFrom && promo.validFrom > now) {
+    return { valid: false, reason: "not_started" };
+  }
+  if (promo.validUntil && promo.validUntil < now) {
+    return { valid: false, reason: "expired" };
+  }
+  if (promo.maxUses && (promo.currentUses || 0) >= promo.maxUses) {
+    return { valid: false, reason: "exhausted" };
+  }
+  if (promo.minOrderAmount && cartTotal < promo.minOrderAmount) {
+    return { valid: false, reason: "below_minimum", minimumAmount: promo.minOrderAmount };
+  }
+
+  let discountAmount = 0;
+  if (promo.type === "percentage") {
+    discountAmount = Math.round(cartTotal * (promo.value / 100) * 100) / 100;
+  } else if (promo.type === "fixed") {
+    discountAmount = Math.min(promo.value, cartTotal);
+  }
+
+  return {
+    valid: true,
+    code,
+    type: promo.type as string,
+    value: promo.value as number,
+    discountAmount,
+    description: (promo.description as string) || null,
+  };
+});
+
+// ─── Engraving Input Validation ───────────────────────────────────────────────
+
+const ALLOWED_FONT_IDS: readonly string[] = [
+  "cormorant",
+  "sans",
+  "mono",
+  "georgia",
+  "palatino",
+  "impact",
+];
+
+/**
+ * Validate and sanitize engraving text input before it reaches cart/order logic.
+ * No authentication required — called from the product page before checkout.
+ */
+export const validateEngravingInput = functions.https.onCall(
+  async (data: unknown, _context: functions.https.CallableContext): Promise<{
+    valid: true;
+    lines: string[];
+    fontId: string;
+  }> => {
+    const payload = data as {
+      lines?: unknown;
+      fontId?: unknown;
+      maxCharsPerLine?: unknown;
+    };
+
+    // ── Validate lines array ─────────────────────────────────────────────────
+    if (!Array.isArray(payload?.lines)) {
+      throw new functions.https.HttpsError(
+        "invalid-argument",
+        "lines must be an array of strings"
+      );
+    }
+
+    const rawLines = payload.lines as unknown[];
+
+    if (rawLines.length === 0) {
+      throw new functions.https.HttpsError(
+        "invalid-argument",
+        "lines must not be empty"
+      );
+    }
+
+    if (rawLines.length > 4) {
+      throw new functions.https.HttpsError(
+        "invalid-argument",
+        "Too many lines: maximum 4 lines allowed",
+        { received: rawLines.length, max: 4 }
+      );
+    }
+
+    // ── Validate fontId ──────────────────────────────────────────────────────
+    if (typeof payload?.fontId !== "string" || !payload.fontId) {
+      throw new functions.https.HttpsError(
+        "invalid-argument",
+        "fontId must be a non-empty string"
+      );
+    }
+
+    const fontId: string = payload.fontId;
+
+    if (!ALLOWED_FONT_IDS.includes(fontId)) {
+      throw new functions.https.HttpsError(
+        "invalid-argument",
+        `fontId must be one of: ${ALLOWED_FONT_IDS.join(", ")}`,
+        { received: fontId }
+      );
+    }
+
+    // ── Validate maxCharsPerLine ─────────────────────────────────────────────
+    const DEFAULT_MAX_CHARS = 200;
+    let maxCharsPerLine: number = DEFAULT_MAX_CHARS;
+
+    if (payload?.maxCharsPerLine !== undefined) {
+      if (
+        typeof payload.maxCharsPerLine !== "number" ||
+        !Number.isInteger(payload.maxCharsPerLine) ||
+        payload.maxCharsPerLine < 1
+      ) {
+        throw new functions.https.HttpsError(
+          "invalid-argument",
+          "maxCharsPerLine must be a positive integer"
+        );
+      }
+      maxCharsPerLine = payload.maxCharsPerLine as number;
+    }
+
+    // ── Sanitize and validate each line ─────────────────────────────────────
+    const sanitizedLines: string[] = rawLines.map(
+      (rawLine: unknown, index: number): string => {
+        if (typeof rawLine !== "string") {
+          throw new functions.https.HttpsError(
+            "invalid-argument",
+            `lines[${index}] must be a string`
+          );
+        }
+
+        // Strip HTML tags
+        let sanitized: string = rawLine.replace(/<[^>]*>/g, "");
+
+        // Strip dangerous characters: control chars, null bytes, backticks,
+        // backslashes, and common injection delimiters
+        sanitized = sanitized.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F`\\]/g, "");
+
+        // Trim leading/trailing whitespace
+        sanitized = sanitized.trim();
+
+        if (sanitized.length > maxCharsPerLine) {
+          throw new functions.https.HttpsError(
+            "invalid-argument",
+            `lines[${index}] exceeds the maximum of ${maxCharsPerLine} characters`,
+            { line: index, length: sanitized.length, max: maxCharsPerLine }
+          );
+        }
+
+        return sanitized;
+      }
+    );
+
+    return { valid: true, lines: sanitizedLines, fontId };
+  }
+);
 

@@ -181,7 +181,7 @@ export class SoloMinersPageComponent extends LoadingComponentBase implements OnI
       features: (previewFeatures.length > 0 ? previewFeatures : product.features ?? []).slice(0, 4),
       badge: 'soloMiners.badges.lottery',
       ctaLabel: 'soloMiners.cta.viewProduct',
-      ctaLink: `/products/${product.slug}`,
+      ctaLink: `/productos/${product.slug}`,
       inStock: legacyProduct.stock === undefined ? undefined : legacyProduct.stock > 0
     };
   }

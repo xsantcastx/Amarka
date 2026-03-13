@@ -46,6 +46,9 @@ export interface CartItemCustomization {
   link?: string;
   // Multi-zone support
   zones?: ZoneCustomization[];
+  // Text engraving
+  engravingLines?: string[];  // Text per line, e.g. ["John Smith", "Est. 1990"]
+  engravingFont?: string;     // Font id from ENGRAVING_FONTS, e.g. "cormorant"
 }
 
 // ===== Cart Item =====

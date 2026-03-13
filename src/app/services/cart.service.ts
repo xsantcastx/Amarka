@@ -154,7 +154,7 @@ export class CartService {
     
     if (!anonId) {
       // Generate new anonymous cart ID
-      anonId = `anon_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      anonId = `anon_${Date.now()}_${Math.random().toString(36).slice(2)}${Math.random().toString(36).slice(2)}`;
       localStorage.setItem(ANON_CART_KEY, anonId);
     }
 
@@ -362,7 +362,7 @@ export class CartService {
 
     let anonId = localStorage.getItem(ANON_CART_KEY);
     if (!anonId) {
-      anonId = `anon_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      anonId = `anon_${Date.now()}_${Math.random().toString(36).slice(2)}${Math.random().toString(36).slice(2)}`;
       localStorage.setItem(ANON_CART_KEY, anonId);
     }
 

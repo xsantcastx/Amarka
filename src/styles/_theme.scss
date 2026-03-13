@@ -2,13 +2,13 @@
 
 $themes: (
   light: (
-    bg-surface: #faf6f0, // ivory
-    bg-elevated: #ffffff,
-    text: #1d2a39, // midnight blue
-    muted: #3f5f47, // forest green secondary text
-    primary: #a8c5a4, // sage green
-    on-primary: #1d2a39,
-    border: #e1d7c5,
+    bg-surface: #f6f1e8, // warm stone
+    bg-elevated: #fffdf9,
+    text: #17161a, // ink
+    muted: #5e5a57, // warm gray
+    primary: #9f6b3d, // bronze
+    on-primary: #fffdf9,
+    border: #ddd2c2,
     overlay: #0a0d140d
   )
 );
@@ -26,12 +26,11 @@ $themes: (
     --border: #{map.get($theme, border)};
     --overlay: #{map.get($theme, overlay)};
     
-    // Accent colors (sage green theme)
-    --bitcoin-orange: #a8c5a4;
-    --bitcoin-gold: #a8c5a4;
-    --luxury-gold: #a8c5a4;
-    --deep-black: #1d2a39;
-    --rich-gray: #3f5f47;
-    --accent-blue: #e8b8c8;
+    --bitcoin-orange: #9f6b3d;
+    --bitcoin-gold: #c59a68;
+    --luxury-gold: #9f6b3d;
+    --deep-black: #17161a;
+    --rich-gray: #5e5a57;
+    --accent-blue: #23303b;
   }
 }

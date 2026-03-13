@@ -24,11 +24,6 @@ export const routes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: 'products',
-    redirectTo: 'productos',
-    pathMatch: 'full'
-  },
-  {
     path: 'productos/:slug',
     loadComponent: () => import('./pages/productos/detalle/detalle.component').then(m => m.DetalleComponent),
     title: routeTitle('page_titles.product_details')

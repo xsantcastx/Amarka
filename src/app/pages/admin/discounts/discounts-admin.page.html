@@ -38,9 +38,9 @@
       <!-- Messages -->
       @if (message) {
         <div class="rounded-2xl border px-4 py-3 text-sm"
-             [class.border-emerald-200]="messageType === 'success'"
-             [class.bg-emerald-50/80]="messageType === 'success'"
-             [class.text-emerald-700]="messageType === 'success'"
+             [class.border-primary/20]="messageType === 'success'"
+             [class.bg-primary/5]="messageType === 'success'"
+             [class.text-primary]="messageType === 'success'"
              [class.border-rose-200]="messageType === 'error'"
              [class.bg-rose-50/80]="messageType === 'error'"
              [class.text-rose-700]="messageType === 'error'">
@@ -100,7 +100,7 @@
                     <td class="px-6 py-4">
                       <span [class]="getStatusClass(promo)" class="flex items-center gap-2">
                         <span class="w-2 h-2 rounded-full"
-                              [class.bg-emerald-500]="getStatusText(promo) === 'Active'"
+                              [class.bg-primary]="getStatusText(promo) === 'Active'"
                               [class.bg-slate-400]="getStatusText(promo) === 'Inactive'"
                               [class.bg-rose-500]="getStatusText(promo) === 'Expired' || getStatusText(promo) === 'Limit Reached'"
                               [class.bg-amber-500]="getStatusText(promo) === 'Scheduled'"></span>

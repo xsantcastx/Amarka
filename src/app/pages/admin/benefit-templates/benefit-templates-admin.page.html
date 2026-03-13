@@ -142,7 +142,7 @@
                     <button (click)="toggleActive(template)" 
                             class="px-3 py-1 rounded-lg text-xs font-medium transition-all"
                             [ngClass]="{
-                              'bg-green-500/20 text-green-400 border border-green-500/30 hover:bg-green-500/30': template.isActive,
+                              'bg-primary/15 text-primary border border-primary/30 hover:bg-primary/20': template.isActive,
                               'bg-red-500/20 text-red-400 border border-red-500/30 hover:bg-red-500/30': !template.isActive
                             }">
                       {{ template.isActive ? '✓ Active' : '✗ Inactive' }}

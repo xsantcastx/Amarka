@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -8,6 +8,8 @@ import { Product } from '../../models/product';
 import { PageHeaderComponent } from '../../shared/components/page-header/page-header.component';
 import { ProductCardComponent } from '../../shared/components/product-card/product-card.component';
 import { MetaService } from '../../services/meta.service';
+import { SeoSchemaService } from '../../services/seo-schema.service';
+import { BrandConfigService } from '../../core/services/brand-config.service';
 import { CollectionsService, CollectionDoc } from '../../services/collections.service';
 
 type SortOption = 'newest' | 'price-asc' | 'price-desc';
@@ -19,10 +21,12 @@ type SortOption = 'newest' | 'price-asc' | 'price-desc';
   templateUrl: './collection.page.html',
   styleUrls: ['./collection.page.scss']
 })
-export class CollectionPageComponent implements OnInit {
+export class CollectionPageComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
   private productsService = inject(ProductsService);
   private metaService = inject(MetaService);
+  private seoService = inject(SeoSchemaService);
+  private brandConfig = inject(BrandConfigService);
   private collectionsService = inject(CollectionsService);
   private cdr = inject(ChangeDetectorRef);
 
@@ -47,25 +51,44 @@ export class CollectionPageComponent implements OnInit {
     await this.loadProducts();
   }
 
+  ngOnDestroy(): void {
+    this.seoService.removeAllSchemas();
+  }
+
   private async loadCollection() {
     this.collection = await this.collectionsService.getCollectionBySlugOnce(this.slug);
+    const siteUrl = this.brandConfig.siteUrl;
+    const siteName = this.brandConfig.siteName;
+
     if (this.collection) {
       this.collectionId = this.collection.id || '';
       this.title = this.collection.name;
       const description = (this.collection.description || '').trim();
       this.subtitle = description;
+      const metaTitle = this.collection.seo?.title || `${this.collection.name} | ${siteName}`;
+      const metaDesc = this.collection.seo?.description || description || this.defaultSubtitle;
+      const ogImage = this.collection.seo?.image || this.collection.heroImageUrl || '';
       this.metaService.setPageMeta({
-        title: this.collection.seo?.title || this.collection.name,
-        description: this.collection.seo?.description || description || this.defaultSubtitle,
-        image: this.collection.seo?.image
+        title: metaTitle,
+        description: metaDesc,
+        image: ogImage || undefined,
+        url: `${siteUrl}/collections/${this.slug}`
       });
+      this.seoService.setCanonicalUrl(`${siteUrl}/collections/${this.slug}`);
+      this.seoService.generateBreadcrumbSchema([
+        { name: 'Home', url: siteUrl },
+        { name: 'Collections', url: `${siteUrl}/collections` },
+        { name: this.collection.name, url: `${siteUrl}/collections/${this.slug}` }
+      ]);
     } else {
       this.title = this.slugToTitle(this.slug);
       this.subtitle = '';
       this.metaService.setPageMeta({
-        title: this.title,
-        description: this.defaultSubtitle
+        title: `${this.title} | ${siteName}`,
+        description: this.defaultSubtitle,
+        url: `${siteUrl}/collections/${this.slug}`
       });
+      this.seoService.setCanonicalUrl(`${siteUrl}/collections/${this.slug}`);
     }
     this.cdr.detectChanges();
   }
@@ -110,6 +133,23 @@ export class CollectionPageComponent implements OnInit {
       });
       this.tags = Array.from(new Set(this.products.flatMap(p => p.tags || []))).slice(0, 12);
       this.applyFilters();
+      if (this.products.length > 0) {
+        const siteUrl = this.brandConfig.siteUrl;
+        this.seoService.generateItemListSchema(
+          this.products.map(p => ({
+            name: p.name,
+            description: p.description || '',
+            imageUrl: p.imageUrl || p.coverImage || '',
+            price: p.price || 0,
+            currency: 'USD',
+            sku: p.sku || p.id || '',
+            brand: this.brandConfig.siteName,
+            availability: (p.stock && p.stock > 0) ? 'InStock' : 'OutOfStock',
+            slug: p.slug
+          })),
+          this.title || this.slugToTitle(this.slug)
+        );
+      }
     } catch (err) {
       void 0;
       this.products = [];

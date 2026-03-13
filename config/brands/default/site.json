@@ -20,16 +20,18 @@
   },
   "theme": {
     "tokens": {
-      "ts-bg": "#F7F0E7",
-      "ts-bg-soft": "#FEFCF8",
+      "ts-bg": "#F5F5F7",
+      "ts-bg-soft": "#FBFBFD",
       "ts-paper": "#FFFFFF",
-      "ts-ink": "#17130F",
-      "ts-ink-soft": "#4B3B2F",
-      "ts-accent": "#C7683B",
-      "ts-accent-soft": "#E59B73",
-      "ts-line": "rgba(23,19,15,0.08)",
-      "surface-glass": "rgba(199,104,59,0.08)",
-      "surface-border": "rgba(23,19,15,0.12)"
+      "ts-ink": "#1d1d1f",
+      "ts-ink-soft": "#6e6e73",
+      "ts-accent": "#0071e3",
+      "ts-accent-soft": "#d9eaff",
+      "ts-line": "rgba(0,0,0,0.08)",
+      "surface-glass": "rgba(255,255,255,0.94)",
+      "surface-border": "rgba(0,0,0,0.10)",
+      "color-success": "0 113 227",
+      "color-primary": "0 113 227"
     },
     "fonts": {
       "sans": "'Source Sans 3', 'Inter', 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif",

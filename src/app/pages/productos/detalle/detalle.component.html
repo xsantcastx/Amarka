@@ -38,6 +38,27 @@
               </div>
             }
 
+            <!-- Live engraving overlay on product image -->
+            @if (hasEngravingText) {
+              <div class="engraving-image-overlay" aria-hidden="true">
+                <div class="engraving-image-overlay__text"
+                     [style.font-family]="getEngravingFontFamily(engravingFont)">
+                  @for (line of engravingLines; track $index) {
+                    @if (line.trim()) {
+                      <p class="engraving-image-overlay__line">{{ line }}</p>
+                    }
+                  }
+                </div>
+                <span class="engraving-image-overlay__badge">
+                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.5L16.732 3.732z"/>
+                  </svg>
+                  Your engraving
+                </span>
+              </div>
+            }
+
             @if (carouselImages.length > 1) {
               <button
                 type="button"
@@ -164,6 +185,108 @@
                     }
                     @if (clientInputErrors.logo) {
                       <p class="text-xs text-red-500">{{ clientInputErrors.logo | translate }}</p>
+                    }
+
+                    @if (requiresEngravingText) {
+                      <!-- ── Engraving Text Input ── -->
+                      <div class="mt-4 space-y-3">
+                        <div class="flex items-center gap-2">
+                          <svg class="w-4 h-4 text-ts-accent flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                              d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.5L16.732 3.732z"/>
+                          </svg>
+                          <h4 class="text-sm font-semibold text-ts-ink">Engraving text</h4>
+                          <span class="ml-auto text-[11px] text-ts-ink-soft">max {{ engravingMaxChars }} chars / line</span>
+                        </div>
+
+                        @for (line of engravingLines; track $index) {
+                          <div>
+                            <div class="flex items-center justify-between mb-1">
+                              <label class="text-xs font-medium text-ts-ink-soft">
+                                @if (engravingLineCount > 1) { Line {{ $index + 1 }} } @else { Your text }
+                              </label>
+                              <span class="text-[11px] tabular-nums"
+                                [class.text-ts-accent]="getEngravingLineCharCount($index) >= engravingMaxChars"
+                                [class.text-ts-ink-soft]="getEngravingLineCharCount($index) < engravingMaxChars">
+                                {{ getEngravingLineCharCount($index) }}/{{ engravingMaxChars }}
+                              </span>
+                            </div>
+                            <input
+                              type="text"
+                              [value]="engravingInputLines[$index] || ''"
+                              (input)="onEngravingLineChange($event, $index)"
+                              [attr.maxlength]="engravingMaxChars"
+                              placeholder="Your engraving text..."
+                              class="w-full px-3 py-2 rounded-lg border border-ts-line/60 bg-ts-bg-soft/60 text-sm text-ts-ink focus:ring-2 focus:ring-ts-accent/40 focus:border-ts-accent font-mono tracking-wider transition-colors">
+                          </div>
+                        }
+
+                        <!-- Font picker -->
+                        <div>
+                          <p class="text-xs font-medium text-ts-ink-soft mb-2">Engraving style</p>
+                          <div class="grid grid-cols-3 gap-2">
+                            @for (font of availableEngravingFonts; track font.id) {
+                              <button
+                                type="button"
+                                (click)="selectEngravingFont(font.id)"
+                                class="px-2 py-3 rounded-lg border text-center transition-all"
+                                [class.border-ts-accent]="engravingFont === font.id"
+                                [class.bg-ts-accent]="engravingFont === font.id"
+                                [class.border-ts-line]="engravingFont !== font.id"
+                                [class.bg-ts-bg-soft]="engravingFont !== font.id">
+                                <span class="block text-base leading-tight truncate"
+                                  [style.font-family]="font.cssFamily"
+                                  [class.text-black]="engravingFont === font.id"
+                                  [class.text-ts-ink]="engravingFont !== font.id">
+                                  {{ font.sampleText }}
+                                </span>
+                                <span class="block text-[10px] mt-1"
+                                  [class.text-black]="engravingFont === font.id"
+                                  [class.text-ts-ink-soft]="engravingFont !== font.id">
+                                  {{ font.label }}
+                                </span>
+                              </button>
+                            }
+                          </div>
+                        </div>
+
+                        <!-- Live canvas preview -->
+                        @if (hasEngravingText) {
+                          <div class="rounded-xl overflow-hidden border border-ts-accent/20 bg-[#1a1a1a]">
+                            <div class="flex items-center justify-between px-3 py-2 border-b border-white/10">
+                              <span class="text-[11px] font-semibold text-ts-accent/80 uppercase tracking-widest">Live preview</span>
+                              <button
+                                type="button"
+                                (click)="copyEngravingPreviewUrl()"
+                                class="flex items-center gap-1.5 text-[11px] text-ts-accent/70 hover:text-ts-accent transition-colors">
+                                @if (engravingPreviewCopied) {
+                                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                  </svg>
+                                  Copied!
+                                } @else {
+                                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
+                                  </svg>
+                                  Share preview
+                                }
+                              </button>
+                            </div>
+                            <!-- Hidden canvas for rendering -->
+                            <canvas #engravingCanvas class="hidden"></canvas>
+                            @if (engravingPreviewDataUrl) {
+                              <div class="relative overflow-hidden engraving-reveal">
+                                <span class="engraving-reveal__cursor" aria-hidden="true"></span>
+                                <img [src]="engravingPreviewDataUrl" alt="Engraving preview" class="w-full h-auto block">
+                              </div>
+                            }
+                          </div>
+                        } @else {
+                          <!-- Hidden canvas always present so ref is available -->
+                          <canvas #engravingCanvas class="hidden"></canvas>
+                        }
+                      </div>
                     }
                   </div>
                 </div>
@@ -836,39 +959,9 @@
         </span>
       </h2>
       
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
         @for (relacionado of productosRelacionados; track relacionado.slug) {
-          <article class="group rounded-2xl overflow-hidden bg-ts-bg-soft/40 border border-ts-accent/20 hover:border-ts-accent/40 shadow-lg hover:shadow-2xl hover:shadow-ts-accent/10 transition-all duration-300">
-            <a [routerLink]="['/products', relacionado.slug]" class="block aspect-[4/3] overflow-hidden bg-ts-bg-soft/60 cursor-pointer">
-              @if (relacionado.imageUrl) {
-                <img [src]="relacionado.imageUrl" 
-                     [alt]="relacionado.name"
-                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                     loading="lazy"/>
-              } @else {
-                <div class="w-full h-full flex items-center justify-center text-ts-ink-soft">
-                  <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                  </svg>
-                </div>
-              }
-            </a>
-            <div class="p-6">
-              <h3 class="font-serif text-xl text-ts-ink mb-2">{{relacionado.name}}</h3>
-              @if (relacionado.specs && relacionado.specs['hashRate']) {
-                <p class="text-sm text-ts-ink-soft mb-2">
-                  <span class="font-medium text-ts-accent">{{relacionado.specs['hashRate']}}</span>
-                </p>
-              }
-              @if (relacionado.price) {
-                <p class="text-lg font-semibold text-ts-accent mb-4">{{relacionado.price | currency:'USD':'symbol':'1.2-2'}}</p>
-              }
-              <a [routerLink]="['/products', relacionado.slug]" 
-                 class="text-ts-accent hover:text-ts-accent font-medium transition-colors">
-                {{ 'detalle.view_details' | translate }} →
-              </a>
-            </div>
-          </article>
+          <ts-product-card [product]="relacionado" />
         }
       </div>
     </div>
@@ -907,5 +1000,4 @@
   (currentIndexChange)="onLightboxIndexChange($event)"
   [(isOpen)]="lightboxOpen"
 />
-
 

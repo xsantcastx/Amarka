@@ -8,11 +8,13 @@ import {
   doc,
   docData,
   getDoc,
-  setDoc
+  setDoc,
+  updateDoc
 } from '@angular/fire/firestore';
 import { catchError } from 'rxjs/operators';
 import { Subscription, of } from 'rxjs';
 import { BrandConfigService } from '../core/services/brand-config.service';
+import { applySiteTheme } from '../../theme/apply-theme';
 import type { SeasonalThemeConfig } from '@config';
 
 export type RadiusLevel = 'xs' | 'sm' | 'md' | 'lg' | 'full';
@@ -66,15 +68,15 @@ const DEFAULT_THEME: ThemeDocument = {
   name: 'Default Light',
   mode: 'light',
   palette: {
-    primary: '168 197 164',
-    secondary: '232 184 200',
-    accent: '63 95 71',
-    neutral: '29 42 57',
+    primary: '0 113 227',
+    secondary: '0 125 250',
+    accent: '110 110 115',
+    neutral: '29 29 31',
     surface: '255 255 255',
-    background: '250 246 240',
-    success: '46 204 113',
-    warning: '241 196 15',
-    error: '231 76 60'
+    background: '245 245 247',
+    success: '0 113 227',
+    warning: '255 159 10',
+    error: '255 59 48'
   },
   radiusLevel: 'md',
   shadowLevel: 2,
@@ -85,18 +87,18 @@ const DEFAULT_THEME: ThemeDocument = {
     navbar: {
       palette: {
         neutral: '255 255 255',
-        accent: '29 42 57'
+        accent: '29 29 31'
       }
     },
     productCard: {
       palette: {
-        accent: '168 197 164'
+        accent: '0 113 227'
       },
       shadowLevel: 2
     },
     footer: {
       palette: {
-        neutral: '63 95 71'
+        neutral: '245 245 247'
       }
     }
   },
@@ -106,15 +108,15 @@ const DEFAULT_THEME: ThemeDocument = {
       name: 'Default',
       scope: 'global',
       palette: {
-        primary: '168 197 164',
-        secondary: '232 184 200',
-        accent: '63 95 71',
-        neutral: '29 42 57',
+        primary: '0 113 227',
+        secondary: '0 125 250',
+        accent: '110 110 115',
+        neutral: '29 29 31',
         surface: '255 255 255',
-        background: '250 246 240',
-        success: '46 204 113',
-        warning: '241 196 15',
-        error: '231 76 60'
+        background: '245 245 247',
+        success: '0 113 227',
+        warning: '255 159 10',
+        error: '255 59 48'
       }
     },
     {
@@ -128,7 +130,7 @@ const DEFAULT_THEME: ThemeDocument = {
         neutral: '241 245 249',
         surface: '30 41 59',
         background: '15 23 42',
-        success: '34 197 94',
+        success: '52 120 246',
         warning: '251 191 36',
         error: '248 113 113'
       }
@@ -144,7 +146,7 @@ const DEFAULT_THEME: ThemeDocument = {
         neutral: '0 0 0',
         surface: '255 255 255',
         background: '255 255 255',
-        success: '0 128 0',
+        success: '0 71 160',
         warning: '255 204 0',
         error: '204 0 0'
       }
@@ -154,21 +156,21 @@ const DEFAULT_THEME: ThemeDocument = {
       name: 'Brand preset',
       scope: 'global',
       palette: {
-        primary: '199 104 59',
-        secondary: '229 155 115',
-        accent: '75 59 47',
-        neutral: '23 19 15',
+        primary: '0 113 227',
+        secondary: '0 125 250',
+        accent: '110 110 115',
+        neutral: '29 29 31',
         surface: '255 255 255',
-        background: '247 240 231',
-        success: '46 204 113',
-        warning: '241 196 15',
-        error: '231 76 60'
+        background: '245 245 247',
+        success: '0 113 227',
+        warning: '255 159 10',
+        error: '255 59 48'
       }
     }
   ]
 };
 
-const THEME_CACHE_KEY = 'theme:last-applied';
+const THEME_CACHE_KEY = 'theme:last-applied:v2';
 
 @Injectable({
   providedIn: 'root'
@@ -223,6 +225,7 @@ export class ThemeService {
 
     this.loadCachedTheme();
     await this.ensureGlobalThemeExists();
+    await this.migrateGreenSuccessIfNeeded();
     this.subscribeToGlobalTheme();
     this.subscribeToUserTheme();
   }
@@ -375,6 +378,33 @@ export class ThemeService {
       await setDoc(ref, DEFAULT_THEME);
     } catch (error) {
       void 0;
+    }
+  }
+
+  /** One-time migration: replace legacy green/blue values with brand amber. */
+  private async migrateGreenSuccessIfNeeded(): Promise<void> {
+    const LEGACY_VALUES = new Set([
+      '52 199 89', '34 197 94', '0 128 0', '74 222 128', // old greens
+      '0 113 227', '0 125 250', '52 120 246', '0 71 160'  // old blues
+    ]);
+    const AMBER = '176 106 45';
+    try {
+      const ref = doc(this.firestore, 'themes', 'global');
+      const snap = await getDoc(ref);
+      if (!snap.exists()) return;
+      const data = snap.data() as ThemeDocument;
+      const updates: Record<string, string> = {};
+      if (LEGACY_VALUES.has((data.palette?.success ?? '').trim())) {
+        updates['palette.success'] = AMBER;
+      }
+      if (LEGACY_VALUES.has((data.palette?.primary ?? '').trim())) {
+        updates['palette.primary'] = AMBER;
+      }
+      if (Object.keys(updates).length > 0) {
+        await updateDoc(ref, updates);
+      }
+    } catch {
+      // Non-critical — site.json token override covers the UI in the meantime
     }
   }
 
@@ -562,6 +592,9 @@ export class ThemeService {
     });
 
     this.applySeasonalDecorTokens(root);
+
+    // Apply site.json brand tokens last so they always win over Firestore palette
+    applySiteTheme();
 
     // Cache last applied theme for fast boot when offline or before Firestore responds
     if (typeof localStorage !== 'undefined' && !this.seasonalTheme()) {

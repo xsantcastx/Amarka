@@ -34,6 +34,8 @@ interface CartViewModel {
       logoFilename?: string;
       note?: string;
       link?: string;
+      engravingLines?: string[];
+      engravingFont?: string;
     };
     qty: number;
   }>;
@@ -134,7 +136,9 @@ export class CartPage implements OnInit {
           logoUrl: item.customization.logoUrl,
           logoFilename: item.customization.logoFilename,
           note: item.customization.note,
-          link: item.customization.link
+          link: item.customization.link,
+          engravingLines: item.customization.engravingLines,
+          engravingFont: item.customization.engravingFont
         } : undefined,
         qty: item.qty
       })) || [],

@@ -1,37 +1,113 @@
 <header class="app-navbar fixed inset-x-0 top-0 z-50">
-  <!-- Top rail -->
-  <div class="bg-ts-paper border-b border-ts-line shadow-sm">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 grid grid-cols-[auto,1fr,auto] items-center gap-4">
-      <!-- Left: logo -->
+  <div class="app-navbar__notice">
+    <div class="app-navbar__notice-inner">
+      <span>Personalized luxury pieces crafted for gifting, milestones, and signature collections.</span>
+      <a routerLink="/contacto" class="app-navbar__notice-link">{{ 'home.cta.secondary' | translate }}</a>
+    </div>
+  </div>
+
+  <div class="app-navbar__main">
+    <div class="app-navbar__frame max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 grid grid-cols-[auto,1fr,auto] items-center gap-4">
       <div class="flex items-center gap-3 flex-shrink-0">
-        <a routerLink="/">
+        <a routerLink="/" class="app-navbar__brand-lockup">
           <img [src]="logoSrc" [alt]="logoAlt" class="h-11 w-auto max-w-[200px] object-contain" />
+          <div class="app-navbar__brand-copy hidden md:block">
+            <span class="app-navbar__brand-name">{{ brandName }}</span>
+            <span class="app-navbar__brand-tag">Luxury personalization atelier</span>
+          </div>
         </a>
       </div>
 
-      <!-- Center: search -->
-      <div
-        class="hidden md:flex items-stretch w-full max-w-[420px] mx-auto rounded-xl overflow-hidden border border-ts-line bg-ts-paper shadow-lvl1">
-        <input type="search" [placeholder]="'nav.search_placeholder' | translate"
-          class="flex-1 px-3 text-ts-ink bg-transparent focus:outline-none" #navSearch
-          (keydown.enter)="goToSearch(navSearch.value)">
-        <button class="px-4 bg-primary text-neutral font-semibold hover:shadow-lvl2 transition"
-          (click)="goToSearch(navSearch.value)">
-          {{ 'common.search' | translate }}
-        </button>
+      <!-- Search with live autocomplete -->
+      <div class="app-navbar__search-wrap hidden md:block relative" (click)="$event.stopPropagation()">
+        <div class="app-navbar__search flex items-center w-full max-w-[260px] mx-auto rounded-full px-3 py-1.5 transition-all"
+             [class.app-navbar__search--open]="showSearchDropdown()">
+          <svg class="w-4 h-4 text-ts-ink-soft mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+          </svg>
+          <input type="search" [placeholder]="'nav.search_placeholder' | translate"
+            class="flex-1 bg-transparent text-sm text-ts-ink placeholder:text-ts-ink-soft focus:outline-none w-full min-w-0"
+            #navSearch
+            autocomplete="off"
+            (input)="onSearchInput(navSearch.value)"
+            (focus)="onSearchFocus(navSearch.value)"
+            (blur)="closeSearchDropdown()"
+            (keydown)="onSearchKeydown($event, navSearch)"
+            role="combobox"
+            [attr.aria-expanded]="showSearchDropdown()"
+            aria-autocomplete="list"
+            aria-controls="nav-search-listbox">
+        </div>
+
+        <!-- Autocomplete dropdown -->
+        @if (showSearchDropdown()) {
+        <div id="nav-search-listbox" class="nav-search-dropdown" role="listbox">
+          @if (searchLoading()) {
+          <div class="nav-search-dropdown__loading">
+            <svg class="w-4 h-4 animate-spin text-ts-accent" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+            </svg>
+            <span>Searching...</span>
+          </div>
+          } @else if (searchResults().length > 0) {
+          @for (result of searchResults(); track result.id; let i = $index) {
+          <button class="nav-search-dropdown__item"
+                  [class.nav-search-dropdown__item--active]="searchActiveIndex() === i"
+                  role="option"
+                  [attr.aria-selected]="searchActiveIndex() === i"
+                  (mousedown)="navigateToProduct(result)">
+            <div class="nav-search-dropdown__thumb">
+              @if (result.coverImage) {
+              <img [src]="result.coverImage" [alt]="result.name" loading="lazy" />
+              } @else {
+              <svg class="w-5 h-5 text-ts-ink-soft" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                  d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
+                </path>
+              </svg>
+              }
+            </div>
+            <div class="nav-search-dropdown__info">
+              <span class="nav-search-dropdown__name">{{ result.name }}</span>
+              @if (result.shortDescription) {
+              <span class="nav-search-dropdown__desc">{{ result.shortDescription }}</span>
+              }
+            </div>
+            @if (result.price) {
+            <span class="nav-search-dropdown__price">${{ result.price | number:'1.0-0' }}</span>
+            }
+          </button>
+          }
+          <div class="nav-search-dropdown__footer">
+            <button class="nav-search-dropdown__all" (mousedown)="goToSearch(navSearch.value)">
+              See all results
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+              </svg>
+            </button>
+          </div>
+          } @else {
+          <div class="nav-search-dropdown__empty">
+            <svg class="w-8 h-8 text-ts-ink-soft opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            </svg>
+            <span>No products found</span>
+          </div>
+          }
+        </div>
+        }
       </div>
 
-      <!-- Right: account / cart / menu -->
-      <div class="flex items-center gap-4 text-xs text-ts-ink justify-self-end">
+      <div class="flex items-center gap-3 text-xs text-ts-ink justify-self-end">
         <div class="hidden lg:flex flex-col leading-tight">
-          @if (('common.hello' | translate) !== 'common.hello') {
-          <span class="text-ts-ink-soft">{{ 'common.hello' | translate }}</span>
-          }
+          <span class="app-navbar__mini-label">Client space</span>
           <a routerLink="/client/profile" class="font-semibold hover:text-ts-accent">{{ 'nav.account_lists' | translate
             }}</a>
         </div>
         <a routerLink="/cart"
-          class="relative inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-ts-line bg-ts-bg hover:border-ts-accent transition">
+          class="app-navbar__utility-link relative inline-flex items-center gap-2 px-3 py-2 transition">
           <svg class="w-5 h-5 text-ts-ink" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
               d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2 9h14l-2-9M10 21a1 1 0 11-2 0 1 1 0 012 0zm8 0a1 1 0 11-2 0 1 1 0 012 0z" />
@@ -43,7 +119,7 @@
             totalItems() }}</span>
           }
         </a>
-        <button class="p-2 rounded-lg border border-ts-line bg-ts-bg hover:border-ts-accent transition-colors"
+        <button class="app-navbar__utility-link p-2 transition-colors"
           (click)="toggleMobile(); $event.stopPropagation()" aria-label="Open navigation">
           <svg class="w-5 h-5 text-ts-ink" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
@@ -53,15 +129,30 @@
     </div>
   </div>
 
-  <!-- Secondary nav -->
-  <div class="bg-ts-bg border-b border-ts-line">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-12 flex items-center justify-center gap-4 overflow-x-auto">
-      @for (link of navLinks; track link.href) {
-      <a [routerLink]="link.href" routerLinkActive="active"
-        [routerLinkActiveOptions]="link.exact ? exactMatchOption : partialMatchOption"
-        class="text-sm px-3 py-2 rounded-lg text-ts-ink hover:bg-ts-bg-soft hover:text-ts-accent transition">
-        {{ link.label | translate }}
-      </a>
+  <!-- Secondary nav with smooth rotating collection slot -->
+  <div class="app-navbar__secondary"
+       (mouseenter)="pauseRotation()"
+       (mouseleave)="resumeRotation()">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-center gap-3 overflow-x-auto">
+      @for (link of navLinks; track link.href; let i = $index) {
+        @if (isRotatingSlot(i)) {
+          <!-- Rotating collection slot — animated, DOM element stays stable -->
+          @if (rotatingLink(); as rl) {
+          <a [routerLink]="rl.href" routerLinkActive="active"
+            [routerLinkActiveOptions]="partialMatchOption"
+            class="app-navbar__secondary-link app-navbar__secondary-link--rotating text-sm px-4 py-2 rounded-lg transition"
+            [class.app-navbar__secondary-link--exiting]="rotatingState() === 'exiting'"
+            [class.app-navbar__secondary-link--entering]="rotatingState() === 'entering'">
+            {{ rl.label }}
+          </a>
+          }
+        } @else {
+        <a [routerLink]="link.href" routerLinkActive="active"
+          [routerLinkActiveOptions]="link.exact ? exactMatchOption : partialMatchOption"
+          class="app-navbar__secondary-link text-sm px-4 py-2 rounded-lg transition">
+          {{ link.label | translate }}
+        </a>
+        }
       }
       @if (!navLinks.length) {
       <span class="text-sm text-ts-ink-soft">{{ 'nav.add_links' | translate }}</span>
@@ -94,15 +185,35 @@
     </button>
   </div>
 
+  <!-- Mobile search -->
+  <div class="mobile-drawer__search">
+    <div class="mobile-drawer__search-inner">
+      <svg class="w-4 h-4 text-ts-ink-soft flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+      </svg>
+      <input type="search" [placeholder]="'nav.search_placeholder' | translate"
+        class="flex-1 bg-transparent text-sm text-ts-ink placeholder:text-ts-ink-soft focus:outline-none"
+        #mobileSearch
+        autocomplete="off"
+        (keydown.enter)="goToSearch(mobileSearch.value); mobileSearch.value = ''">
+    </div>
+  </div>
+
   <!-- Mobile navigation -->
   <nav class="mobile-drawer__nav">
     <div class="mobile-drawer__links">
-      @for (link of navLinks; track link.href) {
+      @for (link of navLinks; track link.href; let i = $index) {
       @let children = link.children?.length ? link.children : (link.href === '/collections' ? collectionLinks : []);
       <div class="mobile-drawer__link-block">
+        @if (isRotatingSlot(i) && rotatingLink(); as rl) {
+        <a [routerLink]="rl.href" (click)="closeMobile()" class="mobile-drawer__link">
+          {{ rl.label }}
+        </a>
+        } @else {
         <a [routerLink]="link.href" (click)="closeMobile()" class="mobile-drawer__link">
           {{ link.label | translate }}
         </a>
+        }
         @if (children?.length) {
         <div class="mobile-drawer__sublinks">
           @for (child of children; track child.href) {

@@ -119,6 +119,6 @@ export class ProductCardComponent implements OnInit {
   }
 
   getProductRoute(): string[] {
-    return ['/products', this.product.slug || this.product.id || ''];
+    return ['/productos', this.product.slug || this.product.id || ''];
   }
 }

@@ -1,47 +1,63 @@
 <article
-  class="group rounded-lg md:rounded-xl overflow-hidden bg-surface border border-ts-line shadow-lvl1 hover:shadow-lvl3 transition-all duration-300 flex flex-col h-full"
-  [class]="viewMode === 'grid' ? 'product-card-grid' : 'product-card-list'">
+  [class]="viewMode === 'grid' ? 'product-card product-card-grid' : 'product-card product-card-list'">
 
   <!-- Grid View -->
   <ng-container *ngIf="viewMode === 'grid'">
-    <a [routerLink]="getProductRoute()" class="relative block aspect-[4/3] overflow-hidden cursor-pointer">
+    <!-- Image -->
+    <a [routerLink]="getProductRoute()" class="product-card__image">
       <img [src]="product.imageUrl || 'assets/placeholder-product.jpg'"
            [alt]="product.name"
-           class="w-full h-full object-contain bg-gray-50 group-hover:scale-105 transition-transform duration-500"
+           class="product-card__img"
            loading="lazy" />
-      <!-- Stock Indicator Badge -->
+      <div class="product-card__overlay"></div>
+      <div class="product-card__hover-indicator">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </div>
       @if (showStockIndicator) {
-        <span class="absolute top-3 left-3 px-2 py-1 text-xs font-semibold rounded-md border" [class]="stockIndicatorClass">
+        <span class="product-card__stock-badge" [ngClass]="stockIndicatorClass">
           {{ stockIndicatorText }}
         </span>
       }
     </a>
-    <div class="p-6 space-y-3 flex flex-col flex-1">
-      <h3 class="font-serif text-xl text-ts-ink">{{ product.name }}</h3>
 
-      <!-- Star Rating -->
+    <!-- Content -->
+    <div class="product-card__content">
+      @if (product.tags && product.tags.length > 0) {
+        <span class="product-card__label">{{ product.tags[0] }}</span>
+      } @else {
+        <span class="product-card__label">Engraved Gift</span>
+      }
+
+      <h3 class="product-card__title">{{ product.name }}</h3>
+
+      @if (product.price) {
+        <p class="product-card__price">${{ product.price | number:'1.0-0' }}</p>
+      }
+
       @if (hasReviews) {
-        <div class="flex items-center gap-2">
-          <div class="flex items-center gap-0.5">
+        <div class="product-card__stars">
+          <div class="product-card__stars-row">
             @for (star of [1, 2, 3, 4, 5]; track star) {
-              <svg class="w-4 h-4" [class]="getStarClass(star)" fill="currentColor" viewBox="0 0 20 20">
+              <svg class="w-3.5 h-3.5" [class]="getStarClass(star)" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
               </svg>
             }
           </div>
-          <span class="text-xs text-ts-ink-soft">({{ totalReviews }})</span>
+          <span class="product-card__review-count">({{ totalReviews }})</span>
         </div>
       }
 
-      <div class="flex items-center justify-between pt-2 mt-auto">
-        <a [routerLink]="getProductRoute()"
-           class="text-accent hover:underline font-medium transition-colors">
-          {{ 'product.view_details' | translate }} →
+      <div class="product-card__actions">
+        <a [routerLink]="getProductRoute()" class="product-card__cta">
+          Shop now →
         </a>
         <button (click)="add()"
                 [disabled]="adding && !hasVariants()"
-                class="px-4 py-2 rounded-md bg-primary text-neutral shadow-lvl1 hover:shadow-lvl2 transition disabled:opacity-50"
-                [class.animate-pulse]="adding">
+                class="product-card__add-btn"
+                [class.adding]="adding">
           {{ (hasVariants() ? 'product.select_variant' : (adding ? 'product.added' : 'product.add_to_cart')) | translate }}
         </button>
       </div>
@@ -50,51 +66,54 @@
 
   <!-- List View -->
   <ng-container *ngIf="viewMode === 'list'">
-    <div class="flex gap-6">
-      <a [routerLink]="getProductRoute()" class="relative block w-48 aspect-[4/3] overflow-hidden rounded-xl cursor-pointer">
-        <img [src]="product.imageUrl || 'assets/placeholder-product.jpg'"
-             [alt]="product.name"
-             class="w-full h-full object-contain bg-gray-50 group-hover:scale-105 transition-transform duration-500"
-             loading="lazy" />
-        <!-- Stock Indicator Badge (List View) -->
-        @if (showStockIndicator) {
-          <span class="absolute top-2 left-2 px-2 py-1 text-xs font-semibold rounded-md border" [class]="stockIndicatorClass">
-            {{ stockIndicatorText }}
-          </span>
-        }
-      </a>
-      <div class="flex-1 p-6 space-y-3">
-        <h3 class="font-serif text-2xl text-ts-ink">{{ product.name }}</h3>
-
-        <!-- Star Rating (List View) -->
-        @if (hasReviews) {
-          <div class="flex items-center gap-2">
-            <div class="flex items-center gap-0.5">
-              @for (star of [1, 2, 3, 4, 5]; track star) {
-                <svg class="w-4 h-4" [class]="getStarClass(star)" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                </svg>
-              }
-            </div>
-            <span class="text-xs text-ts-ink-soft">({{ totalReviews }})</span>
+    <a [routerLink]="getProductRoute()" class="product-card__image product-card__image--list">
+      <img [src]="product.imageUrl || 'assets/placeholder-product.jpg'"
+           [alt]="product.name"
+           class="product-card__img"
+           loading="lazy" />
+      <div class="product-card__overlay"></div>
+      @if (showStockIndicator) {
+        <span class="product-card__stock-badge" [ngClass]="stockIndicatorClass">
+          {{ stockIndicatorText }}
+        </span>
+      }
+    </a>
+    <div class="product-card__content product-card__content--list">
+      @if (product.tags && product.tags.length > 0) {
+        <span class="product-card__label">{{ product.tags[0] }}</span>
+      } @else {
+        <span class="product-card__label">Engraved Gift</span>
+      }
+      <h3 class="product-card__title product-card__title--list">{{ product.name }}</h3>
+      @if (product.price) {
+        <p class="product-card__price">${{ product.price | number:'1.0-0' }}</p>
+      }
+      @if (hasReviews) {
+        <div class="product-card__stars">
+          <div class="product-card__stars-row">
+            @for (star of [1, 2, 3, 4, 5]; track star) {
+              <svg class="w-4 h-4" [class]="getStarClass(star)" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+              </svg>
+            }
           </div>
-        }
-
-        <div class="flex items-center justify-between">
-          <a [routerLink]="getProductRoute()"
-             class="inline-flex items-center px-6 py-3 ring-2 ring-primary text-accent rounded-full font-semibold hover:bg-primary hover:text-neutral transition-colors">
-            {{ 'product.view_details' | translate }}
-            <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-            </svg>
-          </a>
-          <button (click)="add()"
-                  [disabled]="adding && !hasVariants()"
-                  class="px-6 py-3 bg-primary text-neutral rounded-full font-semibold shadow-lvl1 hover:shadow-lvl2 transition-colors disabled:opacity-50"
-                  [class.animate-pulse]="adding">
-            {{ (hasVariants() ? 'product.select_variant' : (adding ? 'product.added' : 'product.add_to_cart')) | translate }}
-          </button>
+          <span class="product-card__review-count">({{ totalReviews }})</span>
         </div>
+      }
+      <div class="product-card__actions">
+        <a [routerLink]="getProductRoute()"
+           class="inline-flex items-center gap-2 px-6 py-2.5 border-2 border-ts-accent text-ts-accent rounded-full font-semibold text-sm hover:bg-ts-accent hover:text-white transition-all">
+          {{ 'product.view_details' | translate }}
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </a>
+        <button (click)="add()"
+                [disabled]="adding && !hasVariants()"
+                class="px-6 py-2.5 bg-ts-accent text-white rounded-full font-semibold text-sm shadow-sm hover:opacity-90 transition disabled:opacity-50"
+                [class.animate-pulse]="adding">
+          {{ (hasVariants() ? 'product.select_variant' : (adding ? 'product.added' : 'product.add_to_cart')) | translate }}
+        </button>
       </div>
     </div>
   </ng-container>

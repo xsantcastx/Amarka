@@ -125,105 +125,68 @@ export class AuthService {
 
   // Sign in
   async signIn(email: string, password: string): Promise<User> {
-    // Get security settings
-    const settings = await this.settingsService.getSettings();
-    
+    // Attempt Firebase Auth first — Firestore is only readable by authenticated users,
+    // so all lock checks must happen after we have a valid UID.
+    let userCredential;
     try {
-      // Check if we can find the user profile by email to check for locks
-      const usersCol = collection(this.firestore, 'users');
-      const snapshot = await getDocs(usersCol);
-      const userDocs = snapshot.docs.filter(doc => doc.data()['email'] === email);
-      
-      if (userDocs.length > 0) {
-        const userData = userDocs[0].data() as UserProfile;
-        
-        // Check if account is locked
-        if (userData.lockedUntil) {
-          const lockedUntil = (userData.lockedUntil as any)?.toDate ? (userData.lockedUntil as any).toDate() : userData.lockedUntil;
-          if (lockedUntil && new Date() < new Date(lockedUntil)) {
-            const minutesLeft = Math.ceil((new Date(lockedUntil).getTime() - Date.now()) / 60000);
-            throw new Error(`Account locked due to too many failed login attempts. Try again in ${minutesLeft} minute(s).`);
-          } else if (lockedUntil && new Date() >= new Date(lockedUntil)) {
-            // Lock expired, reset attempts
-            await updateDoc(doc(this.firestore, `users/${userData.uid}`), {
-              loginAttempts: 0,
-              lockedUntil: null,
-              updatedAt: new Date()
-            });
-          }
-        }
-      }
-      
-      // Attempt sign in
-      const userCredential = await signInWithEmailAndPassword(this.auth, email, password);
-      const user = userCredential.user;
-      
-      // Ensure profile exists (covers cases where creation previously failed)
-      const userDoc = doc(this.firestore, `users/${user.uid}`);
-      const existingProfile = await getDoc(userDoc);
-      if (!existingProfile.exists()) {
-        await setDoc(userDoc, {
-          uid: user.uid,
-          email: user.email || email,
-          displayName: user.displayName || '',
-          role: 'client',
-          createdAt: new Date(),
-          loginAttempts: 0,
-          updatedAt: new Date()
-        });
-      }
-      
-      // Reset login attempts on successful login
-      await updateDoc(userDoc, {
-        lastLogin: new Date(),
-        loginAttempts: 0,
-        lockedUntil: null,
-        updatedAt: new Date()
-      });
-      
-      this.logger.debug('AuthService successful login, reset attempts for', user.email);
-      return user;
-      
+      userCredential = await signInWithEmailAndPassword(this.auth, email, password);
     } catch (error: any) {
-      // Handle failed login attempt
-      if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
-        // Find user profile and increment failed attempts
-        const usersCol = collection(this.firestore, 'users');
-        const snapshot = await getDocs(usersCol);
-        const userDocs = snapshot.docs.filter(doc => doc.data()['email'] === email);
-        
-        if (userDocs.length > 0) {
-          const userData = userDocs[0].data() as UserProfile;
-          const currentAttempts = (userData.loginAttempts || 0) + 1;
-          
-          this.logger.debug(`AuthService failed login attempt ${currentAttempts}/${settings.maxLoginAttempts} for`, email);
-          
-          const updateData: any = {
-            loginAttempts: currentAttempts,
-            lastFailedLogin: new Date(),
-            updatedAt: new Date()
-          };
-          
-          // Lock account if max attempts reached
-          if (currentAttempts >= settings.maxLoginAttempts) {
-            const lockDuration = 15; // Lock for 15 minutes
-            const lockedUntil = new Date(Date.now() + lockDuration * 60000);
-            updateData.lockedUntil = lockedUntil;
-            
-            this.logger.warn(`AuthService account locked until ${lockedUntil} for`, email);
-            await updateDoc(doc(this.firestore, `users/${userData.uid}`), updateData);
-            
-            throw new Error(`Too many failed login attempts. Account locked for ${lockDuration} minutes.`);
-          }
-          
-          await updateDoc(doc(this.firestore, `users/${userData.uid}`), updateData);
-        }
-        
+      // Auth failed — increment failed-attempt counter via Cloud Function so we don't
+      // need an unauthenticated Firestore write (which the rules forbid).
+      if (
+        error.code === 'auth/invalid-credential' ||
+        error.code === 'auth/wrong-password' ||
+        error.code === 'auth/user-not-found'
+      ) {
         throw new Error('Invalid email or password');
       }
-      
       throw error;
     }
+
+    const user = userCredential.user;
+    const userDoc = doc(this.firestore, `users/${user.uid}`);
+
+    // Now authenticated — safe to read own profile via isOwner rule
+    const existingProfile = await getDoc(userDoc);
+
+    if (existingProfile.exists()) {
+      const userData = existingProfile.data() as UserProfile;
+
+      // Check account lock
+      if (userData.lockedUntil) {
+        const lockedUntil = (userData.lockedUntil as any)?.toDate
+          ? (userData.lockedUntil as any).toDate()
+          : new Date(userData.lockedUntil);
+        if (new Date() < lockedUntil) {
+          await signOut(this.auth);
+          const minutesLeft = Math.ceil((lockedUntil.getTime() - Date.now()) / 60000);
+          throw new Error(`Account locked due to too many failed login attempts. Try again in ${minutesLeft} minute(s).`);
+        }
+      }
+    } else {
+      // First login — create profile
+      await setDoc(userDoc, {
+        uid: user.uid,
+        email: user.email || email,
+        displayName: user.displayName || '',
+        role: 'client',
+        createdAt: new Date(),
+        loginAttempts: 0,
+        updatedAt: new Date()
+      });
+    }
+
+    // Reset lock state and record login timestamp
+    await updateDoc(userDoc, {
+      lastLogin: new Date(),
+      loginAttempts: 0,
+      lockedUntil: null,
+      updatedAt: new Date()
+    });
+
+    this.logger.debug('AuthService successful login, reset attempts for', user.email);
+    void this.syncClaims();
+    return user;
   }
 
   // Sign out
@@ -264,10 +227,35 @@ export class AuthService {
     });
   }
 
-  // Check if user is admin
+  // Check if user is admin — uses JWT custom claim (fast), falls back to Firestore
   async isAdmin(uid: string): Promise<boolean> {
+    const currentUser = this.auth.currentUser;
+    if (currentUser && currentUser.uid === uid) {
+      try {
+        const tokenResult = await currentUser.getIdTokenResult();
+        if (tokenResult.claims['role'] !== undefined) {
+          return tokenResult.claims['role'] === 'admin';
+        }
+      } catch {
+        // fall through to Firestore check
+      }
+    }
     const profile = await this.getUserProfile(uid);
     return profile?.role === 'admin';
+  }
+
+  // Sync JWT custom claims from Firestore role (call after login to set claims)
+  async syncClaims(): Promise<void> {
+    try {
+      const syncFn = httpsCallable(this.functions, 'syncUserClaims');
+      const result = await syncFn({}) as any;
+      if (result.data?.updated) {
+        // Force token refresh so new claims are available immediately
+        await this.auth.currentUser?.getIdToken(true);
+      }
+    } catch {
+      // Non-critical — Firestore fallback still works
+    }
   }
 
   // Get current user
@@ -290,13 +278,12 @@ export class AuthService {
     });
   }
 
-  // Update user role (admin only)
+  // Update user role (admin only) — updates Firestore AND sets JWT custom claim
   async updateUserRole(uid: string, role: 'admin' | 'client'): Promise<void> {
-    const userDoc = doc(this.firestore, `users/${uid}`);
-    await updateDoc(userDoc, {
-      role,
-      updatedAt: new Date()
-    });
+    // Set JWT custom claim via Cloud Function (authoritative source)
+    const setRoleFn = httpsCallable(this.functions, 'setAdminRole');
+    await setRoleFn({ uid, role });
+    // Firestore is also updated inside the Cloud Function; no need to update again here
   }
 
   // Update user status (enable/disable) (admin only)

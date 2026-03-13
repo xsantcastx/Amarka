@@ -23,20 +23,21 @@
   --font-mono: "JetBrains Mono", "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 
   /* Core Colors (space-separated RGB for Tailwind variable support) */
-  --color-primary: 168 197 164;
-  /* sage */
-  --color-secondary: 232 184 200;
-  /* blush */
-  --color-accent: 63 95 71;
-  /* forest */
-  --color-neutral: 29 42 57;
-  /* ink */
+  --color-primary: 0 113 227;
+  /* apple blue */
+  --color-secondary: 0 125 250;
+  /* apple blue alt */
+  --color-accent: 110 110 115;
+  /* apple secondary label gray */
+  --color-neutral: 29 29 31;
+  /* apple near-black */
   --color-surface: 255 255 255;
-  --color-background: 250 246 240;
-  /* ivory */
+  --color-background: 245 245 247;
+  /* apple light bg */
 
   /* Semantic */
-  --color-success: 46 204 113;
+  --color-success: 0 113 227;
+  /* brand blue — keeps success states on-theme */
   --color-warning: 241 196 15;
   --color-error: 231 76 60;
 
@@ -62,29 +63,28 @@
 
   /* Legacy + surface tokens derived from palette */
   --ts-bg: rgb(var(--color-background));
-  --ts-bg-soft: color-mix(in srgb, rgb(var(--color-background)) 85%, rgb(var(--color-surface)) 15%);
+  --ts-bg-soft: color-mix(in srgb, rgb(var(--color-background)) 70%, rgb(var(--color-surface)) 30%);
   --ts-ink: rgb(var(--color-neutral));
-  --ts-ink-soft: color-mix(in srgb, rgb(var(--color-neutral)) 70%, rgb(var(--color-accent)) 30%);
+  --ts-ink-soft: color-mix(in srgb, rgb(var(--color-neutral)) 60%, rgb(var(--color-accent)) 40%);
   --ts-accent: rgb(var(--color-primary));
-  --ts-accent-soft: color-mix(in srgb, rgb(var(--color-primary)) 70%, rgb(var(--color-surface)) 30%);
-  --ts-accent-dark: color-mix(in srgb, rgb(var(--color-primary)) 75%, rgb(var(--color-accent)) 25%);
-  --ts-line: color-mix(in srgb, rgb(var(--color-primary)) 35%, transparent);
+  --ts-accent-soft: color-mix(in srgb, rgb(var(--color-primary)) 24%, rgb(var(--color-surface)) 76%);
+  --ts-accent-dark: color-mix(in srgb, rgb(var(--color-primary)) 82%, black 18%);
+  --ts-line: rgba(0, 0, 0, 0.08);
   --ts-paper: rgb(var(--color-surface));
 
   /* Brand aliases */
   --bitcoin-orange: var(--ts-accent);
   /* compatibility with legacy styles */
-  --bitcoin-gold: color-mix(in srgb, rgb(var(--color-primary)) 80%, rgb(var(--color-surface)) 20%);
-  --luxury-gold: color-mix(in srgb, rgb(var(--color-primary)) 75%, rgb(var(--color-accent)) 25%);
+  --bitcoin-gold: color-mix(in srgb, rgb(var(--color-primary)) 62%, rgb(var(--color-surface)) 38%);
+  --luxury-gold: color-mix(in srgb, rgb(var(--color-primary)) 82%, rgb(var(--color-secondary)) 18%);
   --accent-warm: rgb(var(--color-secondary));
-  /* rose blush accent */
-  --forest-green: rgb(var(--color-accent));
+  --forest-green: rgb(var(--color-secondary));
 
-  --surface-glass: color-mix(in srgb, var(--ts-paper) 92%, rgba(0, 0, 0, 0.02));
-  --surface-border: color-mix(in srgb, rgb(var(--color-primary)) 35%, transparent);
-  --shadow-soft: 0 28px 60px -35px rgba(29, 42, 57, 0.25);
-  --shadow-hover: 0 18px 40px -30px rgba(29, 42, 57, 0.28);
-  --shadow-focus: 0 0 0 1px color-mix(in srgb, var(--ts-accent) 45%, transparent), 0 18px 42px -30px rgba(29, 42, 57, 0.32);
+  --surface-glass: color-mix(in srgb, var(--ts-paper) 97%, rgb(var(--color-background)) 3%);
+  --surface-border: rgba(0, 0, 0, 0.10);
+  --shadow-soft: 0 28px 60px -38px rgba(0, 0, 0, 0.12);
+  --shadow-hover: 0 22px 46px -34px rgba(0, 0, 0, 0.16);
+  --shadow-focus: 0 0 0 3px color-mix(in srgb, var(--ts-accent) 30%, transparent), 0 18px 42px -30px rgba(0, 0, 0, 0.18);
   --nav-height: 6.5rem;
   --content-offset: clamp(2.5rem, 6vw, 3.75rem);
   --section-spacing: clamp(3rem, 8vw, 5rem);
@@ -92,11 +92,11 @@
 
   /* Button tokens (driven by theme manager button style) */
   --btn-primary-bg: var(--ts-accent);
-  --btn-primary-text: var(--on-primary, #1d2a39);
-  --btn-primary-border: color-mix(in srgb, var(--ts-accent) 45%, transparent);
-  --btn-primary-shadow: 0 12px 30px -22px rgba(29, 42, 57, 0.35);
-  --btn-primary-hover-bg: color-mix(in srgb, var(--ts-accent) 88%, #000 12%);
-  --btn-primary-hover-shadow: 0 14px 32px -20px rgba(29, 42, 57, 0.4);
+  --btn-primary-text: var(--on-primary, #ffffff);
+  --btn-primary-border: color-mix(in srgb, var(--ts-accent) 70%, transparent);
+  --btn-primary-shadow: 0 4px 16px -4px rgba(0, 113, 227, 0.32);
+  --btn-primary-hover-bg: color-mix(in srgb, var(--ts-accent) 90%, #000 10%);
+  --btn-primary-hover-shadow: 0 6px 20px -4px rgba(0, 113, 227, 0.40);
 }
 
 :root[data-theme-button-style="outline"] {
@@ -336,8 +336,11 @@
 
 /* Bitcoin Mining Luxurious Background */
 body {
-  background-color: #0b0d10;
-  background-image: radial-gradient(140% 140% at 22% 18%, color-mix(in srgb, var(--ts-accent-soft) 12%, #0b0d10) 0%, color-mix(in srgb, #0b0d10 92%, #06080d 8%) 45%, #050609 100%);
+  background-color: var(--ts-bg);
+  background-image:
+    radial-gradient(120% 120% at 0% 0%, color-mix(in srgb, var(--luxury-gold) 10%, var(--ts-bg) 90%) 0%, transparent 44%),
+    radial-gradient(120% 120% at 100% 0%, color-mix(in srgb, var(--accent-warm) 7%, var(--ts-bg) 93%) 0%, transparent 40%),
+    linear-gradient(180deg, color-mix(in srgb, var(--ts-paper) 35%, var(--ts-bg) 65%) 0%, var(--ts-bg) 28%, var(--ts-paper) 100%);
   color: var(--ts-ink);
   font-family: var(--font-sans);
   position: relative;
@@ -411,12 +414,12 @@ div {
 
 /* Ensure links are visible but softer by default */
 a {
-  color: var(--ts-accent-soft);
-  text-decoration-color: color-mix(in srgb, var(--ts-accent-soft) 35%, transparent);
+  color: var(--ts-accent);
+  text-decoration-color: color-mix(in srgb, var(--ts-accent) 35%, transparent);
 }
 
 a:not([class*="text-"]):not([class*="bg-"]) {
-  color: var(--ts-accent-soft);
+  color: var(--ts-accent);
 }
 
 a:hover,
@@ -433,23 +436,23 @@ body::before {
   width: 100%;
   height: 100%;
   background:
-    radial-gradient(circle at 18% 42%, color-mix(in srgb, var(--ts-accent-soft) 14%, transparent) 0%, transparent 52%),
-    radial-gradient(circle at 78% 78%, color-mix(in srgb, var(--accent-warm) 12%, transparent) 0%, transparent 55%),
-    radial-gradient(circle at 46% 18%, color-mix(in srgb, #4a9eff 8%, transparent) 0%, transparent 50%);
+    radial-gradient(circle at 18% 42%, color-mix(in srgb, var(--luxury-gold) 7%, transparent) 0%, transparent 52%),
+    radial-gradient(circle at 78% 78%, color-mix(in srgb, var(--accent-warm) 7%, transparent) 0%, transparent 55%),
+    radial-gradient(circle at 46% 18%, color-mix(in srgb, var(--luxury-gold) 8%, transparent) 0%, transparent 50%);
   pointer-events: none;
   z-index: 0;
-  filter: saturate(0.85);
+  filter: saturate(0.92);
 }
 
 /* Luxurious overlay effect for content sections */
 .luxury-overlay {
   position: relative;
-  background: linear-gradient(145deg, color-mix(in srgb, var(--surface-glass) 92%, transparent) 0%, color-mix(in srgb, var(--ts-bg-soft) 88%, transparent) 100%);
-  backdrop-filter: blur(18px);
-  border: 1px solid color-mix(in srgb, var(--ts-accent) 18%, transparent);
+  background: linear-gradient(145deg, color-mix(in srgb, var(--surface-glass) 99%, transparent) 0%, color-mix(in srgb, var(--ts-bg-soft) 96%, transparent) 100%);
+  backdrop-filter: blur(10px);
+  border: 1px solid color-mix(in srgb, var(--ts-line) 90%, transparent);
   box-shadow:
     var(--shadow-soft),
-    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    inset 0 1px 0 rgba(255, 255, 255, 0.45);
 }
 
 .luxury-overlay::before {
@@ -460,12 +463,12 @@ body::before {
   right: 0;
   height: 1px;
   background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--ts-accent) 40%, transparent), transparent);
-  opacity: 0.75;
+  opacity: 0.5;
 }
 
 /* Gradient text for headers */
 .bitcoin-gradient-text {
-  color: var(--ts-accent-soft);
+  color: var(--ts-accent);
   background: none;
   -webkit-background-clip: initial;
   -webkit-text-fill-color: currentColor;
@@ -476,8 +479,8 @@ body::before {
 
 /* Bitcoin-themed glow effects */
 .bitcoin-glow {
-  text-shadow: 0 16px 32px color-mix(in srgb, var(--ts-accent) 18%, transparent);
-  filter: drop-shadow(0 12px 28px color-mix(in srgb, var(--ts-accent) 14%, transparent));
+  text-shadow: 0 14px 28px color-mix(in srgb, var(--ts-accent) 12%, transparent);
+  filter: drop-shadow(0 8px 20px color-mix(in srgb, var(--ts-accent) 10%, transparent));
 }
 
 .menu-surface,
@@ -662,13 +665,14 @@ a:hover {
   }
 
   .ts-btn-success {
-    background-color: #16a34a;
+    background-color: var(--btn-primary-bg);
     background-image: none;
-    color: var(--on-primary);
-    box-shadow: 0 16px 32px -24px color-mix(in srgb, #22c55e 28%, transparent);
+    color: var(--btn-primary-text);
+    box-shadow: var(--btn-primary-shadow);
   }
 
   .ts-btn-success:hover {
+    background-color: var(--btn-primary-hover-bg);
     filter: brightness(1.05);
   }
 
@@ -1173,13 +1177,6 @@ td {
   color: #f5f5f7 !important;
 }
 
-/* Override any remaining dark text */
-.text-gray-900,
-.text-gray-800,
-.text-gray-700 {
-  color: #f5f5f7 !important;
-}
-
 /* ========================================
    HIGH-QUALITY IMAGE RENDERING
    ======================================== */
@@ -1311,4 +1308,64 @@ button .app-spinner::before,
     transform: scale(1.06);
     opacity: 1;
   }
+}
+
+/* ============================================================
+   Laser-trace animation — engraving preview reveal
+   Usage: add class="engraving-reveal" to the preview container
+   ============================================================ */
+@keyframes laser-trace {
+  0% {
+    clip-path: inset(0 100% 0 0);
+    opacity: 0.7;
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    clip-path: inset(0 0% 0 0);
+    opacity: 1;
+  }
+}
+
+@keyframes laser-glow {
+  0%, 100% {
+    box-shadow:
+      0 0 0 0 transparent,
+      inset 0 0 8px rgba(201, 168, 76, 0);
+  }
+  20% {
+    box-shadow:
+      0 0 18px 4px rgba(201, 168, 76, 0.45),
+      inset 0 0 12px rgba(201, 168, 76, 0.15);
+  }
+  80% {
+    box-shadow:
+      0 0 10px 2px rgba(201, 168, 76, 0.2),
+      inset 0 0 6px rgba(201, 168, 76, 0.08);
+  }
+}
+
+.engraving-reveal {
+  animation:
+    laser-trace 1.1s cubic-bezier(0.4, 0, 0.2, 1) forwards,
+    laser-glow 1.1s ease-out forwards;
+}
+
+/* Scanline effect — optional inner element for the moving laser cursor */
+@keyframes laser-scan {
+  from { left: 0; opacity: 1; }
+  to   { left: 100%; opacity: 0; }
+}
+
+.engraving-reveal__cursor {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(180deg, transparent 0%, rgba(201, 168, 76, 0.9) 40%, rgba(255, 220, 100, 1) 50%, rgba(201, 168, 76, 0.9) 60%, transparent 100%);
+  filter: blur(1px);
+  pointer-events: none;
+  animation: laser-scan 1.1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  z-index: 2;
 }

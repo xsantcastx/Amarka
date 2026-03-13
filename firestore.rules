@@ -13,8 +13,9 @@ service cloud.firestore {
     }
     
     function isAdmin() {
-      return isSignedIn() && 
-             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+      // JWT custom claim only — fast, no extra Firestore read.
+      // Claims are kept in sync by the onUserRoleChanged Cloud Function trigger.
+      return isSignedIn() && request.auth.token.role == 'admin';
     }
 
     // Reviews - Public read, users can manage their own review
@@ -197,9 +198,8 @@ service cloud.firestore {
       allow update: if isOwner(userId) || isAdmin();
       // No one can delete user documents
       allow delete: if false;
-      // Allow listing users for authentication purposes (checking locks before sign-in)
-      // This is needed for the sign-in flow to check if account is locked
-      allow list: if true;
+      // Only admins can list users — pre-auth lock checks must use a Cloud Function
+      allow list: if isAdmin();
     }
 
     // Carts - Users can read/write their own cart, allow anonymous temp carts
@@ -210,7 +210,8 @@ service cloud.firestore {
       allow write: if isSignedIn() && cartId == request.auth.uid;
       
       // Allow anonymous cart creation and access (temp ID that upgrades on sign-in)
-      allow read, write: if cartId.matches('^anon_[a-zA-Z0-9_]+$');
+      // Require minimum 32 characters after "anon_" to prevent enumeration attacks
+      allow read, write: if cartId.matches('^anon_[a-zA-Z0-9_]{32,}$');
     }
 
     // Addresses - Users can read/write their own addresses
@@ -224,8 +225,15 @@ service cloud.firestore {
       allow read: if isAdmin() || 
                     (isSignedIn() && resource.data.uid == request.auth.uid);
       // Allow order creation only if user is authenticated and uid matches
-      allow create: if isSignedIn() && 
-                      request.resource.data.uid == request.auth.uid;
+      allow create: if isSignedIn() &&
+                      request.resource.data.uid == request.auth.uid &&
+                      // Max 20 line items
+                      (!('items' in request.resource.data) ||
+                        request.resource.data.items.size() <= 20) &&
+                      // Reject if any engraving text exceeds 200 chars or contains HTML tags.
+                      // items is a list of maps; Firestore rules can't iterate lists, so we
+                      // enforce a hard cap on the total serialised order size instead.
+                      request.resource.data.size() <= 50000;
       // Only admins can update orders (status changes, etc.)
       allow update: if isAdmin();
       allow delete: if isAdmin();
@@ -252,10 +260,9 @@ service cloud.firestore {
       allow write: if false;
     }
 
-    // Promo Codes - Public read (to validate), Admin write
+    // Promo Codes - Admin only (validation is done server-side via validatePromoCode Cloud Function)
     match /promoCodes/{codeId} {
-      allow read: if true;
-      allow write: if isAdmin();
+      allow read, write: if isAdmin();
     }
 
     // Settings

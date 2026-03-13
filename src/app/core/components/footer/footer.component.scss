@@ -1,5 +1,27 @@
+.footer-shell {
+  position: relative;
+}
+
+.footer-surface {
+  padding: clamp(1.75rem, 4vw, 2.75rem);
+  border-radius: 2rem;
+  background:
+    linear-gradient(145deg, color-mix(in srgb, var(--ts-paper) 98%, transparent) 0%, color-mix(in srgb, var(--ts-bg-soft) 94%, transparent) 100%);
+  border: 1px solid color-mix(in srgb, var(--ts-line) 92%, transparent);
+  box-shadow: 0 24px 44px -34px rgba(23, 22, 26, 0.14);
+}
+
+.footer__eyebrow {
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ts-ink-soft);
+}
+
 .footer__heading {
   @apply text-ts-ink font-semibold text-base mb-3;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .footer__links {
@@ -21,15 +43,15 @@
   width: 2.5rem;
   height: 2.5rem;
   border-radius: 999px;
-  background: color-mix(in srgb, var(--ts-accent, #d8c9a6) 18%, transparent);
-  border: 1px solid color-mix(in srgb, var(--ts-line, rgba(0, 0, 0, 0.08)) 60%, transparent);
+  background: color-mix(in srgb, var(--ts-accent, #9f6b3d) 9%, var(--ts-paper));
+  border: 1px solid color-mix(in srgb, var(--ts-line, rgba(0, 0, 0, 0.08)) 90%, transparent);
   color: var(--ts-ink, #1d2a39);
   transition: all 0.18s ease;
-  box-shadow: 0 10px 26px -20px rgba(29, 42, 57, 0.35);
+  box-shadow: 0 10px 20px -18px rgba(23, 22, 26, 0.14);
 
   &:hover {
-    background: color-mix(in srgb, var(--ts-accent, #d8c9a6) 28%, transparent);
+    background: color-mix(in srgb, var(--ts-accent, #9f6b3d) 14%, var(--ts-paper));
     transform: translateY(-2px);
-    box-shadow: 0 14px 30px -18px rgba(29, 42, 57, 0.38);
+    box-shadow: 0 14px 24px -18px rgba(23, 22, 26, 0.18);
   }
 }

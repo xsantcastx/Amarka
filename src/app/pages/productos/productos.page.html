@@ -190,96 +190,9 @@
           <p class="text-lg text-ts-ink-soft">{{ sectionSubtitleKey | translate }}</p>
         </div>
         
-        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
           @for (producto of filteredProducts; track producto.slug) {
-            <article
-              class="group relative flex h-full cursor-pointer flex-col overflow-hidden rounded-2xl border border-ts-line bg-ts-paper shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-ts-accent/50 hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ts-accent"
-              tabindex="0"
-              role="link"
-              [attr.aria-label]="producto.name"
-              (click)="goToProduct(producto)"
-              (keydown.enter)="goToProduct(producto, $event)"
-              (keydown.space)="goToProduct(producto, $event)">
-              <div class="aspect-[4/3] overflow-hidden bg-ts-bg-soft">
-                @if (producto.imageUrl) {
-                  <img
-                    [src]="producto.imageUrl"
-                    [alt]="producto.name"
-                    class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    loading="lazy"/>
-                } @else {
-                  <div class="flex h-full w-full items-center justify-center text-white/40">
-                    <svg class="h-12 w-12" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                    </svg>
-                  </div>
-                }
-              </div>
-              <div class="flex flex-1 flex-col p-6">
-                <h3 class="mb-3 font-serif text-2xl tracking-tight text-ts-ink">{{producto.name}}</h3>
-
-                <!-- Category and Model Badges -->
-                <div class="mb-4 flex flex-wrap gap-2">
-                  @if (getCategoryName(producto.categoryId)) {
-                    <span class="rounded border border-ts-accent/30 bg-ts-accent/10 px-2 py-1 text-xs font-medium uppercase tracking-wide text-ts-ink">
-                      {{getCategoryName(producto.categoryId)}}
-                    </span>
-                  }
-                  @if (getModelName(producto.modelId)) {
-                    <span class="rounded border border-ts-accent/30 bg-ts-accent/10 px-2 py-1 text-xs font-medium uppercase tracking-wide text-ts-ink">
-                      {{getModelName(producto.modelId)}}
-                    </span>
-                  }
-                </div>
-
-                <!-- Stock Badge -->
-                
-
-                @let priceInfo = getDisplayPrice(producto);
-                @if (priceInfo) {
-                  <p class="mb-6 text-lg font-semibold text-ts-ink">
-                    @if (priceInfo.isFrom) {
-                      <span class="text-xs uppercase tracking-wide text-ts-ink-soft mr-1">{{ 'product.from' | translate }}</span>
-                    }
-                    {{priceInfo.price | currency:'USD':'symbol':'1.2-2'}}
-                  </p>
-                }
-
-                <div class="mt-auto flex items-center justify-between gap-3 pt-2">
-                  <div class="inline-flex items-center gap-2 text-sm font-semibold text-ts-accent transition-colors group-hover:text-ts-ink">
-                    <span>View product</span>
-                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                    </svg>
-                  </div>
-                  <button
-                    (click)="addToCart(producto, $event)"
-                    [disabled]="addingProductId === (producto.id || producto.slug)"
-                    class="inline-flex items-center justify-center rounded-lg border border-ts-accent/50 bg-ts-accent px-4 py-2 text-sm font-semibold text-ts-ink transition-colors hover:bg-ts-accent/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ts-accent disabled:opacity-70 disabled:cursor-not-allowed">
-                    @if (addingProductId === (producto.id || producto.slug)) {
-                      <span class="flex items-center gap-2">
-                        <span class="h-4 w-4 rounded-full border-2 border-ts-ink border-t-transparent animate-spin"></span>
-                        <span>{{ 'common.loading' | translate }}</span>
-                      </span>
-                    } @else if (isRecentlyAdded(producto)) {
-                      <span class="flex items-center gap-2 text-green-900">
-                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                        </svg>
-                        <span>{{ 'product.added' | translate }}</span>
-                      </span>
-                    } @else {
-                      <span class="flex items-center gap-2">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                        </svg>
-                        <span>{{ hasVariants(producto) ? ('product.select_variant' | translate) : ('product.add_to_cart' | translate) }}</span>
-                      </span>
-                    }
-                  </button>
-                </div>
-              </div>
-            </article>
+            <ts-product-card [product]="producto" />
           }
         </div>
       </section>

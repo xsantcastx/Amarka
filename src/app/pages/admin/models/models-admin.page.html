@@ -107,7 +107,7 @@
             {{ selectedModels.size === 1 ? ('admin.models.bulk.selected_single' | translate) : ('admin.models.bulk.selected' | translate:{ count: selectedModels.size }) }}
           </span>
           <div class="flex items-center gap-2 flex-wrap">
-            <button (click)="bulkActivate()" class="px-3 py-1.5 text-sm bg-green-100 border border-green-200 text-ts-ink rounded-full hover:bg-green-200 transition-all">
+            <button (click)="bulkActivate()" class="px-3 py-1.5 text-sm bg-primary/10 border border-primary/20 text-ts-ink rounded-full hover:bg-primary/20 transition-all">
               {{ 'admin.models.bulk.activate' | translate }}
             </button>
             <button (click)="bulkDeactivate()" class="px-3 py-1.5 text-sm bg-amber-100 border border-amber-200 text-amber-800 rounded-full hover:bg-amber-200 transition-all">
@@ -195,7 +195,7 @@
                       </td>
                       <td class="px-6 py-4 whitespace-nowrap">
                         @if (model.active !== false) {
-                          <span class="text-xs px-2 py-0.5 rounded-full border bg-green-100 text-green-900 border-green-300">
+                          <span class="text-xs px-2 py-0.5 rounded-full border bg-primary/10 text-primary border-primary/30">
                             {{ 'admin.models.table.active' | translate }}
                           </span>
                         } @else {
@@ -247,7 +247,7 @@
               {{ selectedCategories.size === 1 ? ('admin.models.categories.bulk.selected_single' | translate) : ('admin.models.categories.bulk.selected' | translate:{ count: selectedCategories.size }) }}
             </span>
             <div class="flex items-center gap-2 flex-wrap">
-              <button (click)="bulkActivateCategories()" class="px-3 py-1.5 text-sm bg-green-100 border border-green-200 text-ts-ink rounded-full hover:bg-green-200 transition-all">
+              <button (click)="bulkActivateCategories()" class="px-3 py-1.5 text-sm bg-primary/10 border border-primary/20 text-ts-ink rounded-full hover:bg-primary/20 transition-all">
                 {{ 'admin.models.categories.bulk.activate' | translate }}
               </button>
               <button (click)="bulkDeactivateCategories()" class="px-3 py-1.5 text-sm bg-amber-100 border border-amber-200 text-amber-800 rounded-full hover:bg-amber-200 transition-all">
@@ -317,7 +317,7 @@
                     <td class="px-6 py-4 text-sm text-ts-ink">{{ category.order ?? '-' }}</td>
                     <td class="px-6 py-4 whitespace-nowrap">
                       @if (category.active !== false) {
-                        <span class="text-xs px-2 py-0.5 rounded-full border bg-green-100 text-green-900 border-green-300">
+                        <span class="text-xs px-2 py-0.5 rounded-full border bg-primary/10 text-primary border-primary/30">
                           {{ 'admin.models.categories.table.active' | translate }}
                         </span>
                       } @else {

@@ -14,6 +14,7 @@ import {
   Timestamp,
   increment
 } from '@angular/fire/firestore';
+import { Functions, httpsCallable } from '@angular/fire/functions';
 import { Observable, from, map } from 'rxjs';
 import { PromoCode } from '../models/cart';
 
@@ -27,6 +28,7 @@ export interface PromoCodeValidationResult {
 @Injectable({ providedIn: 'root' })
 export class PromoCodeService {
   private firestore = inject(Firestore);
+  private functions = inject(Functions);
 
   /**
    * Get all promo codes
@@ -123,68 +125,46 @@ export class PromoCodeService {
   }
 
   /**
-   * Validate a promo code for use
+   * Validate a promo code via Cloud Function (server-side — Firestore not directly readable by clients)
    */
   async validatePromoCode(
     code: string,
     cartSubtotal: number,
-    userId?: string
+    _userId?: string
   ): Promise<PromoCodeValidationResult> {
     try {
-      // Find the promo code
-      const promoCode = await new Promise<PromoCode | null>((resolve, reject) => {
-        this.getPromoCodeByCode(code).subscribe({
-          next: resolve,
-          error: reject
-        });
-      });
+      const fn = httpsCallable<{ code: string; cartTotal: number }, any>(
+        this.functions,
+        'validatePromoCode'
+      );
+      const result = await fn({ code, cartTotal: cartSubtotal });
+      const data = result.data;
 
-      if (!promoCode) {
-        return { valid: false, error: 'Invalid promo code' };
-      }
-
-      // Check if active
-      if (!promoCode.active) {
-        return { valid: false, error: 'This promo code is no longer active' };
-      }
-
-      // Check validity dates
-      const now = Timestamp.now();
-      if (promoCode.validFrom && promoCode.validFrom.toMillis() > now.toMillis()) {
-        return { valid: false, error: 'This promo code is not yet valid' };
-      }
-      if (promoCode.validUntil && promoCode.validUntil.toMillis() < now.toMillis()) {
-        return { valid: false, error: 'This promo code has expired' };
-      }
-
-      // Check max uses
-      if (promoCode.maxUses && (promoCode.currentUses || 0) >= promoCode.maxUses) {
-        return { valid: false, error: 'This promo code has reached its usage limit' };
-      }
-
-      // Check minimum order amount
-      if (promoCode.minOrderAmount && cartSubtotal < promoCode.minOrderAmount) {
-        return {
-          valid: false,
-          error: `Minimum order amount of $${promoCode.minOrderAmount.toFixed(2)} required`
+      if (!data.valid) {
+        const reasonMap: Record<string, string> = {
+          not_found:     'Invalid promo code',
+          inactive:      'This promo code is no longer active',
+          not_started:   'This promo code is not yet valid',
+          expired:       'This promo code has expired',
+          exhausted:     'This promo code has reached its usage limit',
+          below_minimum: `Minimum order of $${data.minimumAmount?.toFixed(2) ?? '?'} required`,
+          invalid_format:'Invalid promo code format',
         };
-      }
-
-      // Calculate discount
-      let discountAmount: number;
-      if (promoCode.type === 'percentage') {
-        discountAmount = (cartSubtotal * promoCode.value) / 100;
-      } else {
-        discountAmount = Math.min(promoCode.value, cartSubtotal);
+        return { valid: false, error: reasonMap[data.reason] ?? 'Invalid promo code' };
       }
 
       return {
         valid: true,
-        promoCode,
-        discountAmount
+        discountAmount: data.discountAmount,
+        // Minimal PromoCode object for display purposes
+        promoCode: {
+          code: data.code,
+          type: data.type,
+          value: data.value,
+          active: true,
+        } as PromoCode,
       };
     } catch (error: any) {
-      void 0;
       return { valid: false, error: 'Error validating promo code' };
     }
   }

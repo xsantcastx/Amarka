@@ -2,7 +2,7 @@
   "nav": {
     "add_links": "Add links in brand config",
     "account_lists": "Account & Lists",
-    "search_placeholder": "Search engraved gifts, occasions, recipients...",
+    "search_placeholder": "Search gifts by recipient, occasion, or product...",
     "cart": "Cart",
     "follow_us": "Follow us",
     "language": "Language",
@@ -19,8 +19,8 @@
     "privacy": "Privacy Policy",
     "cookie_policy": "Cookie Policy",
     "terms": "Terms of Service",
-    "home": "Home",
-    "products": "Products",
+    "home": "Personalised Engraved Gifts | Amarka",
+    "products": "Shop Personalised Gifts | Amarka",
     "product_details": "Product Details",
     "checkout_review": "Checkout Review",
     "payment": "Payment",
@@ -253,15 +253,15 @@
   "home": {
     "loading": "Loading content...",
     "hero": {
-      "badge": "Leaving a MARK with LOVE",
-      "title": "Premium engraved gifts crafted to keep",
-      "subtitle": "Laser-sharp engraving on glass, wood, metal, and leather with gift-ready packaging. Fast turnaround for milestones, corporate gifts, and everyday wins.",
+      "badge": "Leaving a Mark with Love",
+      "title": "Gifts that leave a mark.",
+      "subtitle": "Engraved gifts for every milestone. Premium materials, gift-ready packaging, fast dispatch.",
       "view_collection": "View collection",
       "rush_badge": "Rush",
       "rush_title": "Rush engraving",
       "rush_subtitle": "Priority production & ship",
-      "cta_collections": "Shop collections",
-      "cta_products": "Browse all products",
+      "cta_collections": "Shop gifts",
+      "cta_products": "See all products",
       "fast": "Fast engraving & dispatch",
       "packaging": "Gift-ready packaging",
       "view_product": "View product"
@@ -273,8 +273,8 @@
     },
     "featured": {
       "badge": "Curated picks",
-      "title": "Featured personalised gifts",
-      "subtitle": "Best sellers and new arrivals, ready to engrave.",
+      "title": "Gifts they'll keep forever",
+      "subtitle": "Personalised pieces, ready to engrave and ship.",
       "valentine_badge": "Valentine favorites",
       "valentine_title": "Love-ready gifts for February",
       "valentine_subtitle": "Engrave something unforgettable for the people you love.",
@@ -284,8 +284,8 @@
     },
     "bestsellers": {
       "badge": "Top sellers",
-      "title": "Most popular right now",
-      "subtitle": "Customer favorites and repeat best-sellers.",
+      "title": "Customer favorites",
+      "subtitle": "The pieces people order again and again.",
       "cta": "View all products"
     },
     "new": {
@@ -302,24 +302,28 @@
     },
     "story": {
       "badge": "Why Amarka",
-      "title": "Gift-ready quality with thoughtful engraving",
-      "subtitle": "We personalize fast, package beautifully, and ship with care so your gifts arrive ready to impress.",
+      "title": "Made with care. Sent with love.",
+      "subtitle": "We engrave fast, package beautifully, and ship with pride.",
       "fast": {
         "title": "Fast engraving & dispatch",
-        "copy": "Personalized and out the door quickly, even for last-minute gifting."
+        "copy": "Ready to dispatch — even for last-minute gifting."
       },
       "materials": {
         "title": "Premium materials",
-        "copy": "Quality woods, metals, and finishes that feel premium in hand."
+        "copy": "Premium woods, metals, and glass chosen for feel and finish."
       },
       "packaging": {
         "title": "Gift-ready packaging",
-        "copy": "Arrives beautifully boxed with care instructions and notes."
+        "copy": "Arrives boxed and gift-ready. No wrapping needed."
       },
       "trust": {
         "title": "Trusted by customers",
-        "copy": "Reviews from real recipients; see what people love most."
+        "copy": "Thousands of happy recipients. Real reviews, real people."
       }
+    },
+    "services": {
+      "title": "Crafted for every occasion.",
+      "subtitle": "From a single engraved piece to full-scale corporate runs — we make it happen."
     },
     "gallery": {
       "badge": "Detail & craft",
@@ -330,15 +334,15 @@
     },
     "cta": {
       "badge": "Ready to personalise?",
-      "title": "Let’s craft the perfect gift together",
-      "subtitle": "Need advice on sets, engraving, or shipping times? We’re here.",
+      "title": "The perfect gift starts here.",
+      "subtitle": "Custom engraving for any occasion, any budget.",
       "primary": "Shop collections",
       "secondary": "Talk to us"
     }
   },
   "collections": {
     "title": "Collections",
-    "subtitle": "Curated drops like Gifts for Men, Wedding Keepsakes, and bespoke engraved sets.",
+    "subtitle": "Curated gift sets for him, her, weddings, and more.",
     "badge": "Curated collections",
     "loading": "Loading collections...",
     "empty": {
@@ -351,8 +355,8 @@
       "cta": "Shop now"
     },
     "cta": {
-      "title": "Looking for something unique?",
-      "text": "Contact us for custom engraving, bulk orders, or personalized gift consultation.",
+      "title": "Need something unique?",
+      "text": "We do custom engraving, bulk orders, and gift consulting.",
       "button": "Get in touch"
     },
     "items": "items",

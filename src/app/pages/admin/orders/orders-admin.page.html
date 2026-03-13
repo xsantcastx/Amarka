@@ -35,7 +35,7 @@
     </div>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
-      <div *ngIf="successMessage()" class="rounded-2xl border border-emerald-200 bg-emerald-50/80 px-4 py-3 text-sm text-emerald-700">
+      <div *ngIf="successMessage()" class="rounded-2xl border border-primary/20 bg-primary/5 px-4 py-3 text-sm text-primary">
         {{ successMessage() | translate }}
       </div>
       <div *ngIf="errorMessage()" class="rounded-2xl border border-rose-200 bg-rose-50/80 px-4 py-3 text-sm text-rose-700">
@@ -74,7 +74,7 @@
                 'bg-amber-500': status.value === 'pending',
                 'bg-orange-500': status.value === 'processing',
                 'bg-blue-500': status.value === 'shipped',
-                'bg-emerald-500': status.value === 'delivered',
+                'bg-primary': status.value === 'delivered',
                 'bg-rose-500': status.value === 'cancelled',
                 'bg-ts-ink/40': status.value === 'all',
                 'ring-2 ring-ts-accent/40': selectedStatus === status.value
@@ -131,7 +131,7 @@
                     [ngClass]="{
                       'bg-amber-50 text-amber-700 border-amber-200': order.status === 'pending' || order.status === 'processing',
                       'bg-blue-50 text-blue-700 border-blue-200': order.status === 'shipped',
-                      'bg-emerald-50 text-emerald-700 border-emerald-200': order.status === 'delivered',
+                      'bg-primary/5 text-primary border-primary/20': order.status === 'delivered',
                       'bg-rose-50 text-rose-700 border-rose-200': order.status === 'cancelled'
                     }">
                     <span
@@ -139,7 +139,7 @@
                       [ngClass]="{
                         'bg-amber-500': order.status === 'pending' || order.status === 'processing',
                         'bg-blue-500': order.status === 'shipped',
-                        'bg-emerald-500': order.status === 'delivered',
+                        'bg-primary': order.status === 'delivered',
                         'bg-rose-500': order.status === 'cancelled'
                       }"></span>
                     {{ ('admin.' + order.status) | translate }}
@@ -184,7 +184,7 @@
           [ngClass]="{
             'bg-amber-50 text-amber-700 border-amber-200': selectedOrder.status === 'pending' || selectedOrder.status === 'processing',
             'bg-blue-50 text-blue-700 border-blue-200': selectedOrder.status === 'shipped',
-            'bg-emerald-50 text-emerald-700 border-emerald-200': selectedOrder.status === 'delivered',
+            'bg-primary/5 text-primary border-primary/20': selectedOrder.status === 'delivered',
             'bg-rose-50 text-rose-700 border-rose-200': selectedOrder.status === 'cancelled'
           }">
           <span
@@ -192,7 +192,7 @@
             [ngClass]="{
               'bg-amber-500': selectedOrder.status === 'pending' || selectedOrder.status === 'processing',
               'bg-blue-500': selectedOrder.status === 'shipped',
-              'bg-emerald-500': selectedOrder.status === 'delivered',
+              'bg-primary': selectedOrder.status === 'delivered',
               'bg-rose-500': selectedOrder.status === 'cancelled'
             }"></span>
           {{ ('admin.' + selectedOrder.status) | translate }}

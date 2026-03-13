@@ -83,7 +83,7 @@ export class AppComponent implements OnInit {
       const savedLang = localStorage.getItem('selectedLanguage') || 'en';
       this.translate.setDefaultLang('en');
       this.translate.use(savedLang);
-      
+
       // Initialize theme from settings
       this.themeService.initializeTheme();
     } else {

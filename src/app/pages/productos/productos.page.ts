@@ -17,6 +17,7 @@ import { Product } from '../../models/product';
 import { Category, Model, Tag } from '../../models/catalog';
 import { Media } from '../../models/media';
 import { PageHeaderComponent } from '../../shared/components/page-header/page-header.component';
+import { ProductCardComponent } from '../../shared/components/product-card/product-card.component';
 import { LoadingComponentBase } from '../../core/classes/loading-component.base';
 import { firstValueFrom } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
@@ -24,7 +25,7 @@ import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-productos-page',
   standalone: true,
-  imports: [CommonModule, RouterLink, FormsModule, TranslateModule, PageHeaderComponent],
+  imports: [CommonModule, RouterLink, FormsModule, TranslateModule, PageHeaderComponent, ProductCardComponent],
   templateUrl: './productos.page.html',
   styleUrl: './productos.page.scss'
 })
@@ -99,8 +100,8 @@ export class ProductosPageComponent extends LoadingComponentBase implements OnIn
     if (isPlatformBrowser(this.platformId)) {
       await this.loadProducts();
     } else {
-      // During SSR, set loading to false
-      this.setLoading(false);
+      // Keep loading=true during SSR to prevent hydration mismatch / duplicate content
+      this.setLoading(true);
     }
   }
 
@@ -357,7 +358,7 @@ export class ProductosPageComponent extends LoadingComponentBase implements OnIn
     }
 
     if (product?.slug) {
-      this.router.navigate(['/products', product.slug]);
+      this.router.navigate(['/productos', product.slug]);
     }
   }
 

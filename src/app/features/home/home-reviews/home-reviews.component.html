@@ -1,54 +1,5 @@
 <section class="section-gap relative overflow-hidden bg-ts-bg">
   <div class="page-container relative z-10">
-    <!-- Why Choose Us Section -->
-    <div class="text-center mb-16">
-      <p class="text-sm uppercase tracking-[0.2em] text-ts-accent mb-4 font-semibold">
-        Why Choose Amarka Engraving
-      </p>
-      <div class="h-px w-24 mx-auto bg-gradient-to-r from-transparent via-ts-accent to-transparent mb-12"></div>
-      
-      <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-        <!-- Family-Owned Business -->
-        <div class="bg-white border border-ts-ink/10 rounded-xl p-8 shadow-soft hover:shadow-lg transition-all duration-300">
-          <div class="w-16 h-16 mx-auto mb-6 rounded-full bg-ts-accent/10 flex items-center justify-center">
-            <svg class="w-8 h-8 text-ts-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
-            </svg>
-          </div>
-          <h3 class="font-serif text-2xl text-ts-ink mb-3">Family-Owned Business</h3>
-          <p class="text-ts-ink/70 leading-relaxed">
-            Personalized service with a warm, family touch. We treat every gift like it's our own.
-          </p>
-        </div>
-
-        <!-- Quality-checked orders -->
-        <div class="bg-white border border-ts-ink/10 rounded-xl p-8 shadow-soft hover:shadow-lg transition-all duration-300">
-          <div class="w-16 h-16 mx-auto mb-6 rounded-full bg-ts-accent/10 flex items-center justify-center">
-            <svg class="w-8 h-8 text-ts-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-            </svg>
-          </div>
-          <h3 class="font-serif text-2xl text-ts-ink mb-3">Quality-checked orders</h3>
-          <p class="text-ts-ink/70 leading-relaxed">
-            Every piece is reviewed for engraving clarity and finish before it ships.
-          </p>
-        </div>
-
-        <!-- Custom Designs -->
-        <div class="bg-white border border-ts-ink/10 rounded-xl p-8 shadow-soft hover:shadow-lg transition-all duration-300">
-          <div class="w-16 h-16 mx-auto mb-6 rounded-full bg-ts-accent/10 flex items-center justify-center">
-            <svg class="w-8 h-8 text-ts-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/>
-            </svg>
-          </div>
-          <h3 class="font-serif text-2xl text-ts-ink mb-3">Custom Designs</h3>
-          <p class="text-ts-ink/70 leading-relaxed">
-            Every order is unique. We engrave and package to your vision and style.
-          </p>
-        </div>
-      </div>
-    </div>
-
     <!-- Reviews Section -->
     <div class="grid xl:grid-cols-2 gap-12 items-start">
       <div>
@@ -85,7 +36,7 @@
 
       <div class="bg-white border border-ts-ink/10 rounded-2xl p-6 lg:p-8 shadow-soft space-y-4">
         @if (submissionMessage()) {
-          <div class="p-4 rounded-lg border border-emerald-500/40 bg-emerald-500/10 text-emerald-700 text-sm">
+          <div class="p-4 rounded-lg border border-primary/40 bg-primary/10 text-primary text-sm">
             {{ submissionMessage() }}
           </div>
         }

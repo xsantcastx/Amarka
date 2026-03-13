@@ -2,8 +2,7 @@
 @if (isLoading) {
 <div class="min-h-screen flex items-center justify-center bg-ts-bg">
   <div class="text-center space-y-4">
-    <div class="app-spinner" style="--spinner-size: 72px;"><img src="/Logo Clear.png" alt="Loading" width="96"
-        height="96"></div>
+    <div class="app-spinner" style="--spinner-size: 72px;"><img src="/Logo Clear.png" alt="Loading" width="96" height="96"></div>
     <p class="text-ts-ink-soft text-lg font-semibold">{{ brandName || ('common.loading_content' | translate) }}</p>
   </div>
 </div>
@@ -11,258 +10,169 @@
 
 <!-- Content -->
 @if (!isLoading) {
+<div class="home-shell">
 
-<!-- ═══════════════════════════════════════════════════════════════════
-     HERO SECTION - Premium Brand Introduction
-     ═══════════════════════════════════════════════════════════════════ -->
-<section class="relative overflow-hidden">
-  <!-- Background with subtle gradient -->
-  <div class="absolute inset-0 bg-gradient-to-b from-ts-bg via-ts-bg-soft to-ts-paper"></div>
+  <!-- ① HERO ─────────────────────────────────────────────── -->
+  <section class="home-hero">
+    <!-- Floating light orbs -->
+    <div class="home-hero__orb home-hero__orb--1" aria-hidden="true"></div>
+    <div class="home-hero__orb home-hero__orb--2" aria-hidden="true"></div>
+    <div class="home-hero__orb home-hero__orb--3" aria-hidden="true"></div>
+    <div class="page-container home-hero__layout">
+      <div class="home-hero__copy">
+        <p class="badge home-hero__badge">{{ 'home.hero.badge' | translate }}</p>
+        <h1 class="heading-display home-hero__title">Gifts that leave <span class="home-hero__title-shine">a mark.</span></h1>
+        <p class="home-hero__subtitle">{{ 'home.hero.subtitle' | translate }}</p>
 
-  <!-- Decorative elements -->
-  <div class="absolute inset-0 opacity-40">
-    <div class="absolute top-20 left-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl"></div>
-    <div class="absolute bottom-10 right-20 w-96 h-96 bg-secondary/10 rounded-full blur-3xl"></div>
-  </div>
-
-  <div class="relative page-container py-16 lg:py-24">
-    <!-- Brand Logo & Tagline -->
-    <div class="text-center mb-12">
-      <img src="/Logo Clear.png" alt="Amarka" class="h-32 md:h-40 lg:h-48 w-auto mx-auto mb-6" loading="eager" />
-      <p class="text-lg md:text-xl text-ts-ink-soft font-medium tracking-wide">{{ 'home.hero.badge' | translate }}</p>
-    </div>
-
-    <!-- Hero Headline -->
-    <div class="max-w-4xl mx-auto text-center mb-12">
-      <h1 class="heading-display text-4xl md:text-5xl lg:text-6xl text-ts-ink mb-6 leading-tight">
-        {{ 'home.hero.title' | translate }}
-      </h1>
-      <p class="text-lg md:text-xl text-ts-ink-soft max-w-2xl mx-auto leading-relaxed">
-        {{ 'home.hero.subtitle' | translate }}
-      </p>
-    </div>
-
-    <!-- CTA Buttons -->
-    <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
-      <a routerLink="/collections" class="btn-primary px-8 py-4 text-lg">
-        {{ 'home.hero.cta_collections' | translate }}
-      </a>
-      <a routerLink="/productos" class="btn-outline px-8 py-4 text-lg">
-        {{ 'home.hero.cta_products' | translate }}
-      </a>
-    </div>
-
-    <!-- Trust Badges -->
-    <div class="flex flex-wrap items-center justify-center gap-6 md:gap-10">
-      <div class="flex items-center gap-2 text-ts-ink-soft">
-        <svg class="w-5 h-5 text-ts-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-        </svg>
-        <span class="text-sm font-medium">{{ 'home.hero.fast' | translate }}</span>
-      </div>
-      <div class="flex items-center gap-2 text-ts-ink-soft">
-        <svg class="w-5 h-5 text-ts-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-        </svg>
-        <span class="text-sm font-medium">{{ 'home.hero.packaging' | translate }}</span>
-      </div>
-      <div class="flex items-center gap-2 text-ts-ink-soft">
-        <svg class="w-5 h-5 text-ts-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-        <span class="text-sm font-medium">{{ 'home.story.trust.title' | translate }}</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════════════════════════════════════
-     COLLECTIONS SHOWCASE - Category Navigation
-     ═══════════════════════════════════════════════════════════════════ -->
-<section class="section-gap bg-ts-paper">
-  <div class="page-container">
-    <!-- Section Header -->
-    <div class="flex items-center justify-between mb-8">
-      <div>
-        <p class="badge mb-2">{{ 'collections.card.label' | translate }}</p>
-        <h2 class="heading-display text-2xl md:text-3xl text-ts-ink">{{ 'home.collections.heading' | translate }}</h2>
-      </div>
-      <a routerLink="/collections" class="btn-outline text-sm">
-        {{ 'home.collections.view_all' | translate }}
-        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-        </svg>
-      </a>
-    </div>
-
-    <!-- Collection Cards Grid -->
-    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-      @for (col of categoryShowcase; track col.slug) {
-      <a [routerLink]="['/collections', col.slug]"
-        class="group relative rounded-2xl border border-ts-line bg-ts-bg-soft overflow-hidden hover:shadow-lvl2 transition-all duration-300 hover:-translate-y-1">
-        <!-- Collection Image -->
-        <div class="aspect-[4/3] bg-ts-bg overflow-hidden">
-          <img [src]="collectionImages[col.slug] || 'assets/placeholder-product.jpg'" [alt]="col.name"
-            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
+        <div class="home-hero__actions">
+          <a routerLink="/collections" class="btn-primary home-hero__cta">
+            {{ 'home.hero.cta_collections' | translate }}
+          </a>
+          <a routerLink="/productos" class="btn-outline home-hero__cta">
+            {{ 'home.hero.cta_products' | translate }}
+          </a>
         </div>
-        <!-- Collection Name -->
-        <div class="p-4 flex items-center justify-between gap-2 bg-white">
-          <span class="text-sm font-semibold text-ts-ink group-hover:text-ts-accent transition-colors">{{ col.name }}</span>
-          <svg class="w-4 h-4 text-ts-ink-soft group-hover:text-ts-accent group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+        <div class="home-hero__trust">
+          <div class="home-hero__trust-item">
+            <span class="home-hero__trust-icon">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </span>
+            <span>{{ 'home.hero.fast' | translate }}</span>
+          </div>
+          <div class="home-hero__trust-item">
+            <span class="home-hero__trust-icon">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+              </svg>
+            </span>
+            <span>{{ 'home.hero.packaging' | translate }}</span>
+          </div>
+          <div class="home-hero__trust-item">
+            <span class="home-hero__trust-icon">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </span>
+            <span>{{ 'home.story.trust.title' | translate }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="home-hero__panel luxury-overlay">
+        <div class="home-hero__panel-top">
+          <img src="/Logo Clear.png" alt="Amarka" class="home-hero__logo" loading="eager" />
+          <div>
+            <p class="home-hero__panel-label">Amarka</p>
+            <p class="home-hero__panel-copy">Refined gifting, premium materials, and personalized craftsmanship.</p>
+          </div>
+        </div>
+
+        @if (heroProducts.length) {
+        <div class="home-hero__product-grid">
+          @for (product of heroProducts; track product.id) {
+          <a [routerLink]="['/productos', product.slug || product.id || '']" class="home-hero__product-card">
+            <div class="home-hero__product-media">
+              <img [src]="product.imageUrl || 'assets/placeholder-product.jpg'" [alt]="product.name" loading="lazy" />
+            </div>
+            <div class="home-hero__product-body">
+              <p class="home-hero__product-name">{{ product.name }}</p>
+            </div>
+          </a>
+          }
+        </div>
+        }
+
+        <div class="home-hero__collections">
+          <p class="home-hero__collections-label">Signature collections</p>
+          <div class="home-hero__collection-links">
+            @for (col of heroCollections; track col.slug) {
+            <a [routerLink]="['/collections', col.slug]" class="home-hero__collection-link">{{ col.name }}</a>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ② COLLECTIONS ────────────────────────────────────────── -->
+  <section class="section-gap">
+    <div class="page-container">
+      <div class="home-section-head">
+        <div>
+          <p class="badge">{{ 'collections.card.label' | translate }}</p>
+          <h2 class="heading-display home-section-head__title">{{ 'home.collections.heading' | translate }}</h2>
+        </div>
+        <a routerLink="/collections" class="btn-outline text-sm">
+          {{ 'home.collections.view_all' | translate }}
+          <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
           </svg>
-        </div>
-      </a>
-      }
-      @if (!categoryShowcase.length) {
-      <div class="col-span-full text-center py-12 text-ts-ink-soft">
-        <p>{{ 'home.collections.empty' | translate }}</p>
-      </div>
-      }
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════════════════════════════════════
-     FEATURED PRODUCTS - Curated Selection
-     ═══════════════════════════════════════════════════════════════════ -->
-@if (featuredProducts.length) {
-<section class="section-gap" [class.home-featured--valentine]="isValentineSeason">
-  <div class="page-container">
-    <!-- Section Header -->
-    <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-10">
-      <div class="max-w-2xl">
-        <p class="badge mb-3">{{ featuredBadgeKey | translate }}</p>
-        <h2 class="heading-display text-3xl md:text-4xl lg:text-5xl text-ts-ink mb-3">{{ featuredTitleKey | translate }}</h2>
-        <p class="text-lg text-ts-ink-soft">{{ featuredSubtitleKey | translate }}</p>
-      </div>
-      <div class="flex gap-3">
-        <a routerLink="/productos" class="btn-outline">{{ 'home.featured.cta_all' | translate }}</a>
-        <a routerLink="/collections/gifts-for-men" class="btn-primary">{{ 'home.featured.cta_special' | translate }}</a>
-      </div>
-    </div>
-
-    <!-- Product Grid -->
-    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-      @for (product of featuredProducts; track product.id) {
-      <ts-product-card [product]="product" />
-      }
-    </div>
-  </div>
-</section>
-}
-
-<!-- ═══════════════════════════════════════════════════════════════════
-     BEST SELLERS - Customer Favorites
-     ═══════════════════════════════════════════════════════════════════ -->
-@if (bestSellerProducts.length) {
-<section class="section-gap bg-ts-bg-soft">
-  <div class="page-container">
-    <!-- Section Header -->
-    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
-      <div>
-        <p class="badge mb-3">{{ 'home.bestsellers.badge' | translate }}</p>
-        <h2 class="heading-display text-3xl md:text-4xl text-ts-ink">{{ 'home.bestsellers.title' | translate }}</h2>
-        <p class="text-ts-ink-soft mt-2">{{ 'home.bestsellers.subtitle' | translate }}</p>
-      </div>
-      <a routerLink="/productos" class="btn-outline">{{ 'home.bestsellers.cta' | translate }}</a>
-    </div>
-
-    <!-- Product Grid -->
-    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-      @for (product of bestSellerProducts; track product.id) {
-      <ts-product-card [product]="product" />
-      }
-    </div>
-  </div>
-</section>
-}
-
-<!-- ═══════════════════════════════════════════════════════════════════
-     BRAND STORY - Why Choose Amarka
-     ═══════════════════════════════════════════════════════════════════ -->
-<section class="section-gap bg-ts-paper">
-  <div class="page-container">
-    <div class="grid lg:grid-cols-5 gap-10 lg:gap-16 items-center">
-      <!-- Story Text -->
-      <div class="lg:col-span-2 space-y-6">
-        <p class="badge">{{ 'home.story.badge' | translate }}</p>
-        <h2 class="heading-display text-3xl md:text-4xl text-ts-ink leading-tight">{{ 'home.story.title' | translate }}</h2>
-        <p class="text-lg text-ts-ink-soft leading-relaxed">{{ 'home.story.subtitle' | translate }}</p>
-        <a routerLink="/collections" class="btn-primary inline-flex">
-          {{ 'home.cta.primary' | translate }}
         </a>
       </div>
 
-      <!-- Feature Cards Grid -->
-      <div class="lg:col-span-3 grid sm:grid-cols-2 gap-4">
-        <!-- Fast Engraving -->
-        <div class="group p-6 rounded-2xl border border-ts-line bg-white hover:shadow-lvl2 hover:border-ts-accent/30 transition-all duration-300">
-          <div class="w-12 h-12 rounded-xl bg-ts-accent/10 flex items-center justify-center mb-4 group-hover:bg-ts-accent/20 transition-colors">
-            <svg class="w-6 h-6 text-ts-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+      <div class="home-collections-grid">
+        @for (col of categoryShowcase; track col.slug) {
+        <a [routerLink]="['/collections', col.slug]" class="home-collection-card">
+          <div class="home-collection-card__media">
+            <img [src]="collectionImages[col.slug] || 'assets/placeholder-product.jpg'" [alt]="col.name"
+              class="w-full h-full object-cover" loading="lazy">
+          </div>
+          <div class="home-collection-card__body">
+            <span class="home-collection-card__name">{{ col.name }}</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
             </svg>
           </div>
-          <h3 class="font-semibold text-lg text-ts-ink mb-2">{{ 'home.story.fast.title' | translate }}</h3>
-          <p class="text-sm text-ts-ink-soft leading-relaxed">{{ 'home.story.fast.copy' | translate }}</p>
+        </a>
+        }
+        @if (!categoryShowcase.length) {
+        <div class="col-span-full text-center py-12 text-ts-ink-soft">
+          <p>{{ 'home.collections.empty' | translate }}</p>
         </div>
-
-        <!-- Premium Materials -->
-        <div class="group p-6 rounded-2xl border border-ts-line bg-white hover:shadow-lvl2 hover:border-ts-accent/30 transition-all duration-300">
-          <div class="w-12 h-12 rounded-xl bg-ts-accent/10 flex items-center justify-center mb-4 group-hover:bg-ts-accent/20 transition-colors">
-            <svg class="w-6 h-6 text-ts-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-            </svg>
-          </div>
-          <h3 class="font-semibold text-lg text-ts-ink mb-2">{{ 'home.story.materials.title' | translate }}</h3>
-          <p class="text-sm text-ts-ink-soft leading-relaxed">{{ 'home.story.materials.copy' | translate }}</p>
-        </div>
-
-        <!-- Gift Packaging -->
-        <div class="group p-6 rounded-2xl border border-ts-line bg-white hover:shadow-lvl2 hover:border-ts-accent/30 transition-all duration-300">
-          <div class="w-12 h-12 rounded-xl bg-ts-accent/10 flex items-center justify-center mb-4 group-hover:bg-ts-accent/20 transition-colors">
-            <svg class="w-6 h-6 text-ts-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-            </svg>
-          </div>
-          <h3 class="font-semibold text-lg text-ts-ink mb-2">{{ 'home.story.packaging.title' | translate }}</h3>
-          <p class="text-sm text-ts-ink-soft leading-relaxed">{{ 'home.story.packaging.copy' | translate }}</p>
-        </div>
-
-        <!-- Trusted -->
-        <div class="group p-6 rounded-2xl border border-ts-line bg-white hover:shadow-lvl2 hover:border-ts-accent/30 transition-all duration-300">
-          <div class="w-12 h-12 rounded-xl bg-ts-accent/10 flex items-center justify-center mb-4 group-hover:bg-ts-accent/20 transition-colors">
-            <svg class="w-6 h-6 text-ts-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-            </svg>
-          </div>
-          <h3 class="font-semibold text-lg text-ts-ink mb-2">{{ 'home.story.trust.title' | translate }}</h3>
-          <p class="text-sm text-ts-ink-soft leading-relaxed">{{ 'home.story.trust.copy' | translate }}</p>
-        </div>
+        }
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- ═══════════════════════════════════════════════════════════════════
-     CUSTOMER REVIEWS
-     ═══════════════════════════════════════════════════════════════════ -->
-<app-home-reviews />
+  <!-- ③ PRODUCTS ───────────────────────────────────────────── -->
+  @if (featuredProducts.length) {
+  <section class="section-gap home-featured" [class.home-featured--valentine]="isValentineSeason">
+    <div class="page-container">
+      <div class="home-section-head">
+        <div>
+          <p class="badge mb-3">{{ featuredBadgeKey | translate }}</p>
+          <h2 class="heading-display home-section-head__title">{{ featuredTitleKey | translate }}</h2>
+          <p class="home-section-head__copy">{{ featuredSubtitleKey | translate }}</p>
+        </div>
+        <div class="home-featured__actions">
+          <a routerLink="/productos" class="btn-outline">{{ 'home.featured.cta_all' | translate }}</a>
+          <a routerLink="/collections/gifts-for-men" class="btn-primary">{{ 'home.featured.cta_special' | translate }}</a>
+        </div>
+      </div>
 
-<!-- ═══════════════════════════════════════════════════════════════════
-     FINAL CTA - Call to Action Band
-     ═══════════════════════════════════════════════════════════════════ -->
-<section class="section-gap bg-ts-bg-soft">
-  <div class="page-container">
-    <div class="relative rounded-3xl border border-ts-line bg-white shadow-lvl2 overflow-hidden">
-      <!-- Decorative gradient -->
-      <div class="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5"></div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        @for (product of featuredProducts; track product.id) {
+        <ts-product-card [product]="product" />
+        }
+      </div>
+    </div>
+  </section>
+  }
 
-      <div class="relative p-10 md:p-16 flex flex-col lg:flex-row items-center justify-between gap-8">
-        <div class="text-center lg:text-left max-w-xl">
+  <!-- ④ REVIEWS ────────────────────────────────────────────── -->
+  <app-home-reviews />
+
+  <!-- ⑤ CTA ───────────────────────────────────────────────── -->
+  <section class="section-gap">
+    <div class="page-container">
+      <div class="home-cta luxury-overlay">
+        <div class="home-cta__copy">
           <p class="badge mb-4">{{ 'home.cta.badge' | translate }}</p>
-          <h2 class="heading-display text-3xl md:text-4xl text-ts-ink mb-3">{{ 'home.cta.title' | translate }}</h2>
-          <p class="text-lg text-ts-ink-soft">{{ 'home.cta.subtitle' | translate }}</p>
+          <h2 class="heading-display home-cta__title">{{ 'home.cta.title' | translate }}</h2>
+          <p class="home-cta__subtitle">{{ 'home.cta.subtitle' | translate }}</p>
         </div>
         <div class="flex flex-col sm:flex-row gap-4">
           <a routerLink="/collections" class="btn-primary px-8 py-4">{{ 'home.cta.primary' | translate }}</a>
@@ -270,7 +180,7 @@
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
+</div>
 }

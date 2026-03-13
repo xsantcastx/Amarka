@@ -75,7 +75,27 @@ export interface ProductClientInputConfig {
   note?: boolean;
   link?: boolean;
   logo?: boolean;
+  engravingText?: boolean;      // Enable text engraving inputs
+  engravingMaxChars?: number;   // Max characters per line (default: 30)
+  engravingLines?: number;      // Number of engraving lines (default: 1)
+  engravingFonts?: string[];    // Available font names; defaults to ENGRAVING_FONTS if empty
 }
+
+export interface EngravingFont {
+  id: string;
+  label: string;
+  cssFamily: string;
+  sampleText: string;
+}
+
+export const ENGRAVING_FONTS: EngravingFont[] = [
+  { id: 'cormorant', label: 'Classic Serif', cssFamily: '"Cormorant Garamond", serif', sampleText: 'Amarka' },
+  { id: 'sans',      label: 'Modern',        cssFamily: '"Source Sans 3", sans-serif',  sampleText: 'Amarka' },
+  { id: 'mono',      label: 'Engraved',      cssFamily: '"JetBrains Mono", monospace',  sampleText: 'Amarka' },
+  { id: 'georgia',   label: 'Elegant',       cssFamily: 'Georgia, serif',               sampleText: 'Amarka' },
+  { id: 'palatino',  label: 'Palatino',      cssFamily: '"Palatino Linotype", Palatino, serif', sampleText: 'Amarka' },
+  { id: 'impact',    label: 'Bold',          cssFamily: 'Impact, "Arial Black", sans-serif',    sampleText: 'AMARKA' },
+];
 
 export interface BulkPricingTier {
   minQty: number;

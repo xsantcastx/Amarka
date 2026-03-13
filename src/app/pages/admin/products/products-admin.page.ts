@@ -347,11 +347,8 @@ export class ProductsAdminComponent extends LoadingComponentBase implements OnIn
     
     // If it's a suggestion to create new model, navigate to catalog
     if (option.isSuggestion) {
-      this.router.navigate(['/admin/catalog'], { 
-        queryParams: { 
-          tab: 'models',
-          categoryId: option.categoryId 
-        } 
+      this.router.navigate(['/admin/models'], {
+        queryParams: { categoryId: option.categoryId }
       });
       return;
     }

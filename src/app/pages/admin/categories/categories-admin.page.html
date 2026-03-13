@@ -16,9 +16,9 @@
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     @if (message) {
       <div class="mb-4 p-4 rounded-xl border"
-           [class.bg-green-500/10]="messageType === 'success'"
-           [class.border-green-500/30]="messageType === 'success'"
-           [class.text-green-400]="messageType === 'success'"
+           [class.bg-primary/10]="messageType === 'success'"
+           [class.border-primary/30]="messageType === 'success'"
+           [class.text-primary]="messageType === 'success'"
            [class.bg-red-500/10]="messageType === 'error'"
            [class.border-red-500/30]="messageType === 'error'"
            [class.text-red-400]="messageType === 'error'">
@@ -57,7 +57,7 @@
                 <td class="px-6 py-4 text-gray-400">{{cat.slug}}</td>
                 <td class="px-6 py-4 text-gray-400">{{cat.order}}</td>
                 <td class="px-6 py-4">
-                  <span [class.text-green-400]="cat.active" [class.text-gray-400]="!cat.active">
+                  <span [class.text-primary]="cat.active" [class.text-gray-400]="!cat.active">
                     {{cat.active ? 'Active' : 'Inactive'}}
                   </span>
                 </td>

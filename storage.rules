@@ -10,8 +10,9 @@ service firebase.storage {
     }
     
     function isAdmin() {
-      return isAuthenticated() && 
-             firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.role == 'admin';
+      // JWT custom claim only — mirrors the Firestore rules change.
+      // Claims are kept in sync by the onUserRoleChanged Cloud Function trigger.
+      return isAuthenticated() && request.auth.token.role == 'admin';
     }
     
     function isValidImage() {
@@ -82,13 +83,14 @@ service firebase.storage {
       allow delete: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
     }
     
-    // User profile images - Users can manage their own
+    // User profile images - Owner and admin only (not public, to protect PII)
     match /users/{userId}/{imageName} {
-      allow read: if true;
-      allow write: if isAuthenticated() && 
+      allow read: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
+      allow write: if isAuthenticated() &&
                      (request.auth.uid == userId || isAdmin()) &&
-                     isValidImage();
-      allow delete: if isAuthenticated() && 
+                     isValidImage() &&
+                     imageName.matches('^[a-zA-Z0-9._-]{1,200}$');
+      allow delete: if isAuthenticated() &&
                       (request.auth.uid == userId || isAdmin());
     }
     

@@ -12,7 +12,7 @@ import { SeoSchemaService } from '../../../services/seo-schema.service';
 import { BrandConfigService } from '../../../core/services/brand-config.service';
 import { ProductReviewService } from '../../../services/product-review.service';
 import { AnalyticsService } from '../../../services/analytics.service';
-import { BulkPricingTier, Product, ProductVariant, CustomizationZone } from '../../../models/product';
+import { BulkPricingTier, Product, ProductVariant, CustomizationZone, ENGRAVING_FONTS, EngravingFont } from '../../../models/product';
 import { CartItemCustomization, ZoneCustomization, ZoneLogo } from '../../../models/cart';
 import { Media } from '../../../models/media';
 import { Category } from '../../../models/catalog';
@@ -20,15 +20,18 @@ import { Model } from '../../../models/catalog';
 import { ReviewSummary } from '../../../models/review';
 import { ImageLightboxComponent, LightboxImage } from '../../../shared/components/image-lightbox/image-lightbox.component';
 import { ProductReviewsComponent } from '../../../shared/components/product-reviews/product-reviews.component';
+import { ProductCardComponent } from '../../../shared/components/product-card/product-card.component';
 import { StorageService } from '../../../services/storage.service';
 import { firstValueFrom, lastValueFrom, Subscription } from 'rxjs';
 import { Auth } from '@angular/fire/auth';
+import { Functions, httpsCallable } from '@angular/fire/functions';
 
 @Component({
   selector: 'app-detalle',
   standalone: true,
-  imports: [CommonModule, RouterLink, TranslateModule, ImageLightboxComponent, ProductReviewsComponent],
-  templateUrl: './detalle.component.html'
+  imports: [CommonModule, RouterLink, TranslateModule, ImageLightboxComponent, ProductReviewsComponent, ProductCardComponent],
+  templateUrl: './detalle.component.html',
+  styleUrls: ['./detalle.component.scss']
 })
 export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
   private platformId = inject(PLATFORM_ID);
@@ -48,6 +51,7 @@ export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
   private cdr = inject(ChangeDetectorRef);
   private storageService = inject(StorageService);
   private auth = inject(Auth);
+  private functions = inject(Functions);
   
   producto: Product | undefined;
   category: Category | undefined;
@@ -86,6 +90,14 @@ export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
   private dragOffsetX = 0;
   private dragOffsetY = 0;
   @ViewChild('customizationPreview') customizationPreviewRef?: ElementRef<HTMLDivElement>;
+  @ViewChild('engravingCanvas') engravingCanvasRef?: ElementRef<HTMLCanvasElement>;
+
+  // Text engraving
+  engravingInputLines: string[] = [''];
+  engravingFont: string = 'cormorant';
+  engravingPreviewDataUrl: string | null = null;
+  engravingPreviewCopied = false;
+  readonly availableEngravingFonts: EngravingFont[] = ENGRAVING_FONTS;
 
   // Multi-zone customization
   activeZoneId: string | null = null;
@@ -162,6 +174,7 @@ export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
       this.updatePlaceholderSlots();
       this.prepareCarouselImages();
       this.updateSEO();
+      this.loadEngravingFromUrl();
 
       // Track product view for analytics
       if (isPlatformBrowser(this.platformId)) {
@@ -189,8 +202,174 @@ export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
     this.clientNote = '';
     this.clientLink = '';
     this.clientInputErrors = {};
+    this.engravingInputLines = [''];
+    this.engravingFont = 'cormorant';
+    this.engravingPreviewDataUrl = null;
     // Reset multi-zone state
     this.resetMultiZoneCustomization();
+  }
+
+  // ===== Text Engraving Methods =====
+
+  get requiresEngravingText(): boolean {
+    return !!this.clientInputConfig.engravingText;
+  }
+
+  get engravingMaxChars(): number {
+    return this.clientInputConfig.engravingMaxChars || 30;
+  }
+
+  get engravingLineCount(): number {
+    return Math.max(1, this.clientInputConfig.engravingLines || 1);
+  }
+
+  get engravingLines(): string[] {
+    // Keep array in sync with configured line count
+    while (this.engravingInputLines.length < this.engravingLineCount) {
+      this.engravingInputLines.push('');
+    }
+    return this.engravingInputLines.slice(0, this.engravingLineCount);
+  }
+
+  get hasEngravingText(): boolean {
+    return this.engravingLines.some(line => line.trim().length > 0);
+  }
+
+  getEngravingLineCharCount(index: number): number {
+    return (this.engravingInputLines[index] || '').length;
+  }
+
+  onEngravingLineChange(event: Event, index: number): void {
+    const value = (event.target as HTMLInputElement).value;
+    // Strip characters that could be HTML/script injection
+    const sanitized = value.replace(/[<>"'`]/g, '').slice(0, this.engravingMaxChars);
+    this.engravingInputLines[index] = sanitized;
+    if ((event.target as HTMLInputElement).value !== sanitized) {
+      (event.target as HTMLInputElement).value = sanitized;
+    }
+    this.renderEngravingPreview();
+  }
+
+  selectEngravingFont(fontId: string): void {
+    this.engravingFont = fontId;
+    this.renderEngravingPreview();
+  }
+
+  getEngravingFontFamily(fontId: string): string {
+    return ENGRAVING_FONTS.find(f => f.id === fontId)?.cssFamily ?? '"Cormorant Garamond", serif';
+  }
+
+  renderEngravingPreview(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+
+    const lines = this.engravingLines.filter(l => l.trim());
+    if (!lines.length) {
+      this.engravingPreviewDataUrl = null;
+      this.cdr.detectChanges();
+      return;
+    }
+
+    const canvas = this.engravingCanvasRef?.nativeElement;
+    if (!canvas) {
+      // Canvas not yet rendered; defer one tick
+      setTimeout(() => this.renderEngravingPreview(), 50);
+      return;
+    }
+
+    const W = 600;
+    const H = 200;
+    canvas.width = W;
+    canvas.height = H;
+    const ctx = canvas.getContext('2d')!;
+
+    // Dark engraved background
+    ctx.fillStyle = '#1a1a1a';
+    ctx.fillRect(0, 0, W, H);
+
+    // Subtle brushed-metal texture lines
+    ctx.strokeStyle = 'rgba(255,255,255,0.03)';
+    ctx.lineWidth = 1;
+    for (let y = 0; y < H; y += 4) {
+      ctx.beginPath();
+      ctx.moveTo(0, y);
+      ctx.lineTo(W, y);
+      ctx.stroke();
+    }
+
+    // Engraved border
+    ctx.strokeStyle = 'rgba(201,168,76,0.4)';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(12, 12, W - 24, H - 24);
+
+    const fontFamily = this.getEngravingFontFamily(this.engravingFont);
+    const lineHeight = H / (lines.length + 1);
+    const fontSize = Math.min(Math.floor(lineHeight * 0.55), 48);
+
+    ctx.font = `${fontSize}px ${fontFamily}`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+
+    lines.forEach((line, i) => {
+      const y = lineHeight * (i + 1);
+      // Engraved shadow (dark offset)
+      ctx.fillStyle = 'rgba(0,0,0,0.6)';
+      ctx.fillText(line, W / 2 + 1, y + 1);
+      // Gold highlight
+      ctx.fillStyle = '#C9A84C';
+      ctx.fillText(line, W / 2, y);
+      // Light sheen
+      ctx.fillStyle = 'rgba(255,255,255,0.15)';
+      ctx.fillText(line, W / 2, y - 0.5);
+    });
+
+    // Null first so Angular destroys/recreates the @if block → CSS animation replays
+    this.engravingPreviewDataUrl = null;
+    this.cdr.detectChanges();
+    this.engravingPreviewDataUrl = canvas.toDataURL('image/png');
+    this.cdr.detectChanges();
+  }
+
+  async copyEngravingPreviewUrl(): Promise<void> {
+    if (!isPlatformBrowser(this.platformId) || !this.producto) return;
+
+    const params = new URLSearchParams();
+    this.engravingLines.forEach((line, i) => {
+      if (line.trim()) params.set(`el${i}`, line.trim());
+    });
+    if (this.engravingFont !== 'cormorant') params.set('ef', this.engravingFont);
+
+    const url = `${window.location.origin}${window.location.pathname}?${params.toString()}`;
+    try {
+      await navigator.clipboard.writeText(url);
+    } catch {
+      const ta = document.createElement('textarea');
+      ta.value = url;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+    }
+    this.engravingPreviewCopied = true;
+    this.cdr.detectChanges();
+    setTimeout(() => { this.engravingPreviewCopied = false; this.cdr.detectChanges(); }, 2000);
+  }
+
+  private loadEngravingFromUrl(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+    const params = new URLSearchParams(window.location.search);
+    const lines: string[] = [];
+    for (let i = 0; i < this.engravingLineCount; i++) {
+      const val = params.get(`el${i}`);
+      if (val !== null) lines.push(val.slice(0, this.engravingMaxChars));
+    }
+    if (lines.length) {
+      this.engravingInputLines = lines;
+      const font = params.get('ef');
+      if (font && ENGRAVING_FONTS.some(f => f.id === font)) {
+        this.engravingFont = font;
+      }
+      setTimeout(() => this.renderEngravingPreview(), 100);
+    }
   }
 
   private async loadProductMediaAssets(): Promise<void> {
@@ -730,7 +909,7 @@ export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   get hasClientInputs(): boolean {
-    return this.requiresNote || this.requiresLink || this.requiresLogoInput;
+    return this.requiresNote || this.requiresLink || this.requiresLogoInput || this.requiresEngravingText;
   }
 
   get showLogoCustomization(): boolean {
@@ -917,38 +1096,64 @@ export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private updateSEO() {
     if (!this.producto) return;
-    
-    // Update page title
-    const title = this.producto.seo?.title || `${this.producto.name} - ${this.brandConfig.siteName}`;
+
+    const siteUrl = this.brandConfig.siteUrl;
+    const siteName = this.brandConfig.siteName;
+    const productUrl = `${siteUrl}/productos/${this.producto.slug}`;
+    const imageUrl = this.coverImage?.url || this.producto.imageUrl || '';
+
+    // Page title
+    const title = this.producto.seo?.title || `${this.producto.name} | ${siteName}`;
     this.titleService.setTitle(title);
-    
-    // Update meta description
+
+    // Meta description
     const description = this.producto.seo?.metaDescription || this.producto.description || '';
     this.metaService.updateTag({ name: 'description', content: description });
-    
-    // Update Open Graph tags
+
+    // Keywords
+    const keywords = [
+      this.producto.name,
+      'personalised gift',
+      'engraved gift',
+      siteName,
+      ...(this.producto.tags || [])
+    ].filter(Boolean).join(', ');
+    this.metaService.updateTag({ name: 'keywords', content: keywords });
+
+    // Open Graph
     this.metaService.updateTag({ property: 'og:title', content: title });
     this.metaService.updateTag({ property: 'og:description', content: description });
-    
-    if (this.coverImage?.url) {
-      this.metaService.updateTag({ property: 'og:image', content: this.coverImage.url });
+    this.metaService.updateTag({ property: 'og:type', content: 'product' });
+    this.metaService.updateTag({ property: 'og:url', content: productUrl });
+    if (imageUrl) {
+      this.metaService.updateTag({ property: 'og:image', content: imageUrl });
     }
 
-    // 🎯 Generate Product Schema with Review Data
+    // Twitter Cards
+    this.metaService.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
+    this.metaService.updateTag({ name: 'twitter:title', content: title });
+    this.metaService.updateTag({ name: 'twitter:description', content: description });
+    if (imageUrl) {
+      this.metaService.updateTag({ name: 'twitter:image', content: imageUrl });
+    }
+
+    // Canonical URL
+    this.seoSchemaService.setCanonicalUrl(productUrl);
+
+    // Product Schema (JSON-LD)
     const productSchemaData: any = {
       name: this.producto.name,
-      description: description,
-      imageUrl: this.coverImage?.url || this.producto.imageUrl || '',
+      description,
+      imageUrl,
       price: this.producto.price || 0,
-      currency: 'EUR',
-      sku: this.producto.sku || `TLM-${this.producto.id}`,
-      brand: this.brandConfig.siteName,
+      currency: 'USD',
+      sku: this.producto.sku || `AMK-${this.producto.id}`,
+      brand: siteName,
       availability: (this.producto.stock && this.producto.stock > 0) ? 'InStock' : 'OutOfStock',
       condition: 'NewCondition',
       slug: this.producto.slug
     };
 
-    // Add review rating if available
     if (this.reviewSummary && this.reviewSummary.totalReviews > 0) {
       productSchemaData.rating = {
         value: this.reviewSummary.averageRating,
@@ -958,24 +1163,20 @@ export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.seoSchemaService.generateProductSchema(productSchemaData);
 
-    // 🎯 Generate Breadcrumb Schema
+    // Breadcrumb Schema (JSON-LD)
     const breadcrumbs = [
-      { name: 'Home', url: 'https://amarka.com/' },
-      { name: 'Products', url: 'https://amarka.com/productos' }
+      { name: 'Home', url: `${siteUrl}/` },
+      { name: 'Products', url: `${siteUrl}/productos` }
     ];
-    
+
     if (this.category) {
       breadcrumbs.push({
         name: this.category.name,
-        url: `https://amarka.com/productos?category=${this.category.slug}`
+        url: `${siteUrl}/productos?category=${this.category.slug}`
       });
     }
-    
-    breadcrumbs.push({
-      name: this.producto.name,
-      url: `https://amarka.com/products/${this.producto.slug}`
-    });
 
+    breadcrumbs.push({ name: this.producto.name, url: productUrl });
     this.seoSchemaService.generateBreadcrumbSchema(breadcrumbs);
   }
 
@@ -1058,7 +1259,7 @@ export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
     if (isPlatformBrowser(this.platformId)) {
       return window.location.href;
     }
-    return `https://amarka.com/products/${this.producto?.slug || ''}`;
+    return `https://amarka.com/productos/${this.producto?.slug || ''}`;
   }
 
   shareOnWhatsApp() {
@@ -1158,8 +1359,29 @@ export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
     const hasZoneUploads = this.zoneCustomizations.size > 0;
     const trimmedNote = (this.clientNote || '').trim();
     const trimmedLink = (this.clientLink || '').trim();
-    if (!this.customLogoFile && !hasZoneUploads && !trimmedNote && !trimmedLink) {
+    let engravingLines = this.engravingLines.map(l => l.trim()).filter(l => l.length > 0);
+    const hasEngraving = engravingLines.length > 0;
+    if (!this.customLogoFile && !hasZoneUploads && !trimmedNote && !trimmedLink && !hasEngraving) {
       return null;
+    }
+
+    // Server-side engraving validation before writing to cart
+    if (hasEngraving) {
+      try {
+        const validateFn = httpsCallable<
+          { lines: string[]; fontId: string; maxCharsPerLine: number },
+          { valid: true; lines: string[]; fontId: string }
+        >(this.functions, 'validateEngravingInput');
+        const result = await validateFn({
+          lines: engravingLines,
+          fontId: this.engravingFont,
+          maxCharsPerLine: this.engravingMaxChars,
+        });
+        engravingLines = result.data.lines; // use sanitized lines
+      } catch (err: any) {
+        this.addError = err?.message || 'Engraving text is invalid. Please check your input.';
+        return null;
+      }
     }
 
     const customizationId = this.generateCustomizationId();
@@ -1243,7 +1465,9 @@ export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
         placement: this.customizationPlacement,
         note: trimmedNote || undefined,
         link: trimmedLink || undefined,
-        zones: zones.length ? zones : undefined
+        zones: zones.length ? zones : undefined,
+        engravingLines: hasEngraving ? engravingLines : undefined,
+        engravingFont: hasEngraving ? this.engravingFont : undefined,
       };
     }
 
@@ -1254,7 +1478,9 @@ export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
       baseImageUrl: this.customizationBaseImageUrl || undefined,
       placement: this.customizationPlacement,
       note: trimmedNote || undefined,
-      link: trimmedLink || undefined
+      link: trimmedLink || undefined,
+      engravingLines: hasEngraving ? engravingLines : undefined,
+      engravingFont: hasEngraving ? this.engravingFont : undefined,
     };
   }
 
@@ -1271,6 +1497,9 @@ export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     if (this.requiresLogoInput && this.totalUploadedLogos === 0) {
       errors.logo = 'product.customization_logo_required';
+    }
+    if (this.requiresEngravingText && !this.hasEngravingText) {
+      (errors as any).engraving = 'product.customization_engraving_required';
     }
 
     this.clientInputErrors = errors;
