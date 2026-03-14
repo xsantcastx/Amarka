@@ -1,0 +1,110 @@
+<section class="page-hero">
+  <div class="page-container">
+    <div class="page-hero__inner">
+      <p class="badge">Trade &amp; Commercial</p>
+      <h1 class="heading-display">Supplying the NYC Trade Since 2024</h1>
+      <p class="page-hero__subtitle">Preferred supplier positioning for interior designers, GCs, hospitality groups, and commercial operators needing precise engraved fabrication.</p>
+    </div>
+  </div>
+</section>
+
+<section class="trade-page">
+  <div class="page-container">
+    <div class="trade-page__steps">
+      @for (step of tradeSteps(); track step.step) {
+      <article class="trade-step">
+        <span class="trade-step__number">{{ step.step }}</span>
+        <h2>{{ step.title }}</h2>
+        <p>{{ step.description }}</p>
+      </article>
+      }
+    </div>
+
+    <div class="trade-page__grid">
+      <section class="trade-panel trade-panel--benefits">
+        <p class="badge">Trade account benefits</p>
+        <ul class="trade-list">
+          <li>
+            <span class="trade-list__icon">◆</span>
+            Preferred pricing
+          </li>
+          <li>
+            <span class="trade-list__icon">◆</span>
+            Dedicated lead time slots
+          </li>
+          <li>
+            <span class="trade-list__icon">◆</span>
+            Single point of contact
+          </li>
+          <li>
+            <span class="trade-list__icon">◆</span>
+            Monthly invoicing
+          </li>
+        </ul>
+        <p class="trade-panel__copy">FF&amp;E supply support, fabrication guidance, and a 5-10 business day turnaround for active trade programmes.</p>
+        @if (specSheet(); as download) {
+        <a [href]="download.fileUrl" target="_blank" rel="noopener" class="btn-primary" (click)="trackDownload()">
+          Download spec sheet
+        </a>
+        }
+      </section>
+
+      <section class="trade-panel trade-panel--form">
+        <p class="badge">Trade application</p>
+        @if (success) {
+        <div class="form-success">
+          <h2>Application received</h2>
+          <p>Thanks. We'll review your trade enquiry and respond within 24 hours.</p>
+        </div>
+        } @else {
+        <form [formGroup]="form" (ngSubmit)="submit()" class="trade-form">
+          <input formControlName="companyName" type="text" placeholder="Company Name" />
+          <input formControlName="contactName" type="text" placeholder="Contact Name" />
+          <input formControlName="email" type="email" placeholder="Email Address" />
+          <select formControlName="role">
+            <option value="" disabled selected>Your Role</option>
+            <option value="designer">Interior Designer</option>
+            <option value="gc">General Contractor (GC)</option>
+            <option value="hospitality">Hospitality Operator</option>
+            <option value="corporate">Corporate</option>
+            <option value="other">Other</option>
+          </select>
+          <select formControlName="projectType">
+            <option value="" disabled selected>Project Type</option>
+            <option value="signage">Signage</option>
+            <option value="bar_fitout">Bar Fitout</option>
+            <option value="trade_supply">Trade Supply</option>
+            <option value="awards">Awards</option>
+            <option value="architectural">Architectural</option>
+            <option value="other">Other</option>
+          </select>
+          <input formControlName="estimatedQuantity" type="text" placeholder="Estimated Quantity" />
+          <select formControlName="materialPreference">
+            <option value="" disabled selected>Material Preference</option>
+            <option value="brass">Brushed Brass</option>
+            <option value="aluminium">Anodized Aluminium</option>
+            <option value="stainless">Stainless Steel</option>
+            <option value="acrylic">Frosted / Cast Acrylic</option>
+            <option value="wood">Hardwood (Oak / Walnut)</option>
+            <option value="glass">Glass</option>
+            <option value="unsure">Unsure — advise me</option>
+          </select>
+          <select formControlName="timeline">
+            <option value="" disabled selected>Timeline</option>
+            <option value="2_weeks">Within 2 weeks</option>
+            <option value="1_month">1 month</option>
+            <option value="1_3_months">1–3 months</option>
+            <option value="flexible">Flexible</option>
+          </select>
+          <textarea formControlName="notes" rows="4" placeholder="Project notes"></textarea>
+          <app-file-dropzone [files]="files" [progress]="uploadProgress" helper="PDF, AI, DWG, JPG up to 20MB" (filesChange)="onFilesChange($event)" />
+          @if (errorMessage) {
+          <p class="form-error">{{ errorMessage }}</p>
+          }
+          <button type="submit" class="btn-primary" [disabled]="submitting">Submit trade application</button>
+        </form>
+        }
+      </section>
+    </div>
+  </div>
+</section>

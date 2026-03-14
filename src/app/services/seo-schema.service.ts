@@ -25,6 +25,14 @@ export interface FAQItem {
   answer: string;
 }
 
+export interface MarketingSeoInput {
+  title: string;
+  description: string;
+  keywords?: string[];
+  path?: string;
+  imageUrl?: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -262,13 +270,17 @@ export class SeoSchemaService {
     this.meta.updateTag({ name: 'twitter:title', content: title });
   }
 
+  setOgType(type: string): void {
+    this.meta.updateTag({ property: 'og:type', content: type });
+  }
+
   /**
    * Remove all dynamic schema scripts
    */
   removeAllSchemas(): void {
     if (!this.isBrowser) return;
     
-    const schemaIds = ['product-schema', 'faq-schema', 'breadcrumb-schema', 'itemlist-schema', 'article-schema'];
+    const schemaIds = ['product-schema', 'faq-schema', 'breadcrumb-schema', 'itemlist-schema', 'article-schema', 'local-business-schema'];
     schemaIds.forEach(id => this.removeSchema(id));
   }
 
@@ -313,6 +325,62 @@ export class SeoSchemaService {
     const siteUrl = this.brandConfig.siteUrl.replace(/\/$/, '');
     const path = logo.startsWith('/') ? logo : `/${logo}`;
     return `${siteUrl}${path}`;
+  }
+
+  private getAbsoluteUrl(path = ''): string {
+    const siteUrl = this.brandConfig.siteUrl.replace(/\/$/, '');
+    if (!path) {
+      return siteUrl;
+    }
+    return `${siteUrl}${path.startsWith('/') ? path : `/${path}`}`;
+  }
+
+  setupMarketingPageSEO(input: MarketingSeoInput): void {
+    this.removeAllSchemas();
+    this.setTitle(input.title);
+    this.setMetaDescription(input.description);
+    this.setOgTitle(input.title);
+    this.setOgType('website');
+
+    if (input.keywords?.length) {
+      this.setMetaKeywords(input.keywords.join(', '));
+    }
+
+    this.setOgImage(input.imageUrl ? this.getAbsoluteUrl(input.imageUrl) : this.getAbsoluteLogoUrl());
+
+    if (input.path) {
+      this.setCanonicalUrl(this.getAbsoluteUrl(input.path));
+    }
+  }
+
+  generateLocalBusinessSchema(data?: {
+    pagePath?: string;
+    description?: string;
+  }): void {
+    if (!this.isBrowser) return;
+
+    const contact = this.brandConfig.site.contact;
+    const schema = {
+      '@context': 'https://schema.org',
+      '@type': 'ProfessionalService',
+      '@id': this.getAbsoluteUrl(data?.pagePath),
+      name: this.brandConfig.siteName,
+      url: this.getAbsoluteUrl(data?.pagePath),
+      description: data?.description || this.brandConfig.site.brand.description,
+      image: this.getAbsoluteLogoUrl(),
+      email: contact.email,
+      telephone: contact.phone,
+      areaServed: ['New York City Metropolitan Area', 'Stamford, Connecticut'],
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Stamford',
+        addressRegion: 'CT',
+        addressCountry: 'US'
+      },
+      sameAs: (this.brandConfig.nav.social || []).map(item => item.href)
+    };
+
+    this.injectSchema('local-business-schema', schema);
   }
 
   /**

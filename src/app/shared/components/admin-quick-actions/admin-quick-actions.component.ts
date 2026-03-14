@@ -23,13 +23,13 @@ export class AdminQuickActionsComponent {
       icon: 'M12 6V3m0 3a9 9 0 019 9h-3m-6-9a9 9 0 00-9 9h3m6 6v3m0-3a9 9 0 01-9-9H3m9 9a9 9 0 009-9h3'
     },
     catalog: {
-      label: 'Catalog',
-      description: 'Curate products, imagery, and supporting assets.',
+      label: 'Content',
+      description: 'Manage current studio content and retained legacy catalog data.',
       icon: 'M4 6h16M4 12h16M4 18h16'
     },
     commerce: {
-      label: 'Commerce',
-      description: 'Oversee orders, customers, and transactional flows.',
+      label: 'Legacy Commerce',
+      description: 'Retained storefront operations kept outside the live trade site.',
       icon: 'M12 8c-1.657 0-3-.843-3-2.5S10.343 3 12 3s3 .843 3 2.5S13.657 8 12 8zm0 0c4.418 0 8 2.239 8 5v4H4v-4c0-2.761 3.582-5 8-5zm-4 9h8v2H8z'
     },
     engagement: {
@@ -50,9 +50,9 @@ export class AdminQuickActionsComponent {
     },
     {
       labelKey: 'admin.products.title',
-      description: 'Update inventory, pricing, specs, and visibility.',
+      description: 'Retained legacy product records from the previous storefront.',
       icon: 'M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4',
-      route: '/admin/products',
+      route: '/admin/legacy/products',
       color: 'orange',
       category: 'catalog'
     },
@@ -66,9 +66,9 @@ export class AdminQuickActionsComponent {
     },
     {
       labelKey: 'admin.benefit_templates.title',
-      description: 'Fine-tune benefit snippets used across listings.',
+      description: 'Legacy listing copy helpers retained for the old storefront.',
       icon: 'M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01',
-      route: '/admin/benefit-templates',
+      route: '/admin/legacy/benefit-templates',
       color: 'cyan',
       category: 'catalog'
     },
@@ -82,9 +82,9 @@ export class AdminQuickActionsComponent {
     },
     {
       labelKey: 'admin.orders.title',
-      description: 'Review purchase flow, status, and fulfillment.',
+      description: 'Legacy storefront orders retained outside the new public site.',
       icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2',
-      route: '/admin/orders',
+      route: '/admin/legacy/orders',
       color: 'yellow',
       category: 'commerce'
     },

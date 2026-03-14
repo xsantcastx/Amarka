@@ -415,7 +415,7 @@ export class AdminDashboardService {
         return {
           id: docSnap.id,
           type: 'order' as AdminActivityType,
-          description: `Order ${orderNumber} · ${statusLabel}${amountLabel}`,
+          description: `Legacy order ${orderNumber} · ${statusLabel}${amountLabel}`,
           timestamp,
           icon: 'order',
           entityId: docSnap.id // Store order ID for navigation
@@ -436,7 +436,7 @@ export class AdminDashboardService {
 
     return snapshot.docs.map(docSnap => {
       const data = docSnap.data() as Record<string, unknown>;
-      const name = (data['name'] as string) || 'Product';
+      const name = (data['name'] as string) || 'Legacy product';
       const grosor =
         (data['specs'] as Record<string, unknown> | undefined)?.['grosor'] ||
         (data['grosor'] as string) ||
@@ -446,7 +446,7 @@ export class AdminDashboardService {
       return {
         id: docSnap.id,
         type: 'product' as AdminActivityType,
-        description: grosor ? `${name} (${grosor}) updated` : `${name} updated`,
+        description: grosor ? `Legacy product updated: ${name} (${grosor})` : `Legacy product updated: ${name}`,
         timestamp,
         icon: 'product',
         entityId: docSnap.id // Store product ID for navigation
@@ -524,7 +524,7 @@ export class AdminDashboardService {
       const data = docSnap.data() as Record<string, unknown>;
       const displayName = (data['displayName'] as string) || '';
       const email = (data['email'] as string) || '';
-      const description = displayName ? `New user: ${displayName}` : `New user registered: ${email}`;
+      const description = displayName ? `New account profile: ${displayName}` : `New account registered: ${email}`;
       const timestamp = this.extractTimestamp(data['createdAt']);
 
       return {

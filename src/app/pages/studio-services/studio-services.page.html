@@ -1,0 +1,29 @@
+<section class="page-hero">
+  <div class="page-container">
+    <div class="page-hero__inner">
+      <p class="badge">Commission types</p>
+      <h1 class="heading-display">Six service categories tailored to hospitality, workplace, and architectural projects.</h1>
+      <p class="page-hero__subtitle">No catalogue. No list pricing. Each commission is reviewed against material, timeline, quantity, and installation context.</p>
+    </div>
+  </div>
+</section>
+
+<section class="studio-page">
+  <div class="page-container">
+    <div class="services-grid">
+      @for (service of services(); track service.id) {
+      <article class="service-card">
+        <div class="service-card__copy">
+          <h2>{{ service.title }}</h2>
+          <p>{{ service.description }}</p>
+        </div>
+        <div class="service-card__meta">
+          <p><span class="service-card__label">Materials:</span> {{ service.materials.join(', ') }}</p>
+          <p><span class="service-card__label">Lead time:</span> {{ service.typicalLeadTime }}</p>
+          <a [routerLink]="service.ctaHref" class="service-card__cta">{{ service.ctaLabel }} →</a>
+        </div>
+      </article>
+      }
+    </div>
+  </div>
+</section>

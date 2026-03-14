@@ -13,8 +13,8 @@
             </svg>
           </div>
           <div>
-            <h1 class="text-lg md:text-xl font-bold text-ts-ink">{{ 'admin.dashboard.title' | translate }}</h1>
-            <p class="text-sm text-ts-ink-soft">{{ 'admin.dashboard.subtitle' | translate }}</p>
+            <h1 class="text-lg md:text-xl font-bold text-ts-ink">Studio Control Panel</h1>
+            <p class="text-sm text-ts-ink-soft">Manage the live trade site, project media, and archived commerce data from one place.</p>
           </div>
         </div>
         <div class="flex items-center gap-2 w-full md:w-auto">
@@ -44,7 +44,7 @@
       <!-- Quick Stats -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6 mb-8">
         
-        <!-- Products Card -->
+        <!-- Legacy Products Card -->
         <div class="bg-ts-paper backdrop-blur-sm rounded-2xl shadow-lg p-6 border border-ts-line hover:border-ts-accent/50 hover:shadow-xl transition-all duration-300 group">
           <div class="flex items-center justify-between mb-4">
             <div class="w-12 h-12 bg-gradient-to-br from-ts-accent to-ts-accent rounded-xl flex items-center justify-center shadow-lg">
@@ -52,17 +52,17 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
               </svg>
             </div>
-            <a routerLink="/admin/products" class="text-ts-accent hover:text-ts-accent-soft transition-colors">
+            <a routerLink="/admin/legacy/products" class="text-ts-accent hover:text-ts-accent-soft transition-colors">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
               </svg>
             </a>
           </div>
           <h3 class="text-3xl font-bold heading-display text-ts-accent mb-1">{{ stats?.totalProducts }}</h3>
-          <p class="text-sm text-ts-ink-soft">{{ 'admin.total_products' | translate }}</p>
+          <p class="text-sm text-ts-ink-soft">Legacy product records</p>
         </div>
 
-        <!-- Orders Card -->
+        <!-- Legacy Orders Card -->
         <div class="bg-ts-paper backdrop-blur-sm rounded-2xl shadow-lg p-6 border border-ts-line hover:border-ts-accent/50 hover:shadow-xl transition-all duration-300 group">
           <div class="flex items-center justify-between mb-4">
             <div class="w-12 h-12 bg-gradient-to-br from-ts-accent to-ts-accent rounded-xl flex items-center justify-center shadow-lg">
@@ -70,17 +70,17 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
               </svg>
             </div>
-            <a routerLink="/admin/orders" class="text-ts-accent hover:text-ts-accent-soft transition-colors">
+            <a routerLink="/admin/legacy/orders" class="text-ts-accent hover:text-ts-accent-soft transition-colors">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
               </svg>
             </a>
           </div>
           <h3 class="text-3xl font-bold heading-display text-ts-accent mb-1">{{ stats?.totalOrders }}</h3>
-          <p class="text-sm text-ts-ink-soft">{{ 'admin.total_orders' | translate }}</p>
+          <p class="text-sm text-ts-ink-soft">Legacy orders</p>
           @if (stats && stats.pendingOrders > 0) {
             <span class="inline-block mt-2 px-2 py-1 bg-ts-accent-soft/20 text-ts-accent-soft text-xs font-medium rounded-full border border-ts-accent-soft/30">
-              {{ stats.pendingOrders }} {{ 'client.pending' | translate }}
+              {{ stats.pendingOrders }} pending review
             </span>
           }
         </div>
@@ -100,7 +100,7 @@
             </a>
           </div>
           <h3 class="text-3xl font-bold heading-display text-ts-accent mb-1">{{ stats?.totalGalleryImages }}</h3>
-          <p class="text-sm text-ts-ink-soft">{{ 'admin.gallery_images' | translate }}</p>
+          <p class="text-sm text-ts-ink-soft">Project gallery assets</p>
         </div>
 
         <!-- Users Card -->
@@ -118,7 +118,7 @@
             </a>
           </div>
           <h3 class="text-3xl font-bold heading-display text-ts-accent mb-1">{{ stats?.totalUsers }}</h3>
-          <p class="text-sm text-ts-ink-soft">{{ 'admin.total_users' | translate }}</p>
+          <p class="text-sm text-ts-ink-soft">Accounts and access profiles</p>
         </div>
 
         <!-- Reviews Card -->
@@ -136,15 +136,15 @@
             </a>
           </div>
           <h3 class="text-3xl font-bold heading-display text-rose-500 mb-1">{{ stats?.pendingReviews ?? 0 }}</h3>
-          <p class="text-sm text-ts-ink-soft">{{ 'admin.pending_reviews' | translate }}</p>
+          <p class="text-sm text-ts-ink-soft">Review moderation queue</p>
           @if (stats && stats.pendingReviews > 0) {
             <span class="inline-block mt-2 px-2 py-1 bg-rose-500/20 text-rose-500 text-xs font-medium rounded-full border border-rose-500/30">
-              {{ 'admin.needs_moderation' | translate }}
+              Needs moderation
             </span>
           }
         </div>
 
-        <!-- Revenue Card -->
+        <!-- Archived Revenue Card -->
         <div class="bg-ts-paper backdrop-blur-sm rounded-2xl shadow-lg p-6 border border-ts-line hover:border-ts-accent/50 hover:shadow-xl transition-all duration-300 group">
           <div class="flex items-center justify-between mb-4">
             <div class="w-12 h-12 bg-gradient-to-br from-ts-accent to-ts-accent rounded-xl flex items-center justify-center shadow-lg">
@@ -152,14 +152,14 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3-.895-3-2s1.343-2 3-2 3 .895 3 2m-3 4c-1.657 0-3-.895-3-2s1.343-2 3-2 3 .895 3 2m-6 0v8c0 1.105 1.343 2 3 2s3-.895 3-2v-8m6 0c0 3.866-3.582 7-8 7s-8-3.134-8-7"></path>
               </svg>
             </div>
-            <a routerLink="/admin/orders" class="text-ts-accent hover:text-ts-accent-soft transition-colors">
+            <a routerLink="/admin/legacy/orders" class="text-ts-accent hover:text-ts-accent-soft transition-colors">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
               </svg>
             </a>
           </div>
           <h3 class="text-3xl font-bold heading-display text-ts-accent mb-1">{{ formatCurrency(stats?.totalRevenue ?? 0) }}</h3>
-          <p class="text-sm text-ts-ink-soft">{{ 'admin.total_revenue' | translate }}</p>
+          <p class="text-sm text-ts-ink-soft">Archived storefront revenue</p>
           <p class="text-xs text-ts-ink-soft/60 mt-1">{{ stats?.currencyCode }}</p>
         </div>
       </div>
@@ -169,43 +169,43 @@
         <!-- Quick Actions -->
         <div class="lg:col-span-1">
           <div class="bg-ts-paper backdrop-blur-sm rounded-2xl shadow-lg p-6 border border-ts-line">
-            <h2 class="text-xl font-bold heading-display text-ts-accent mb-4">{{ 'admin.quick_actions' | translate }}</h2>
+            <h2 class="text-xl font-bold heading-display text-ts-accent mb-4">Priority actions</h2>
             <div class="space-y-2">
-              <a routerLink="/admin/products" [queryParams]="{action: 'create'}" class="flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-ts-accent to-ts-accent-soft hover:from-ts-accent-soft hover:to-ts-accent text-white border border-ts-accent/30 rounded-xl transition-all duration-300 group shadow-md hover:shadow-lg">
+              <a routerLink="/admin/gallery" [queryParams]="{action: 'upload'}" class="flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-ts-accent to-ts-accent-soft hover:from-ts-accent-soft hover:to-ts-accent text-white border border-ts-accent/30 rounded-xl transition-all duration-300 group shadow-md hover:shadow-lg">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                 </svg>
-                <span class="font-medium">{{ 'admin.add_product' | translate }}</span>
+                <span class="font-medium">Upload project imagery</span>
                 <svg class="w-4 h-4 ml-auto group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                 </svg>
               </a>
               
-              <a routerLink="/admin/gallery" [queryParams]="{action: 'upload'}" class="flex items-center gap-3 px-4 py-3 bg-ts-accent/10 hover:bg-ts-accent/20 text-ts-accent border border-ts-accent/30 rounded-xl transition-all duration-300 group">
+              <a routerLink="/admin/users" class="flex items-center gap-3 px-4 py-3 bg-ts-accent/10 hover:bg-ts-accent/20 text-ts-accent border border-ts-accent/30 rounded-xl transition-all duration-300 group">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
                 </svg>
-                <span class="font-medium">{{ 'admin.upload_image' | translate }}</span>
+                <span class="font-medium">Review account access</span>
                 <svg class="w-4 h-4 ml-auto group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                 </svg>
               </a>
 
-              <a routerLink="/admin/products" class="flex items-center gap-3 px-4 py-3 hover:bg-ts-bg-soft text-ts-ink-soft hover:text-ts-accent border border-transparent hover:border-ts-accent/20 rounded-xl transition-all duration-300 group">
+              <a routerLink="/admin/legacy/products" class="flex items-center gap-3 px-4 py-3 hover:bg-ts-bg-soft text-ts-ink-soft hover:text-ts-accent border border-transparent hover:border-ts-accent/20 rounded-xl transition-all duration-300 group">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
                 </svg>
-                <span class="font-medium">{{ 'admin.manage_products' | translate }}</span>
+                <span class="font-medium">Review legacy product data</span>
                 <svg class="w-4 h-4 ml-auto group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                 </svg>
               </a>
 
-              <a routerLink="/admin/orders" class="flex items-center gap-3 px-4 py-3 hover:bg-ts-bg-soft text-ts-ink-soft hover:text-ts-accent border border-transparent hover:border-ts-accent/20 rounded-xl transition-all duration-300 group">
+              <a routerLink="/admin/legacy/orders" class="flex items-center gap-3 px-4 py-3 hover:bg-ts-bg-soft text-ts-ink-soft hover:text-ts-accent border border-transparent hover:border-ts-accent/20 rounded-xl transition-all duration-300 group">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
                 </svg>
-                <span class="font-medium">{{ 'admin.manage_orders' | translate }}</span>
+                <span class="font-medium">Audit legacy orders</span>
                 <svg class="w-4 h-4 ml-auto group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                 </svg>
@@ -221,11 +221,11 @@
                 </svg>
               </a>
 
-              <a routerLink="/admin/models" class="flex items-center gap-3 px-4 py-3 hover:bg-ts-bg-soft text-ts-ink-soft hover:text-ts-accent border border-transparent hover:border-ts-accent/20 rounded-xl transition-all duration-300 group">
+              <a routerLink="/admin/legacy/models" class="flex items-center gap-3 px-4 py-3 hover:bg-ts-bg-soft text-ts-ink-soft hover:text-ts-accent border border-transparent hover:border-ts-accent/20 rounded-xl transition-all duration-300 group">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
                 </svg>
-                <span class="font-medium">{{ 'admin.catalog.title' | translate }}</span>
+                <span class="font-medium">Inspect legacy models</span>
                 <svg class="w-4 h-4 ml-auto group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                 </svg>
@@ -247,7 +247,7 @@
         <!-- Recent Activity -->
         <div class="lg:col-span-2">
           <div class="bg-ts-paper backdrop-blur-sm rounded-2xl shadow-lg p-6 border border-ts-line">
-            <h2 class="text-xl font-bold heading-display text-ts-accent mb-4">{{ 'admin.recent_activity' | translate }}</h2>
+            <h2 class="text-xl font-bold heading-display text-ts-accent mb-4">Recent activity</h2>
             
             @if (stats && stats.recentActivity && stats.recentActivity.length > 0) {
               <div class="space-y-3">
@@ -280,6 +280,5 @@
     </div>
   }
 </div>
-
 
 
