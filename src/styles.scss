@@ -231,13 +231,7 @@
   }
 }
 
-/* Stronger specificity rule to override global h1 !important inside page-hero */
-body .page-hero h1,
-body .page-hero h2,
-body .page-hero h3 {
-  color: #f7f1e7 !important;
-  -webkit-text-fill-color: #f7f1e7 !important;
-}
+/* page-hero headings already inherit #f7f1e7 from the dark-first globals */
 
 .page-hero__inner {
   position: relative;
@@ -385,7 +379,7 @@ body {
     radial-gradient(120% 120% at 0% 0%, rgba(159, 107, 61, 0.10) 0%, transparent 44%),
     radial-gradient(120% 120% at 100% 0%, rgba(159, 107, 61, 0.06) 0%, transparent 40%),
     linear-gradient(180deg, #0a0d11 0%, #0e1116 100%);
-  color: var(--ts-ink);
+  color: rgba(247, 241, 231, 0.85);
   font-family: var(--font-sans);
   position: relative;
   overflow-x: hidden;
@@ -411,14 +405,14 @@ body {
   filter: saturate(0.9);
 }
 
-/* Base heading styles — no !important so dark sections can override */
+/* Base heading styles — dark-first (matches dark body) */
 h1,
 h2,
 h3,
 h4,
 h5,
 h6 {
-  color: var(--ts-ink);
+  color: #f7f1e7;
   font-family: var(--font-display);
   font-weight: 700;
   letter-spacing: -0.015em;
@@ -430,7 +424,7 @@ h6 {
   font-weight: 700;
   letter-spacing: -0.02em;
   line-height: 1.14;
-  color: var(--ts-ink);
+  color: #f7f1e7;
 }
 
 .heading-display--accent {
@@ -1017,17 +1011,17 @@ select {
   transition: all 0.25s ease-out;
 }
 
-/* Enhanced form controls for better readability */
+/* Enhanced form controls — dark-first for the Amarka dark body */
 input,
 textarea,
 select {
-  color: var(--ts-ink) !important;
-  background-color: color-mix(in srgb, var(--surface-glass) 92%, rgba(255, 255, 255, 0.02)) !important;
-  border: 1px solid var(--surface-border) !important;
-  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.03);
+  color: #f7f1e7;
+  background-color: rgba(255, 253, 249, 0.07);
+  border: 1px solid rgba(247, 241, 231, 0.14);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.12);
   backdrop-filter: blur(6px);
-  caret-color: var(--ts-ink);
-  color-scheme: light;
+  caret-color: #f7f1e7;
+  color-scheme: dark;
 }
 
 input,
@@ -1041,12 +1035,12 @@ select {
 
 input::placeholder,
 textarea::placeholder {
-  color: color-mix(in srgb, var(--ts-ink-soft) 65%, transparent) !important;
+  color: rgba(247, 241, 231, 0.38);
   opacity: 1;
 }
 
 label {
-  color: var(--ts-ink) !important;
+  color: rgba(247, 241, 231, 0.85);
 }
 
 /* Enhanced button styles */
@@ -1061,20 +1055,20 @@ button:disabled {
   opacity: 0.6;
 }
 
-/* Form field focus states for better visibility */
+/* Form field focus states — dark-first */
 input:focus,
 textarea:focus,
 select:focus {
-  border-color: color-mix(in srgb, var(--ts-accent) 55%, transparent);
-  box-shadow: var(--shadow-focus);
-  background-color: color-mix(in srgb, var(--surface-glass) 85%, rgba(255, 255, 255, 0.06));
+  border-color: rgba(159, 107, 61, 0.55);
+  box-shadow: 0 0 0 3px rgba(159, 107, 61, 0.12);
+  background-color: rgba(255, 253, 249, 0.10);
 }
 
 input:focus:not(:focus-visible),
 textarea:focus:not(:focus-visible),
 select:focus:not(:focus-visible) {
   outline: none;
-  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.03);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.12);
 }
 
 /* Ensure button text is readable */
@@ -1102,8 +1096,7 @@ button:disabled {
   padding-left: 1.5rem;
   padding-right: 1.5rem;
   max-width: 1280px;
-  color: var(--ts-ink);
-  /* Ensure container text is light */
+  color: rgba(247, 241, 231, 0.85);
 }
 
 /* Custom scrollbar for webkit browsers */
@@ -1112,11 +1105,11 @@ button:disabled {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--ts-bg-soft);
+  background: rgba(14, 17, 22, 0.6);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--ts-line);
+  background: rgba(159, 107, 61, 0.3);
   border-radius: 4px;
 }
 
@@ -1183,14 +1176,14 @@ img {
   }
 }
 
-/* Additional text readability fixes */
+/* Additional text readability fixes — dark-first */
 article,
 section,
 main,
 aside,
 header,
 nav {
-  color: var(--ts-ink);
+  color: rgba(247, 241, 231, 0.85);
 }
 
 /* Ensure readable text in cards and surfaces */
@@ -1200,7 +1193,7 @@ nav {
 [class*='surface'],
 .panel,
 [class*='panel'] {
-  color: var(--ts-ink);
+  color: rgba(247, 241, 231, 0.85);
 }
 
 /* List items */
@@ -1212,7 +1205,7 @@ li {
 table,
 th,
 td {
-  color: var(--ts-ink);
+  color: rgba(247, 241, 231, 0.85);
 }
 
 /* Specific utility for light text */

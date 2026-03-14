@@ -52,7 +52,7 @@
   }
 }
 
-// Outline button
+// Outline button — dark-first
 .btn-outline {
   display: inline-flex;
   align-items: center;
@@ -64,16 +64,18 @@
   text-decoration: none;
   letter-spacing: 0.02em;
   transition: all 0.18s ease;
-  color: var(--ts-ink);
-  background: color-mix(in srgb, var(--ts-paper) 96%, transparent);
-  border: 1px solid color-mix(in srgb, var(--ts-line) 90%, transparent);
-  box-shadow: 0 16px 30px -26px rgba(23, 22, 26, 0.14);
+  color: #f7f1e7;
+  background: rgba(247, 241, 231, 0.07);
+  border: 1px solid rgba(247, 241, 231, 0.18);
+  box-shadow: 0 16px 30px -26px rgba(0, 0, 0, 0.3);
   cursor: pointer;
 
   &:hover {
-    background: color-mix(in srgb, var(--ts-accent) 9%, var(--ts-paper));
-    border-color: color-mix(in srgb, var(--ts-accent) 38%, transparent);
+    background: rgba(159, 107, 61, 0.14);
+    border-color: rgba(159, 107, 61, 0.4);
+    color: #f7f1e7;
     transform: translateY(-2px);
+    text-decoration: none;
   }
 }
 
@@ -104,22 +106,22 @@
   color: var(--btn-primary-text) !important;
 }
 
-// Badge/Pill style
+// Badge/Pill style — dark-first
 .badge {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
   padding: 0.55rem 1rem;
   border-radius: 999px;
-  background: color-mix(in srgb, var(--ts-paper) 96%, transparent);
+  background: rgba(159, 107, 61, 0.12);
   backdrop-filter: blur(16px);
-  color: var(--ts-ink) !important;
+  color: var(--ts-accent) !important;
   font-weight: 700;
   font-size: 0.77rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  border: 1px solid color-mix(in srgb, var(--ts-line) 92%, transparent);
-  box-shadow: 0 12px 24px -22px rgba(23, 22, 26, 0.14);
+  border: 1px solid rgba(159, 107, 61, 0.28);
+  box-shadow: 0 12px 24px -22px rgba(0, 0, 0, 0.3);
 }
 
 // Tag pill
