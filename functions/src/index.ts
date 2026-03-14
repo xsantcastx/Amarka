@@ -1704,3 +1704,197 @@ export const validateEngravingInput = functions.https.onCall(
   }
 );
 
+interface LeadUploadRef {
+  storagePath: string;
+  originalName: string;
+  mimeType: string;
+  size: number;
+}
+
+interface StudioEnquiryPayload {
+  type: "standard" | "trade";
+  fullName: string;
+  company?: string;
+  email: string;
+  role: "designer" | "gc" | "hospitality" | "corporate" | "other";
+  projectType: string;
+  preferredMaterial?: string;
+  estimatedQuantity?: string;
+  targetTimeline?: string;
+  projectDescription: string;
+  fileUploads?: LeadUploadRef[];
+  sourcePage: string;
+  leadTags?: string[];
+}
+
+interface TradeApplicationPayload {
+  companyName: string;
+  contactName: string;
+  email: string;
+  role: "designer" | "gc" | "other";
+  projectType: string;
+  estimatedQuantity: string;
+  materialPreference?: string;
+  timeline?: string;
+  notes?: string;
+  specSheetUploads?: LeadUploadRef[];
+  leadTags?: string[];
+}
+
+function validateLeadUploads(files: LeadUploadRef[] = []) {
+  for (const file of files) {
+    if (!file.storagePath || !file.storagePath.startsWith("private/")) {
+      throw new functions.https.HttpsError("invalid-argument", "Invalid upload path");
+    }
+    if (Number(file.size || 0) > 20 * 1024 * 1024) {
+      throw new functions.https.HttpsError("invalid-argument", "Upload exceeds 20MB limit");
+    }
+  }
+}
+
+function buildLeadTags(payload: { role?: string; sourcePage?: string; type?: string }, extra: string[] = []) {
+  const tags = new Set<string>(extra.filter(Boolean));
+  if (payload.type) tags.add(payload.type);
+  if (payload.role) tags.add(payload.role);
+  if (payload.sourcePage === "/trade") tags.add("trade_page");
+  return Array.from(tags);
+}
+
+async function sendLeadEmail(
+  to: string,
+  subject: string,
+  html: string,
+  replyTo?: { email: string; name?: string }
+) {
+  const config = await getEmailConfig();
+  if (!config.apiKey || !config.fromEmail || !to) {
+    return;
+  }
+
+  const fetchFn = (globalThis as any).fetch as any;
+  if (!fetchFn) {
+    return;
+  }
+
+  await fetchFn("https://api.brevo.com/v3/smtp/email", {
+    method: "POST",
+    headers: {
+      accept: "application/json",
+      "content-type": "application/json",
+      "api-key": config.apiKey,
+    },
+    body: JSON.stringify({
+      sender: {
+        name: config.fromName || "Amarka",
+        email: config.fromEmail,
+      },
+      to: [{ email: to }],
+      subject,
+      htmlContent: html,
+      replyTo: replyTo?.email ? { email: replyTo.email, name: replyTo.name || replyTo.email } : undefined,
+    }),
+  });
+}
+
+export const submitStudioEnquiry = withBrevoSecrets.https.onCall(
+  withFlag("emailNotifications", async (data: StudioEnquiryPayload) => {
+    if (!data?.fullName || !data?.email || !data?.projectType || !data?.projectDescription) {
+      throw new functions.https.HttpsError("invalid-argument", "Missing required enquiry fields");
+    }
+
+    validateLeadUploads(data.fileUploads);
+    const leadTags = buildLeadTags(data, data.leadTags);
+    const docRef = await db.collection("enquiries").add({
+      ...data,
+      leadTags,
+      responseSla: "24h",
+      status: "new",
+      createdAt: admin.firestore.FieldValue.serverTimestamp(),
+      updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+    });
+
+    const emailConfig = await getEmailConfig();
+    const internalTarget = emailConfig.notificationEmail || emailConfig.contactEmail;
+
+    await Promise.all([
+      internalTarget
+        ? sendLeadEmail(
+            internalTarget,
+            `New enquiry: ${data.projectType}`,
+            `<div style="font-family:Arial,sans-serif">
+              <h2>New Amarka enquiry</h2>
+              <p><strong>Name:</strong> ${data.fullName}</p>
+              <p><strong>Company:</strong> ${data.company || "—"}</p>
+              <p><strong>Email:</strong> ${data.email}</p>
+              <p><strong>Role:</strong> ${data.role}</p>
+              <p><strong>Project type:</strong> ${data.projectType}</p>
+              <p><strong>Description:</strong><br>${data.projectDescription}</p>
+            </div>`,
+            { email: data.email, name: data.fullName }
+          )
+        : Promise.resolve(),
+      sendLeadEmail(
+        data.email,
+        "Amarka received your enquiry",
+        `<div style="font-family:Arial,sans-serif">
+          <h2>Thanks for contacting Amarka</h2>
+          <p>We’ve received your project brief and will respond within 24 hours.</p>
+          <p><strong>Project type:</strong> ${data.projectType}</p>
+          <p>Studio based in Stamford, CT · Serving the NYC metro.</p>
+        </div>`
+      ),
+    ]);
+
+    return { ok: true, id: docRef.id };
+  })
+);
+
+export const submitTradeApplication = withBrevoSecrets.https.onCall(
+  withFlag("emailNotifications", async (data: TradeApplicationPayload) => {
+    if (!data?.companyName || !data?.contactName || !data?.email || !data?.projectType || !data?.estimatedQuantity) {
+      throw new functions.https.HttpsError("invalid-argument", "Missing required trade application fields");
+    }
+
+    validateLeadUploads(data.specSheetUploads);
+    const leadTags = buildLeadTags({ role: data.role, sourcePage: "/trade", type: "trade_application" }, data.leadTags);
+    const docRef = await db.collection("tradeApplications").add({
+      ...data,
+      leadTags,
+      status: "new",
+      createdAt: admin.firestore.FieldValue.serverTimestamp(),
+      updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+    });
+
+    const emailConfig = await getEmailConfig();
+    const internalTarget = emailConfig.notificationEmail || emailConfig.contactEmail;
+
+    await Promise.all([
+      internalTarget
+        ? sendLeadEmail(
+            internalTarget,
+            `New trade application: ${data.companyName}`,
+            `<div style="font-family:Arial,sans-serif">
+              <h2>New trade application</h2>
+              <p><strong>Company:</strong> ${data.companyName}</p>
+              <p><strong>Contact:</strong> ${data.contactName}</p>
+              <p><strong>Email:</strong> ${data.email}</p>
+              <p><strong>Role:</strong> ${data.role}</p>
+              <p><strong>Project type:</strong> ${data.projectType}</p>
+              <p><strong>Estimated quantity:</strong> ${data.estimatedQuantity}</p>
+            </div>`,
+            { email: data.email, name: data.contactName }
+          )
+        : Promise.resolve(),
+      sendLeadEmail(
+        data.email,
+        "Amarka received your trade application",
+        `<div style="font-family:Arial,sans-serif">
+          <h2>Trade application received</h2>
+          <p>Thanks for applying to the Amarka trade programme. We’ll review the details and respond within 24 hours.</p>
+        </div>`
+      ),
+    ]);
+
+    return { ok: true, id: docRef.id };
+  })
+);

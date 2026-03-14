@@ -1,0 +1,55 @@
+<section class="page-hero">
+  <div class="page-container">
+    <div class="page-hero__inner">
+      <p class="badge">Selected commissions</p>
+      <h1 class="heading-display">Trade-facing case studies, grouped by workflow and client type.</h1>
+      <p class="page-hero__subtitle">Hospitality, corporate, and architectural engraving commissions across the NYC metro.</p>
+    </div>
+  </div>
+</section>
+
+<section class="studio-page">
+  <div class="page-container">
+    <div class="work-filters">
+      @for (filter of filters; track filter) {
+      <button type="button" (click)="setFilter(filter)" [class.is-active]="activeFilter() === filter">
+        {{ filter === 'all' ? 'All' : (filter | titlecase) }}
+      </button>
+      }
+    </div>
+
+    @if (featured(); as featuredProject) {
+    <article class="work-feature">
+      <div class="work-feature__copy">
+        <p class="badge">Commission in Progress</p>
+        <h2 class="heading-display">{{ featuredProject.projectName }}</h2>
+        <p>{{ featuredProject.brief }}</p>
+      </div>
+      <div class="work-feature__meta">
+        <p class="work-feature__detail">{{ featuredProject.location }}</p>
+        <p class="work-feature__detail">{{ featuredProject.materials.join(' · ') }}</p>
+        <a [routerLink]="featuredProject.ctaHref" class="btn-primary">Start Your Commission</a>
+      </div>
+    </article>
+    }
+
+    <div class="work-grid">
+      @for (caseStudy of filteredCaseStudies(); track caseStudy.id) {
+      <article class="work-card">
+        <div class="work-card__media" aria-hidden="true">
+          <span class="work-card__material-label">{{ caseStudy.materials[0] ?? 'Engraving' }}</span>
+        </div>
+        <div class="work-card__body">
+          <p class="work-card__type">{{ caseStudy.clientType | titlecase }}</p>
+          <h3>{{ caseStudy.projectName }}</h3>
+          <p>{{ caseStudy.description }}</p>
+          <div class="work-card__footer">
+            <span class="work-card__meta">{{ caseStudy.location }}</span>
+            <a [routerLink]="caseStudy.ctaHref">{{ caseStudy.ctaLabel }}</a>
+          </div>
+        </div>
+      </article>
+      }
+    </div>
+  </div>
+</section>

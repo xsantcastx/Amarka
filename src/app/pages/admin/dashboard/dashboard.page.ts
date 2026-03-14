@@ -113,8 +113,8 @@ export class AdminDashboardComponent extends LoadingComponentBase implements OnI
     }
 
     const routes: Record<AdminActivityItem['type'], string> = {
-      order: `/admin/orders`,
-      product: `/admin/products`,
+      order: `/admin/legacy/orders`,
+      product: `/admin/legacy/products`,
       gallery: `/admin/gallery`,
       user: `/admin/users`
     };

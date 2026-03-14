@@ -1,0 +1,79 @@
+<section class="page-hero">
+  <div class="page-container">
+    <div class="page-hero__inner">
+      <p class="badge">Start your commission</p>
+      <h1 class="heading-display">Tell us what you're fabricating.</h1>
+      <p class="page-hero__subtitle">We'll review your brief and respond within 24 hours. Standard enquiry for general projects, trade path for specification-driven programmes.</p>
+    </div>
+  </div>
+</section>
+
+<section class="enquire-page">
+  <div class="page-container">
+    <div class="enquire-panel">
+      <div class="enquire-toggle">
+        <button type="button" (click)="setMode('standard')" [class.is-active]="mode() === 'standard'">Standard enquiry</button>
+        <button type="button" (click)="setMode('trade')" [class.is-active]="mode() === 'trade'">Trade enquiry</button>
+      </div>
+
+      @if (success) {
+      <div class="form-success">
+        <h2>Enquiry received</h2>
+        <p>Thanks for sending your brief. We'll review the project details and respond within 24 hours.</p>
+      </div>
+      } @else {
+      <form [formGroup]="form" (ngSubmit)="submit()" class="enquire-form">
+        <div class="enquire-form__grid">
+          <input formControlName="fullName" type="text" placeholder="Full Name" />
+          <input formControlName="company" type="text" placeholder="Company / Organisation" />
+          <input formControlName="email" type="email" placeholder="Email Address" />
+          <select formControlName="role">
+            <option value="" disabled selected>Your Role</option>
+            <option value="designer">Interior Designer</option>
+            <option value="gc">General Contractor (GC)</option>
+            <option value="hospitality">Hospitality Operator</option>
+            <option value="corporate">Corporate</option>
+            <option value="other">Other</option>
+          </select>
+          <select formControlName="projectType">
+            <option value="" disabled selected>Project Type</option>
+            <option value="signage">Signage</option>
+            <option value="bar_fitout">Bar Fitout</option>
+            <option value="trade_supply">Trade Supply</option>
+            <option value="awards">Awards</option>
+            <option value="architectural">Architectural</option>
+            <option value="other">Other</option>
+          </select>
+          <select formControlName="preferredMaterial">
+            <option value="" disabled selected>Preferred Material</option>
+            <option value="brass">Brushed Brass</option>
+            <option value="aluminium">Anodized Aluminium</option>
+            <option value="stainless">Stainless Steel</option>
+            <option value="acrylic">Frosted / Cast Acrylic</option>
+            <option value="wood">Hardwood (Oak / Walnut)</option>
+            <option value="glass">Glass</option>
+            <option value="unsure">Unsure — advise me</option>
+          </select>
+          <input formControlName="estimatedQuantity" type="text" placeholder="Estimated Quantity" />
+          <select formControlName="targetTimeline">
+            <option value="" disabled selected>Target Timeline</option>
+            <option value="2_weeks">Within 2 weeks</option>
+            <option value="1_month">1 month</option>
+            <option value="1_3_months">1–3 months</option>
+            <option value="flexible">Flexible</option>
+          </select>
+        </div>
+        <textarea formControlName="projectDescription" rows="6" placeholder="Project Description — include scope, finish, and any reference examples"></textarea>
+        <app-file-dropzone [files]="files" [progress]="uploadProgress" helper="PDF, AI, DWG, JPG up to 20MB" (filesChange)="onFilesChange($event)" />
+        @if (errorMessage) {
+        <p class="form-error">{{ errorMessage }}</p>
+        }
+        <div class="enquire-form__footer">
+          <p class="enquire-form__trust">We respond within 24 hours, Mon–Fri.</p>
+          <button type="submit" class="btn-primary" [disabled]="submitting">Submit enquiry</button>
+        </div>
+      </form>
+      }
+    </div>
+  </div>
+</section>

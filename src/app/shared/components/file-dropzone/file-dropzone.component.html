@@ -1,0 +1,24 @@
+<div class="dropzone">
+  <label class="dropzone__surface">
+    <input type="file" [accept]="accept" multiple (change)="onFileChange($event)" />
+    <span class="dropzone__title">Upload project files</span>
+    <span class="dropzone__helper">{{ helper }}</span>
+  </label>
+
+  @if (progress > 0 && progress < 100) {
+  <div class="dropzone__progress">
+    <div class="dropzone__progress-bar" [style.width.%]="progress"></div>
+  </div>
+  }
+
+  @if (files.length) {
+  <div class="dropzone__files">
+    @for (file of files; track file.name; let i = $index) {
+    <div class="dropzone__file">
+      <span>{{ file.name }}</span>
+      <button type="button" (click)="removeFile(i)">Remove</button>
+    </div>
+    }
+  </div>
+  }
+</div>
