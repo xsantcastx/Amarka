@@ -1,16 +1,16 @@
 @if (shouldShowMaintenancePage) {
-  <section class="min-h-screen bg-gradient-to-br from-[#0a0b0d] via-[#13151a] to-[#0a0b0d] flex items-center justify-center px-6 py-16 text-center">
+  <section class="min-h-screen bg-[linear-gradient(135deg,#0e1116_0%,#151a21_55%,#0e1116_100%)] flex items-center justify-center px-6 py-16 text-center">
     <div class="max-w-3xl space-y-8">
       <div class="space-y-4">
-        <h1 class="text-3xl md:text-4xl font-bold bitcoin-gradient-text">{{ 'maintenance.title' | translate }}</h1>
+        <h1 class="text-3xl md:text-4xl font-bold text-[#f7f1e7]">{{ 'maintenance.title' | translate }}</h1>
         <p class="text-white/70 text-base md:text-lg whitespace-pre-line">{{ maintenanceMessage }}</p>
       </div>
 
-      <div class="bg-bitcoin-dark/60 border border-bitcoin-orange/30 rounded-2xl px-6 py-8 space-y-4">
+      <div class="bg-white/6 border border-white/12 rounded-2xl px-6 py-8 space-y-4 backdrop-blur">
         <p class="text-white/70">{{ 'maintenance.support' | translate }}</p>
         <div class="space-y-2 text-sm text-white/80">
           @if (contactEmail) {
-            <a [href]="'mailto:' + contactEmail" class="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-bitcoin-orange/20 text-bitcoin-orange border border-bitcoin-orange/40 hover:bg-bitcoin-orange/30 transition-colors">
+            <a [href]="'mailto:' + contactEmail" class="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-[#9f6b3d]/12 text-[#d9c2a5] border border-[#9f6b3d]/40 hover:bg-[#9f6b3d]/20 transition-colors">
               <span>{{ 'maintenance.email_label' | translate }}</span>
               <span class="font-semibold">{{ contactEmail }}</span>
             </a>
@@ -51,8 +51,10 @@
   }
 }
 
-<!-- Cookie Consent Banner (GDPR Compliant) -->
-<app-cookie-banner></app-cookie-banner>
+@if (showCookieBanner && !isAdminRoute) {
+  <app-cookie-banner></app-cookie-banner>
+}
 
-<!-- WhatsApp Floating Button -->
-<app-whatsapp-button></app-whatsapp-button>
+@if (showWhatsappButton && !isAdminRoute) {
+  <app-whatsapp-button></app-whatsapp-button>
+}

@@ -1,0 +1,191 @@
+:host { display: block; }
+
+/* Override global h1 !important rule inside dark hero */
+.page-hero h1,
+.page-hero h2,
+.page-hero h3 {
+  color: #f7f1e7 !important;
+  -webkit-text-fill-color: #f7f1e7 !important;
+}
+
+.studio-page {
+  padding: 3rem 0 4rem;
+}
+
+.work-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-bottom: 2rem;
+
+  button {
+    padding: 0.6rem 1.1rem;
+    border-radius: 999px;
+    border: 1px solid rgba(159, 107, 61, 0.22);
+    background: rgba(255, 253, 249, 0.05);
+    color: rgba(247, 241, 231, 0.72);
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.18s ease;
+
+    &:hover {
+      background: rgba(159, 107, 61, 0.12);
+      border-color: rgba(159, 107, 61, 0.38);
+      color: #f7f1e7;
+    }
+
+    &.is-active {
+      background: rgba(159, 107, 61, 0.18);
+      border-color: rgba(159, 107, 61, 0.5);
+      color: var(--ts-accent);
+      font-weight: 700;
+    }
+  }
+}
+
+.work-feature {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+  padding: clamp(1.75rem, 4vw, 2.5rem) clamp(1.5rem, 4vw, 2.25rem);
+  border-radius: 1.8rem;
+  margin-bottom: 2rem;
+  background: linear-gradient(
+    135deg,
+    rgba(159, 107, 61, 0.16) 0%,
+    rgba(255, 253, 249, 0.06) 100%
+  );
+  border: 1px solid rgba(159, 107, 61, 0.3);
+
+  h2 {
+    color: #f7f1e7 !important;
+    -webkit-text-fill-color: #f7f1e7 !important;
+    font-size: clamp(1.4rem, 2.5vw, 2rem);
+    margin: 0.4rem 0 0.75rem;
+  }
+
+  p { color: rgba(247, 241, 231, 0.78); margin: 0; }
+
+  .badge {
+    color: var(--ts-accent) !important;
+    background: rgba(159, 107, 61, 0.14);
+    border-color: rgba(159, 107, 61, 0.3);
+  }
+}
+
+.work-feature__copy {
+  flex: 1;
+  min-width: 0;
+}
+
+.work-feature__meta {
+  display: grid;
+  gap: 0.75rem;
+  align-content: start;
+  flex-shrink: 0;
+}
+
+.work-feature__detail {
+  color: rgba(247, 241, 231, 0.6);
+  font-size: 0.88rem;
+  margin: 0;
+}
+
+.work-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+
+.work-card {
+  border-radius: 1.4rem;
+  background: rgba(255, 253, 249, 0.04);
+  border: 1px solid rgba(247, 241, 231, 0.09);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+  color: #f7f1e7;
+
+  &:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 253, 249, 0.07);
+    border-color: rgba(159, 107, 61, 0.28);
+    box-shadow: 0 28px 56px -32px rgba(0, 0, 0, 0.45);
+
+    .work-card__media { opacity: 1; }
+  }
+}
+
+.work-card__media {
+  position: relative;
+  height: 9rem;
+  background:
+    linear-gradient(180deg, rgba(159, 107, 61, 0.22), rgba(14, 17, 22, 0.88)),
+    radial-gradient(circle at 30% 40%, rgba(159, 107, 61, 0.32), transparent 60%);
+  display: flex;
+  align-items: flex-end;
+  padding: 0.9rem 1.25rem;
+  opacity: 0.85;
+  transition: opacity 0.24s ease;
+}
+
+.work-card__material-label {
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--ts-accent);
+}
+
+.work-card__body {
+  padding: 1.25rem 1.5rem 1.5rem;
+
+  h3 {
+    font-size: clamp(1rem, 1.6vw, 1.2rem);
+    margin: 0.25rem 0 0.6rem;
+    line-height: 1.25;
+    color: #f7f1e7 !important;
+    -webkit-text-fill-color: #f7f1e7 !important;
+  }
+
+  p {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: rgba(247, 241, 231, 0.60);
+    margin: 0 0 1rem;
+  }
+}
+
+.work-card__type {
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--ts-accent);
+  margin: 0 !important;
+}
+
+.work-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+
+  a {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ts-accent);
+    text-decoration: none;
+
+    &:hover { text-decoration: underline; }
+  }
+}
+
+.work-card__meta {
+  font-size: 0.8rem;
+  color: rgba(247, 241, 231, 0.45);
+}

@@ -1,2 +1,114 @@
-// 404 Page Styles
-// Inherits global styles from styles.scss
+:host { display: block; }
+
+.nf-hero {
+  padding: calc(var(--nav-height) + 4rem) 0 5rem;
+  text-align: center;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 0%, rgba(159, 107, 61, 0.16), transparent 55%),
+    linear-gradient(180deg, #0a0d11 0%, #0e1116 100%);
+  border-bottom: 1px solid rgba(159, 107, 61, 0.12);
+}
+
+.nf-hero__inner {
+  max-width: 44rem;
+  margin: 0 auto;
+  display: grid;
+  gap: 1.25rem;
+  justify-items: center;
+}
+
+.nf-hero__code {
+  font-family: var(--font-display);
+  font-size: clamp(5rem, 15vw, 9rem);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--ts-accent);
+  letter-spacing: -0.04em;
+  opacity: 0.7;
+}
+
+.nf-hero__title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.12;
+  color: #f7f1e7 !important;
+  -webkit-text-fill-color: #f7f1e7 !important;
+}
+
+.nf-hero__sub {
+  font-size: 1.1rem;
+  line-height: 1.72;
+  color: rgba(247, 241, 231, 0.65);
+  max-width: 40ch;
+  margin: 0;
+}
+
+.nf-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  padding-top: 0.5rem;
+
+  .btn-outline {
+    background: rgba(247, 241, 231, 0.07);
+    border-color: rgba(247, 241, 231, 0.22);
+    color: #f7f1e7 !important;
+    box-shadow: none;
+
+    &:hover {
+      background: rgba(247, 241, 231, 0.13);
+      border-color: rgba(247, 241, 231, 0.42);
+    }
+  }
+}
+
+.nf-links {
+  padding: 4rem 0 5rem;
+}
+
+.nf-links__label {
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(247, 241, 231, 0.38);
+  margin: 0 0 1.5rem;
+  font-weight: 700;
+}
+
+.nf-links__grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.nf-card {
+  display: grid;
+  gap: 0.5rem;
+  padding: 1.75rem 2rem;
+  border-radius: 1.4rem;
+  background: rgba(255, 253, 249, 0.04);
+  border: 1px solid rgba(247, 241, 231, 0.09);
+  text-decoration: none;
+  color: #f7f1e7;
+  transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    background: rgba(255, 253, 249, 0.07);
+    border-color: rgba(159, 107, 61, 0.28);
+    text-decoration: none;
+  }
+}
+
+.nf-card__title {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #f7f1e7;
+}
+
+.nf-card__desc {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: rgba(247, 241, 231, 0.58);
+}

@@ -1,0 +1,29 @@
+<section class="page-hero">
+  <div class="page-container">
+    <div class="page-hero__inner">
+      <p class="badge">Who we work with</p>
+      <h1 class="heading-display">Built for the way designers, GCs, hospitality teams, and operators actually buy.</h1>
+      <p class="page-hero__subtitle">Workflow clarity, material capability, quote turnaround, and trade account readiness — by client type.</p>
+    </div>
+  </div>
+</section>
+
+<section class="clients-page">
+  <div class="page-container">
+    <div class="clients-grid">
+      @for (section of sections(); track section.id) {
+      <article class="client-card" [attr.id]="section.id.replace('_', '-')">
+        <div class="client-card__icon" aria-hidden="true">{{ section.icon ?? clientIcon(section.id) }}</div>
+        <h2>{{ section.title }}</h2>
+        <p>{{ section.intro }}</p>
+        <ul class="client-card__list">
+          @for (bullet of section.bullets; track bullet) {
+          <li>{{ bullet }}</li>
+          }
+        </ul>
+        <a routerLink="/enquire" class="client-card__cta">Start an Enquiry</a>
+      </article>
+      }
+    </div>
+  </div>
+</section>

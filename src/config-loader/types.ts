@@ -89,6 +89,11 @@ export interface SiteConfig {
     emailFrom?: string;
     emailFromName?: string;
   };
+  studio?: {
+    location?: string;
+    serviceArea?: string;
+    turnaround?: string;
+  };
 }
 
 export type FeatureFlags = Record<string, boolean>;

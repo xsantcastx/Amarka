@@ -1,0 +1,101 @@
+:host { display: block; }
+
+.page-hero h1,
+.page-hero h2,
+.page-hero h3 {
+  color: #f7f1e7 !important;
+  -webkit-text-fill-color: #f7f1e7 !important;
+}
+
+.clients-page {
+  padding: 3rem 0 5rem;
+}
+
+.clients-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+
+.client-card {
+  display: grid;
+  grid-template-rows: auto auto 1fr auto auto;
+  gap: 0.75rem;
+  padding: 2rem 2.25rem;
+  border-radius: 1.6rem;
+  background: rgba(255, 253, 249, 0.04);
+  border: 1px solid rgba(247, 241, 231, 0.09);
+  color: #f7f1e7;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 253, 249, 0.07);
+    border-color: rgba(159, 107, 61, 0.28);
+    box-shadow: 0 28px 56px -32px rgba(0, 0, 0, 0.45);
+  }
+}
+
+.client-card__icon {
+  font-size: 1.5rem;
+  color: var(--ts-accent);
+  margin-bottom: 0.25rem;
+}
+
+.client-card h2 {
+  font-size: clamp(1.1rem, 1.8vw, 1.3rem);
+  margin: 0;
+  line-height: 1.25;
+  color: #f7f1e7 !important;
+  -webkit-text-fill-color: #f7f1e7 !important;
+}
+
+.client-card p {
+  font-size: 0.92rem;
+  line-height: 1.65;
+  color: rgba(247, 241, 231, 0.60);
+  margin: 0;
+}
+
+.client-card__list {
+  display: grid;
+  gap: 0.5rem;
+  padding: 0;
+  list-style: none;
+  margin: 0.25rem 0;
+
+  li {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    font-size: 0.88rem;
+    color: rgba(247, 241, 231, 0.62);
+
+    &::before {
+      content: '—';
+      color: var(--ts-accent);
+      flex-shrink: 0;
+      font-size: 0.7rem;
+    }
+  }
+}
+
+.client-card__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ts-accent);
+  text-decoration: none;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(247, 241, 231, 0.09);
+  transition: gap 0.18s ease;
+
+  &:hover {
+    gap: 0.5rem;
+    text-decoration: none;
+  }
+}

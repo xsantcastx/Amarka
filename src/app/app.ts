@@ -40,6 +40,8 @@ export class AppComponent implements OnInit {
   isAuthenticated = false;
   currentUrl = '';
   isAdminRoute = false;
+  showCookieBanner = true;
+  showWhatsappButton = false;
   
   // Routes that should be accessible during maintenance mode (even for non-authenticated users)
   private maintenanceExemptRoutes = [
@@ -75,6 +77,9 @@ export class AppComponent implements OnInit {
         this.isAdminRoute = this.currentUrl.startsWith('/admin');
         this.cdr.markForCheck();
       });
+
+    this.currentUrl = this.router.url;
+    this.isAdminRoute = this.currentUrl.startsWith('/admin');
   }
 
   ngOnInit() {
@@ -109,6 +114,8 @@ export class AppComponent implements OnInit {
     this.contactEmail = settings.contactEmail;
     this.contactPhone = settings.contactPhone;
     this.contactAddress = settings.contactAddress;
+    this.showCookieBanner = settings.cookieConsentRequired;
+    this.showWhatsappButton = !!settings.whatsappNumber;
     this.settingsLoaded = true;
     this.cdr.markForCheck();
   }

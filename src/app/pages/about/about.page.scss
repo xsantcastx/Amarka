@@ -1,0 +1,37 @@
+:host { display: block; }
+
+.page-hero h1,
+.page-hero h2,
+.page-hero h3 {
+  color: #f7f1e7 !important;
+  -webkit-text-fill-color: #f7f1e7 !important;
+}
+
+.phase-page {
+  padding: 3rem 0 5rem;
+}
+
+.phase-page__copy {
+  max-width: 46rem;
+  color: rgba(247, 241, 231, 0.62);
+  margin: 0 0 1.5rem;
+  line-height: 1.7;
+}
+
+.phase-page__actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+
+  .btn-outline {
+    background: rgba(247, 241, 231, 0.07);
+    border-color: rgba(247, 241, 231, 0.22);
+    color: #f7f1e7 !important;
+    box-shadow: none;
+
+    &:hover {
+      background: rgba(247, 241, 231, 0.13);
+      border-color: rgba(247, 241, 231, 0.4);
+    }
+  }
+}

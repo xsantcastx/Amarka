@@ -117,6 +117,25 @@ export class AnalyticsService {
     });
   }
 
+  trackLeadEvent(eventName: string, additionalData?: Record<string, any>): void {
+    this.logEventSafely(eventName, {
+      page_location: this.isBrowser ? window.location.href : undefined,
+      ...additionalData
+    });
+  }
+
+  trackTradePageView(): void {
+    this.trackLeadEvent('view_trade_page', {
+      page_type: 'trade'
+    });
+  }
+
+  trackSpecSheetDownload(assetSlug: string): void {
+    this.trackLeadEvent('spec_sheet_download', {
+      asset_slug: assetSlug
+    });
+  }
+
   trackOutboundLink(url: string, linkText?: string): void {
     this.logEventSafely('click', {
       link_url: url,

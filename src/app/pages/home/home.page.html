@@ -1,186 +1,129 @@
-<!-- Loading State -->
-@if (isLoading) {
-<div class="min-h-screen flex items-center justify-center bg-ts-bg">
-  <div class="text-center space-y-4">
-    <div class="app-spinner" style="--spinner-size: 72px;"><img src="/Logo Clear.png" alt="Loading" width="96" height="96"></div>
-    <p class="text-ts-ink-soft text-lg font-semibold">{{ brandName || ('common.loading_content' | translate) }}</p>
+<section class="home-hero">
+  <div class="page-container home-hero__layout">
+    <div class="home-hero__copy">
+      <p class="badge">{{ hero?.eyebrow }}</p>
+      <h1 class="heading-display">{{ hero?.title }}</h1>
+      <p class="home-hero__subtitle">{{ hero?.subtitle }}</p>
+      <div class="home-hero__actions">
+        <a [routerLink]="hero?.primaryCta?.href || '/enquire'" class="btn-primary">{{ hero?.primaryCta?.label }}</a>
+        <a [routerLink]="hero?.secondaryCta?.href || '/trade'" class="btn-outline">{{ hero?.secondaryCta?.label }}</a>
+      </div>
+    </div>
+
+    <div class="home-hero__media">
+      <div class="home-hero__material-card">
+        <span class="home-hero__material-label">Bespoke metal signage</span>
+        <p>Premium brass, anodised aluminium, and hospitality-ready engraved finishes for trade-led projects.</p>
+      </div>
+      <div class="home-hero__material-card">
+        <span class="home-hero__material-label">Stamford studio · NYC metro</span>
+        <p>{{ studio()?.turnaround }}</p>
+      </div>
+    </div>
   </div>
-</div>
+</section>
+
+<section class="home-section">
+  <div class="page-container">
+    <div class="home-verticals">
+      @for (vertical of homeContent()?.verticals || []; track vertical.id) {
+      <article class="home-vertical">
+        <p class="home-vertical__icon">{{ vertical.icon }}</p>
+        <h2>{{ vertical.title }}</h2>
+        <p>{{ vertical.description }}</p>
+        <a [routerLink]="vertical.href">Learn more</a>
+      </article>
+      }
+    </div>
+  </div>
+</section>
+
+<section class="home-section">
+  <div class="page-container">
+    <div class="home-section__head">
+      <div>
+        <p class="badge">Selected commissions</p>
+        <h2 class="heading-display">Recent and upcoming work for hospitality, workplace, and architectural interiors.</h2>
+      </div>
+      <a routerLink="/work" class="btn-outline">View all work</a>
+    </div>
+
+    <div class="home-work-grid">
+      @for (item of featuredCaseStudies(); track item.id) {
+      <article class="home-work-card">
+        <p class="home-work-card__eyebrow">{{ item.clientType | titlecase }}</p>
+        <h3>{{ item.projectName }}</h3>
+        <p>{{ item.brief }}</p>
+        <a [routerLink]="item.ctaHref">{{ item.ctaLabel }}</a>
+      </article>
+      }
+    </div>
+  </div>
+</section>
+
+@if (featuredProject(); as project) {
+<section class="home-section">
+  <div class="page-container">
+    <div class="home-feature">
+      <div>
+        <p class="badge">In Progress</p>
+        <h2 class="heading-display">{{ project.projectName }}</h2>
+        <p>{{ project.description }}</p>
+      </div>
+      <div class="home-feature__meta">
+        <p>{{ project.brief }}</p>
+        <p>{{ project.materials.join(' · ') }}</p>
+        <a routerLink="/trade" class="btn-primary">View Trade Programme</a>
+      </div>
+    </div>
+  </div>
+</section>
 }
 
-<!-- Content -->
-@if (!isLoading) {
-<div class="home-shell">
-
-  <!-- ① HERO ─────────────────────────────────────────────── -->
-  <section class="home-hero">
-    <!-- Floating light orbs -->
-    <div class="home-hero__orb home-hero__orb--1" aria-hidden="true"></div>
-    <div class="home-hero__orb home-hero__orb--2" aria-hidden="true"></div>
-    <div class="home-hero__orb home-hero__orb--3" aria-hidden="true"></div>
-    <div class="page-container home-hero__layout">
-      <div class="home-hero__copy">
-        <p class="badge home-hero__badge">{{ 'home.hero.badge' | translate }}</p>
-        <h1 class="heading-display home-hero__title">Gifts that leave <span class="home-hero__title-shine">a mark.</span></h1>
-        <p class="home-hero__subtitle">{{ 'home.hero.subtitle' | translate }}</p>
-
-        <div class="home-hero__actions">
-          <a routerLink="/collections" class="btn-primary home-hero__cta">
-            {{ 'home.hero.cta_collections' | translate }}
-          </a>
-          <a routerLink="/productos" class="btn-outline home-hero__cta">
-            {{ 'home.hero.cta_products' | translate }}
-          </a>
-        </div>
-
-        <div class="home-hero__trust">
-          <div class="home-hero__trust-item">
-            <span class="home-hero__trust-icon">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
-            </span>
-            <span>{{ 'home.hero.fast' | translate }}</span>
-          </div>
-          <div class="home-hero__trust-item">
-            <span class="home-hero__trust-icon">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-              </svg>
-            </span>
-            <span>{{ 'home.hero.packaging' | translate }}</span>
-          </div>
-          <div class="home-hero__trust-item">
-            <span class="home-hero__trust-icon">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </span>
-            <span>{{ 'home.story.trust.title' | translate }}</span>
-          </div>
-        </div>
+<section class="home-section">
+  <div class="page-container">
+    <div class="home-section__head">
+      <div>
+        <p class="badge">Commission types</p>
+        <h2 class="heading-display">Trade-facing services shaped around projects, not product SKUs.</h2>
       </div>
-
-      <div class="home-hero__panel luxury-overlay">
-        <div class="home-hero__panel-top">
-          <img src="/Logo Clear.png" alt="Amarka" class="home-hero__logo" loading="eager" />
-          <div>
-            <p class="home-hero__panel-label">Amarka</p>
-            <p class="home-hero__panel-copy">Refined gifting, premium materials, and personalized craftsmanship.</p>
-          </div>
-        </div>
-
-        @if (heroProducts.length) {
-        <div class="home-hero__product-grid">
-          @for (product of heroProducts; track product.id) {
-          <a [routerLink]="['/productos', product.slug || product.id || '']" class="home-hero__product-card">
-            <div class="home-hero__product-media">
-              <img [src]="product.imageUrl || 'assets/placeholder-product.jpg'" [alt]="product.name" loading="lazy" />
-            </div>
-            <div class="home-hero__product-body">
-              <p class="home-hero__product-name">{{ product.name }}</p>
-            </div>
-          </a>
-          }
-        </div>
-        }
-
-        <div class="home-hero__collections">
-          <p class="home-hero__collections-label">Signature collections</p>
-          <div class="home-hero__collection-links">
-            @for (col of heroCollections; track col.slug) {
-            <a [routerLink]="['/collections', col.slug]" class="home-hero__collection-link">{{ col.name }}</a>
-            }
-          </div>
-        </div>
-      </div>
+      <a routerLink="/services" class="btn-outline">Explore services</a>
     </div>
-  </section>
 
-  <!-- ② COLLECTIONS ────────────────────────────────────────── -->
-  <section class="section-gap">
-    <div class="page-container">
-      <div class="home-section-head">
-        <div>
-          <p class="badge">{{ 'collections.card.label' | translate }}</p>
-          <h2 class="heading-display home-section-head__title">{{ 'home.collections.heading' | translate }}</h2>
-        </div>
-        <a routerLink="/collections" class="btn-outline text-sm">
-          {{ 'home.collections.view_all' | translate }}
-          <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-          </svg>
-        </a>
+    <div class="home-work-grid">
+      @for (service of services(); track service.id) {
+      <article class="home-work-card">
+        <h3>{{ service.title }}</h3>
+        <p>{{ service.description }}</p>
+        <a [routerLink]="service.ctaHref">{{ service.ctaLabel }}</a>
+      </article>
+      }
+    </div>
+  </div>
+</section>
+
+<section class="home-section">
+  <div class="page-container">
+    <div class="home-trade-band luxury-overlay">
+      <div>
+        <p class="badge">Trade accounts</p>
+        <h2 class="heading-display">We Offer Trade Accounts</h2>
+        <p>Interior designers and GCs working on NYC projects can apply for an Amarka trade account — preferred pricing, dedicated turnaround slots, and a single point of contact for all your projects.</p>
       </div>
+      <a routerLink="/trade" class="btn-primary">Request a Trade Account</a>
+    </div>
+  </div>
+</section>
 
-      <div class="home-collections-grid">
-        @for (col of categoryShowcase; track col.slug) {
-        <a [routerLink]="['/collections', col.slug]" class="home-collection-card">
-          <div class="home-collection-card__media">
-            <img [src]="collectionImages[col.slug] || 'assets/placeholder-product.jpg'" [alt]="col.name"
-              class="w-full h-full object-cover" loading="lazy">
-          </div>
-          <div class="home-collection-card__body">
-            <span class="home-collection-card__name">{{ col.name }}</span>
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-            </svg>
-          </div>
-        </a>
-        }
-        @if (!categoryShowcase.length) {
-        <div class="col-span-full text-center py-12 text-ts-ink-soft">
-          <p>{{ 'home.collections.empty' | translate }}</p>
-        </div>
+<section class="home-section home-section--last">
+  <div class="page-container">
+    <div class="home-trusted">
+      <p class="home-trusted__label">Trusted by</p>
+      <div class="home-trusted__items">
+        @for (item of homeContent()?.trustedBy || []; track item.label) {
+        <span>{{ item.label }}</span>
         }
       </div>
     </div>
-  </section>
-
-  <!-- ③ PRODUCTS ───────────────────────────────────────────── -->
-  @if (featuredProducts.length) {
-  <section class="section-gap home-featured" [class.home-featured--valentine]="isValentineSeason">
-    <div class="page-container">
-      <div class="home-section-head">
-        <div>
-          <p class="badge mb-3">{{ featuredBadgeKey | translate }}</p>
-          <h2 class="heading-display home-section-head__title">{{ featuredTitleKey | translate }}</h2>
-          <p class="home-section-head__copy">{{ featuredSubtitleKey | translate }}</p>
-        </div>
-        <div class="home-featured__actions">
-          <a routerLink="/productos" class="btn-outline">{{ 'home.featured.cta_all' | translate }}</a>
-          <a routerLink="/collections/gifts-for-men" class="btn-primary">{{ 'home.featured.cta_special' | translate }}</a>
-        </div>
-      </div>
-
-      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        @for (product of featuredProducts; track product.id) {
-        <ts-product-card [product]="product" />
-        }
-      </div>
-    </div>
-  </section>
-  }
-
-  <!-- ④ REVIEWS ────────────────────────────────────────────── -->
-  <app-home-reviews />
-
-  <!-- ⑤ CTA ───────────────────────────────────────────────── -->
-  <section class="section-gap">
-    <div class="page-container">
-      <div class="home-cta luxury-overlay">
-        <div class="home-cta__copy">
-          <p class="badge mb-4">{{ 'home.cta.badge' | translate }}</p>
-          <h2 class="heading-display home-cta__title">{{ 'home.cta.title' | translate }}</h2>
-          <p class="home-cta__subtitle">{{ 'home.cta.subtitle' | translate }}</p>
-        </div>
-        <div class="flex flex-col sm:flex-row gap-4">
-          <a routerLink="/collections" class="btn-primary px-8 py-4">{{ 'home.cta.primary' | translate }}</a>
-          <a routerLink="/contacto" class="btn-outline px-8 py-4">{{ 'home.cta.secondary' | translate }}</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-</div>
-}
+  </div>
+</section>
