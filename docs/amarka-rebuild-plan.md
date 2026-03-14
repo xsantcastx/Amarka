@@ -1,7 +1,7 @@
 # AMARKA Rebuild Plan
 
 ## Positioning
-
+ 
 AMARKA is being rebuilt from a consumer-commerce template into a premium B2B lead-generation website for bespoke laser engraving in the NYC metro. The public site should sell credibility, process, material fluency, and response speed rather than products, pricing, or checkout flows.
 
 ## Phase 1 Scope
