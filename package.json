@@ -13,7 +13,7 @@
     "test": "npm run template:sync && ng test",
     "test:guards": "ng test --watch=false --include=\"src/app/guards/**/*.spec.ts\"",
     "serve:ssr:commerce-template": "node dist/commerce-template/server/server.mjs",
-    "deploy": "npm run build && npx firebase deploy --only hosting",
+    "deploy": "npm run build && npx firebase deploy",
     "lint:styles": "stylelint \"src/**/*.{css,scss}\"",
     "seed:templates": "tsx scripts/seed-templates.ts",
     "seed:tags": "tsx scripts/seed-tags.ts",
@@ -34,7 +34,7 @@
   },
   "private": true,
   "overrides": {
-    "firebase": "11.10.0"
+    "firebase": "$firebase"
   },
   "dependencies": {
     "@angular/animations": "^20.3.4",

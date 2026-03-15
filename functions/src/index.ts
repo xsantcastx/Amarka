@@ -1849,6 +1849,18 @@ export const submitStudioEnquiry = withBrevoSecrets.https.onCall(
   })
 );
 
+// ─── SSR ─────────────────────────────────────────────────────────────────────
+
+/**
+ * Angular SSR handler. Renders the app server-side for all non-static requests.
+ * Static files (JS, CSS, images) are served directly by Firebase Hosting.
+ */
+export const ssr = functions.https.onRequest(async (req, res) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const ssrModule: any = await import(`${__dirname}/../ssr/server.mjs`);
+  return ssrModule.reqHandler(req, res);
+});
+
 export const submitTradeApplication = withBrevoSecrets.https.onCall(
   withFlag("emailNotifications", async (data: TradeApplicationPayload) => {
     if (!data?.companyName || !data?.contactName || !data?.email || !data?.projectType || !data?.estimatedQuantity) {

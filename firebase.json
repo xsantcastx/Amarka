@@ -2,6 +2,7 @@
   "functions": {
     "source": "functions",
     "predeploy": [
+      "cp -r dist/commerce-template/server functions/ssr",
       "npm --prefix \"$RESOURCE_DIR\" run build"
     ]
   },
@@ -13,11 +14,17 @@
     "rules": "storage.rules"
   },
   "hosting": {
-    "public": "public",
+    "public": "dist/commerce-template/browser",
     "ignore": [
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "function": "ssr"
+      }
     ]
   }
 }

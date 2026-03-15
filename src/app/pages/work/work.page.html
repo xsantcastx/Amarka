@@ -37,7 +37,7 @@
       @for (caseStudy of filteredCaseStudies(); track caseStudy.id) {
       <article class="work-card">
         <div class="work-card__media" aria-hidden="true">
-          <span class="work-card__material-label">{{ caseStudy.materials[0] ?? 'Engraving' }}</span>
+          <span class="work-card__material-label">{{ caseStudy.materials.at(0) ?? 'Engraving' }}</span>
         </div>
         <div class="work-card__body">
           <p class="work-card__type">{{ caseStudy.clientType | titlecase }}</p>
