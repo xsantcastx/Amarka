@@ -9,6 +9,26 @@ on:
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
+    env:
+      FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
+      FIREBASE_AUTH_DOMAIN: amarka-d237b.firebaseapp.com
+      FIREBASE_PROJECT_ID: amarka-d237b
+      FIREBASE_STORAGE_BUCKET: amarka-d237b.firebasestorage.app
+      FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}
+      FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
+      FIREBASE_MEASUREMENT_ID: G-XQHZR0DS09
+      GA_MEASUREMENT_ID: G-XQHZR0DS09
+      GTM_CONTAINER_ID: ""
+      STRIPE_PUBLIC_KEY: ${{ secrets.STRIPE_PUBLIC_KEY }}
+      RECAPTCHA_SITE_KEY: ${{ secrets.RECAPTCHA_SITE_KEY }}
+      RECAPTCHA_ENABLED: "true"
+      APPCHECK_PROVIDER: recaptcha
+      APPCHECK_SITE_KEY: ${{ secrets.RECAPTCHA_SITE_KEY }}
+      USE_FIREBASE_EMULATORS: "false"
+      APP_NAME: Amarka
+      APP_URL: https://amarka.co
+      APP_BRAND_KEY: amarka
+      FUNCTIONS_NAMESPACE: amarka
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

@@ -3,130 +3,104 @@
     "key": "amarka",
     "name": "Amarka",
     "shortName": "Amarka",
-    "tagline": "Personalised gifts, crafted to keep",
-    "description": "Curated keepsakes and engraved gifts with warm, premium finishes—built for moments that matter.",
-    "domain": "amarka.com",
+    "tagline": "Precision laser engraving for the NYC trade",
+    "description": "Bespoke engraved signage, wayfinding, architectural accents, and hospitality elements — fabricated to spec for interior designers, general contractors, and commercial operators across the NYC metro.",
+    "domain": "amarka.co",
     "logo": "/Logo Clear2.png",
     "logoAlt": "Amarka",
     "favicon": "/Logo Clear.png"
   },
   "contact": {
-    "email": "hello@amarka.com",
-    "phone": "+1 (000) 000-0000",
+    "email": "studio@amarka.co",
+    "phone": "+1 (203) 555-0148",
     "phone2": "",
-    "address": "Austin, Texas\nUnited States",
-    "supportHours": "Mon-Fri 9AM-6PM CST",
-    "whatsapp": ""
+    "address": "Stamford, CT\nUnited States",
+    "supportHours": "Mon-Fri 8AM-6PM EST",
+    "whatsapp": "+12035550148"
   },
   "theme": {
     "tokens": {
-      "ts-bg": "#F5F5F7",
-      "ts-bg-soft": "#FBFBFD",
-      "ts-paper": "#FFFFFF",
-      "ts-ink": "#1d1d1f",
-      "ts-ink-soft": "#6e6e73",
-      "ts-accent": "#0071e3",
-      "ts-accent-soft": "#d9eaff",
-      "ts-line": "rgba(0,0,0,0.08)",
-      "surface-glass": "rgba(0,113,227,0.06)",
-      "surface-border": "rgba(0,0,0,0.10)"
+      "ts-bg": "#0e1116",
+      "ts-bg-soft": "#141920",
+      "ts-paper": "#fffdf9",
+      "ts-ink": "#f7f1e7",
+      "ts-ink-soft": "#5e5a57",
+      "ts-accent": "#9f6b3d",
+      "ts-accent-soft": "rgba(159,107,61,0.24)",
+      "ts-line": "rgba(247,241,231,0.08)",
+      "surface-glass": "rgba(255,253,249,0.035)",
+      "surface-border": "rgba(247,241,231,0.08)"
     },
     "fonts": {
       "sans": "'Source Sans 3', 'Inter', 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif",
-      "display": "'Cormorant Garamond', 'Georgia', serif",
+      "display": "'Playfair Display', 'Cormorant Garamond', 'Georgia', serif",
       "mono": "'JetBrains Mono', Menlo, Monaco, Consolas, monospace"
     }
   },
-  "seasonalThemes": [
-    {
-      "id": "valentine",
-      "label": "Valentine 2026",
-      "startDate": "2026-01-01",
-      "endDate": "2026-02-28",
-      "mode": "light",
-      "palette": {
-        "primary": "225 104 136",
-        "secondary": "241 176 196",
-        "accent": "120 36 64",
-        "neutral": "31 22 28",
-        "surface": "255 255 255",
-        "background": "252 244 247",
-        "success": "46 204 113",
-        "warning": "241 196 15",
-        "error": "231 76 60"
-      },
-      "tokens": {
-        "season-rose": "#e16888",
-        "season-rose-soft": "rgba(225, 104, 136, 0.2)",
-        "season-berry": "#782440",
-        "season-cream": "#FDF6F8"
-      },
-      "featuredProductsTag": "valentine",
-      "featuredRotationSeconds": 6
-    }
-  ],
+  "seasonalThemes": [],
   "hero": {
-    "eyebrow": "Engraved gifts, made personal",
-    "title": "Amarka creates warm, lasting keepsakes for every milestone",
-    "subtitle": "Personalised flasks, decanters, pens, and more—designed with premium materials and thoughtful engraving.",
+    "eyebrow": "Precision engraving for the NYC trade",
+    "title": "Your name, permanently etched in brass, steel, glass, and hardwood",
+    "subtitle": "Amarka is the Stamford studio that interior designers, GCs, and hospitality teams rely on when a project demands engraving done right — on time, on spec, on material.",
     "primaryCta": {
-      "label": "Shop collections",
-      "href": "/collections"
+      "label": "Start a Commission",
+      "href": "/enquire"
     },
     "secondaryCta": {
-      "label": "Gift inspiration",
-      "href": "/collections/gifts-for-men"
+      "label": "Apply for Trade Access",
+      "href": "/trade"
     },
-    "badge": "Personalised in the USA"
+    "badge": "Stamford, CT studio"
   },
   "navigation": {
     "header": [
-      { "label": "Home", "href": "/", "exact": true },
-      { "label": "Collections", "href": "/collections" },
-      { "label": "Gifts for Men", "href": "/collections/gifts-for-men" },
-      { "label": "Products", "href": "/productos" },
-      { "label": "Contact", "href": "/contacto" }
+      { "label": "Work", "href": "/work" },
+      { "label": "Services", "href": "/services" },
+      { "label": "Trade", "href": "/trade" },
+      { "label": "About", "href": "/about" }
     ],
     "footer": [
-      { "label": "Collections", "href": "/collections" },
-      { "label": "Gifts for Men", "href": "/collections/gifts-for-men" },
-      { "label": "Products", "href": "/productos" },
-      { "label": "Contact", "href": "/contacto" }
+      { "label": "Work", "href": "/work" },
+      { "label": "Services", "href": "/services" },
+      { "label": "Trade", "href": "/trade" },
+      { "label": "Who We Work With", "href": "/clients" },
+      { "label": "Materials", "href": "/materials" },
+      { "label": "Enquire", "href": "/enquire" }
     ],
     "social": [
-      { "platform": "instagram", "href": "https://instagram.com/amarka" },
-      { "platform": "pinterest", "href": "https://pinterest.com/amarka" }
+      { "platform": "instagram", "href": "https://instagram.com/amarka.co" },
+      { "platform": "linkedin", "href": "https://www.linkedin.com/company/amarka-co/" }
     ]
   },
   "seo": {
     "siteName": "Amarka",
     "titleTemplate": "%s | Amarka",
-    "defaultTitle": "Personalised gifts and engraved keepsakes by Amarka",
-    "defaultDescription": "Shop personalised gifts and engraved keepsakes with premium materials, fast shipping, and thoughtful packaging by Amarka.",
+    "defaultTitle": "Amarka | Bespoke Laser Engraving Studio for NYC Trade Clients",
+    "defaultDescription": "AMARKA is the NYC metro laser engraving studio for interior designers, general contractors, hospitality groups, and corporate operators. Stamford, CT studio. 5-10 business day turnaround.",
     "defaultKeywords": [
-      "personalised gifts",
-      "engraved gifts",
-      "gifts for men",
-      "custom flasks",
-      "engraved decanter",
-      "keepsake gifts"
+      "laser engraving NYC",
+      "custom signage NYC trade",
+      "bespoke engraved signage New York",
+      "FF&E laser engraving supplier NYC",
+      "laser engraving for interior designers NYC",
+      "custom bar signage NYC"
     ],
-    "socialImage": "/assets/brand/amarka-og.jpg"
+    "socialImage": "/Logo Clear2.png"
   },
   "legal": {
     "businessName": "Amarka",
     "taxId": "",
-    "supportEmail": "support@amarka.com",
-    "returnPolicyUrl": "/return-policy",
-    "privacyPolicyUrl": "/privacy-policy",
+    "supportEmail": "studio@amarka.co",
+    "returnPolicyUrl": "",
+    "privacyPolicyUrl": "/privacy",
     "termsUrl": "/terms"
   },
   "maintenance": {
-    "title": "Scheduled maintenance",
-    "description": "We are updating Amarka and will return shortly. Reach us at support@amarka.com for urgent questions."
+    "title": "Studio maintenance",
+    "description": "We are updating amarka.co and will return shortly. Reach us at studio@amarka.co for urgent enquiries."
   },
   "notifications": {
     "emailFromName": "Amarka",
-    "emailFrom": "noreply@amarka.com"
+    "emailFrom": "studio@amarka.co"
   }
 }

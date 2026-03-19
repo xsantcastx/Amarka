@@ -12,8 +12,8 @@
 
     <div class="home-hero__media">
       <div class="home-hero__material-card">
-        <span class="home-hero__material-label">Bespoke metal signage</span>
-        <p>Premium brass, anodised aluminium, and hospitality-ready engraved finishes for trade-led projects.</p>
+        <span class="home-hero__material-label">Six substrates, one studio</span>
+        <p>Brass, aluminium, stainless steel, acrylic, hardwood, and glass — engraved and finished in-house.</p>
       </div>
       <div class="home-hero__material-card">
         <span class="home-hero__material-label">Stamford studio · NYC metro</span>
@@ -31,7 +31,7 @@
         <p class="home-vertical__icon">{{ vertical.icon }}</p>
         <h2>{{ vertical.title }}</h2>
         <p>{{ vertical.description }}</p>
-        <a [routerLink]="vertical.href">Learn more</a>
+        <a [routerLink]="vertical.href">See details</a>
       </article>
       }
     </div>
@@ -42,8 +42,8 @@
   <div class="page-container">
     <div class="home-section__head">
       <div>
-        <p class="badge">Selected commissions</p>
-        <h2 class="heading-display">Recent and upcoming work for hospitality, workplace, and architectural interiors.</h2>
+        <p class="badge">Recent commissions</p>
+        <h2 class="heading-display">Work that speaks for itself — hospitality, corporate, and architectural.</h2>
       </div>
       <a routerLink="/work" class="btn-outline">View all work</a>
     </div>
@@ -66,14 +66,14 @@
   <div class="page-container">
     <div class="home-feature">
       <div>
-        <p class="badge">In Progress</p>
+        <p class="badge">Now fabricating</p>
         <h2 class="heading-display">{{ project.projectName }}</h2>
         <p>{{ project.description }}</p>
       </div>
       <div class="home-feature__meta">
         <p>{{ project.brief }}</p>
         <p>{{ project.materials.join(' · ') }}</p>
-        <a routerLink="/trade" class="btn-primary">View Trade Programme</a>
+        <a routerLink="/trade" class="btn-primary">Explore Trade Access</a>
       </div>
     </div>
   </div>
@@ -84,10 +84,10 @@
   <div class="page-container">
     <div class="home-section__head">
       <div>
-        <p class="badge">Commission types</p>
-        <h2 class="heading-display">Trade-facing services shaped around projects, not product SKUs.</h2>
+        <p class="badge">What we do</p>
+        <h2 class="heading-display">Every commission is scoped to your project — not pulled from a catalogue.</h2>
       </div>
-      <a routerLink="/services" class="btn-outline">Explore services</a>
+      <a routerLink="/services" class="btn-outline">View all services</a>
     </div>
 
     <div class="home-work-grid">
@@ -104,13 +104,52 @@
 
 <section class="home-section">
   <div class="page-container">
+    <div class="home-section__head">
+      <div>
+        <p class="badge">Who we work with</p>
+        <h2 class="heading-display">Structured for the way design and construction teams actually procure.</h2>
+      </div>
+      <a routerLink="/clients" class="btn-outline">See all client types</a>
+    </div>
+
+    <div class="home-verticals">
+      <article class="home-vertical">
+        <p class="home-vertical__icon">&#9670;</p>
+        <h3>Interior Designers</h3>
+        <p>Formal quotes, material samples, and lead times aligned to your FF&amp;E schedule. We supply to trade spec so your procurement stays clean.</p>
+        <a routerLink="/clients" fragment="interior-designers">See details</a>
+      </article>
+      <article class="home-vertical">
+        <p class="home-vertical__icon">&#9632;</p>
+        <h3>General Contractors</h3>
+        <p>Signage, wayfinding, and architectural accents for commercial fitouts. Quotes returned within 24 hours. Delivery in 5–10 business days.</p>
+        <a routerLink="/clients" fragment="general-contractors">See details</a>
+      </article>
+      <article class="home-vertical">
+        <p class="home-vertical__icon">&#9733;</p>
+        <h3>Bars &amp; Restaurants</h3>
+        <p>Tap handles, menu boards, bar signage, host stand elements, and wall pieces that give your venue a permanent, crafted identity.</p>
+        <a routerLink="/clients" fragment="premium-bars">See details</a>
+      </article>
+      <article class="home-vertical">
+        <p class="home-vertical__icon">&#9636;</p>
+        <h3>Corporate &amp; Building Ops</h3>
+        <p>Lobby directories, suite signage, conference room identification, executive awards, and building-wide wayfinding programmes.</p>
+        <a routerLink="/clients" fragment="corporate-offices">See details</a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="home-section">
+  <div class="page-container">
     <div class="home-trade-band luxury-overlay">
       <div>
         <p class="badge">Trade accounts</p>
-        <h2 class="heading-display">We Offer Trade Accounts</h2>
-        <p>Interior designers and GCs working on NYC projects can apply for an Amarka trade account — preferred pricing, dedicated turnaround slots, and a single point of contact for all your projects.</p>
+        <h2 class="heading-display">Preferred pricing. Priority turnaround. One point of contact.</h2>
+        <p>Amarka trade accounts give interior designers and GCs working on NYC projects dedicated scheduling, monthly invoicing, and a direct line to our fabrication team.</p>
       </div>
-      <a routerLink="/trade" class="btn-primary">Request a Trade Account</a>
+      <a routerLink="/trade" class="btn-primary">Apply for Trade Access</a>
     </div>
   </div>
 </section>

@@ -1,4 +1,4 @@
-﻿@keyframes slide-up {
+@keyframes slide-up {
   from {
     transform: translateY(100%);
     opacity: 0;
@@ -13,90 +13,77 @@
   animation: slide-up 0.3s ease-out;
 }
 
+/* ── Dark glass surface — forced dark to override any global light-theme rules ── */
 .cookie-banner-surface {
-  background-color: var(--bg-elevated);
-  color: var(--text);
-  border: 1px solid var(--border);
+  background: rgba(20, 25, 32, 0.94) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  color: #f7f1e7 !important;
+  border: 1px solid rgba(247, 241, 231, 0.08) !important;
+  background-color: rgba(20, 25, 32, 0.94) !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
 }
 
-.cookie-heading {
-  color: var(--text);
-}
-
-.cookie-body {
-  color: var(--muted);
-}
-
-.cookie-muted {
-  color: color-mix(in srgb, var(--muted) 80%, var(--bg-elevated));
-}
-
-.cookie-link {
-  color: var(--primary);
-  font-weight: 600;
-  text-decoration: underline;
-}
-
+/* ── Banner buttons ── */
 .cookie-banner-actions .ts-btn {
-  min-height: 3rem;
+  min-height: 2.75rem !important;
+  font-size: 0.875rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.01em;
+  border-radius: 0.625rem !important;
+  transition: all 0.2s ease;
+  box-shadow: none !important;
+  transform: none !important;
 }
 
-.cookie-overlay {
-  background-color: var(--overlay);
+.cookie-banner-actions .ts-btn:hover {
+  transform: none !important;
+  box-shadow: none !important;
 }
 
-.cookie-section {
-  padding: 1rem;
-  border-radius: 1rem;
-  border: 1px solid var(--border);
-  background: color-mix(in srgb, var(--bg-surface) 80%, var(--bg-elevated));
-}
-
-.cookie-section + .cookie-section {
-  margin-top: 1rem;
-}
-
-.cookie-section--analytics {
-  border-left: 4px solid color-mix(in srgb, var(--primary) 55%, var(--border));
-}
-
-.cookie-section--marketing {
-  border-left: 4px solid color-mix(in srgb, #c084fc 55%, var(--border));
-}
-
-.cookie-section--preferences {
-  border-left: 4px solid color-mix(in srgb, #4ade80 55%, var(--border));
-}
-
-.cookie-chip {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
-  font-size: 0.75rem;
+/* ── Cookie links ── */
+.cookie-link {
+  color: #c59a68 !important;
   font-weight: 600;
-  color: var(--muted);
-  background: color-mix(in srgb, var(--muted) 10%, var(--bg-elevated));
+  text-decoration: none !important;
+  border-bottom: 1px solid rgba(197, 154, 104, 0.3);
+  transition: border-color 0.2s ease;
+
+  &:hover {
+    border-color: #c59a68;
+    color: #c59a68 !important;
+    text-decoration: none !important;
+  }
 }
 
-.cookie-checkbox {
-  width: 1.25rem;
-  height: 1.25rem;
-  accent-color: var(--primary);
-  border: 1px solid var(--border);
-  border-radius: 0.5rem;
+/* ── Settings modal overlay ── */
+.cookie-overlay {
+  background-color: rgba(0, 0, 0, 0.6) !important;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
 
+/* ── Close button ── */
 .cookie-icon-btn {
-  color: var(--muted);
-  background-color: var(--bg-elevated);
+  color: rgba(247, 241, 231, 0.4) !important;
+  background: transparent !important;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
 }
 
 .cookie-icon-btn:hover {
-  background: color-mix(in srgb, var(--muted) 12%, var(--bg-elevated));
+  color: #f7f1e7 !important;
+  background: rgba(247, 241, 231, 0.06) !important;
 }
 
-.cookie-modal-footer {
-  background-color: color-mix(in srgb, var(--bg-surface) 85%, var(--bg-elevated));
-  border-top: 1px solid var(--border);
+/* ── Checkbox accent ── */
+.cookie-checkbox {
+  width: 1.125rem;
+  height: 1.125rem;
+  accent-color: #9f6b3d !important;
+}
+
+/* ── Icon tint ── */
+.text-ts-accent {
+  color: #9f6b3d !important;
 }

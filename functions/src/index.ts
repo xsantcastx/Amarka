@@ -1250,7 +1250,7 @@ export const createCustomOrderPaymentLink = withStripeSecrets.https.onCall(
       after_completion: {
         type: "redirect",
         redirect: {
-          url: `${functions.config().app?.url || "https://amarka.com"}/checkout/confirmation?custom_order=${customOrderId}`,
+          url: `${functions.config().app?.url || "https://amarka.co"}/checkout/confirmation?custom_order=${customOrderId}`,
         },
       },
       // Allow promotion codes

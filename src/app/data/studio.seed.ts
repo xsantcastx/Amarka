@@ -9,16 +9,16 @@ import {
 } from '../models/studio';
 
 export const STUDIO_SETTINGS: StudioSettings = {
-  brandStatement: 'Precision laser engraving studio for the NYC trade.',
-  heroEyebrow: 'Bespoke Laser Engraving Studio · NYC Metro',
-  heroTitle: 'Precision-fabricated engraved elements for hospitality, workplace, and architectural interiors.',
+  brandStatement: 'Precision laser engraving for the NYC trade.',
+  heroEyebrow: 'Precision Laser Engraving · NYC Metro',
+  heroTitle: 'Your name, permanently etched in brass, steel, glass, and hardwood.',
   heroSubtitle:
-    'Amarka partners with interior designers, general contractors, hospitality groups, and building operators from our Stamford, CT studio with a dependable 5-10 business day turnaround.',
-  tradeHeadline: 'Supplying the NYC Trade Since 2024',
+    'Amarka is the Stamford studio that interior designers, GCs, and hospitality teams rely on when a project demands engraving done right — on time, on spec, on material.',
+  tradeHeadline: 'One account. Priority access to the studio.',
   tradeSubheadline:
-    'A preferred laser engraving and fabrication partner for designers, contractors, hospitality operators, and premium commercial interiors.',
-  responseWindow: 'We’ll respond within 24 hours.',
-  turnaround: '5-10 business day turnaround',
+    'Trade accounts unlock preferred pricing, dedicated turnaround, and a single point of contact for every commission.',
+  responseWindow: 'Response within one business day.',
+  turnaround: '5–10 business day turnaround',
   location: 'Stamford, CT',
   serviceArea: 'NYC Metro'
 };
@@ -35,43 +35,43 @@ export const HOME_CONTENT: HomeContent = {
       id: 'interior_designers',
       icon: 'drafting_compass',
       title: 'Interior Designers',
-      description: 'Specification-friendly engraved elements for hospitality, workplace, and residential amenity spaces.',
+      description: 'Engraved elements supplied to trade spec — formal quotes, sampling, and lead times that fit your FF&E schedule.',
       href: '/clients#interior-designers'
     },
     {
       id: 'general_contractors',
       icon: 'construction',
       title: 'General Contractors',
-      description: 'Reliable fabrication partner for signage packages, wayfinding systems, and commercial installation schedules.',
+      description: 'Signage packages, wayfinding systems, and architectural accents — quoted in 24 hours, delivered in 5–10 business days.',
       href: '/clients#general-contractors'
     },
     {
       id: 'bars_restaurants',
       icon: 'wine_bar',
       title: 'Bars & Restaurants',
-      description: 'Bar fitout details, branded service elements, and premium engraved touchpoints for hospitality concepts.',
+      description: 'Tap handles, menu boards, bar signage, and branded service elements that give your venue a crafted, permanent identity.',
       href: '/clients#bars-restaurants'
     },
     {
       id: 'corporate_offices',
       icon: 'apartment',
       title: 'Corporate Offices',
-      description: 'Architectural signage, recognition pieces, and branded environmental elements for high-trust workplaces.',
+      description: 'Lobby directories, suite signage, executive awards, and building-wide wayfinding for corporate and commercial environments.',
       href: '/clients#corporate-offices'
     }
   ],
   tradeBenefits: [
     {
-      title: 'Preferred pricing',
-      description: 'Account-based quoting for repeat trade clients and FF&E procurement teams.'
+      title: 'Preferred trade pricing',
+      description: 'Account-based quoting that rewards repeat volume and multi-project relationships.'
     },
     {
-      title: 'Dedicated lead time slots',
-      description: 'Priority scheduling for time-sensitive hospitality and construction programmes.'
+      title: 'Reserved production slots',
+      description: 'Priority scheduling so your project stays on track, even under tight construction timelines.'
     },
     {
-      title: 'Single point of contact',
-      description: 'One studio partner from initial brief through fabrication, revisions, and delivery.'
+      title: 'Dedicated project contact',
+      description: 'One studio partner from first brief through fabrication, revisions, and delivery coordination.'
     }
   ],
   featuredProjectSlug: 'private-golf-club-door-signage'
@@ -85,9 +85,9 @@ export const CASE_STUDIES: CaseStudy[] = [
     clientType: 'architectural',
     audienceTags: ['interior_designers', 'general_contractors'],
     location: 'Connecticut',
-    brief: 'Door signage system for a private golf club renovation.',
+    brief: 'Full door signage system for a private golf club renovation in Connecticut.',
     description:
-      'A brushed brass signage package in development for a private golf club, pairing precise typography, durable fixing details, and a refined hospitality finish.',
+      'Brushed brass signage with precise typography, concealed fixings, and a finish calibrated for high-end hospitality — currently in production.',
     materials: ['Brushed brass', 'Black infill', 'Architectural adhesive backers'],
     technique: ['Laser engraving', 'Paint fill', 'Finishing and sealing'],
     images: [
@@ -97,7 +97,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     featured: true,
     featuredOnHome: true,
     published: true,
-    ctaLabel: 'Start a similar project',
+    ctaLabel: 'Start a commission like this',
     ctaHref: '/enquire',
     createdAt: '2026-03-01T00:00:00.000Z',
     updatedAt: '2026-03-01T00:00:00.000Z'
@@ -109,9 +109,9 @@ export const CASE_STUDIES: CaseStudy[] = [
     clientType: 'hospitality',
     audienceTags: ['bars_restaurants', 'interior_designers'],
     location: 'New York City',
-    brief: 'Prototype wayfinding package for a premium hospitality concept.',
+    brief: 'Room markers, directional plates, and branded inserts for a premium hospitality concept.',
     description:
-      'A concept development package showing engraved room markers, directional plates, and branded insert details for hospitality interiors.',
+      'Engraved wayfinding elements prototyped in aged brass and powder-coated aluminium — designed to set the tone across the guest experience.',
     materials: ['Aged brass', 'Powder-coated aluminium'],
     technique: ['Laser engraving', 'Surface finishing'],
     images: [{ url: '/Logo Clear2.png', alt: 'Hospitality prototype placeholder' }],
@@ -119,7 +119,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     featured: false,
     featuredOnHome: false,
     published: true,
-    ctaLabel: 'Start a similar project',
+    ctaLabel: 'Start a commission like this',
     ctaHref: '/enquire',
     createdAt: '2026-03-01T00:00:00.000Z',
     updatedAt: '2026-03-01T00:00:00.000Z'
@@ -131,9 +131,9 @@ export const CASE_STUDIES: CaseStudy[] = [
     clientType: 'corporate',
     audienceTags: ['corporate_offices'],
     location: 'NYC Metro',
-    brief: 'Recognition pieces for executive and staff milestones.',
+    brief: 'Milestone awards and branded recognition pieces for a corporate headquarters.',
     description:
-      'Engraved awards and branded recognition elements designed for premium workplace environments and executive gifting programmes.',
+      'Engraved awards in blackened steel, acrylic, and walnut — designed for executive presentation and long-term display in premium workplace environments.',
     materials: ['Blackened steel', 'Acrylic', 'Walnut'],
     technique: ['Laser engraving', 'Assembly'],
     images: [{ url: '/Logo Clear2.png', alt: 'Corporate programme placeholder' }],
@@ -141,7 +141,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     featured: false,
     featuredOnHome: false,
     published: true,
-    ctaLabel: 'Start a similar project',
+    ctaLabel: 'Start a commission like this',
     ctaHref: '/enquire',
     createdAt: '2026-03-01T00:00:00.000Z',
     updatedAt: '2026-03-01T00:00:00.000Z'
@@ -153,7 +153,7 @@ export const SERVICES: ServiceCommission[] = [
     id: 'architectural-signage-systems',
     slug: 'architectural-signage-systems',
     title: 'Architectural Signage Systems',
-    description: 'Wayfinding, room signage, plaque systems, and architectural identification pieces fabricated for commercial and hospitality interiors.',
+    description: 'Wayfinding, room markers, plaque systems, and identification pieces — fabricated to spec for commercial and hospitality interiors.',
     materials: ['Brass', 'Stainless steel', 'Aluminium', 'Acrylic'],
     typicalLeadTime: '5-10 business days',
     ctaLabel: 'Discuss a signage package',
@@ -165,7 +165,7 @@ export const SERVICES: ServiceCommission[] = [
     id: 'custom-bar-restaurant-fitout',
     slug: 'custom-bar-restaurant-fitout',
     title: 'Custom Bar & Restaurant Fitout',
-    description: 'Engraved back-bar details, service elements, menu displays, and branded spatial moments for premium hospitality venues.',
+    description: 'Back-bar details, menu displays, tap handles, and branded spatial elements — engraved for venues that take their identity seriously.',
     materials: ['Brass', 'Mirror acrylic', 'Powder-coated metals'],
     typicalLeadTime: '5-10 business days',
     ctaLabel: 'Start a hospitality brief',
@@ -176,7 +176,7 @@ export const SERVICES: ServiceCommission[] = [
     id: 'trade-supply',
     slug: 'trade-supply',
     title: 'Trade Supply (Designer / GC)',
-    description: 'Reliable fabrication support for design studios and contractors requiring repeatability, documentation, and scheduling confidence.',
+    description: 'Dependable fabrication for design studios and GCs who need repeatability, documentation, and scheduling they can count on.',
     materials: ['Specified to brief'],
     typicalLeadTime: '5-10 business days',
     ctaLabel: 'Open a trade conversation',
@@ -187,7 +187,7 @@ export const SERVICES: ServiceCommission[] = [
     id: 'corporate-awards-recognition',
     slug: 'corporate-awards-recognition',
     title: 'Corporate Awards & Recognition',
-    description: 'Executive awards, donor recognition, and branded commemorative pieces with premium finishing and presentation.',
+    description: 'Executive awards, donor walls, and commemorative pieces — premium finishing and presentation-ready packaging.',
     materials: ['Metal', 'Acrylic', 'Wood'],
     typicalLeadTime: '5-10 business days',
     ctaLabel: 'Plan a recognition project',
@@ -198,7 +198,7 @@ export const SERVICES: ServiceCommission[] = [
     id: 'bespoke-architectural-accents',
     slug: 'bespoke-architectural-accents',
     title: 'Bespoke Architectural Accents',
-    description: 'Engraved metal and material accents integrated into interior detailing, joinery, and spatial branding.',
+    description: 'Engraved metal and material accents integrated into joinery, interior detailing, and spatial branding — the details that elevate a space.',
     materials: ['Brass', 'Bronze-toned aluminium', 'Steel'],
     typicalLeadTime: '5-10 business days',
     ctaLabel: 'Review material options',
@@ -209,7 +209,7 @@ export const SERVICES: ServiceCommission[] = [
     id: 'branded-environmental-elements',
     slug: 'branded-environmental-elements',
     title: 'Branded Environmental Elements',
-    description: 'Signage and engraved branded components that translate identity into premium physical environments.',
+    description: 'Signage and engraved branded components that translate your identity into the physical environment — lobby to rooftop.',
     materials: ['Metal', 'Acrylic', 'Composite panels'],
     typicalLeadTime: '5-10 business days',
     ctaLabel: 'Shape a branded environment',
@@ -222,41 +222,41 @@ export const AUDIENCE_SECTIONS: AudienceSection[] = [
   {
     id: 'interior_designers',
     title: 'Interior Designers & Architecture Firms',
-    intro: 'We support specification-heavy hospitality and workplace projects with fabrication guidance, finish sampling, and clean quote turnaround.',
+    intro: 'We support specification-driven hospitality and workplace projects with fabrication guidance, finish sampling, and quotes that move at your pace.',
     bullets: [
-      'Material and finish guidance at concept stage',
+      'Material and finish guidance from concept through spec',
       'Design-sensitive detailing for hospitality and workplace interiors',
-      'Fast response windows for ongoing studio workflows'
+      'Turnaround aligned to your FF&E procurement schedule'
     ]
   },
   {
     id: 'general_contractors',
     title: 'General Contractors & Construction Companies',
-    intro: 'We work as a dependable fabrication partner for signage packages, install schedules, and late-stage value engineering.',
+    intro: 'A dependable fabrication partner for signage packages, install schedules, and late-stage value engineering — no surprises.',
     bullets: [
-      'Clear lead-time communication',
-      'Repeatable fabrication for multi-piece packages',
-      'Trade-account support for ongoing commercial delivery'
+      'Clear lead-time commitments on every order',
+      'Repeatable fabrication for multi-piece and multi-floor packages',
+      'Trade account support with net-30 invoicing'
     ]
   },
   {
     id: 'bars_restaurants',
     title: 'Premium Bars & Restaurants',
-    intro: 'We produce engraved details that sharpen the hospitality experience, from branded bar fitout pieces to operational wayfinding.',
+    intro: 'Engraved details that sharpen the guest experience — from branded bar fitout pieces to front-of-house wayfinding.',
     bullets: [
-      'Premium hospitality finishes',
-      'Branded details for front-of-house and back-bar applications',
-      'Fast fabrication windows for openings and refreshes'
+      'Finishes selected for high-traffic hospitality environments',
+      'Branded elements for front-of-house, back-bar, and service areas',
+      'Fast fabrication for new openings, refreshes, and seasonal updates'
     ]
   },
   {
     id: 'corporate_offices',
     title: 'Corporate Offices & Building Operators',
-    intro: 'We fabricate polished signage, recognition pieces, and environmental branding for executive, amenity, and shared workplace environments.',
+    intro: 'Polished signage, recognition programmes, and environmental branding for executive suites, amenity spaces, and shared workplace environments.',
     bullets: [
-      'Recognition and donor-style programmes',
-      'Architectural room and amenity signage',
-      'Responsive support for facilities and operator teams'
+      'Recognition walls, donor displays, and milestone awards',
+      'Room identification, amenity signage, and lobby directories',
+      'Responsive support for facilities teams and building operators'
     ]
   }
 ];
@@ -264,18 +264,18 @@ export const AUDIENCE_SECTIONS: AudienceSection[] = [
 export const TRADE_STEPS: TradeStep[] = [
   {
     step: '01',
-    title: 'Share the brief',
-    description: 'Send drawings, quantities, dimensions, and timeline requirements through the trade enquiry flow.'
+    title: 'Send your brief',
+    description: 'Share drawings, quantities, dimensions, and timeline through our trade form. We respond within one business day.'
   },
   {
     step: '02',
-    title: 'Review materials and schedule',
-    description: 'We confirm fabrication approach, material direction, and a realistic lead-time window.'
+    title: 'Lock materials and schedule',
+    description: 'We confirm the fabrication approach, material selection, and a firm production window that fits your project timeline.'
   },
   {
     step: '03',
-    title: 'Approve and fabricate',
-    description: 'Once approved, your project moves into production with a single studio contact and delivery coordination.'
+    title: 'We build. You install.',
+    description: 'Your project moves into production with a dedicated contact handling revisions, proofing, and delivery coordination.'
   }
 ];
 

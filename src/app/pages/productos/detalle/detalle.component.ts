@@ -1259,7 +1259,7 @@ export class DetalleComponent implements OnInit, AfterViewInit, OnDestroy {
     if (isPlatformBrowser(this.platformId)) {
       return window.location.href;
     }
-    return `https://amarka.com/productos/${this.producto?.slug || ''}`;
+    return `https://amarka.co/products/${this.producto?.slug || ''}`;
   }
 
   shareOnWhatsApp() {

@@ -8,12 +8,16 @@ Allow: /
 Disallow: /admin/
 Disallow: /client/
 Disallow: /cart/
+Disallow: /checkout/
 
-# Allow crawling of product pages
-Allow: /productos/
-Allow: /galeria/
-Allow: /contacto/
-Allow: /datos-tecnicos/
+# Allow crawling of public pages
+Allow: /work/
+Allow: /services/
+Allow: /trade/
+Allow: /clients/
+Allow: /materials/
+Allow: /enquire/
+Allow: /about/
 
 # Sitemap location
-Sitemap: https://amarka.com/sitemap.xml
+Sitemap: https://amarka.co/sitemap.xml

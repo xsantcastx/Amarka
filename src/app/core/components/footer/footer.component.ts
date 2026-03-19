@@ -19,14 +19,14 @@ import { BrandConfigService } from '../../services/brand-config.service';
                 <p class="studio-footer__tag">{{ brand.site.brand.description }}</p>
               </div>
             </div>
-            <a routerLink="/enquire" class="btn-primary">Start Your Commission</a>
+            <a routerLink="/enquire" class="btn-primary">Start a Commission</a>
           </div>
 
           <div class="studio-footer__grid">
             <div>
               <p class="studio-footer__eyebrow">Studio</p>
-              <p class="studio-footer__text">Stamford, CT studio serving the NYC metro.</p>
-              <p class="studio-footer__text">5-10 business day turnaround for bespoke engraved commissions.</p>
+              <p class="studio-footer__text">Stamford, CT — serving the NYC metro trade.</p>
+              <p class="studio-footer__text">5–10 business day turnaround on all commissions.</p>
             </div>
             <div>
               <p class="studio-footer__eyebrow">Navigate</p>

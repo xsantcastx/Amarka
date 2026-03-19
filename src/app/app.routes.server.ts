@@ -18,11 +18,11 @@ export const serverRoutes: ServerRoute[] = [
     renderMode: RenderMode.Client
   },
   {
-    path: 'productos/:slug',
+    path: 'collections/:slug',
     renderMode: RenderMode.Client
   },
   {
-    path: 'collections/:slug',
+    path: 'productos/:slug',
     renderMode: RenderMode.Client
   },
   {

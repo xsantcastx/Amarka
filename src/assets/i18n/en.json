@@ -1059,41 +1059,41 @@
   },
   "cookie": {
     "banner": {
-      "title": "We use cookies for a better engraving experience",
-      "body": "We use cookies and similar technologies to enhance your experience, analyze site traffic, and personalize content and offers.",
-      "read": "Read our",
+      "title": "Your privacy, respected",
+      "body": "We use a small number of cookies to keep the site running smoothly and understand how it's used.",
+      "read": "See our",
       "and": "and",
       "privacy": "Privacy Policy",
       "cookie": "Cookie Policy",
-      "more": "for more information."
+      "more": "for details."
     },
     "actions": {
       "accept_all": "Accept All",
       "essential": "Essential Only",
-      "customize": "Customize"
+      "customize": "Manage"
     },
     "settings": {
-      "title": "Cookie Settings",
-      "body": "Manage your cookie preferences. Some cookies are essential for the site to function and cannot be disabled.",
+      "title": "Cookie Preferences",
+      "body": "Choose which cookies you'd like to allow. Essential cookies are required for the site to function and cannot be turned off.",
       "essential": {
-        "title": "Essential Cookies",
-        "body": "Required for security, checkout, and access to protected areas.",
-        "always": "Always Active"
+        "title": "Essential",
+        "body": "Required for security, navigation, and core site functionality.",
+        "always": "Always On"
       },
       "analytics": {
-        "title": "Analytics Cookies",
-        "body": "Help us understand how visitors interact with our site (anonymous performance data).",
-        "allow": "Allow analytics cookies"
+        "title": "Analytics",
+        "body": "Anonymous performance data that helps us improve the site experience.",
+        "allow": "Allow analytics"
       },
       "marketing": {
-        "title": "Marketing Cookies",
-        "body": "Used to personalize offers and measure campaign performance.",
-        "allow": "Allow marketing cookies"
+        "title": "Marketing",
+        "body": "Used to measure campaign performance and personalise relevant content.",
+        "allow": "Allow marketing"
       },
       "preferences": {
-        "title": "Preference Cookies",
-        "body": "Remember language, region, and theme preferences.",
-        "allow": "Allow preference cookies"
+        "title": "Preferences",
+        "body": "Remembers your language, region, and display settings.",
+        "allow": "Allow preferences"
       },
       "save": "Save Preferences"
     }
@@ -1124,7 +1124,7 @@
     "contact": {
       "heading": "Questions",
       "copy": "If you have privacy questions or data requests, contact our team.",
-      "email": "privacy@amarka.com"
+      "email": "privacy@amarka.co"
     }
   },
   "cookiePolicy": {
@@ -1150,7 +1150,7 @@
     "contact": {
       "heading": "Contact",
       "copy": "For cookie questions, reach out to our privacy team.",
-      "email": "privacy@amarka.com"
+      "email": "privacy@amarka.co"
     }
   },
   "terms": {
@@ -1173,7 +1173,7 @@
     "contact": {
       "heading": "Need help?",
       "copy": "For questions about these terms or your order, contact our support team.",
-      "email": "support@amarka.com"
+      "email": "support@amarka.co"
     }
   },
   "products": {

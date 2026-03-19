@@ -4,7 +4,7 @@
       <img [src]="logoSrc" [alt]="logoAlt" class="site-nav__logo" />
       <div class="site-nav__copy">
         <span class="site-nav__name">{{ brandName }}</span>
-        <span class="site-nav__tag">Bespoke Laser Engraving Studio · NYC Metro</span>
+        <span class="site-nav__tag">Precision Laser Engraving · NYC Metro</span>
       </div>
     </a>
 
@@ -14,7 +14,7 @@
         {{ link.label }}
       </a>
       }
-      <a routerLink="/enquire" class="btn-primary site-nav__cta">Enquire</a>
+      <a routerLink="/enquire" class="btn-primary site-nav__cta">Get a Quote</a>
     </nav>
 
     <button class="site-nav__menu" type="button" (click)="toggleMobile()" aria-label="Toggle navigation">
@@ -29,7 +29,7 @@
     @for (link of navLinks; track link.href) {
     <a [routerLink]="link.href" (click)="closeMobile()">{{ link.label }}</a>
     }
-    <a routerLink="/enquire" class="btn-primary" (click)="closeMobile()">Enquire</a>
+    <a routerLink="/enquire" class="btn-primary" (click)="closeMobile()">Get a Quote</a>
   </div>
   }
 </header>

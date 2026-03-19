@@ -212,11 +212,11 @@ export class ContactoPageComponent {
   async loadSettings() {
     try {
       const settings = await this.settingsService.getSettings();
-      this.contactEmail = settings.contactEmail || 'hello@amarka.com';
-      this.contactPhone = settings.contactPhone || '+1 (305) 555-0100';
-      this.contactAddress = settings.contactAddress || 'Miami & South Florida';
+      this.contactEmail = settings.contactEmail || 'studio@amarka.co';
+      this.contactPhone = settings.contactPhone || '+1 (203) 555-0148';
+      this.contactAddress = settings.contactAddress || 'Stamford, CT';
       this.whatsappNumber = settings.whatsappNumber || settings.contactPhone || '';
-      
+
       // Load hero settings if available
       this.heroImage = settings.contactoHeroImage || this.heroImage;
       this.heroTitle = settings.contactoHeroTitle || this.heroTitle;
@@ -224,9 +224,9 @@ export class ContactoPageComponent {
     } catch (error) {
       void 0;
       // Fallback to defaults
-      this.contactEmail = 'hello@amarka.com';
-      this.contactPhone = '+1 (305) 555-0100';
-      this.contactAddress = 'Miami & South Florida';
+      this.contactEmail = 'studio@amarka.co';
+      this.contactPhone = '+1 (203) 555-0148';
+      this.contactAddress = 'Stamford, CT';
     }
   }
 

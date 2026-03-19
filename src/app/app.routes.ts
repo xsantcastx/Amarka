@@ -12,12 +12,12 @@ export const routes: Routes = [
   {
     path: '',
     loadComponent: () => import('./pages/home/home.page').then(m => m.HomePageComponent),
-    title: routeTitle('Bespoke Laser Engraving Studio · NYC Metro')
+    title: routeTitle('Precision Laser Engraving for the NYC Trade')
   },
   {
     path: 'work',
     loadComponent: () => import('./pages/work/work.page').then(m => m.WorkPageComponent),
-    title: routeTitle('Work')
+    title: routeTitle('Our Work')
   },
   {
     path: 'services',
@@ -27,7 +27,7 @@ export const routes: Routes = [
   {
     path: 'trade',
     loadComponent: () => import('./pages/trade/trade.page').then(m => m.TradePageComponent),
-    title: routeTitle('Trade & Commercial')
+    title: routeTitle('Trade Programme')
   },
   {
     path: 'clients',
@@ -37,7 +37,7 @@ export const routes: Routes = [
   {
     path: 'enquire',
     loadComponent: () => import('./pages/enquire/enquire.page').then(m => m.EnquirePageComponent),
-    title: routeTitle('Enquire')
+    title: routeTitle('Start a Commission')
   },
   {
     path: 'materials',
@@ -47,7 +47,7 @@ export const routes: Routes = [
   {
     path: 'about',
     loadComponent: () => import('./pages/about/about.page').then(m => m.AboutPageComponent),
-    title: routeTitle('About')
+    title: routeTitle('About the Studio')
   },
   // Legacy storefront paths redirected into the new B2B information architecture
   {

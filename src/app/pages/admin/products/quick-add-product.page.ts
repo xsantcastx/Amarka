@@ -725,7 +725,7 @@ export class QuickAddProductComponent extends LoadingComponentBase implements On
     
     this.seoPreviewTitle = title || 'Product Title';
     this.seoPreviewDescription = description || 'Product description will appear here...';
-    this.seoPreviewUrl = `https://amarka.com/productos/${slug || 'product-url'}`;
+    this.seoPreviewUrl = `https://amarka.co/products/${slug || 'product-url'}`;
   }
 
   onCoverImageSelected(event: any) {

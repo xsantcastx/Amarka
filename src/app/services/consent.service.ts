@@ -22,7 +22,7 @@ export interface ConsentState {
 })
 export class ConsentService {
   private platformId = inject(PLATFORM_ID);
-  private readonly CONSENT_KEY = 'CreaDevents_user_consent';
+  private readonly CONSENT_KEY = 'amarka_user_consent';
   
   private consentState = new BehaviorSubject<ConsentState>({
     analytics: false,

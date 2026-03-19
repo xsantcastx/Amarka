@@ -1,9 +1,9 @@
 <section class="page-hero">
   <div class="page-container">
     <div class="page-hero__inner">
-      <p class="badge">Selected commissions</p>
-      <h1 class="heading-display">Trade-facing case studies, grouped by workflow and client type.</h1>
-      <p class="page-hero__subtitle">Hospitality, corporate, and architectural engraving commissions across the NYC metro.</p>
+      <p class="badge">Our work</p>
+      <h1 class="heading-display">What we've made — and who we made it for.</h1>
+      <p class="page-hero__subtitle">Hospitality, corporate, and architectural commissions across the NYC metro. Filter by client type to see relevant projects.</p>
     </div>
   </div>
 </section>
@@ -21,14 +21,14 @@
     @if (featured(); as featuredProject) {
     <article class="work-feature">
       <div class="work-feature__copy">
-        <p class="badge">Commission in Progress</p>
+        <p class="badge">Now fabricating</p>
         <h2 class="heading-display">{{ featuredProject.projectName }}</h2>
         <p>{{ featuredProject.brief }}</p>
       </div>
       <div class="work-feature__meta">
         <p class="work-feature__detail">{{ featuredProject.location }}</p>
         <p class="work-feature__detail">{{ featuredProject.materials.join(' · ') }}</p>
-        <a [routerLink]="featuredProject.ctaHref" class="btn-primary">Start Your Commission</a>
+        <a [routerLink]="featuredProject.ctaHref" class="btn-primary">Start a Commission</a>
       </div>
     </article>
     }

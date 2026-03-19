@@ -13,7 +13,7 @@ export interface SitemapUrl {
   providedIn: 'root'
 })
 export class SitemapService {
-  private baseUrl = 'https://amarka.com';
+  private baseUrl = 'https://amarka.co';
 
   constructor(private productsService: ProductsService) {}
 
@@ -44,29 +44,47 @@ export class SitemapService {
       {
         loc: `${this.baseUrl}/`,
         lastmod: today,
-        changefreq: 'daily',
+        changefreq: 'weekly',
         priority: 1.0
       },
       {
-        loc: `${this.baseUrl}/productos`,
+        loc: `${this.baseUrl}/work`,
         lastmod: today,
         changefreq: 'weekly',
         priority: 0.9
       },
       {
-        loc: `${this.baseUrl}/galeria`,
+        loc: `${this.baseUrl}/services`,
         lastmod: today,
-        changefreq: 'weekly',
-        priority: 0.7
+        changefreq: 'monthly',
+        priority: 0.9
       },
       {
-        loc: `${this.baseUrl}/contacto`,
+        loc: `${this.baseUrl}/trade`,
+        lastmod: today,
+        changefreq: 'monthly',
+        priority: 0.9
+      },
+      {
+        loc: `${this.baseUrl}/clients`,
         lastmod: today,
         changefreq: 'monthly',
         priority: 0.8
       },
       {
-        loc: `${this.baseUrl}/datos-tecnicos`,
+        loc: `${this.baseUrl}/materials`,
+        lastmod: today,
+        changefreq: 'monthly',
+        priority: 0.7
+      },
+      {
+        loc: `${this.baseUrl}/enquire`,
+        lastmod: today,
+        changefreq: 'monthly',
+        priority: 0.8
+      },
+      {
+        loc: `${this.baseUrl}/about`,
         lastmod: today,
         changefreq: 'monthly',
         priority: 0.6

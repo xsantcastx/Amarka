@@ -1006,41 +1006,41 @@
   },
   "cookie": {
     "banner": {
-      "title": "Usamos cookies para una mejor experiencia de grabado",
-      "body": "Usamos cookies y tecnologias similares para mejorar tu experiencia, analizar trafico y personalizar contenido y ofertas.",
-      "read": "Lee nuestra",
+      "title": "Tu privacidad, respetada",
+      "body": "Usamos un conjunto reducido de cookies para que el sitio funcione correctamente y entender como se utiliza.",
+      "read": "Consulta nuestra",
       "and": "y",
       "privacy": "Politica de Privacidad",
       "cookie": "Politica de Cookies",
-      "more": "para mas informacion."
+      "more": "para mas detalles."
     },
     "actions": {
       "accept_all": "Aceptar todo",
       "essential": "Solo esenciales",
-      "customize": "Personalizar"
+      "customize": "Gestionar"
     },
     "settings": {
-      "title": "Configuracion de cookies",
-      "body": "Administra tus preferencias. Algunas cookies son esenciales y no pueden deshabilitarse.",
+      "title": "Preferencias de cookies",
+      "body": "Elige que cookies deseas permitir. Las esenciales son necesarias para el funcionamiento del sitio y no pueden desactivarse.",
       "essential": {
-        "title": "Cookies esenciales",
-        "body": "Necesarias para seguridad, compra y acceso a areas protegidas.",
+        "title": "Esenciales",
+        "body": "Necesarias para seguridad, navegacion y funcionalidad basica del sitio.",
         "always": "Siempre activas"
       },
       "analytics": {
-        "title": "Cookies de analitica",
-        "body": "Nos ayudan a entender como navegan los visitantes (datos anonimos).",
-        "allow": "Permitir cookies de analitica"
+        "title": "Analitica",
+        "body": "Datos anonimos de rendimiento que nos ayudan a mejorar la experiencia del sitio.",
+        "allow": "Permitir analitica"
       },
       "marketing": {
-        "title": "Cookies de marketing",
-        "body": "Usadas para personalizar ofertas y medir campanas.",
-        "allow": "Permitir cookies de marketing"
+        "title": "Marketing",
+        "body": "Usadas para medir campanas y personalizar contenido relevante.",
+        "allow": "Permitir marketing"
       },
       "preferences": {
-        "title": "Cookies de preferencias",
-        "body": "Recuerdan idioma, region y preferencias de tema.",
-        "allow": "Permitir cookies de preferencias"
+        "title": "Preferencias",
+        "body": "Recuerdan tu idioma, region y configuracion de visualizacion.",
+        "allow": "Permitir preferencias"
       },
       "save": "Guardar preferencias"
     }
@@ -1071,7 +1071,7 @@
     "contact": {
       "heading": "Preguntas",
       "copy": "Si tienes dudas o solicitudes de datos, contáctanos.",
-      "email": "privacy@amarka.com"
+      "email": "privacy@amarka.co"
     }
   },
   "cookiePolicy": {
@@ -1097,7 +1097,7 @@
     "contact": {
       "heading": "Contacto",
       "copy": "Para preguntas sobre cookies, contacta a nuestro equipo de privacidad.",
-      "email": "privacy@amarka.com"
+      "email": "privacy@amarka.co"
     }
   },
   "terms": {
@@ -1120,7 +1120,7 @@
     "contact": {
       "heading": "¿Necesitas ayuda?",
       "copy": "Para preguntas sobre estos términos o tu pedido, contacta a soporte.",
-      "email": "support@amarka.com"
+      "email": "support@amarka.co"
     }
   },
   "products": {

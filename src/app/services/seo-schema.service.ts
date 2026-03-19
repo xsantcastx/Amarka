@@ -68,8 +68,8 @@ export class SeoSchemaService {
       offers: {
         '@type': 'Offer',
         url: product.slug 
-          ? `https://amarka.com/productos/${product.slug}` 
-          : 'https://amarka.com/productos',
+          ? `https://amarka.co/productos/${product.slug}` 
+          : 'https://amarka.co/productos',
         priceCurrency: product.currency || 'USD',
         price: product.price.toFixed(2),
         availability: product.availability 
@@ -158,8 +158,8 @@ export class SeoSchemaService {
           '@type': 'Product',
           name: product.name,
           url: product.slug 
-            ? `https://amarka.com/productos/${product.slug}` 
-            : 'https://amarka.com/productos',
+            ? `https://amarka.co/productos/${product.slug}` 
+            : 'https://amarka.co/productos',
           image: product.imageUrl,
           offers: {
             '@type': 'Offer',
@@ -209,7 +209,7 @@ export class SeoSchemaService {
       },
       mainEntityOfPage: {
         '@type': 'WebPage',
-        '@id': `https://amarka.com/blog/${article.slug}`
+        '@id': `https://amarka.co/blog/${article.slug}`
       }
     };
 
@@ -403,7 +403,7 @@ export class SeoSchemaService {
     
     // Set canonical URL
     if (product.slug) {
-      this.setCanonicalUrl(`https://amarka.com/productos/${product.slug}`);
+      this.setCanonicalUrl(`https://amarka.co/productos/${product.slug}`);
     }
     
     // Generate product schema
