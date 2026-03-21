@@ -74,34 +74,10 @@ export const HOME_CONTENT: HomeContent = {
       description: 'One studio partner from first brief through fabrication, revisions, and delivery coordination.'
     }
   ],
-  featuredProjectSlug: 'private-golf-club-door-signage'
+  featuredProjectSlug: 'hospitality-wayfinding-prototype'
 };
 
 export const CASE_STUDIES: CaseStudy[] = [
-  {
-    id: 'case-private-golf-club',
-    projectName: 'Private Golf Club, Connecticut',
-    slug: 'private-golf-club-door-signage',
-    clientType: 'architectural',
-    audienceTags: ['interior_designers', 'general_contractors'],
-    location: 'Connecticut',
-    brief: 'Full door signage system for a private golf club renovation in Connecticut.',
-    description:
-      'Brushed brass signage with precise typography, concealed fixings, and a finish calibrated for high-end hospitality — currently in production.',
-    materials: ['Brushed brass', 'Black infill', 'Architectural adhesive backers'],
-    technique: ['Laser engraving', 'Paint fill', 'Finishing and sealing'],
-    images: [
-      { url: '/Logo Clear2.png', alt: 'Amarka project placeholder' }
-    ],
-    status: 'in_progress',
-    featured: true,
-    featuredOnHome: true,
-    published: true,
-    ctaLabel: 'Start a commission like this',
-    ctaHref: '/enquire',
-    createdAt: '2026-03-01T00:00:00.000Z',
-    updatedAt: '2026-03-01T00:00:00.000Z'
-  },
   {
     id: 'case-hospitality-wayfinding',
     projectName: 'Hospitality Wayfinding Prototype',

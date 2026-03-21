@@ -4,7 +4,7 @@
     "name": "Amarka",
     "shortName": "Amarka",
     "tagline": "Precision laser engraving for the NYC trade",
-    "description": "Bespoke engraved signage, wayfinding, architectural accents, and hospitality elements — fabricated to spec for interior designers, general contractors, and commercial operators across the NYC metro.",
+    "description": "Bespoke engraved signage, wayfinding, architectural accents, and hospitality elements \u2014 fabricated to spec for interior designers, general contractors, and commercial operators across the NYC metro.",
     "domain": "amarka.co",
     "logo": "/Logo Clear2.png",
     "logoAlt": "Amarka",
@@ -12,11 +12,11 @@
   },
   "contact": {
     "email": "studio@amarka.co",
-    "phone": "+1 (203) 555-0148",
+    "phone": "+1 (203) 554-6224",
     "phone2": "",
     "address": "Stamford, CT\nUnited States",
     "supportHours": "Mon-Fri 8AM-6PM EST",
-    "whatsapp": "+12035550148"
+    "whatsapp": "+12035546224"
   },
   "theme": {
     "tokens": {
@@ -41,7 +41,7 @@
   "hero": {
     "eyebrow": "Precision engraving for the NYC trade",
     "title": "Your name, permanently etched in brass, steel, glass, and hardwood",
-    "subtitle": "Amarka is the Stamford studio that interior designers, GCs, and hospitality teams rely on when a project demands engraving done right — on time, on spec, on material.",
+    "subtitle": "Amarka is the Stamford studio that interior designers, GCs, and hospitality teams rely on when a project demands engraving done right \u2014 on time, on spec, on material.",
     "primaryCta": {
       "label": "Start a Commission",
       "href": "/enquire"
@@ -54,22 +54,66 @@
   },
   "navigation": {
     "header": [
-      { "label": "Work", "href": "/work" },
-      { "label": "Services", "href": "/services" },
-      { "label": "Trade", "href": "/trade" },
-      { "label": "About", "href": "/about" }
+      {
+        "label": "Work",
+        "href": "/work"
+      },
+      {
+        "label": "Services",
+        "href": "/services"
+      },
+      {
+        "label": "Trade",
+        "href": "/trade"
+      },
+      {
+        "label": "About",
+        "href": "/about"
+      },
+      {
+        "label": "Tools",
+        "href": "/tools"
+      }
     ],
     "footer": [
-      { "label": "Work", "href": "/work" },
-      { "label": "Services", "href": "/services" },
-      { "label": "Trade", "href": "/trade" },
-      { "label": "Who We Work With", "href": "/clients" },
-      { "label": "Materials", "href": "/materials" },
-      { "label": "Enquire", "href": "/enquire" }
+      {
+        "label": "Work",
+        "href": "/work"
+      },
+      {
+        "label": "Services",
+        "href": "/services"
+      },
+      {
+        "label": "Trade",
+        "href": "/trade"
+      },
+      {
+        "label": "Who We Work With",
+        "href": "/clients"
+      },
+      {
+        "label": "Materials",
+        "href": "/materials"
+      },
+      {
+        "label": "Enquire",
+        "href": "/enquire"
+      },
+      {
+        "label": "Tools",
+        "href": "/tools"
+      }
     ],
     "social": [
-      { "platform": "instagram", "href": "https://instagram.com/amarka.co" },
-      { "platform": "linkedin", "href": "https://www.linkedin.com/company/amarka-co/" }
+      {
+        "platform": "instagram",
+        "href": "https://instagram.com/amarka.co"
+      },
+      {
+        "platform": "linkedin",
+        "href": "https://www.linkedin.com/company/amarka-co/"
+      }
     ]
   },
   "seo": {
