@@ -20,7 +20,7 @@ export const STUDIO_SETTINGS: StudioSettings = {
   responseWindow: 'Response within one business day.',
   turnaround: '5–10 business day turnaround',
   location: 'Stamford, CT',
-  serviceArea: 'NYC Metro'
+  serviceArea: 'Stamford, CT'
 };
 
 export const HOME_CONTENT: HomeContent = {
@@ -36,28 +36,32 @@ export const HOME_CONTENT: HomeContent = {
       icon: 'drafting_compass',
       title: 'Interior Designers',
       description: 'Engraved elements supplied to trade spec — formal quotes, sampling, and lead times that fit your FF&E schedule.',
-      href: '/clients#interior-designers'
+      href: '/clients',
+      fragment: 'interior-designers'
     },
     {
       id: 'general_contractors',
       icon: 'construction',
       title: 'General Contractors',
       description: 'Signage packages, wayfinding systems, and architectural accents — quoted in 24 hours, delivered in 5–10 business days.',
-      href: '/clients#general-contractors'
+      href: '/clients',
+      fragment: 'general-contractors'
     },
     {
       id: 'bars_restaurants',
       icon: 'wine_bar',
       title: 'Bars & Restaurants',
       description: 'Tap handles, menu boards, bar signage, and branded service elements that give your venue a crafted, permanent identity.',
-      href: '/clients#bars-restaurants'
+      href: '/clients',
+      fragment: 'bars-restaurants'
     },
     {
       id: 'corporate_offices',
       icon: 'apartment',
       title: 'Corporate Offices',
       description: 'Lobby directories, suite signage, executive awards, and building-wide wayfinding for corporate and commercial environments.',
-      href: '/clients#corporate-offices'
+      href: '/clients',
+      fragment: 'corporate-offices'
     }
   ],
   tradeBenefits: [

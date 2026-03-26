@@ -49,6 +49,11 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/about/about.page').then(m => m.AboutPageComponent),
     title: routeTitle('About the Studio')
   },
+  {
+    path: 'tools',
+    loadComponent: () => import('./pages/datos-tecnicos/datos-tecnicos.page').then(m => m.DatosTecnicosPageComponent),
+    title: routeTitle('Tools & Specifications')
+  },
 
   // Legacy storefront paths redirected into the new B2B information architecture
   {

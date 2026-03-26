@@ -14,6 +14,7 @@ export interface VerticalCard {
   title: string;
   description: string;
   href: string;
+  fragment?: string;
 }
 
 export interface TrustedByLabel {

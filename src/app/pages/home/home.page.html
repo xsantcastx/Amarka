@@ -46,7 +46,7 @@
       <article class="home-vertical">
         <h2>{{ vertical.title }}</h2>
         <p>{{ vertical.description }}</p>
-        <a [routerLink]="vertical.href">See details</a>
+        <a [routerLink]="vertical.href" [fragment]="vertical.fragment">See details</a>
       </article>
       }
     </div>
