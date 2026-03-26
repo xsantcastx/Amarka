@@ -7,7 +7,7 @@
   <div class="page-container home-hero__layout">
     <div class="home-hero__copy">
       @if (hero?.badge) {
-        <span class="home-hero__badge">{{ hero.badge }}</span>
+        <span class="home-hero__badge">{{ hero?.badge }}</span>
       }
       <p class="badge animate-hero-fade" style="animation-delay:0.15s">{{ hero?.eyebrow }}</p>
       <h1 class="heading-display animate-hero-fade" style="animation-delay:0.3s">{{ hero?.title }}</h1>
