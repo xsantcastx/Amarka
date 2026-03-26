@@ -42,11 +42,9 @@
           </li>
         </ul>
         <p class="trade-panel__copy">FF&amp;E supply support, fabrication guidance, and a 5–10 business day turnaround — standard for all active trade accounts.</p>
-        @if (specSheet(); as download) {
-        <a [href]="download.fileUrl" target="_blank" rel="noopener" class="btn-primary" (click)="trackDownload()">
-          Download Spec Sheet
+        <a routerLink="/enquire" class="btn-primary">
+          Request a Sample Kit
         </a>
-        }
       </section>
 
       <section class="trade-panel trade-panel--form">

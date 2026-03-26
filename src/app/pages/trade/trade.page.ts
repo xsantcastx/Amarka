@@ -1,17 +1,18 @@
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { StudioContentService } from '../../services/studio-content.service';
 import { AnalyticsService } from '../../services/analytics.service';
 import { LeadSubmissionService } from '../../services/lead-submission.service';
 import { SeoSchemaService } from '../../services/seo-schema.service';
-import { DownloadAsset, TradeApplication, TradeStep } from '../../models/studio';
+import { TradeApplication, TradeStep } from '../../models/studio';
 import { FileDropzoneComponent } from '../../shared/components/file-dropzone/file-dropzone.component';
 
 @Component({
   selector: 'app-trade-page',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FileDropzoneComponent],
+  imports: [CommonModule, RouterModule, ReactiveFormsModule, FileDropzoneComponent],
   templateUrl: './trade.page.html',
   styleUrl: './trade.page.scss'
 })
@@ -23,7 +24,6 @@ export class TradePageComponent {
   private seo = inject(SeoSchemaService);
 
   protected tradeSteps = signal<TradeStep[]>([]);
-  protected specSheet = signal<DownloadAsset | null>(null);
   protected files: File[] = [];
   protected uploadProgress = 0;
   protected success = false;
@@ -99,15 +99,7 @@ export class TradePageComponent {
     }
   }
 
-  protected trackDownload() {
-    const specSheet = this.specSheet();
-    if (specSheet) {
-      this.analytics.trackSpecSheetDownload(specSheet.slug);
-    }
-  }
-
   private async load() {
     this.tradeSteps.set(await this.content.getTradeSteps());
-    this.specSheet.set(await this.content.getDownload('trade-spec-sheet'));
   }
 }

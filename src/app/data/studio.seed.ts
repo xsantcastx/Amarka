@@ -11,7 +11,7 @@ import {
 export const STUDIO_SETTINGS: StudioSettings = {
   brandStatement: 'Precision laser engraving for the NYC trade.',
   heroEyebrow: 'Precision Laser Engraving · NYC Metro',
-  heroTitle: 'Your name, permanently etched in brass, steel, glass, and hardwood.',
+  heroTitle: 'Bespoke laser engraving — your name, permanently etched in brass, steel, glass, and hardwood.',
   heroSubtitle:
     'Amarka is the Stamford studio that interior designers, GCs, and hospitality teams rely on when a project demands engraving done right — on time, on spec, on material.',
   tradeHeadline: 'One account. Priority access to the studio.',
