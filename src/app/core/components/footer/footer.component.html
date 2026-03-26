@@ -1,0 +1,103 @@
+<footer class="site-footer">
+  <!-- Accent line -->
+  <div class="site-footer__accent-line"></div>
+
+  <div class="site-footer__container">
+    <div class="site-footer__surface">
+
+      <!-- Top section: Brand + CTA -->
+      <div class="site-footer__top">
+        <div class="site-footer__brand">
+          <img [src]="brand.site.brand.logo"
+               [alt]="brand.site.brand.logoAlt || brand.siteName"
+               class="site-footer__logo" />
+          <div>
+            <p class="site-footer__name">{{ brand.siteName }}</p>
+            <p class="site-footer__tagline">{{ brand.site.brand.tagline }}</p>
+          </div>
+        </div>
+        <a routerLink="/enquire" class="site-footer__cta">
+          <span>Start a Commission</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+      </div>
+
+      <!-- Main grid -->
+      <div class="site-footer__grid">
+        <!-- Studio info -->
+        <div class="site-footer__col">
+          <p class="site-footer__eyebrow">Studio</p>
+          <p class="site-footer__text">{{ brand.site.contact.address }}</p>
+          <p class="site-footer__text">{{ brand.site.contact.supportHours }}</p>
+          <p class="site-footer__text site-footer__text--muted">Serving the NYC metro trade</p>
+        </div>
+
+        <!-- Navigation -->
+        <div class="site-footer__col">
+          <p class="site-footer__eyebrow">Navigate</p>
+          <div class="site-footer__link-list">
+            @for (link of brand.nav.footer; track link.href) {
+            <a [routerLink]="link.href">{{ link.label }}</a>
+            }
+          </div>
+        </div>
+
+        <!-- Contact -->
+        <div class="site-footer__col">
+          <p class="site-footer__eyebrow">Contact</p>
+          <div class="site-footer__link-list">
+            <a [href]="'mailto:' + brand.site.contact.email" class="site-footer__contact-link">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 01-2.06 0L2 7"/>
+              </svg>
+              <span>{{ brand.site.contact.email }}</span>
+            </a>
+            @if (brand.site.contact.phone) {
+            <a [href]="'tel:' + brand.site.contact.phone" class="site-footer__contact-link">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6A19.79 19.79 0 012.12 4.18 2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
+              </svg>
+              <span>{{ brand.site.contact.phone }}</span>
+            </a>
+            }
+          </div>
+
+          <!-- Social links -->
+          @if (socialLinks.length) {
+          <div class="site-footer__social">
+            @for (s of socialLinks; track s.platform) {
+            <a [href]="s.href" target="_blank" [attr.aria-label]="s.platform" rel="noopener noreferrer" class="site-footer__social-link">
+              @if (s.platform === 'instagram') {
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>
+              } @else if (s.platform === 'linkedin') {
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+              }
+            </a>
+            }
+          </div>
+          }
+        </div>
+      </div>
+
+      <!-- Bottom bar -->
+      <div class="site-footer__bottom">
+        <span class="site-footer__copyright">&copy; {{ currentYear }} {{ brand.siteName }}. All rights reserved.</span>
+        <div class="site-footer__bottom-links">
+          <a routerLink="/privacy-policy">Privacy</a>
+          <span class="site-footer__dot" aria-hidden="true"></span>
+          <a routerLink="/terms">Terms</a>
+          <span class="site-footer__dot" aria-hidden="true"></span>
+          <a routerLink="/cookie-policy">Cookies</a>
+        </div>
+        <button class="site-footer__back-top" (click)="scrollToTop()" aria-label="Back to top">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 19V5M5 12l7-7 7 7"/>
+          </svg>
+        </button>
+      </div>
+
+    </div>
+  </div>
+</footer>
