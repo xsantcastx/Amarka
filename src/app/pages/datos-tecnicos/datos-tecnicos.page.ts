@@ -8,7 +8,7 @@ import { ImageLightboxComponent } from '../../shared/components/image-lightbox/i
   selector: 'app-datos-tecnicos-page',
   standalone: true,
   imports: [CommonModule, TranslateModule],
-  template: '<div class="min-h-screen bg-black text-white p-8"><h1>Datos Técnicos - Coming Soon</h1></div>'
+  template: '<div class="min-h-screen bg-black text-white p-8"><h1>Technical Specifications</h1><p class="mt-4 text-gray-400">Detailed substrate and engraving specifications are being prepared. Contact <a href="mailto:studio@amarka.co" class="underline">studio&#64;amarka.co</a> for material data sheets.</p></div>'
 })
 export class DatosTecnicosPageComponent implements OnInit {
   // datosTecnicos: DatosTecnicosData | null = null;
@@ -34,121 +34,70 @@ export class DatosTecnicosPageComponent implements OnInit {
   private fallbackData: any = {
     acabadosSuperficie: [
       {
-        nombre: 'Mate',
-        descripcion: 'Superficie con bajo brillo, tacto suave y resistencia a las huellas.',
+        nombre: 'Brushed',
+        descripcion: 'A fine linear texture that softens reflections and resists fingerprints — ideal for high-traffic signage.',
         imagen: '/assets/Modern/image4.jpeg'
       },
       {
-        nombre: 'Pulido',
-        descripcion: 'Alto brillo que realza las vetas y aporta luminosidad al espacio.',
+        nombre: 'Polished',
+        descripcion: 'High-gloss mirror finish that elevates brass, steel, and aluminium pieces for premium presentation.',
         imagen: '/assets/Modern/image3.jpeg'
       },
       {
-        nombre: 'Satinado',
-        descripcion: 'Equilibrio perfecto entre mate y pulido, ideal para cualquier ambiente.',
+        nombre: 'Matte',
+        descripcion: 'A flat, non-reflective surface that provides a contemporary, understated look on any substrate.',
         imagen: '/assets/Modern/image5.jpeg'
       }
     ],
     fichasTecnicas: [
       {
-        nombre: 'General Technical Specifications',
-        url: '/assets/docs/CreaDevents-general-specs.pdf',
-        tamano: '1.8MB',
-        descripcion: 'Complete specifications for all our mining hardware'
+        nombre: 'Substrate Overview',
+        url: '/assets/docs/amarka-substrate-overview.pdf',
+        tamano: '1.2MB',
+        descripcion: 'Properties and applications for all six Amarka substrates: brass, aluminium, stainless steel, acrylic, hardwood, and glass.'
       },
       {
-        nombre: 'ASIC Miners Datasheet',
-        url: '/assets/docs/CreaDevents-asic-specs.pdf',
+        nombre: 'Engraving Specifications',
+        url: '/assets/docs/amarka-engraving-specs.pdf',
+        tamano: '800KB',
+        descripcion: 'Laser engraving depth, resolution, and tolerance specifications across substrates.'
+      },
+      {
+        nombre: 'Finish Guide',
+        url: '/assets/docs/amarka-finish-guide.pdf',
         tamano: '950KB',
-        descripcion: 'Detailed specifications for ASIC mining hardware'
+        descripcion: 'Available surface finishes, coatings, and patina options for each material.'
       },
       {
-        nombre: 'Cooling Solutions Guide',
-        url: '/assets/docs/CreaDevents-cooling-guide.pdf',
-        tamano: '1.1MB',
-        descripcion: 'Specifications for cooling and ventilation systems'
-      },
-      {
-        nombre: 'Power Supply Specifications',
-        url: '/assets/docs/CreaDevents-psu-specs.pdf',
-        tamano: '1.3MB',
-        descripcion: 'Power requirements and PSU specifications'
+        nombre: 'Care & Maintenance',
+        url: '/assets/docs/amarka-care-guide.pdf',
+        tamano: '600KB',
+        descripcion: 'Cleaning, maintenance, and long-term care instructions for engraved pieces.'
       }
     ],
     especificacionesTecnicas: {
-      'absorcionAgua': '≤ 0,5%',
-      'resistenciaAbrasion': 'Clase 4',
-      'resistenciaQuimicos': 'Alta',
-      'resistenciaHelada': 'Sí',
-      'resistenciaFlexion': '> 35 N/mm²',
-      'resistenciaImpacto': 'Alta',
-      'expansionTermica': '6,5 x 10⁻⁶ /°C',
-      'conductividadTermica': '1,3 W/mK'
-    },
-    packing: [
-      {
-        grosor: '12mm',
-        piezasPorPallet: 10,
-        pesoAprox: '~350kg',
-        dimensionesPallet: '165 x 325 x 45 cm',
-        volumen: '2,4 m³'
-      },
-      {
-        grosor: '15mm',
-        piezasPorPallet: 8,
-        pesoAprox: '~360kg',
-        dimensionesPallet: '165 x 325 x 50 cm',
-        volumen: '2,7 m³'
-      },
-      {
-        grosor: '20mm',
-        piezasPorPallet: 6,
-        pesoAprox: '~380kg',
-        dimensionesPallet: '165 x 325 x 55 cm',
-        volumen: '3,0 m³'
-      }
-    ],
-    acabadosBordes: [
-      {
-        nombre: 'Canto recto',
-        descripcion: 'Borde estándar para instalaciones tradicionales',
-        imagen: '/assets/datos/borde-recto.jpg'
-      },
-      {
-        nombre: 'Biselado',
-        descripcion: 'Borde en ángulo para efectos visuales sofisticados',
-        imagen: '/assets/datos/biselado.jpg'
-      },
-      {
-        nombre: 'Radio',
-        descripcion: 'Borde redondeado para mayor seguridad y estética suave',
-        imagen: '/assets/datos/radio.jpg'
-      }
-    ],
-    fijacionesFachada: {
-      descripcion: 'Sistemas de anclaje mecánico certificados para placas de gran formato en fachadas ventiladas.',
-      imagen: '/assets/datos/fachada-anclaje.jpg',
-      ventajas: [
-        'Instalación rápida y segura',
-        'Resistencia a cargas de viento',
-        'Compatibilidad con aislamientos térmicos',
-        'Mantenimiento mínimo',
-        'Certificación CE'
-      ]
+      'laserType': 'CO₂ and fibre laser systems',
+      'maxEngravingArea': '600 × 400 mm standard',
+      'depthRange': '0.01 mm – 3 mm (substrate dependent)',
+      'tolerances': '± 0.05 mm',
+      'resolution': 'Up to 1000 DPI',
+      'substrates': 'Brass, aluminium, stainless steel, acrylic, hardwood, glass',
+      'turnaround': '5–10 business days standard',
+      'rushTurnaround': '72-hour rush available'
     },
     mantenimiento: {
-      limpieza: 'Limpiar con agua y jabón neutro. Evitar productos abrasivos.',
-      frecuencia: 'Limpieza diaria con paño húmedo, limpieza profunda semanal',
+      limpieza: 'Clean with a soft, lint-free cloth. Use mild soap and water for metals; glass cleaner for acrylic and glass substrates.',
+      frecuencia: 'Wipe weekly in high-traffic areas; deep clean monthly',
       productos: [
-        'Jabón neutro',
-        'Limpiadores específicos para porcelánico',
-        'Paños de microfibra'
+        'Mild soap and water',
+        'Non-abrasive metal polish (brass and steel)',
+        'Lint-free microfibre cloths'
       ],
       evitar: [
-        'Ácidos fuertes',
-        'Productos abrasivos',
-        'Cepillos metálicos',
-        'Limpiadores con amoniaco'
+        'Abrasive cleaners or scouring pads',
+        'Ammonia-based products on acrylic',
+        'Steel wool on any substrate',
+        'Harsh chemical solvents'
       ]
     }
   };

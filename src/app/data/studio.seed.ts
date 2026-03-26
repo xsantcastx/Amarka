@@ -84,7 +84,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     slug: 'hospitality-wayfinding-prototype',
     clientType: 'hospitality',
     audienceTags: ['bars_restaurants', 'interior_designers'],
-    location: 'New York City',
+    location: 'Stamford, CT',
     brief: 'Room markers, directional plates, and branded inserts for a premium hospitality concept.',
     description:
       'Engraved wayfinding elements prototyped in aged brass and powder-coated aluminium — designed to set the tone across the guest experience.',

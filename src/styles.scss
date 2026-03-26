@@ -17,6 +17,33 @@
   pointer-events: none;
 }
 
+// ===== AMARKA DESIGN TOKENS =====
+// Color palette v1 — WCAG AA compliant usage rules embedded
+:root {
+  // Backgrounds
+  --amarka-bg: #181818;
+  --amarka-surface: #484848;
+
+  // Text — safe combinations
+  --amarka-text: #f0f0f0;           // Use on: bg, surface → ✅ AA
+  --amarka-text-secondary: #c0c0c0; // Use on: bg, surface → ✅ AA
+  --amarka-text-muted: #909090;     // Use on: bg → ✅ AA | surface → large text only
+
+  // Accent
+  --amarka-gold: #906030;
+  // Gold usage rules:
+  // ✅ Gold as bg + #f0f0f0 text (buttons, badges)
+  // ✅ Gold as border/icon/underline on dark bg
+  // ✅ Gold text on #181818 for headings ≥18px ONLY
+  // ❌ NEVER gold text on #484848 (contrast 1.74:1 — invisible)
+  // ❌ NEVER gold text on body-size text on any background
+
+  // Derived/utility
+  --amarka-border: rgba(144, 96, 48, 0.3);      // Subtle gold border
+  --amarka-border-strong: rgba(144, 96, 48, 0.7); // Prominent gold border
+  --amarka-overlay: rgba(24, 24, 24, 0.85);     // Overlay/scrim
+}
+
 :root {
   --font-sans: "Source Sans 3", "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
   --font-display: "Playfair Display", "Cormorant Garamond", "Inter", "Times New Roman", serif;

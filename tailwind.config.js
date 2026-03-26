@@ -34,7 +34,14 @@ module.exports = {
           gold: '#d4af37',
           silver: '#c0c0c0',
           bronze: '#cd7f32',
-        }
+        },
+        // Amarka Brand Palette v1
+        'amarka-bg': '#181818',          // Primary background
+        'amarka-surface': '#484848',     // Cards, panels, modals
+        'amarka-gold': '#906030',        // Brand accent — large text & borders only
+        'amarka-text': '#f0f0f0',        // Primary text (16.16:1 on bg)
+        'amarka-text-secondary': '#c0c0c0', // Secondary text (10.08:1 on bg)
+        'amarka-text-muted': '#909090',  // Captions, placeholders (5.73:1 on bg)
       },
       fontFamily: {
         serif: ['"Playfair Display"', '"Cormorant Garamond"', 'ui-serif', 'serif'],
