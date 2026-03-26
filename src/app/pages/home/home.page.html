@@ -1,25 +1,41 @@
-<section class="home-hero">
+<section class="home-hero" aria-label="Hero">
+  <!-- Animated background accents -->
+  <div class="home-hero__orb home-hero__orb--1" aria-hidden="true"></div>
+  <div class="home-hero__orb home-hero__orb--2" aria-hidden="true"></div>
+  <div class="home-hero__grain" aria-hidden="true"></div>
+
   <div class="page-container home-hero__layout">
     <div class="home-hero__copy">
-      <p class="badge">{{ hero?.eyebrow }}</p>
-      <h1 class="heading-display">{{ hero?.title }}</h1>
-      <p class="home-hero__subtitle">{{ hero?.subtitle }}</p>
-      <div class="home-hero__actions">
+      @if (hero?.badge) {
+        <span class="home-hero__badge">{{ hero.badge }}</span>
+      }
+      <p class="badge animate-hero-fade" style="animation-delay:0.15s">{{ hero?.eyebrow }}</p>
+      <h1 class="heading-display animate-hero-fade" style="animation-delay:0.3s">{{ hero?.title }}</h1>
+      <p class="home-hero__subtitle animate-hero-fade" style="animation-delay:0.45s">{{ hero?.subtitle }}</p>
+      <div class="home-hero__actions animate-hero-fade" style="animation-delay:0.6s">
         <a [routerLink]="hero?.primaryCta?.href || '/enquire'" class="btn-primary">{{ hero?.primaryCta?.label }}</a>
         <a [routerLink]="hero?.secondaryCta?.href || '/trade'" class="btn-outline">{{ hero?.secondaryCta?.label }}</a>
       </div>
     </div>
 
     <div class="home-hero__media">
-      <div class="home-hero__material-card">
+      <!-- Material showcase cards -->
+      <div class="home-hero__material-card animate-hero-fade" style="animation-delay:0.5s">
         <span class="home-hero__material-label">Six substrates, one studio</span>
         <p>Brass, aluminium, stainless steel, acrylic, hardwood, and glass — engraved and finished in-house.</p>
       </div>
-      <div class="home-hero__material-card">
+      <div class="home-hero__material-card animate-hero-fade" style="animation-delay:0.65s">
         <span class="home-hero__material-label">Stamford studio · NYC metro</span>
-        <p>{{ studio()?.turnaround }}</p>
+        <p>{{ studio()?.turnaround || '5–10 business day turnaround' }}</p>
       </div>
+      <!-- Decorative accent line -->
+      <div class="home-hero__accent-line" aria-hidden="true"></div>
     </div>
+  </div>
+
+  <!-- Scroll cue -->
+  <div class="home-hero__scroll-cue" aria-hidden="true">
+    <span></span>
   </div>
 </section>
 

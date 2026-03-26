@@ -7,7 +7,7 @@
     "description": "Bespoke engraved signage, wayfinding, architectural accents, and hospitality elements \u2014 fabricated to spec for interior designers, general contractors, and commercial operators across the NYC metro.",
     "domain": "amarka.co",
     "logo": "/Logo Nav.png",
-    "logoAlt": "Amarka",
+    "logoAlt": "Amarka — Bespoke Laser Engraving",
     "favicon": "/Logo Clear.png"
   },
   "contact": {
@@ -15,7 +15,7 @@
     "phone": "+1 (203) 554-6224",
     "phone2": "",
     "address": "Stamford, CT\nUnited States",
-    "supportHours": "Mon-Fri 8AM-6PM EST",
+    "supportHours": "Mon–Fri 8 AM – 6 PM EST",
     "whatsapp": "+12035546224"
   },
   "theme": {
@@ -24,12 +24,22 @@
       "ts-bg-soft": "#141920",
       "ts-paper": "#fffdf9",
       "ts-ink": "#f7f1e7",
-      "ts-ink-soft": "#5e5a57",
+      "ts-ink-soft": "rgba(247, 241, 231, 0.50)",
       "ts-accent": "#9f6b3d",
-      "ts-accent-soft": "rgba(159,107,61,0.24)",
-      "ts-line": "rgba(247,241,231,0.08)",
-      "surface-glass": "rgba(255,253,249,0.035)",
-      "surface-border": "rgba(247,241,231,0.08)"
+      "ts-accent-soft": "rgba(197, 154, 104, 0.65)",
+      "ts-accent-dark": "#7a5230",
+      "ts-line": "rgba(247, 241, 231, 0.08)",
+      "surface-glass": "rgba(255, 253, 249, 0.035)",
+      "surface-border": "rgba(247, 241, 231, 0.08)",
+      "color-primary": "159 107 61",
+      "color-secondary": "197 154 104",
+      "color-accent": "94 90 87",
+      "color-neutral": "247 241 231",
+      "color-surface": "20 25 32",
+      "color-background": "14 17 22",
+      "color-success": "159 107 61",
+      "color-warning": "210 140 30",
+      "color-error": "220 53 48"
     },
     "fonts": {
       "sans": "'Source Sans 3', 'Inter', 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif",
@@ -120,14 +130,16 @@
     "siteName": "Amarka",
     "titleTemplate": "%s | Amarka",
     "defaultTitle": "Amarka | Bespoke Laser Engraving Studio for NYC Trade Clients",
-    "defaultDescription": "AMARKA is the NYC metro laser engraving studio for interior designers, general contractors, hospitality groups, and corporate operators. Stamford, CT studio. 5-10 business day turnaround.",
+    "defaultDescription": "AMARKA is the NYC metro laser engraving studio for interior designers, general contractors, hospitality groups, and corporate operators. Stamford, CT studio. 5–10 business day turnaround.",
     "defaultKeywords": [
       "laser engraving NYC",
       "custom signage NYC trade",
       "bespoke engraved signage New York",
       "FF&E laser engraving supplier NYC",
       "laser engraving for interior designers NYC",
-      "custom bar signage NYC"
+      "custom bar signage NYC",
+      "architectural engraving Stamford CT",
+      "luxury engraved plaques New York"
     ],
     "socialImage": "/Logo Clear2.png"
   },
@@ -146,5 +158,10 @@
   "notifications": {
     "emailFromName": "Amarka",
     "emailFrom": "studio@amarka.co"
+  },
+  "studio": {
+    "location": "Stamford, CT",
+    "serviceArea": "NYC metro and tri-state area",
+    "turnaround": "5–10 business days"
   }
 }
