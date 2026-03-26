@@ -8,12 +8,90 @@
   </div>
 </section>
 
-<section class="phase-page">
+<!-- Studio story -->
+<section class="about-section" aria-label="Our story">
   <div class="page-container">
-    <p class="phase-page__copy">The full studio story is on its way. In the meantime, our work and materials pages show exactly what we do — or you can start a conversation directly.</p>
-    <div class="phase-page__actions">
-      <a routerLink="/work" class="btn-outline">See Our Work</a>
-      <a routerLink="/enquire" class="btn-primary">Start a Commission</a>
+    <div class="about-story">
+      <div class="about-story__text">
+        <p class="badge">The Studio</p>
+        <h2 class="heading-display about-heading">Precision is not a feature. It is the entire point.</h2>
+        <p class="about-body">Amarka is a laser engraving studio in Stamford, Connecticut, purpose-built for the NYC metro trade. We serve interior designers, general contractors, hospitality groups, and corporate operators who need engraved elements fabricated to spec — on material, on time, and to a standard that belongs in the spaces they create.</p>
+        <p class="about-body">Every commission starts with a conversation and ends with a finished piece that meets the brief exactly. No catalogue. No off-the-shelf. Just precision engraving across six substrates, delivered within 5–10 business days.</p>
+      </div>
+      <div class="about-story__visual" aria-hidden="true">
+        <div class="about-visual-card">
+          <span class="about-visual-card__label">Stamford, CT Studio</span>
+          <p class="about-visual-card__stat">6</p>
+          <p class="about-visual-card__caption">Substrates engraved in-house</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Substrates -->
+<section class="about-section" aria-label="Materials">
+  <div class="page-container">
+    <p class="badge">Materials</p>
+    <h2 class="heading-display about-heading">Six substrates. One studio. Every finish in-house.</h2>
+    <p class="about-body" style="max-width: 52ch; margin-bottom: 2rem;">Each material is selected for durability, finish quality, and suitability to commercial and hospitality environments. We engrave, finish, and inspect every piece before it leaves the studio.</p>
+    <div class="about-materials-grid">
+      @for (material of materials; track material.name) {
+        <article class="about-material-card">
+          <div class="about-material-card__icon" aria-hidden="true">
+            <span class="about-material-card__initial">{{ material.name.charAt(0) }}</span>
+          </div>
+          <h3 class="about-material-card__name">{{ material.name }}</h3>
+          <p class="about-material-card__desc">{{ material.description }}</p>
+        </article>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- Process -->
+<section class="about-section" aria-label="Our process">
+  <div class="page-container">
+    <p class="badge">How We Work</p>
+    <h2 class="heading-display about-heading">From brief to delivery — a process built for the trade.</h2>
+    <div class="about-process-grid">
+      @for (step of processSteps; track step.step) {
+        <article class="about-process-step">
+          <span class="about-process-step__number">{{ step.step }}</span>
+          <h3 class="about-process-step__title">{{ step.title }}</h3>
+          <p class="about-process-step__desc">{{ step.description }}</p>
+        </article>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- Values -->
+<section class="about-section" aria-label="Studio values">
+  <div class="page-container">
+    <p class="badge">What We Stand For</p>
+    <h2 class="heading-display about-heading">The principles behind every commission.</h2>
+    <div class="about-values-grid">
+      @for (value of values; track value.title) {
+        <article class="about-value-card">
+          <h3 class="about-value-card__title">{{ value.title }}</h3>
+          <p class="about-value-card__desc">{{ value.description }}</p>
+        </article>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="about-section about-cta-section" aria-label="Start a commission">
+  <div class="page-container">
+    <div class="about-cta">
+      <h2 class="heading-display about-heading">Ready to start a commission?</h2>
+      <p class="about-body" style="max-width: 48ch; margin-bottom: 1.5rem;">Whether you have drawings ready or just an idea, we will scope the project, confirm materials, and give you a timeline you can count on.</p>
+      <div class="about-cta__actions">
+        <a routerLink="/enquire" class="btn-primary">Start a Commission</a>
+        <a routerLink="/work" class="btn-outline">See Our Work</a>
+      </div>
     </div>
   </div>
 </section>
