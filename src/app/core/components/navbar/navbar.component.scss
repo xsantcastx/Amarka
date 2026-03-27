@@ -140,22 +140,22 @@
   letter-spacing: 0.1em;
   text-transform: uppercase;
   text-decoration: none;
-  color: #f0f0f0;
-  background: #906030;
-  border: 1px solid rgba(144, 96, 48, 0.7);
+  color: var(--ts-accent, #C7683B);
+  background: transparent;
+  border: 1.5px solid var(--ts-accent, #C7683B);
   border-radius: 2px;
-  box-shadow: 0 2px 8px -3px rgba(144, 96, 48, 0.4);
   transition:
-    background 0.2s ease,
+    background 0.25s ease,
+    color 0.25s ease,
     transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
-    box-shadow 0.2s ease;
+    box-shadow 0.25s ease;
 
   &:hover {
     text-decoration: none;
-    color: #f0f0f0;
+    color: #fff;
+    background: var(--ts-accent, #C7683B);
     transform: translateY(-1px);
-    background: #a06c38;
-    box-shadow: 0 4px 14px -4px rgba(144, 96, 48, 0.5);
+    box-shadow: 0 4px 16px -4px rgba(199, 104, 59, 0.45);
   }
 }
 

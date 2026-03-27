@@ -129,7 +129,7 @@
 
 :root[data-theme-button-style="outline"] {
   --btn-primary-bg: color-mix(in srgb, var(--ts-accent) 6%, var(--ts-paper));
-  --btn-primary-text: var(--ts-accent);
+  --btn-primary-text: #f0f0f0;
   --btn-primary-border: var(--ts-accent);
   --btn-primary-shadow: none;
   --btn-primary-hover-bg: color-mix(in srgb, var(--ts-accent) 14%, var(--ts-paper));
@@ -138,7 +138,7 @@
 
 :root[data-theme-button-style="ghost"] {
   --btn-primary-bg: color-mix(in srgb, var(--ts-ink) 4%, var(--ts-paper));
-  --btn-primary-text: var(--ts-ink);
+  --btn-primary-text: #f0f0f0;
   --btn-primary-border: color-mix(in srgb, var(--ts-ink) 12%, transparent);
   --btn-primary-shadow: none;
   --btn-primary-hover-bg: color-mix(in srgb, var(--ts-ink) 8%, var(--ts-paper));
