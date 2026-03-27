@@ -1,36 +1,60 @@
-import { Component, OnInit, inject, PLATFORM_ID } from '@angular/core';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { TranslateModule } from '@ngx-translate/core';
-// import { DataService, DatosTecnicosData } from '../../core/services/data.service';
-import { ImageLightboxComponent } from '../../shared/components/image-lightbox/image-lightbox.component';
+import { Component, OnInit, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { SeoSchemaService } from '../../services/seo-schema.service';
+
+interface Substrate {
+  name: string;
+  description: string;
+  specs: string[];
+}
 
 @Component({
   selector: 'app-datos-tecnicos-page',
   standalone: true,
-  imports: [CommonModule, TranslateModule],
-  template: '<div class="min-h-screen bg-black text-white p-8"><h1>Technical Specifications</h1><p class="mt-4 text-gray-400">Detailed substrate and engraving specifications are being prepared. Contact <a href="mailto:studio@amarka.co" class="underline">studio&#64;amarka.co</a> for material data sheets.</p></div>'
+  imports: [CommonModule, RouterModule],
+  templateUrl: './datos-tecnicos.page.html',
+  styleUrl: './datos-tecnicos.page.scss'
 })
 export class DatosTecnicosPageComponent implements OnInit {
-  // datosTecnicos: DatosTecnicosData | null = null;
+  private seo = inject(SeoSchemaService);
+
   datosTecnicos: any | null = null;
   isLoading = true;
-  lightboxOpen = false;
-  lightboxImage = '';
-  
-  private platformId = inject(PLATFORM_ID);
-  private isBrowser = isPlatformBrowser(this.platformId);
-  
-  acordeonesAbiertos: { [key: string]: boolean } = {
-    especificaciones: true, // Start with specifications open
-    acabados: false,
-    fichas: false,
-    packing: false,
-    bordes: false,
-    fijaciones: false,
-    mantenimiento: false
-  };
 
-  // Fallback data for immediate display
+  substrates: Substrate[] = [
+    {
+      name: 'Brass',
+      description: 'Aged, polished, or brushed — the signature material for luxury signage and architectural detailing.',
+      specs: ['0.5–3 mm depth', 'Brushed / Polished / Patina', 'Interior & sheltered exterior']
+    },
+    {
+      name: 'Aluminium',
+      description: 'Powder-coated or anodised finishes for lightweight, corrosion-resistant wayfinding and exterior elements.',
+      specs: ['0.3–2 mm depth', 'Anodised / Powder-coated', 'Full exterior rated']
+    },
+    {
+      name: 'Stainless Steel',
+      description: 'Brushed or mirror-polished for high-traffic environments that demand durability and a clean aesthetic.',
+      specs: ['0.2–1.5 mm depth', 'Brushed / Mirror / Satin', 'Marine grade available']
+    },
+    {
+      name: 'Acrylic',
+      description: 'Clear, frosted, or coloured — precision-cut and engraved for illuminated signage and modern interiors.',
+      specs: ['0.1–2 mm depth', 'Clear / Frosted / Coloured', 'LED-compatible']
+    },
+    {
+      name: 'Hardwood',
+      description: 'Walnut, oak, and select species finished for awards, plaques, and warm architectural accents.',
+      specs: ['0.5–3 mm depth', 'Oiled / Lacquered / Raw', 'FSC-certified options']
+    },
+    {
+      name: 'Glass',
+      description: 'Surface and deep engraving for partitions, doors, and decorative panels in premium hospitality spaces.',
+      specs: ['0.01–0.5 mm depth', 'Frosted / Clear / Tinted', 'Tempered & laminated']
+    }
+  ];
+
   private fallbackData: any = {
     acabadosSuperficie: [
       {
@@ -53,36 +77,36 @@ export class DatosTecnicosPageComponent implements OnInit {
       {
         nombre: 'Substrate Overview',
         url: '/assets/docs/amarka-substrate-overview.pdf',
-        tamano: '1.2MB',
+        tamano: '1.2 MB',
         descripcion: 'Properties and applications for all six Amarka substrates: brass, aluminium, stainless steel, acrylic, hardwood, and glass.'
       },
       {
         nombre: 'Engraving Specifications',
         url: '/assets/docs/amarka-engraving-specs.pdf',
-        tamano: '800KB',
+        tamano: '800 KB',
         descripcion: 'Laser engraving depth, resolution, and tolerance specifications across substrates.'
       },
       {
         nombre: 'Finish Guide',
         url: '/assets/docs/amarka-finish-guide.pdf',
-        tamano: '950KB',
+        tamano: '950 KB',
         descripcion: 'Available surface finishes, coatings, and patina options for each material.'
       },
       {
         nombre: 'Care & Maintenance',
         url: '/assets/docs/amarka-care-guide.pdf',
-        tamano: '600KB',
+        tamano: '600 KB',
         descripcion: 'Cleaning, maintenance, and long-term care instructions for engraved pieces.'
       }
     ],
     especificacionesTecnicas: {
-      'laserType': 'CO₂ and fibre laser systems',
-      'maxEngravingArea': '600 × 400 mm standard',
-      'depthRange': '0.01 mm – 3 mm (substrate dependent)',
-      'tolerances': '± 0.05 mm',
+      'laserType': 'CO\u2082 and fibre laser systems',
+      'maxEngravingArea': '600 \u00D7 400 mm standard',
+      'depthRange': '0.01 mm \u2013 3 mm (substrate dependent)',
+      'tolerances': '\u00B1 0.05 mm',
       'resolution': 'Up to 1000 DPI',
       'substrates': 'Brass, aluminium, stainless steel, acrylic, hardwood, glass',
-      'turnaround': '5–10 business days standard',
+      'turnaround': '5\u201310 business days standard',
       'rushTurnaround': '72-hour rush available'
     },
     mantenimiento: {
@@ -102,69 +126,26 @@ export class DatosTecnicosPageComponent implements OnInit {
     }
   };
 
-  constructor() {} // private dataService: DataService) {}
+  constructor() {
+    this.seo.setupMarketingPageSEO({
+      title: 'Technical Specifications | Amarka',
+      description: 'Laser engraving specifications for brass, aluminium, stainless steel, acrylic, hardwood, and glass. Tolerances, depth ranges, surface finishes, and care guides from Amarka\u2019s Stamford studio.',
+      keywords: ['laser engraving specifications', 'engraving tolerances', 'substrate specs laser', 'brass engraving depth', 'architectural engraving technical data'],
+      path: '/datos-tecnicos'
+    });
+    this.seo.generateLocalBusinessSchema({ pagePath: '/datos-tecnicos' });
+  }
 
   ngOnInit() {
-    // TEMP: Disabled for cart testing - just use fallback data
     this.datosTecnicos = this.fallbackData;
     this.isLoading = false;
-  }
-
-  private loadDatosTecnicos() {
-    // TEMP: Disabled for cart testing
-    /*
-    this.dataService.getDatosTecnicos().subscribe({
-      next: (data) => {
-        // Only update if we have actual data
-        if (data.acabadosSuperficie.length > 0) {
-          this.datosTecnicos = data;
-        }
-        this.isLoading = false;
-      },
-      error: () => {
-        // Keep fallback data on error
-        this.isLoading = false;
-      }
-    });
-    */
-  }
-
-  toggleAcordeon(seccion: string) {
-    this.acordeonesAbiertos[seccion] = !this.acordeonesAbiertos[seccion];
-  }
-
-  // Close all other accordions when opening one (optional behavior)
-  openAccordionExclusive(seccion: string) {
-    // Close all
-    Object.keys(this.acordeonesAbiertos).forEach(key => {
-      this.acordeonesAbiertos[key] = false;
-    });
-    // Open the selected one
-    this.acordeonesAbiertos[seccion] = true;
   }
 
   formatearTexto(texto: string): string {
     return texto.replace(/([A-Z])/g, ' $1').trim();
   }
 
-  // Helper method to get object entries for template
-  getObjectEntries(obj: Record<string, string>): Array<{key: string, value: string}> {
+  getObjectEntries(obj: Record<string, string>): Array<{key: string; value: string}> {
     return Object.entries(obj).map(([key, value]) => ({ key, value }));
-  }
-
-  // Check if any accordion is open
-  hasOpenAccordion(): boolean {
-    return Object.values(this.acordeonesAbiertos).some(open => open);
-  }
-
-  // Get count of open accordions
-  getOpenAccordionCount(): number {
-    return Object.values(this.acordeonesAbiertos).filter(open => open).length;
-  }
-
-  // Open image in lightbox
-  openLightbox(imageSrc: string) {
-    this.lightboxImage = imageSrc;
-    this.lightboxOpen = true;
   }
 }

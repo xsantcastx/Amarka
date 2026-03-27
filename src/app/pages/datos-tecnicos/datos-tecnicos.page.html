@@ -1,0 +1,145 @@
+<!-- Hero -->
+<section class="page-hero">
+  <div class="page-container">
+    <div class="page-hero__inner">
+      <p class="badge">Technical Specifications</p>
+      <h1 class="heading-display">Precision-engineered engraving across six substrates.</h1>
+      <p class="page-hero__subtitle">Tolerances, resolutions, depth ranges, and surface finishes — everything you need to spec laser engraving into your project.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Core Specifications -->
+<section class="specs-section" aria-label="Core engraving specifications">
+  <div class="page-container">
+    <p class="badge">Capabilities</p>
+    <h2 class="heading-display specs-heading">Core engraving specifications</h2>
+    <p class="specs-body">Our CO&#x2082; and fibre laser systems deliver consistent results across all six substrates. These specifications represent standard production parameters — custom tolerances are available on request.</p>
+
+    @if (datosTecnicos?.especificacionesTecnicas) {
+      <div class="specs-grid">
+        @for (entry of getObjectEntries(datosTecnicos.especificacionesTecnicas); track entry.key) {
+          <article class="spec-card">
+            <span class="spec-card__label">{{ formatearTexto(entry.key) }}</span>
+            <p class="spec-card__value">{{ entry.value }}</p>
+          </article>
+        }
+      </div>
+    }
+  </div>
+</section>
+
+<!-- Substrates -->
+<section class="specs-section" aria-label="Substrates">
+  <div class="page-container">
+    <p class="badge">Substrates</p>
+    <h2 class="heading-display specs-heading">Six materials. Every finish in-house.</h2>
+    <p class="specs-body">Each substrate is selected for durability, finish quality, and suitability to commercial and hospitality environments.</p>
+    <div class="substrate-grid">
+      @for (substrate of substrates; track substrate.name) {
+        <article class="substrate-card">
+          <div class="substrate-card__icon" aria-hidden="true">
+            <span class="substrate-card__initial">{{ substrate.name.charAt(0) }}</span>
+          </div>
+          <h3 class="substrate-card__name">{{ substrate.name }}</h3>
+          <p class="substrate-card__desc">{{ substrate.description }}</p>
+          <div class="substrate-card__specs">
+            @for (spec of substrate.specs; track spec) {
+              <span class="substrate-tag">{{ spec }}</span>
+            }
+          </div>
+        </article>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- Surface Finishes -->
+<section class="specs-section" aria-label="Surface finishes">
+  <div class="page-container">
+    <p class="badge">Finishes</p>
+    <h2 class="heading-display specs-heading">Surface finishes that elevate every piece.</h2>
+    @if (datosTecnicos?.acabadosSuperficie) {
+      <div class="finish-grid">
+        @for (finish of datosTecnicos.acabadosSuperficie; track finish.nombre) {
+          <article class="finish-card">
+            <div class="finish-card__swatch" aria-hidden="true"></div>
+            <h3 class="finish-card__name">{{ finish.nombre }}</h3>
+            <p class="finish-card__desc">{{ finish.descripcion }}</p>
+          </article>
+        }
+      </div>
+    }
+  </div>
+</section>
+
+<!-- Technical Data Sheets -->
+<section class="specs-section" aria-label="Technical data sheets">
+  <div class="page-container">
+    <p class="badge">Data Sheets</p>
+    <h2 class="heading-display specs-heading">Technical documentation</h2>
+    <p class="specs-body">Detailed specifications, material properties, and care instructions for every substrate and finish we offer.</p>
+    @if (datosTecnicos?.fichasTecnicas) {
+      <div class="sheets-grid">
+        @for (sheet of datosTecnicos.fichasTecnicas; track sheet.nombre) {
+          <article class="sheet-card">
+            <div class="sheet-card__icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+            </div>
+            <div class="sheet-card__content">
+              <h3 class="sheet-card__name">{{ sheet.nombre }}</h3>
+              <p class="sheet-card__desc">{{ sheet.descripcion }}</p>
+              <span class="sheet-card__meta">PDF &middot; {{ sheet.tamano }}</span>
+            </div>
+            <span class="sheet-card__badge">Coming soon</span>
+          </article>
+        }
+      </div>
+    }
+  </div>
+</section>
+
+<!-- Care & Maintenance -->
+<section class="specs-section" aria-label="Care and maintenance">
+  <div class="page-container">
+    @if (datosTecnicos?.mantenimiento) {
+      <p class="badge">Care &amp; Maintenance</p>
+      <h2 class="heading-display specs-heading">Keeping engraved pieces pristine.</h2>
+      <p class="specs-body">{{ datosTecnicos.mantenimiento.limpieza }}</p>
+      <p class="specs-body specs-freq"><strong>Recommended schedule:</strong> {{ datosTecnicos.mantenimiento.frecuencia }}</p>
+
+      <div class="care-grid">
+        <article class="care-card care-card--do">
+          <h3 class="care-card__title">Recommended products</h3>
+          <ul class="care-card__list">
+            @for (item of datosTecnicos.mantenimiento.productos; track item) {
+              <li>{{ item }}</li>
+            }
+          </ul>
+        </article>
+        <article class="care-card care-card--avoid">
+          <h3 class="care-card__title">Avoid</h3>
+          <ul class="care-card__list">
+            @for (item of datosTecnicos.mantenimiento.evitar; track item) {
+              <li>{{ item }}</li>
+            }
+          </ul>
+        </article>
+      </div>
+    }
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="specs-section specs-cta-section" aria-label="Get in touch">
+  <div class="page-container">
+    <div class="specs-cta">
+      <h2 class="heading-display specs-heading">Need custom specifications?</h2>
+      <p class="specs-body" style="max-width: 48ch; margin-bottom: 1.5rem;">If your project requires non-standard tolerances, substrates, or finishes, we are happy to discuss what is possible.</p>
+      <div class="specs-cta__actions">
+        <a routerLink="/enquire" class="btn-primary">Request a Quote</a>
+        <a href="mailto:studio&#64;amarka.co" class="btn-outline">Email the Studio</a>
+      </div>
+    </div>
+  </div>
+</section>
