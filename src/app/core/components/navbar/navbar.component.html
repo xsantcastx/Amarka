@@ -1,7 +1,7 @@
-<header class="site-nav" [class.site-nav--scrolled]="scrolled()">
+<header class="site-nav" [class.site-nav--scrolled]="scrolled()" amarkaSmartStickyNav>
   <div class="site-nav__inner">
     <!-- Brand -->
-    <a routerLink="/" class="site-nav__brand" aria-label="Amarka home" (click)="closeMobile()">
+    <a routerLink="/" class="site-nav__brand navbar-logo" aria-label="Amarka home" (click)="closeMobile()">
       <img [src]="logoSrc" [alt]="logoAlt" class="site-nav__logo" />
       <div class="site-nav__copy">
         <span class="site-nav__name">{{ brandName }}</span>
@@ -18,7 +18,7 @@
         {{ link.label }}
       </a>
       }
-      <a routerLink="/enquire" class="site-nav__cta">
+      <a routerLink="/enquire" class="site-nav__cta navbar-cta">
         <span class="site-nav__cta-text">Get a Quote</span>
         <svg class="site-nav__cta-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M5 12h14M12 5l7 7-7 7"/>
@@ -38,36 +38,6 @@
     </button>
   </div>
 
-  <!-- Mobile drawer -->
-  @if (mobileOpen) {
-  <div class="site-nav__overlay" (click)="closeMobile()"></div>
-  <nav class="site-nav__mobile" aria-label="Mobile navigation">
-    <div class="site-nav__mobile-header">
-      <span class="site-nav__mobile-label">Menu</span>
-    </div>
-    @for (link of navLinks; track link.href) {
-    <a [routerLink]="link.href"
-       routerLinkActive="is-active"
-       (click)="closeMobile()">
-      {{ link.label }}
-    </a>
-    }
-    <div class="site-nav__mobile-divider"></div>
-    <a routerLink="/enquire" class="btn-primary site-nav__mobile-cta" (click)="closeMobile()">Get a Quote</a>
-
-    @if (socialLinks.length) {
-    <div class="site-nav__mobile-social">
-      @for (s of socialLinks; track s.platform) {
-      <a [href]="s.href" target="_blank" [attr.aria-label]="s.platform" rel="noopener noreferrer">
-        @if (s.platform === 'instagram') {
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>
-        } @else if (s.platform === 'linkedin') {
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-        }
-      </a>
-      }
-    </div>
-    }
-  </nav>
-  }
+  <!-- AMK-65: Mobile trade-optimized nav drawer (full-screen overlay) -->
+  <app-mobile-nav-drawer (drawerClose)="onDrawerClosed()"></app-mobile-nav-drawer>
 </header>
