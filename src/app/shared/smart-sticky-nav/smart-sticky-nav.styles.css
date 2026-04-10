@@ -1,0 +1,65 @@
+/**
+ * AMK-63: Scroll-Aware Smart Sticky Navigation — CSS
+ *
+ * Paste these styles into the navbar component's CSS or import as a
+ * shared stylesheet. All colors use CSS custom properties from the
+ * Brand Bible 6-token palette — zero hardcoded hex.
+ *
+ * Brand Bible compliance:
+ * - Gold bottom border = decorative accent (Zone 1 ✅)
+ * - No gold as text, no new colors
+ * - prefers-reduced-motion: instant state swap, no transition
+ * - Zone 3b ghost CTAs unaffected (navbar CTAs maintain style)
+ */
+
+/* ------------------------------------------------------------------ */
+/* Base sticky nav — resting state (top of page)                       */
+/* ------------------------------------------------------------------ */
+.amarka-sticky-nav {
+  position: sticky;
+  top: 0;
+  z-index: 900;
+  background-color: var(--amarka-bg, #181818);
+  padding-block: 1rem;
+  border-bottom: 1px solid transparent;
+  transition:
+    padding 300ms cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 300ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: padding, border-color;
+}
+
+/* Logo within the navbar — resting size */
+.amarka-sticky-nav .navbar-logo {
+  transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1);
+  transform-origin: left center;
+}
+
+/* ------------------------------------------------------------------ */
+/* Scrolled state — compact navbar with gold rule                      */
+/* ------------------------------------------------------------------ */
+.amarka-sticky-nav.scrolled {
+  padding-block: 0.5rem;
+  border-bottom-color: var(--amarka-gold, #906030);
+}
+
+/* Logo scales down ~80% in compact state */
+.amarka-sticky-nav.scrolled .navbar-logo {
+  transform: scale(0.8);
+}
+
+/* Zone 3b CTAs scale proportionally but retain their outlined style */
+.amarka-sticky-nav.scrolled .navbar-cta {
+  /* Slightly reduce vertical padding for compact feel */
+  padding-block: 0.375rem;
+}
+
+/* ------------------------------------------------------------------ */
+/* Accessibility: Reduced motion                                       */
+/* ------------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  .amarka-sticky-nav,
+  .amarka-sticky-nav .navbar-logo,
+  .amarka-sticky-nav .navbar-cta {
+    transition-duration: 0.01ms !important;
+  }
+}

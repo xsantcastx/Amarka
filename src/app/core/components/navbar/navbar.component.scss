@@ -30,6 +30,17 @@
     0 20px 40px -24px rgba(0, 0, 0, 0.55);
 }
 
+/* AMK-63: Compact state at 80px — SmartStickyNavDirective adds 'scrolled' class */
+.site-nav.scrolled .site-nav__inner {
+  min-height: 3.5rem;
+  transition: min-height 300ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* AMK-63: Override position:sticky from amarka-sticky-nav global class — navbar stays fixed */
+.site-nav.amarka-sticky-nav {
+  position: fixed;
+}
+
 .site-nav__inner {
   width: min(1200px, 100% - 2rem);
   margin: 0 auto;
@@ -38,6 +49,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
+  transition: min-height 300ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* ─── Brand lockup ──────────────────── */
