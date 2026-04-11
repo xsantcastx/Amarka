@@ -5,11 +5,13 @@ import { BrandConfigService } from '../../core/services/brand-config.service';
 import { StudioContentService } from '../../services/studio-content.service';
 import { SeoSchemaService } from '../../services/seo-schema.service';
 import { CaseStudy, HomeContent, ServiceCommission, StudioSettings } from '../../models/studio';
+// AMK-62: Scroll-triggered section reveal directives
+import { RevealDirective, RevealStaggerDirective } from '../../shared/reveal';
 
 @Component({
   selector: 'app-home-page',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, RevealDirective, RevealStaggerDirective],
   templateUrl: './home.page.html',
   styleUrl: './home.page.scss'
 })

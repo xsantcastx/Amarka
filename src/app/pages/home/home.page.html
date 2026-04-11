@@ -39,11 +39,11 @@
   </div>
 </section>
 
-<section class="home-section">
+<section class="home-section" amarkaReveal>
   <div class="page-container">
-    <div class="home-verticals">
+    <div class="home-verticals" amarkaRevealStagger>
       @for (vertical of homeContent()?.verticals || []; track vertical.id) {
-      <article class="home-vertical">
+      <article class="home-vertical" amarkaReveal>
         <h2>{{ vertical.title }}</h2>
         <p>{{ vertical.description }}</p>
         <a [routerLink]="vertical.href" [fragment]="vertical.fragment">See details</a>
@@ -53,7 +53,7 @@
   </div>
 </section>
 
-<section class="home-section">
+<section class="home-section" amarkaReveal>
   <div class="page-container">
     <div class="home-section__head">
       <div>
@@ -63,9 +63,9 @@
       <a routerLink="/work" class="btn-outline">View all work</a>
     </div>
 
-    <div class="home-work-grid">
+    <div class="home-work-grid" amarkaRevealStagger>
       @for (item of featuredCaseStudies(); track item.id) {
-      <article class="home-work-card">
+      <article class="home-work-card" amarkaReveal>
         <p class="home-work-card__eyebrow">{{ item.clientType | titlecase }}</p>
         <h3>{{ item.projectName }}</h3>
         <p>{{ item.brief }}</p>
