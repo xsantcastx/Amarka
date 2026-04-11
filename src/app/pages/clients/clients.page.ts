@@ -21,7 +21,7 @@ export class ClientsPageComponent {
     this.seo.setupMarketingPageSEO({
       title: 'Who We Work With: Designers, GCs, Hospitality, and Corporate Teams | Amarka',
       description: 'See how Amarka supports interior designers, general contractors, hospitality groups, and building operators with premium engraved fabrication.',
-      keywords: ['laser engraving for interior designers NYC', 'hospitality signage supplier NYC', 'corporate engraved signage'],
+      keywords: ['laser engraving for interior designers Connecticut', 'hospitality signage supplier Connecticut', 'corporate engraved signage'],
       path: '/clients'
     });
     this.seo.generateLocalBusinessSchema({ pagePath: '/clients' });

@@ -12,7 +12,7 @@ export const routes: Routes = [
   {
     path: '',
     loadComponent: () => import('./pages/home/home.page').then(m => m.HomePageComponent),
-    title: routeTitle('Precision Laser Engraving for the NYC Trade')
+    title: routeTitle('Precision Laser Engraving for the Connecticut Trade')
   },
   {
     path: 'work',

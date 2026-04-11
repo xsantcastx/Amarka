@@ -40,8 +40,8 @@ export class EnquirePageComponent {
   constructor() {
     this.seo.setupMarketingPageSEO({
       title: 'Start Your Commission | Enquire with Amarka',
-      description: 'Send your project brief, timeline, and files to Amarka. We respond within 24 hours for NYC metro trade and commercial engraving enquiries.',
-      keywords: ['laser engraving NYC enquiry', 'custom signage NYC quote', 'trade engraving enquiry'],
+      description: 'Send your project brief, timeline, and files to Amarka. We respond within 24 hours for Connecticut and tri-state trade and commercial engraving enquiries.',
+      keywords: ['laser engraving Connecticut enquiry', 'custom signage Connecticut quote', 'trade engraving enquiry'],
       path: '/enquire'
     });
     this.seo.generateLocalBusinessSchema({ pagePath: '/enquire' });

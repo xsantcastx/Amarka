@@ -44,9 +44,9 @@ export class TradePageComponent {
 
   constructor() {
     this.seo.setupMarketingPageSEO({
-      title: 'Trade Laser Engraving Supplier for NYC Designers and GCs | Amarka',
-      description: 'Apply for a trade account with Amarka for bespoke engraved signage, wayfinding, bar fitout, and architectural elements across the NYC metro.',
-      keywords: ['laser engraving for interior designers NYC', 'trade signage supplier NYC', 'laser engraving GC supplier'],
+      title: 'Trade Laser Engraving Supplier for Connecticut Designers and GCs | Amarka',
+      description: 'Apply for a trade account with Amarka for bespoke engraved signage, wayfinding, bar fitout, and architectural elements across Connecticut and the tri-state region.',
+      keywords: ['laser engraving for interior designers Connecticut', 'trade signage supplier Connecticut', 'laser engraving GC supplier'],
       path: '/trade'
     });
     this.seo.generateLocalBusinessSchema({ pagePath: '/trade' });

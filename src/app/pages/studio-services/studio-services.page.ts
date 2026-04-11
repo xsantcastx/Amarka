@@ -20,8 +20,8 @@ export class StudioServicesPageComponent {
   constructor() {
     this.seo.setupMarketingPageSEO({
       title: 'Architectural Signage, Hospitality Fitout, and Trade Supply Services | Amarka',
-      description: 'Commission architectural signage systems, custom bar fitout elements, trade supply, awards, and bespoke engraved architectural accents for NYC projects.',
-      keywords: ['FF&E laser engraving supplier NYC', 'custom bar signage NYC', 'architectural signage systems NYC'],
+      description: 'Commission architectural signage systems, custom bar fitout elements, trade supply, awards, and bespoke engraved architectural accents for Connecticut and tri-state projects.',
+      keywords: ['FF&E laser engraving supplier Connecticut', 'custom bar signage Connecticut', 'architectural signage systems Connecticut'],
       path: '/services'
     });
     this.seo.generateLocalBusinessSchema({ pagePath: '/services' });

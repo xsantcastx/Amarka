@@ -3,8 +3,8 @@
     "key": "amarka",
     "name": "Amarka",
     "shortName": "Amarka",
-    "tagline": "Precision laser engraving for the NYC trade",
-    "description": "Bespoke engraved signage, wayfinding, architectural accents, and hospitality elements \u2014 fabricated to spec for interior designers, general contractors, and commercial operators across the NYC metro.",
+    "tagline": "Precision laser engraving for the Connecticut trade",
+    "description": "Bespoke engraved signage, wayfinding, architectural accents, and hospitality elements \u2014 fabricated to spec for interior designers, general contractors, and commercial operators across Connecticut and the tri-state region.",
     "domain": "amarka.co",
     "logo": "/Logo Nav.png",
     "logoAlt": "Amarka — Bespoke Laser Engraving",
@@ -49,7 +49,7 @@
   },
   "seasonalThemes": [],
   "hero": {
-    "eyebrow": "Precision engraving for the NYC trade",
+    "eyebrow": "Precision engraving for the Connecticut trade",
     "title": "Bespoke laser engraving — your name, permanently etched in brass, steel, glass, and hardwood",
     "subtitle": "Amarka is the Stamford studio that interior designers, GCs, and hospitality teams rely on when a project demands engraving done right \u2014 on time, on spec, on material.",
     "primaryCta": {
@@ -129,17 +129,17 @@
   "seo": {
     "siteName": "Amarka",
     "titleTemplate": "%s | Amarka",
-    "defaultTitle": "Amarka | Bespoke Laser Engraving Studio for NYC Trade Clients",
-    "defaultDescription": "AMARKA is the NYC metro laser engraving studio for interior designers, general contractors, hospitality groups, and corporate operators. Stamford, CT studio. 5–10 business day turnaround.",
+    "defaultTitle": "Amarka | Bespoke Laser Engraving Studio — Stamford, CT for the Trade",
+    "defaultDescription": "AMARKA is the Stamford, CT laser engraving studio for interior designers, general contractors, hospitality groups, and corporate operators across Connecticut and the tri-state region. 5–10 business day turnaround.",
     "defaultKeywords": [
-      "laser engraving NYC",
-      "custom signage NYC trade",
-      "bespoke engraved signage New York",
-      "FF&E laser engraving supplier NYC",
-      "laser engraving for interior designers NYC",
-      "custom bar signage NYC",
+      "laser engraving Stamford CT",
+      "custom signage Connecticut trade",
+      "bespoke engraved signage Connecticut",
+      "FF&E laser engraving supplier Connecticut",
+      "laser engraving for interior designers Connecticut",
+      "custom bar signage Connecticut",
       "architectural engraving Stamford CT",
-      "luxury engraved plaques New York"
+      "luxury engraved plaques Connecticut"
     ],
     "socialImage": "/Logo Clear2.png"
   },

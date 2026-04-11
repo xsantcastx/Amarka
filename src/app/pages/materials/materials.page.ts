@@ -17,7 +17,7 @@ export class MaterialsPageComponent {
     this.seo.setupMarketingPageSEO({
       title: 'Materials and Finishes | Amarka',
       description: 'Explore the materials and finishes Amarka uses for engraved signage, hospitality fitout, awards, and architectural elements.',
-      keywords: ['engraved brass signage', 'laser engraved materials NYC', 'architectural finishes engraving'],
+      keywords: ['engraved brass signage', 'laser engraved materials Connecticut', 'architectural finishes engraving'],
       path: '/materials'
     });
     this.seo.generateLocalBusinessSchema({ pagePath: '/materials' });

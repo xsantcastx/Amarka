@@ -31,8 +31,8 @@ export class WorkPageComponent {
   constructor() {
     this.seo.setupMarketingPageSEO({
       title: 'Selected Engraving Work for Hospitality, Trade, and Corporate Clients | Amarka',
-      description: 'View selected commissions from Amarka across hospitality, architectural signage, trade supply, and corporate environments in the NYC metro.',
-      keywords: ['custom signage NYC trade', 'laser engraving portfolio NYC', 'architectural engraving hospitality'],
+      description: 'View selected commissions from Amarka across hospitality, architectural signage, trade supply, and corporate environments across Connecticut and the tri-state region.',
+      keywords: ['custom signage Connecticut trade', 'laser engraving portfolio Connecticut', 'architectural engraving hospitality'],
       path: '/work'
     });
     this.seo.generateLocalBusinessSchema({ pagePath: '/work' });

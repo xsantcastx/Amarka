@@ -370,7 +370,7 @@ export class SeoSchemaService {
       image: this.getAbsoluteLogoUrl(),
       email: contact.email,
       telephone: contact.phone,
-      areaServed: ['New York City Metropolitan Area', 'Stamford, Connecticut'],
+      areaServed: ['Stamford, Connecticut', 'Fairfield County', 'Connecticut', 'Tri-State Region'],
       address: {
         '@type': 'PostalAddress',
         addressLocality: 'Stamford',

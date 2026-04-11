@@ -26,9 +26,9 @@ export class HomePageComponent {
 
   constructor() {
     this.seo.setupMarketingPageSEO({
-      title: 'Amarka | Bespoke Laser Engraving Studio for NYC Trade Clients',
-      description: 'Bespoke laser engraving studio serving interior designers, general contractors, hospitality groups, and corporate operators across the NYC metro from Stamford, CT.',
-      keywords: ['laser engraving NYC', 'bespoke engraved signage New York', 'laser engraving for interior designers NYC'],
+      title: 'Amarka | Bespoke Laser Engraving Studio — Stamford, CT for the Trade',
+      description: 'Bespoke laser engraving studio serving interior designers, general contractors, hospitality groups, and corporate operators across Connecticut and the tri-state region from Stamford, CT.',
+      keywords: ['laser engraving Stamford CT', 'bespoke engraved signage Connecticut', 'laser engraving for interior designers Connecticut'],
       path: '/'
     });
     this.seo.generateLocalBusinessSchema({ pagePath: '/' });

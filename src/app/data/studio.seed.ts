@@ -9,8 +9,8 @@ import {
 } from '../models/studio';
 
 export const STUDIO_SETTINGS: StudioSettings = {
-  brandStatement: 'Precision laser engraving for the NYC trade.',
-  heroEyebrow: 'Precision Laser Engraving · NYC Metro',
+  brandStatement: 'Precision laser engraving for the Connecticut trade.',
+  heroEyebrow: 'Precision Laser Engraving · Stamford, CT',
   heroTitle: 'Bespoke laser engraving — your name, permanently etched in brass, steel, glass, and hardwood.',
   heroSubtitle:
     'Amarka is the Stamford studio that interior designers, GCs, and hospitality teams rely on when a project demands engraving done right — on time, on spec, on material.',
@@ -110,7 +110,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     slug: 'corporate-recognition-programme',
     clientType: 'corporate',
     audienceTags: ['corporate_offices'],
-    location: 'NYC Metro',
+    location: 'Stamford, CT',
     brief: 'Milestone awards and branded recognition pieces for a corporate headquarters.',
     description:
       'Engraved awards in blackened steel, acrylic, and walnut — designed for executive presentation and long-term display in premium workplace environments.',

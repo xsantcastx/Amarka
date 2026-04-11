@@ -55,8 +55,8 @@ export class AboutPageComponent {
   constructor() {
     this.seo.setupMarketingPageSEO({
       title: 'About the Studio | Amarka',
-      description: 'Amarka is a laser engraving studio in Stamford, CT serving interior designers, general contractors, and hospitality teams across the NYC metro. Six substrates, 5–10 day turnaround.',
-      keywords: ['laser engraving studio Stamford CT', 'NYC metro engraving studio', 'architectural engraving partner', 'bespoke laser engraving about'],
+      description: 'Amarka is a laser engraving studio in Stamford, CT serving interior designers, general contractors, and hospitality teams across Connecticut and the tri-state region. Six substrates, 5–10 day turnaround.',
+      keywords: ['laser engraving studio Stamford CT', 'Connecticut engraving studio', 'architectural engraving partner', 'bespoke laser engraving about'],
       path: '/about'
     });
     this.seo.generateLocalBusinessSchema({ pagePath: '/about' });
