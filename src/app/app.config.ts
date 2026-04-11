@@ -23,6 +23,31 @@ export function HttpLoaderFactory(http: HttpClient) {
   return new CustomTranslateLoader(http);
 }
 
+/**
+ * AMK-36 — Resolve a non-empty, trimmed App Check site key or return null.
+ *
+ * The "Missing required parameters: sitekey" console error detected in the
+ * production health check was caused by `provideAppCheck` being registered
+ * when `environment.recaptcha.enabled === true` but the resolved siteKey
+ * was empty or whitespace. `new ReCaptchaV3Provider('')` then threw during
+ * App Check initialization.
+ *
+ * This helper is the single source of truth for whether App Check can
+ * safely initialize — if it returns null, provideAppCheck() MUST NOT be
+ * registered. The guard below only spreads the provider when both:
+ *   1. `environment.recaptcha.enabled` is true
+ *   2. A non-empty trimmed siteKey is available
+ */
+function resolveAppCheckSiteKey(): string | null {
+  const appCheckKey =
+    (environment.appCheck && 'siteKey' in environment.appCheck
+      ? (environment.appCheck.siteKey ?? '')
+      : '') as string;
+  const recaptchaKey = (environment.recaptcha?.siteKey ?? '') as string;
+  const resolved = (appCheckKey || recaptchaKey || '').trim();
+  return resolved.length > 0 ? resolved : null;
+}
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
@@ -55,24 +80,26 @@ export const appConfig: ApplicationConfig = {
       const storage = getStorage();
       return storage;
     }),
-    // App Check for security (browser only, only when enabled)
-    ...(environment.recaptcha?.enabled && typeof window !== 'undefined' ? [
-      provideAppCheck(() => {
-        // Use reCAPTCHA v3 provider
-        const provider = new ReCaptchaV3Provider(
-          'siteKey' in environment.appCheck 
-            ? environment.appCheck.siteKey as string 
-            : environment.recaptcha.siteKey
-        );
-          
-        const appCheck = initializeAppCheck(undefined as any, {
-          provider,
-          isTokenAutoRefreshEnabled: true
-        });
-        
-        return appCheck;
-      })
-    ] : []),
+    // App Check for security (browser only, only when enabled AND a
+    // non-empty reCAPTCHA site key is configured — AMK-36).
+    ...(environment.recaptcha?.enabled
+        && typeof window !== 'undefined'
+        && resolveAppCheckSiteKey() !== null
+      ? [
+          provideAppCheck(() => {
+            // Safe: the guard above already verified the site key is non-empty.
+            const siteKey = resolveAppCheckSiteKey() as string;
+            const provider = new ReCaptchaV3Provider(siteKey);
+
+            const appCheck = initializeAppCheck(undefined as any, {
+              provider,
+              isTokenAutoRefreshEnabled: true
+            });
+
+            return appCheck;
+          })
+        ]
+      : []),
     provideFunctions(() => {
       const functions = getFunctions();
       // Connect to emulator in development

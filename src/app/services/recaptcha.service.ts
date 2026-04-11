@@ -120,10 +120,17 @@ export class RecaptchaService {
       return;
     }
 
-    if (!siteKey) {
+    // AMK-36 — reject empty, null, or whitespace-only site keys before
+    // injecting the Google reCAPTCHA script. Without this guard,
+    // `api.js?render=` (no key) or `api.js?render=%20` silently 200s
+    // and then the embedded recaptcha__en.js throws
+    // "Missing required parameters: sitekey" in the browser console.
+    const trimmedSiteKey = (siteKey || '').trim();
+    if (!trimmedSiteKey) {
       void 0;
       return;
     }
+    siteKey = trimmedSiteKey;
 
     // Check if CAPTCHA is enabled before loading script
     const environmentConfig = environment.recaptcha || {};
