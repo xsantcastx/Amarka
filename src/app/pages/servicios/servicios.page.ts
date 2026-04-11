@@ -20,83 +20,83 @@ export class ServiciosPageComponent implements OnInit {
 
   // Hero settings
   heroImage = '/assets/services/hero-services.jpg';
-  heroTitle = 'Precision engraving, elevated gifts';
-  heroSubtitle = 'Custom engraving on metal, glass, wood, and leather with fast turnaround and gift-ready packaging.';
+  heroTitle = 'Trade-grade laser engraving services';
+  heroSubtitle = 'Precision engraving on brass, aluminium, stainless steel, acrylic, hardwood, and glass — built to spec for interior designers, general contractors, and hospitality groups.';
 
   private fallback: ServiceItem[] = [
     {
-      anchor: 'engraved-gifts',
-      title: 'Engraved gifts & keepsakes',
-      subtitle: 'Personalized flasks, decanters, pens, and jewelry boxes.',
-      description: 'Deep, clean engraving on glass, metal, leather, and wood with proofs on request and gift-ready packaging.',
+      anchor: 'architectural-signage',
+      title: 'Architectural signage & identity',
+      subtitle: 'Wayfinding, directories, and branded wall pieces.',
+      description: 'Room signs, suite directories, wayfinding systems, and branded wall panels engraved in-house on brass, aluminium, and acrylic. Spec sheets and material samples available on request.',
       image: '/assets/services/engraved-gifts.jpg',
       bullets: [
-        'Laser and rotary engraving for sharp detail',
-        'Custom monograms, logos, and messages',
-        'Gift wrap and note card options'
+        'ADA-compliant room signs and suite directories',
+        'Wayfinding systems for lobbies, corridors, and common areas',
+        'Branded wall pieces and architectural accent panels'
       ],
-      ctaLabel: 'Shop engraved gifts',
-      ctaHref: '/productos',
+      ctaLabel: 'Request a quote',
+      ctaHref: '/enquire',
       order: 1
     },
     {
-      anchor: 'corporate-awards',
-      title: 'Corporate awards & plaques',
-      subtitle: 'Executive awards, plaques, and office signage with brand consistency.',
-      description: 'Crystal, acrylic, metal, and wood awards engraved with your logo, event details, and recipient personalization.',
+      anchor: 'bar-service-drinkware',
+      title: 'Bar service & drinkware',
+      subtitle: 'Cocktail tumblers, menu holders, and bar top inlays.',
+      description: 'Engraved tumblers, rocks glasses, cocktail shakers, menu holders, and bar top inlays for restaurants, hotel bars, and private clubs. Bulk runs with consistent depth and finish across every piece.',
       image: '/assets/services/corporate-awards.jpg',
       bullets: [
-        'Bulk ordering with proofs and approvals',
-        'Color-fill and multi-surface engraving',
-        'Drop-ship to recipients or event venue'
+        'Logo-engraved tumblers and rocks glasses for branded service',
+        'Menu holders and table-top displays in brass or stainless steel',
+        'Bar top inlays and rail plates in hardwood or metal'
       ],
-      ctaLabel: 'Plan an award order',
-      ctaHref: '/contacto',
+      ctaLabel: 'Request a quote',
+      ctaHref: '/enquire',
       order: 2
     },
     {
-      anchor: 'custom-signage',
-      title: 'Custom signage & tags',
-      subtitle: 'Branded tags, nameplates, keychains, and small signage.',
-      description: 'Durable engraving on metal, leather, and acrylic for product tags, door plates, and badges.',
+      anchor: 'guest-experience',
+      title: 'Guest experience & atmosphere',
+      subtitle: 'Table numbers, reservation plaques, and staff badges.',
+      description: 'Engraved table numbers, reservation plaques, key tags, staff name badges, and amenity labels for hotels, restaurants, and event venues. Every piece finished to match your interior palette.',
       image: '/assets/services/custom-signage.jpg',
       bullets: [
-        'Batch engraving with serialized data',
-        'Multiple finishes and materials',
-        'Fast reorders for new hires or batches'
+        'Table numbers and reservation plaques in brushed or polished metal',
+        'Staff name badges with interchangeable inserts',
+        'Key tags, amenity labels, and do-not-disturb signage'
       ],
-      ctaLabel: 'Request signage',
-      ctaHref: '/contacto',
+      ctaLabel: 'Request a quote',
+      ctaHref: '/enquire',
       order: 3
     },
     {
-      anchor: 'bulk-engraving',
-      title: 'Bulk & white-label engraving',
-      subtitle: 'We engrave your supplied items at scale with QA and safe handling.',
-      description: 'Intake, inspection, and engraving for your inventory with secure chain-of-custody and packaging.',
+      anchor: 'recognition-awards',
+      title: 'Recognition & awards',
+      subtitle: 'Plaques, nameplates, desk plates, and member recognition.',
+      description: 'Donor walls, perpetual plaques, desk plates, and member recognition displays engraved on brass, aluminium, acrylic, and hardwood. Proofs provided before production; bulk programs supported.',
       image: '/assets/services/bulk-engraving.jpg',
       bullets: [
-        'Batch processing with QC checkpoints',
-        'Fulfillment-ready packaging',
-        'Secure intake and return shipping'
+        'Donor walls and perpetual recognition displays',
+        'Executive desk plates and nameplates',
+        'Custom awards with multi-surface engraving and color fill'
       ],
-      ctaLabel: 'Start a batch project',
-      ctaHref: '/contacto',
+      ctaLabel: 'Request a quote',
+      ctaHref: '/enquire',
       order: 4
     },
     {
-      anchor: 'rush-services',
-      title: 'Rush engraving & gifting',
-      subtitle: 'Expedited engraving for last-minute events and gifting.',
-      description: 'Priority queue, proofs, and same-day or next-day shipping where available.',
+      anchor: 'golf-sports',
+      title: 'Golf & sports',
+      subtitle: 'Bag tags, hole markers, scorecard holders, and cart tags.',
+      description: 'Engraved bag tags, yardage markers, hole signs, scorecard holders, and cart identification plates for golf clubs, country clubs, and athletic facilities. Durable finishes rated for outdoor use.',
       image: '/assets/services/rush-engraving.jpg',
       bullets: [
-        'Priority production slots',
-        'Express shipping options',
-        'Concierge support for VIP orders'
+        'Bag tags and cart identification plates in brass or aluminium',
+        'Hole markers and yardage signs with UV-stable engraving',
+        'Scorecard holders and locker plates with club branding'
       ],
-      ctaLabel: 'Request a rush',
-      ctaHref: '/contacto',
+      ctaLabel: 'Request a quote',
+      ctaHref: '/enquire',
       order: 5
     }
   ];

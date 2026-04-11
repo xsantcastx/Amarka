@@ -8,13 +8,13 @@
           {{ heroSubtitle }}
         </p>
         <div class="luxury-hero__actions">
-          <a routerLink="/contacto" class="btn-primary">Plan my event</a>
-          <a routerLink="/galeria" class="btn-secondary">View gallery</a>
+          <a routerLink="/enquire" class="btn-primary">Request a quote</a>
+          <a routerLink="/work" class="btn-secondary">View portfolio</a>
         </div>
       </div>
       <div class="luxury-hero__media">
-        <div class="badge absolute top-3.5 right-3.5 shadow-soft">15+ years in Miami</div>
-        <img [src]="heroImage" alt="Event design and florals" loading="lazy" />
+        <div class="badge absolute top-3.5 right-3.5 shadow-soft">Stamford, CT studio</div>
+        <img [src]="heroImage" alt="Precision laser engraving on brass and aluminium" loading="lazy" />
       </div>
     </div>
   </div>
@@ -45,7 +45,7 @@
               }
             </ul>
             @if (section.ctaLabel || section.ctaHref) {
-              <a [routerLink]="section.ctaHref || '/contacto'"
+              <a [routerLink]="section.ctaHref || '/enquire'"
                  class="btn-outline !text-sm">
                 {{ section.ctaLabel || 'Learn more' }}
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

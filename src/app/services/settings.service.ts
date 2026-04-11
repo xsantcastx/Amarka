@@ -468,14 +468,14 @@ export class SettingsService {
 
       // Page Hero Settings
       serviciosHeroImage: '/assets/services/hero-services.jpg',
-      serviciosHeroTitle: 'Precision engraving, elevated gifts',
-      serviciosHeroSubtitle: 'Custom engraving on metal, glass, wood, and leather with fast turnaround and gift-ready packaging.',
+      serviciosHeroTitle: 'Trade-grade laser engraving services',
+      serviciosHeroSubtitle: 'Precision engraving on brass, aluminium, stainless steel, acrylic, hardwood, and glass — built to spec for interior designers, general contractors, and hospitality groups.',
       galeriaHeroImage: '/assets/gallery/hero-gallery.jpg',
-      galeriaHeroTitle: 'Event design, florals, and seasonal installs we love',
-      galeriaHeroSubtitle: 'Explore weddings, brand activations, private celebrations, and botanical styling crafted with our ivory and gold aesthetic.',
+      galeriaHeroTitle: 'Recent commissions and trade projects',
+      galeriaHeroSubtitle: 'Architectural signage, donor walls, hospitality details, and custom awards — delivered to spec from our Stamford, CT studio.',
       contactoHeroImage: '/assets/contact/hero-contact.jpg',
-      contactoHeroTitle: 'Tell us about your celebration',
-      contactoHeroSubtitle: 'Share your date, location, and vision. We respond within one business day to craft a bespoke plan for your event.',
+      contactoHeroTitle: 'Request a quote',
+      contactoHeroSubtitle: 'Share your project scope, substrate, and timeline. We respond within one business day with a detailed proposal.',
 
     };
   }
