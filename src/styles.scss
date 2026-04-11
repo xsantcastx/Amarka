@@ -1482,3 +1482,52 @@ button .app-spinner::before,
     will-change: auto;
   }
 }
+
+/* =====================================================================
+   AMK-55 — Premium Page Transition & Route Animation System
+   Paired with src/app/shared/page-transition/page-transition.directive.ts
+
+   Motion only. Reuses the AMK-62 motion tokens:
+     --amarka-duration-base : 400ms settle
+     --amarka-ease-out      : polished exit / settle curve
+
+   States:
+     .page-transition                       : resting (no transform, opacity 1)
+     .page-transition--exiting              : NavigationStart — fade + lift up
+     .page-transition--entering             : NavigationEnd (one frame) — from below
+   Background stays var(--amarka-bg) (#181818) throughout — no white flash.
+   Navbar is a sibling of the host in app.html, so it remains fixed.
+   ===================================================================== */
+.page-transition {
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity var(--amarka-duration-base) var(--amarka-ease-out),
+    transform var(--amarka-duration-base) var(--amarka-ease-out);
+  will-change: opacity, transform;
+}
+
+.page-transition.page-transition--exiting {
+  /* Outgoing page — fades out with a subtle upward lift. */
+  opacity: 0;
+  transform: translateY(-8px);
+}
+
+.page-transition.page-transition--entering {
+  /* Priming frame for the incoming page — starts from below at 0 opacity. */
+  opacity: 0;
+  transform: translateY(8px);
+  /* Skip the transition on the priming frame so the settle animates cleanly. */
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-transition,
+  .page-transition.page-transition--exiting,
+  .page-transition.page-transition--entering {
+    opacity: 1;
+    transform: none;
+    transition: none;
+    will-change: auto;
+  }
+}
