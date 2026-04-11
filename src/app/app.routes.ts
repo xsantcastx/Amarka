@@ -303,10 +303,26 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/maintenance/maintenance.page').then(m => m.MaintenancePage),
     title: maintenanceTitle
   },
+  // AMK-51 — Branded error state pages. One component, three route-resolved
+  // states (not-found / server / offline). All three use the same wildcard
+  // destination for the 404 fallback so existing deep links keep working.
   {
     path: '404',
     loadComponent: () => import('./pages/not-found/not-found.page').then(m => m.NotFoundPageComponent),
+    data: { errorState: 'not-found' },
     title: routeTitle('Not Found')
+  },
+  {
+    path: '500',
+    loadComponent: () => import('./pages/not-found/not-found.page').then(m => m.NotFoundPageComponent),
+    data: { errorState: 'server' },
+    title: routeTitle('Studio Error')
+  },
+  {
+    path: 'offline',
+    loadComponent: () => import('./pages/not-found/not-found.page').then(m => m.NotFoundPageComponent),
+    data: { errorState: 'offline' },
+    title: routeTitle('Offline')
   },
   {
     path: '**',

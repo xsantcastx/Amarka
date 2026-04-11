@@ -1,100 +1,222 @@
-:host { display: block; }
+/* ============================================================
+   AMK-51 — Branded Error State Page
+   Paired with not-found.page.ts (404 / 500 / offline states).
 
-.nf-hero {
-  padding: calc(var(--nav-height) + 4rem) 0 5rem;
-  text-align: center;
-  background:
-    radial-gradient(ellipse 60% 50% at 50% 0%, rgba(159, 107, 61, 0.16), transparent 55%),
-    linear-gradient(180deg, #0a0d11 0%, #0e1116 100%);
-  border-bottom: 1px solid rgba(159, 107, 61, 0.1);
+   Locked to the 6-token Amarka Brand Bible palette — all colors
+   flow through the tokens declared in src/styles.scss:
+     --amarka-bg / --amarka-surface / --amarka-gold /
+     --amarka-text / --amarka-text-secondary / --amarka-text-muted
+
+   Typography:
+     - Playfair Display for the state code + heading
+       (Zone 1 — large text, gold on #181818 passes WCAG ≥18px)
+     - Source Sans 3 for eyebrow, body, and card copy
+
+   Motion tokens reuse AMK-62 (scroll-reveal system) shared
+   --amarka-duration-*/--amarka-ease-out with safe fallbacks.
+   ============================================================ */
+
+:host {
+  display: block;
 }
 
-.nf-hero__inner {
+.amk-error {
+  // Full-viewport centered state card on the pure brand background.
+  padding: calc(var(--nav-height, 72px) + 5rem) 0 5rem;
+  background: var(--amarka-bg);
+  text-align: center;
+}
+
+.amk-error__inner {
   max-width: 44rem;
   margin: 0 auto;
   display: grid;
-  gap: 1.15rem;
+  gap: 1.25rem;
   justify-items: center;
 }
 
-.nf-hero__code {
-  font-family: var(--font-display);
-  font-size: clamp(5rem, 15vw, 9rem);
-  font-weight: 700;
-  line-height: 1;
-  color: var(--ts-accent);
-  letter-spacing: -0.04em;
-  opacity: 0.6;
-}
-
-.nf-hero__title {
-  font-size: clamp(2rem, 4vw, 3rem);
-  line-height: 1.12;
-}
-
-.nf-hero__sub {
-  font-size: 1.05rem;
-  line-height: 1.72;
-  color: rgba(247, 241, 231, 0.6);
-  max-width: 40ch;
+.amk-error__eyebrow {
   margin: 0;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--amarka-text-muted); // #909090 on #181818 = 5.73:1 AA ✅
 }
 
-.nf-hero__actions {
+.amk-error__code {
+  font-family: var(--font-display);
+  font-size: clamp(5rem, 14vw, 9rem);
+  font-weight: 700;
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  color: var(--amarka-gold); // large gold text on #181818 ≥18px → Zone 1 safe
+  filter: drop-shadow(0 2px 12px rgba(144, 96, 48, 0.18));
+}
+
+.amk-error__heading {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 600;
+  line-height: 1.15;
+  color: var(--amarka-text); // #f0f0f0 on #181818 = 16.16:1 AAA ✅
+  max-width: 32ch;
+}
+
+.amk-error__sub {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--amarka-text-secondary); // #c0c0c0 on #181818 = 10.08:1 AAA ✅
+  max-width: 44ch;
+}
+
+.amk-error__rule {
+  width: 3.5rem;
+  height: 1px;
+  background: var(--amarka-gold); // 1px gold divider — decorative, Zone 1 ✅
+  margin: 0.5rem 0 0.25rem;
+}
+
+.amk-error__actions {
   display: flex;
   flex-wrap: wrap;
   gap: 0.85rem;
   justify-content: center;
-  padding-top: 0.5rem;
+  padding-top: 0.25rem;
 }
 
-.nf-links {
-  padding: 3.5rem 0 5rem;
+.amk-error__contact {
+  margin: 1.25rem 0 0;
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  color: var(--amarka-text-muted); // #909090 on #181818 = 5.73:1 AA ✅
 }
 
-.nf-links__label {
-  font-size: 0.7rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: rgba(247, 241, 231, 0.35);
+.amk-error__contact-link {
+  color: var(--amarka-text-secondary); // #c0c0c0 on #181818 = 10.08:1 AAA ✅
+  text-decoration: underline;
+  text-decoration-color: var(--amarka-gold);
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  transition:
+    color var(--amarka-duration-fast, 150ms) var(--amarka-ease-out, ease),
+    text-decoration-color var(--amarka-duration-fast, 150ms) var(--amarka-ease-out, ease);
+
+  &:hover,
+  &:focus-visible {
+    color: var(--amarka-text);
+    text-decoration-color: var(--amarka-text);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--amarka-gold);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+}
+
+/* ---------- "Continue to" card grid ---------- */
+
+.amk-error__continue {
+  padding: 0 0 5rem;
+  background: var(--amarka-bg);
+}
+
+.amk-error__continue-label {
   margin: 0 0 1.25rem;
-  font-weight: 700;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--amarka-text-muted); // #909090 on #181818 = 5.73:1 AA ✅
+  text-align: center;
 }
 
-.nf-links__grid {
+.amk-error__continue-grid {
   display: grid;
   gap: 1rem;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
 }
 
-.nf-card {
+.amk-error__card {
   display: grid;
   gap: 0.45rem;
-  padding: 1.6rem 1.85rem;
-  border-radius: 1.3rem;
-  background: rgba(255, 253, 249, 0.035);
-  border: 1px solid rgba(247, 241, 231, 0.08);
+  padding: 1.5rem 1.75rem;
+  border-radius: 2px; // Brand Bible 2px radius ✅
+  background: var(--amarka-surface); // #484848 — Zone 2 card surface ✅
+  border: 1px solid transparent;
+  border-left: 2px solid var(--amarka-gold); // gold as decorative border ✅
   text-decoration: none;
-  color: #f7f1e7;
-  transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease;
+  color: var(--amarka-text); // #f0f0f0 on #484848 = 8.56:1 AAA ✅
+  transition:
+    transform var(--amarka-duration-base, 400ms) var(--amarka-ease-out, ease),
+    border-color var(--amarka-duration-base, 400ms) var(--amarka-ease-out, ease);
 
-  &:hover {
-    transform: translateY(-3px);
-    background: rgba(255, 253, 249, 0.06);
-    border-color: rgba(159, 107, 61, 0.24);
+  &:hover,
+  &:focus-visible {
+    transform: translateY(-2px);
+    border-color: var(--amarka-gold);
     text-decoration: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--amarka-gold);
+    outline-offset: 2px;
   }
 }
 
-.nf-card__title {
+.amk-error__card-title {
   font-family: var(--font-display);
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: #f7f1e7;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--amarka-text); // #f0f0f0 on #484848 = 8.56:1 AAA ✅
 }
 
-.nf-card__desc {
-  font-size: 0.9rem;
-  line-height: 1.6;
-  color: rgba(247, 241, 231, 0.52);
+.amk-error__card-desc {
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: var(--amarka-text-secondary); // #c0c0c0 on #484848 = 5.10:1 AA ✅
+}
+
+/* ---------- Responsive tightening ---------- */
+
+@media (max-width: 640px) {
+  .amk-error {
+    padding: calc(var(--nav-height, 72px) + 3rem) 0 3.5rem;
+  }
+
+  .amk-error__actions {
+    flex-direction: column;
+    width: 100%;
+    max-width: 18rem;
+  }
+
+  .amk-error__actions .btn-primary,
+  .amk-error__actions .btn-outline {
+    width: 100%;
+  }
+
+  .amk-error__continue {
+    padding-bottom: 3.5rem;
+  }
+}
+
+/* ---------- Reduced motion — honor user preference ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .amk-error__card,
+  .amk-error__contact-link {
+    transition: none;
+  }
+
+  .amk-error__card:hover,
+  .amk-error__card:focus-visible {
+    transform: none;
+  }
 }
