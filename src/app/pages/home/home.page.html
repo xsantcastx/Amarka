@@ -99,42 +99,45 @@
   </div>
 </section>
 
-<section class="home-section">
+<!-- AMK-40 — Vertical Industry Cards (premium 5-card grid) -->
+<section class="home-section" aria-labelledby="home-industries-heading">
   <div class="page-container">
     <div class="home-section__head">
       <div>
         <p class="badge">Who we work with</p>
-        <h2 class="heading-display">Structured for the way design and construction teams actually procure.</h2>
+        <h2 class="heading-display" id="home-industries-heading">Who We Work With</h2>
+        <p class="home-section__lede">Trade accounts available with preferred pricing and dedicated lead time slots.</p>
       </div>
       <a routerLink="/clients" class="btn-outline">See all client types</a>
     </div>
 
-    <div class="home-verticals">
-      <article class="home-vertical">
-        <p class="home-vertical__icon">&#9670;</p>
-        <h3>Interior Designers</h3>
-        <p>Formal quotes, material samples, and lead times aligned to your FF&amp;E schedule. We supply to trade spec so your procurement stays clean.</p>
-        <a routerLink="/clients" fragment="interior-designers">See details</a>
-      </article>
-      <article class="home-vertical">
-        <p class="home-vertical__icon">&#9632;</p>
-        <h3>General Contractors</h3>
-        <p>Signage, wayfinding, and architectural accents for commercial fitouts. Quotes returned within 24 hours. Delivery in 5–10 business days.</p>
-        <a routerLink="/clients" fragment="general-contractors">See details</a>
-      </article>
-      <article class="home-vertical">
-        <p class="home-vertical__icon">&#9733;</p>
-        <h3>Bars &amp; Restaurants</h3>
-        <p>Tap handles, menu boards, bar signage, host stand elements, and wall pieces that give your venue a permanent, crafted identity.</p>
-        <a routerLink="/clients" fragment="premium-bars">See details</a>
-      </article>
-      <article class="home-vertical">
-        <p class="home-vertical__icon">&#9636;</p>
-        <h3>Corporate &amp; Building Ops</h3>
-        <p>Lobby directories, suite signage, conference room identification, executive awards, and building-wide wayfinding programmes.</p>
-        <a routerLink="/clients" fragment="corporate-offices">See details</a>
-      </article>
-    </div>
+    <ul class="home-industries" role="list">
+      <li class="home-industry-card" role="listitem">
+        <h3 class="home-industry-card__title">Hospitality</h3>
+        <p class="home-industry-card__products">Room &amp; Door Signs · Do Not Disturb Plaques · Leather Welcome Amenity Cards</p>
+        <a class="home-industry-card__link" routerLink="/clients" fragment="hospitality" aria-label="See details for Hospitality trade accounts">See details</a>
+      </li>
+      <li class="home-industry-card" role="listitem">
+        <h3 class="home-industry-card__title">Food &amp; Beverage</h3>
+        <p class="home-industry-card__products">Bar Name Plaque · Cocktail Menu Plates · Engraved Cocktail Tumblers</p>
+        <a class="home-industry-card__link" routerLink="/clients" fragment="food-beverage" aria-label="See details for Food and Beverage trade accounts">See details</a>
+      </li>
+      <li class="home-industry-card" role="listitem">
+        <h3 class="home-industry-card__title">Golf &amp; Country Clubs</h3>
+        <p class="home-industry-card__products">Golf Bag Tags · Locker Nameplates · Acrylic Hole Markers</p>
+        <a class="home-industry-card__link" routerLink="/clients" fragment="golf-clubs" aria-label="See details for Golf and Country Clubs trade accounts">See details</a>
+      </li>
+      <li class="home-industry-card" role="listitem">
+        <h3 class="home-industry-card__title">Corporate &amp; Office</h3>
+        <p class="home-industry-card__products">Office Door Nameplates · Conference Room Signs · Award &amp; Recognition Plaques</p>
+        <a class="home-industry-card__link" routerLink="/clients" fragment="corporate" aria-label="See details for Corporate and Office trade accounts">See details</a>
+      </li>
+      <li class="home-industry-card" role="listitem">
+        <h3 class="home-industry-card__title">Retail &amp; Events</h3>
+        <p class="home-industry-card__products">Branded Keychains · Event Commemorative Plates · Gift Tumblers</p>
+        <a class="home-industry-card__link" routerLink="/clients" fragment="retail-events" aria-label="See details for Retail and Events trade accounts">See details</a>
+      </li>
+    </ul>
   </div>
 </section>
 

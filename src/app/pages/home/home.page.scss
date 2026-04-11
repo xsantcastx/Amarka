@@ -391,6 +391,132 @@
   margin-bottom: 0.5rem;
 }
 
+/* ─── AMK-40 · Vertical Industry Cards ─────────────────────── */
+/* Brand Bible Zone 2 surface cards with gold left-border accent. */
+/* Colors sourced strictly from the 6-token palette:              */
+/*   bg #181818 · surface #484848 · gold #906030                  */
+/*   text #f0f0f0 · text-secondary #c0c0c0 · muted #909090        */
+
+.home-section__lede {
+  margin: 0.5rem 0 0;
+  max-width: 52ch;
+  color: var(--amarka-text-secondary, #c0c0c0);
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+.home-industries {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1.25rem;
+  /* Desktop: 3+2 rows (3 cols). Tablet auto-fit to 2. Mobile single. */
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+
+  @media (max-width: 960px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @media (max-width: 560px) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.home-industry-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.75rem 1.85rem 1.6rem;
+  background: var(--amarka-surface, #484848);
+  border: 1px solid transparent;
+  border-left: 3px solid var(--amarka-gold, #906030);
+  border-radius: 2px; /* Brand Bible: 2px corner radius */
+  color: var(--amarka-text, #f0f0f0);
+  transition:
+    transform 250ms cubic-bezier(0.16, 1, 0.3, 1),
+    border-left-width 250ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 250ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+
+  &__title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(1.15rem, 1.9vw, 1.4rem);
+    line-height: 1.2;
+    margin: 0;
+    color: var(--amarka-text, #f0f0f0); /* 8.56:1 AAA on #484848 */
+  }
+
+  &__products {
+    font-family: 'Source Sans 3', 'Source Sans Pro', system-ui, sans-serif;
+    font-size: 0.92rem;
+    line-height: 1.6;
+    margin: 0;
+    color: var(--amarka-text-secondary, #c0c0c0); /* 5.10:1 AA on #484848 */
+  }
+
+  &__link {
+    align-self: flex-start;
+    font-family: 'Source Sans 3', 'Source Sans Pro', system-ui, sans-serif;
+    font-size: 0.74rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--amarka-text, #f0f0f0);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem 0;
+    border-bottom: 1px solid transparent;
+    transition:
+      gap 200ms ease,
+      border-color 200ms ease,
+      color 200ms ease;
+
+    &::after {
+      content: '\2192';
+      font-size: 1em;
+      transition: transform 200ms ease;
+    }
+
+    &:hover,
+    &:focus-visible {
+      gap: 0.55rem;
+      border-bottom-color: var(--amarka-gold, #906030);
+      text-decoration: none;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--amarka-gold, #906030);
+      outline-offset: 3px;
+      border-radius: 2px;
+    }
+  }
+
+  &:hover,
+  &:focus-within {
+    border-left-width: 5px;
+    transform: translateY(-2px);
+    box-shadow: 0 22px 44px -30px rgba(0, 0, 0, 0.55);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-industry-card,
+  .home-industry-card__link,
+  .home-industry-card__link::after {
+    transition-duration: 0.01ms !important;
+  }
+
+  .home-industry-card:hover,
+  .home-industry-card:focus-within {
+    transform: none;
+  }
+}
+
 /* ─── FEATURE + TRADE BAND ──────────────────────────────────── */
 
 .home-feature,
