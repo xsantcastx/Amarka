@@ -16,10 +16,10 @@ export class HomeStatsComponent implements OnInit {
   private statsService = inject(StatsService);
   private destroyRef = inject(DestroyRef);
   
-  minersDeployed = signal(0);
-  customerSatisfaction = signal(0);
-  uptimeGuarantee = signal(0);
-  yearsExperience = signal(0);
+  projectsDelivered = signal(0);
+  clientSatisfaction = signal(0);
+  inHouseRate = signal(0);
+  yearsOfCraft = signal(0);
 
   constructor() {
     // Load real stats from database in constructor (injection context)
@@ -50,10 +50,10 @@ export class HomeStatsComponent implements OnInit {
 
   private animateStats() {
     setTimeout(() => {
-      this.animateCounter(this.minersDeployed, this.statsData.totalSales, 2000);
-      this.animateCounter(this.customerSatisfaction, this.statsData.customerSatisfaction, 2000);
-      this.animateCounter(this.uptimeGuarantee, this.statsData.uptimeGuarantee, 2000, true);
-      this.animateCounter(this.yearsExperience, this.statsData.yearsExperience, 1500, this.statsData.yearsExperience % 1 !== 0);
+      this.animateCounter(this.projectsDelivered, this.statsData.totalSales, 2000);
+      this.animateCounter(this.clientSatisfaction, this.statsData.customerSatisfaction, 2000);
+      this.animateCounter(this.inHouseRate, this.statsData.uptimeGuarantee, 2000, true);
+      this.animateCounter(this.yearsOfCraft, this.statsData.yearsExperience, 1500, this.statsData.yearsExperience % 1 !== 0);
     }, 0);
   }
 
