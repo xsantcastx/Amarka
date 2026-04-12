@@ -9,6 +9,7 @@ import { FooterComponent } from './core/components/footer/footer.component';
 import { CookieBannerComponent } from './shared/components/cookie-banner/cookie-banner.component';
 import { WhatsappButtonComponent } from './shared/components/whatsapp-button/whatsapp-button.component';
 import { PageTransitionDirective } from './shared/page-transition';
+import { PrintChromeComponent } from './shared/print-chrome/print-chrome.component';
 import { AnalyticsService } from './services/analytics.service';
 import { SettingsService, AppSettings } from './services/settings.service';
 import { AuthService } from './services/auth.service';
@@ -17,7 +18,7 @@ import { ThemeService } from './services/theme.service';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, NavbarComponent, FooterComponent, CookieBannerComponent, WhatsappButtonComponent, TranslateModule, PageTransitionDirective],
+  imports: [RouterOutlet, NavbarComponent, FooterComponent, CookieBannerComponent, WhatsappButtonComponent, TranslateModule, PageTransitionDirective, PrintChromeComponent],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })

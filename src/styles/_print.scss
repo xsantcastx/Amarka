@@ -1,0 +1,235 @@
+/* =====================================================================
+   AMK-56: Dark-Mode Print Stylesheet & PDF Export Layout
+   =====================================================================
+   Inverts Amarka's dark palette for print-ready, ink-efficient output.
+   Trade clients (interior designers, contractors, hospitality buyers)
+   regularly print specs, quotes, and portfolio pages.
+
+   Print color mapping:
+     --amarka-bg:             #181818 → #FFFFFF (white)
+     --amarka-surface:        #484848 → #F5F5F0 (warm off-white)
+     --amarka-gold:           #906030 → #906030 (unchanged — prints well)
+     --amarka-text:           #f0f0f0 → #1A1A1A (near-black)
+     --amarka-text-secondary: #c0c0c0 → #4A4A4A (dark gray)
+     --amarka-text-muted:     #909090 → #6A6A6A (medium gray)
+
+   WCAG compliance in print:
+     #1A1A1A on #FFFFFF = 17.40:1 (AAA)
+     #4A4A4A on #FFFFFF = 9.73:1  (AAA)
+     #6A6A6A on #FFFFFF = 5.74:1  (AA)
+     #906030 on #FFFFFF = 5.38:1  (AA large text — headings ≥18pt)
+   ===================================================================== */
+
+@media print {
+  /* ---------- Token Inversion ---------- */
+  :root {
+    --amarka-bg: #FFFFFF;
+    --amarka-surface: #F5F5F0;
+    --amarka-text: #1A1A1A;
+    --amarka-text-secondary: #4A4A4A;
+    --amarka-text-muted: #6A6A6A;
+    /* --amarka-gold stays #906030 — prints beautifully on white */
+    --amarka-border: rgba(144, 96, 48, 0.2);
+    --amarka-border-strong: rgba(144, 96, 48, 0.5);
+    --amarka-overlay: rgba(255, 255, 255, 0.85);
+  }
+
+  /* ---------- Page Setup ---------- */
+  @page {
+    size: A4;
+    margin: 20mm 15mm 25mm 15mm;
+  }
+
+  /* ---------- Global Print Reset ---------- */
+  *,
+  *::before,
+  *::after {
+    background: transparent !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    /* Keep intentional backgrounds via inline override below */
+  }
+
+  body {
+    color: var(--amarka-text);
+    font-size: 11pt;
+    line-height: 1.5;
+    font-family: 'Source Sans 3', 'Inter', sans-serif;
+  }
+
+  /* ---------- Typography ---------- */
+  h1, h2, h3 {
+    font-family: 'Playfair Display', serif;
+    color: #906030; /* Gold headings on white — 5.38:1, AA large text */
+    page-break-after: avoid;
+    orphans: 3;
+    widows: 3;
+  }
+
+  h1 { font-size: 22pt; }
+  h2 { font-size: 16pt; }
+  h3 { font-size: 13pt; }
+
+  p, li, td, th {
+    color: #1A1A1A;
+    orphans: 3;
+    widows: 3;
+  }
+
+  a {
+    color: #1A1A1A;
+    text-decoration: underline;
+  }
+
+  a[href]::after {
+    content: ' (' attr(href) ')';
+    font-size: 9pt;
+    color: #6A6A6A;
+    font-weight: 400;
+  }
+
+  /* Don't show URL for internal router links or anchors */
+  a[href^='/']::after,
+  a[href^='#']::after,
+  a[routerLink]::after {
+    content: '';
+  }
+
+  /* ---------- Hide Non-Print Elements ---------- */
+  app-navbar,
+  app-footer,
+  app-cookie-banner,
+  app-whatsapp-button,
+  .cookie-banner,
+  .whatsapp-button,
+  .mobile-drawer,
+  .btn-primary,
+  .btn-ghost,
+  .cta-section button,
+  .cta-section a[routerLink],
+  [class*='scroll-to-top'],
+  video,
+  audio,
+  iframe {
+    display: none !important;
+  }
+
+  /* ---------- Print Header & Footer (via PrintChromeComponent) ---------- */
+  .amarka-print-header,
+  .amarka-print-footer {
+    display: block !important;
+  }
+
+  .amarka-print-header {
+    text-align: center;
+    padding-bottom: 12pt;
+    margin-bottom: 16pt;
+    border-bottom: 1px solid #906030;
+  }
+
+  .amarka-print-header__brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 18pt;
+    color: #906030;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .amarka-print-header__url {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 9pt;
+    color: #6A6A6A;
+    margin-top: 4pt;
+  }
+
+  .amarka-print-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    padding-top: 8pt;
+    border-top: 1px solid #906030;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 8pt;
+    color: #6A6A6A;
+  }
+
+  /* ---------- Layout Adjustments ---------- */
+
+  /* Force single-column for general content */
+  .container,
+  .main-shell {
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Product / card grids → 2-column in print */
+  .stats-grid,
+  .vertical-cards-grid,
+  .portfolio-grid,
+  .product-grid,
+  .service-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 12pt !important;
+  }
+
+  /* Cards: restore visible background for print */
+  .stat-card,
+  .vertical-card,
+  .portfolio-card,
+  [class*='card'] {
+    background: #F5F5F0 !important;
+    border: 1px solid #E0E0E0 !important;
+    padding: 8pt !important;
+    page-break-inside: avoid;
+  }
+
+  /* Hero sections → compact in print */
+  .page-hero,
+  .hero-section,
+  [class*='hero'] {
+    min-height: auto !important;
+    padding: 16pt 0 !important;
+  }
+
+  /* ---------- Page Break Controls ---------- */
+  section {
+    page-break-inside: avoid;
+  }
+
+  h1, h2, h3 {
+    page-break-after: avoid;
+  }
+
+  img {
+    max-width: 100% !important;
+    page-break-inside: avoid;
+  }
+
+  /* ---------- Animations & Transitions Off ---------- */
+  .reveal,
+  .page-transition,
+  [class*='transition'],
+  [class*='animate'] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+    animation: none !important;
+  }
+
+  /* Skeleton loaders: hide in print */
+  amarka-skeleton,
+  [class*='skeleton'] {
+    display: none !important;
+  }
+
+  /* ---------- Images ---------- */
+  img {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}

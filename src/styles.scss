@@ -5,6 +5,7 @@
 @use './styles/buttons';
 @use './styles/admin-mobile';
 @use './styles/admin-theme';
+@use './styles/print';
 
 @include theme.apply-theme(light);
 
