@@ -13,7 +13,7 @@
      - Source Sans 3 for eyebrow, body, and card copy
 
    Motion tokens reuse AMK-62 (scroll-reveal system) shared
-   --amarka-duration-*/--amarka-ease-out with safe fallbacks.
+   --amarka-duration-{fast,base,slow} and --amarka-ease-out with safe fallbacks.
    ============================================================ */
 
 :host {
