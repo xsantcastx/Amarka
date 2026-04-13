@@ -7,7 +7,7 @@
     </div>
     <button
       (click)="addNewImage()"
-      class="px-4 py-2 bg-[#f5a623] text-[#0a0b0d] rounded-lg font-semibold hover:bg-[#f5a623]/90 transition-colors flex items-center gap-2">
+      class="px-4 py-2 bg-[#906030] text-[#181818] rounded-lg font-semibold hover:bg-[#906030]/90 transition-colors flex items-center gap-2">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
       </svg>
@@ -71,11 +71,11 @@
                     accept="image/*"
                     (change)="onFileSelected($event)"
                     [disabled]="uploadingImage"
-                    class="block w-full text-sm text-white/70 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[#f5a623] file:text-[#0a0b0d] hover:file:bg-[#f5a623]/90 file:cursor-pointer cursor-pointer">
+                    class="block w-full text-sm text-white/70 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[#906030] file:text-[#181818] hover:file:bg-[#906030]/90 file:cursor-pointer cursor-pointer">
                   @if (uploadingImage) {
                     <div class="mt-2">
                       <div class="h-2 bg-gray-700 rounded-full overflow-hidden">
-                        <div class="h-full bg-[#f5a623] transition-all duration-300" [style.width.%]="uploadProgress"></div>
+                        <div class="h-full bg-[#906030] transition-all duration-300" [style.width.%]="uploadProgress"></div>
                       </div>
                       <p class="text-xs text-white/60 mt-1">Uploading: {{ uploadProgress }}%</p>
                     </div>
@@ -89,7 +89,7 @@
                     type="text"
                     [(ngModel)]="editingImage!.title"
                     placeholder="e.g., Antminer S19 Pro"
-                    class="w-full px-4 py-2 bg-gray-700 border border-white/20 rounded-lg text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-[#f5a623]">
+                    class="w-full px-4 py-2 bg-gray-700 border border-white/20 rounded-lg text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-[#906030]">
                 </div>
 
                 <!-- Description -->
@@ -99,7 +99,7 @@
                     type="text"
                     [(ngModel)]="editingImage!.description"
                     placeholder="e.g., Industry-leading hashrate with optimized efficiency"
-                    class="w-full px-4 py-2 bg-gray-700 border border-white/20 rounded-lg text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-[#f5a623]">
+                    class="w-full px-4 py-2 bg-gray-700 border border-white/20 rounded-lg text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-[#906030]">
                 </div>
 
                 <!-- Alt Text -->
@@ -109,7 +109,7 @@
                     type="text"
                     [(ngModel)]="editingImage!.alt"
                     placeholder="e.g., Antminer S19 Pro mining setup"
-                    class="w-full px-4 py-2 bg-gray-700 border border-white/20 rounded-lg text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-[#f5a623]">
+                    class="w-full px-4 py-2 bg-gray-700 border border-white/20 rounded-lg text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-[#906030]">
                 </div>
 
                 <!-- Image URL (Read-only if uploaded) -->
@@ -138,7 +138,7 @@
                 (click)="saveImage()"
                 type="button"
                 [disabled]="!editingImage?.url || !editingImage?.title || !editingImage?.alt"
-                class="px-4 py-2 bg-[#f5a623] text-[#0a0b0d] rounded-lg font-semibold hover:bg-[#f5a623]/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                class="px-4 py-2 bg-[#906030] text-[#181818] rounded-lg font-semibold hover:bg-[#906030]/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
                 Save Image
               </button>
             </div>

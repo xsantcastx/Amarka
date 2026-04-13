@@ -1,15 +1,18 @@
 @use 'sass:map';
 
+// AMK-50: Brand Bible 6-color palette (Phase 1 migration)
+// Canonical palette: #181818 (bg), #484848 (surface), #906030 (gold),
+//   #f0f0f0 (text), #c0c0c0 (text-secondary), #909090 (text-muted)
 $themes: (
   light: (
-    bg-surface: #f6f1e8, // warm stone
-    bg-elevated: #fffdf9,
-    text: #17161a, // ink
-    muted: #5e5a57, // warm gray
-    primary: #9f6b3d, // bronze
-    on-primary: #fffdf9,
-    border: #ddd2c2,
-    overlay: #0a0d140d
+    bg-surface: #181818,   // --amarka-bg
+    bg-elevated: #484848,  // --amarka-surface
+    text: #f0f0f0,         // --amarka-text
+    muted: #909090,        // --amarka-text-muted
+    primary: #906030,      // --amarka-gold
+    on-primary: #f0f0f0,   // --amarka-text
+    border: #484848,       // --amarka-surface (border)
+    overlay: rgba(24, 24, 24, 0.05)
   )
 );
 
@@ -26,11 +29,12 @@ $themes: (
     --border: #{map.get($theme, border)};
     --overlay: #{map.get($theme, overlay)};
     
-    --bitcoin-orange: #9f6b3d;
-    --bitcoin-gold: #c59a68;
-    --luxury-gold: #9f6b3d;
-    --deep-black: #17161a;
-    --rich-gray: #5e5a57;
-    --accent-blue: #23303b;
+    // AMK-50: legacy aliases remapped to Brand Bible palette
+    --bitcoin-orange: #906030;
+    --bitcoin-gold: #906030;
+    --luxury-gold: #906030;
+    --deep-black: #181818;
+    --rich-gray: #909090;
+    --accent-blue: #484848;
   }
 }

@@ -23,7 +23,7 @@
   cursor: pointer;
 
   &:hover {
-    background: #a06c38;
+    background: color-mix(in srgb, #906030 85%, #f0f0f0);  // AMK-50: 10% lighter gold (was off-palette #a06c38)
     transform: translateY(-1px);
     box-shadow: 0 4px 14px -4px rgba(144, 96, 48, 0.45);
   }
@@ -121,14 +121,14 @@
   gap: 0.5rem;
   padding: 0.55rem 1rem;
   border-radius: 999px;
-  background: rgba(159, 107, 61, 0.12);
+  background: rgba(144, 96, 48, 0.12);  // AMK-50: #906030 rgb
   backdrop-filter: blur(16px);
   color: var(--ts-accent) !important;
   font-weight: 700;
   font-size: 0.77rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  border: 1px solid rgba(159, 107, 61, 0.28);
+  border: 1px solid rgba(144, 96, 48, 0.28);  // AMK-50: #906030 rgb
   box-shadow: 0 12px 24px -22px rgba(0, 0, 0, 0.3);
 }
 

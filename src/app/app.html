@@ -1,8 +1,8 @@
 @if (shouldShowMaintenancePage) {
-  <section class="min-h-screen bg-[linear-gradient(135deg,#0e1116_0%,#151a21_55%,#0e1116_100%)] flex items-center justify-center px-6 py-16 text-center">
+  <section class="min-h-screen bg-[linear-gradient(135deg,#181818_0%,#181818_55%,#181818_100%)] flex items-center justify-center px-6 py-16 text-center">
     <div class="max-w-3xl space-y-8">
       <div class="space-y-4">
-        <h1 class="text-3xl md:text-4xl font-bold text-[#f7f1e7]">{{ 'maintenance.title' | translate }}</h1>
+        <h1 class="text-3xl md:text-4xl font-bold text-[#f0f0f0]">{{ 'maintenance.title' | translate }}</h1>
         <p class="text-white/70 text-base md:text-lg whitespace-pre-line">{{ maintenanceMessage }}</p>
       </div>
 
@@ -10,7 +10,7 @@
         <p class="text-white/70">{{ 'maintenance.support' | translate }}</p>
         <div class="space-y-2 text-sm text-white/80">
           @if (contactEmail) {
-            <a [href]="'mailto:' + contactEmail" class="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-[#9f6b3d]/12 text-[#d9c2a5] border border-[#9f6b3d]/40 hover:bg-[#9f6b3d]/20 transition-colors">
+            <a [href]="'mailto:' + contactEmail" class="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-[#906030]/12 text-[#c0c0c0] border border-[#906030]/40 hover:bg-[#906030]/20 transition-colors">
               <span>{{ 'maintenance.email_label' | translate }}</span>
               <span class="font-semibold">{{ contactEmail }}</span>
             </a>
