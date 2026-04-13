@@ -7,11 +7,13 @@ import { SeoSchemaService } from '../../services/seo-schema.service';
 import { CaseStudy, HomeContent, ServiceCommission, StudioSettings } from '../../models/studio';
 // AMK-62: Scroll-triggered section reveal directives
 import { RevealDirective, RevealStaggerDirective } from '../../shared/reveal';
+// AMK-45: Trade Client Trust Bar — social proof strip below hero
+import { TradeTrustBarComponent } from '../../features/home/trade-trust-bar';
 
 @Component({
   selector: 'app-home-page',
   standalone: true,
-  imports: [CommonModule, RouterModule, RevealDirective, RevealStaggerDirective],
+  imports: [CommonModule, RouterModule, RevealDirective, RevealStaggerDirective, TradeTrustBarComponent],
   templateUrl: './home.page.html',
   styleUrl: './home.page.scss'
 })
