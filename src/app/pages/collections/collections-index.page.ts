@@ -35,12 +35,12 @@ export class CollectionsIndexPageComponent implements OnInit, OnDestroy {
   private applySeo(): void {
     const siteUrl = this.brandConfig.siteUrl;
     const siteName = this.brandConfig.siteName;
-    this.seoService.setTitle(`Gift Collections — Engraved Gifts for Every Occasion | ${siteName}`);
+    this.seoService.setTitle(`Product Collections — Laser Engraved Signage & Awards | ${siteName}`);
     this.seoService.setMetaDescription(
-      `Browse personalised gift collections by Amarka — curated sets for him, her, weddings, corporate gifting, and more. Premium engraving, gift-ready packaging, fast dispatch.`
+      `Browse Amarka's product collections — architectural signage, wayfinding systems, donor walls, custom awards, and hospitality engraving. Precision laser work for trade professionals.`
     );
     this.seoService.setMetaKeywords(
-      'personalised gift collections, engraved gift sets, gifts for men, wedding gifts, corporate gifts, custom engraving, gift hampers'
+      'laser engraved signage, architectural panels, wayfinding systems, donor walls, custom awards, hospitality signage, trade engraving'
     );
     this.seoService.setCanonicalUrl(`${siteUrl}/collections`);
     this.seoService.generateBreadcrumbSchema([
