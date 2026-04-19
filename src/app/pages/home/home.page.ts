@@ -9,11 +9,13 @@ import { CaseStudy, HomeContent, ServiceCommission, StudioSettings } from '../..
 import { RevealDirective, RevealStaggerDirective } from '../../shared/reveal';
 // AMK-45: Trade Client Trust Bar — social proof strip below hero
 import { TradeTrustBarComponent } from '../../features/home/trade-trust-bar';
+// AMK-46: Interactive Substrate Explorer — hover-reveal material tiles
+import { SubstrateExplorerComponent } from '../../features/home/substrate-explorer';
 
 @Component({
   selector: 'app-home-page',
   standalone: true,
-  imports: [CommonModule, RouterModule, RevealDirective, RevealStaggerDirective, TradeTrustBarComponent],
+  imports: [CommonModule, RouterModule, RevealDirective, RevealStaggerDirective, TradeTrustBarComponent, SubstrateExplorerComponent],
   templateUrl: './home.page.html',
   styleUrl: './home.page.scss'
 })
