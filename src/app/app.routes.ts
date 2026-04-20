@@ -24,6 +24,12 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/studio-services/studio-services.page').then(m => m.StudioServicesPageComponent),
     title: routeTitle('Services')
   },
+  // AMK-58: vertical-specific SEO landing pages (/services/:slug)
+  {
+    path: 'services/:slug',
+    loadComponent: () => import('./pages/service-vertical/service-vertical.page').then(m => m.ServiceVerticalPageComponent),
+    title: routeTitle('Services')
+  },
   {
     path: 'trade',
     loadComponent: () => import('./pages/trade/trade.page').then(m => m.TradePageComponent),

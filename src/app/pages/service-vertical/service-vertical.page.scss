@@ -1,0 +1,284 @@
+/**
+ * AMK-58 — Vertical landing page styles
+ *
+ * Brand Bible compliance:
+ *   - Only the 6 approved palette tokens (--amarka-bg, --amarka-surface,
+ *     --amarka-gold, --amarka-text, --amarka-text-secondary, --amarka-text-muted)
+ *   - Gold (#906030) used as borders and large headings only — never as body text
+ *   - Source Sans 3 body, Playfair Display headings (inherited from globals)
+ *   - Motion uses --amarka-duration-base / --amarka-ease-out tokens (AMK-62)
+ *   - prefers-reduced-motion respected
+ */
+
+:host { display: block; }
+
+.vertical-breadcrumbs {
+  background: var(--amarka-bg);
+  padding: 1rem 0 0;
+
+  ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--amarka-text-secondary);
+  }
+
+  li + li::before {
+    content: '/';
+    margin-right: 0.5rem;
+    color: var(--amarka-text-muted);
+  }
+
+  a {
+    color: var(--amarka-text-secondary);
+    text-decoration: none;
+    transition: color var(--amarka-duration-base, 250ms) var(--amarka-ease-out, ease);
+  }
+
+  a:hover,
+  a:focus-visible {
+    color: var(--amarka-text);
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+  }
+
+  [aria-current='page'] {
+    color: var(--amarka-text);
+  }
+}
+
+.vertical-sections {
+  background: var(--amarka-bg);
+  padding: clamp(2.5rem, 6vw, 4rem) 0;
+}
+
+.vertical-sections__grid {
+  display: grid;
+  gap: clamp(1.25rem, 3vw, 2rem);
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.vertical-section {
+  background: var(--amarka-surface);
+  border: 1px solid transparent;
+  border-radius: 4px;
+  padding: clamp(1.5rem, 3vw, 2rem);
+  color: var(--amarka-text);
+  transition:
+    border-color var(--amarka-duration-base, 250ms) var(--amarka-ease-out, ease),
+    transform var(--amarka-duration-base, 250ms) var(--amarka-ease-out, ease);
+}
+
+.vertical-section:hover {
+  border-color: var(--amarka-gold);
+  transform: translateY(-2px);
+}
+
+.vertical-section h2 {
+  font-family: var(--font-display, 'Playfair Display', serif);
+  font-size: clamp(1.25rem, 1.8vw, 1.5rem);
+  line-height: 1.25;
+  margin: 0 0 0.75rem;
+  color: var(--amarka-text);
+}
+
+.vertical-section p {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--amarka-text-secondary);
+  margin: 0;
+}
+
+.vertical-products {
+  background: var(--amarka-bg);
+  padding: clamp(2.5rem, 6vw, 4rem) 0;
+  border-top: 1px solid var(--amarka-surface);
+  border-bottom: 1px solid var(--amarka-surface);
+}
+
+.vertical-products__heading {
+  font-family: var(--font-display, 'Playfair Display', serif);
+  font-size: clamp(1.5rem, 2.4vw, 2rem);
+  margin: 0 0 1.5rem;
+  color: var(--amarka-text);
+}
+
+.vertical-products__grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.vertical-product-card {
+  background: var(--amarka-surface);
+  border-left: 2px solid var(--amarka-gold);
+  border-radius: 2px;
+  padding: 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  transition: transform var(--amarka-duration-base, 250ms) var(--amarka-ease-out, ease);
+}
+
+.vertical-product-card:hover {
+  transform: translateY(-1px);
+}
+
+.vertical-product-card__name {
+  margin: 0;
+  font-family: var(--font-sans, 'Source Sans 3', sans-serif);
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--amarka-text);
+}
+
+.vertical-product-card__substrate {
+  margin: 0;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--amarka-text-secondary);
+}
+
+.vertical-substrates {
+  background: var(--amarka-bg);
+  padding: clamp(2.25rem, 5vw, 3.5rem) 0;
+}
+
+.vertical-substrates__label {
+  margin: 0 0 0.85rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--amarka-text-secondary);
+}
+
+.vertical-substrates__chips {
+  list-style: none;
+  margin: 0 0 1rem;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.vertical-substrates__chips li {
+  background: var(--amarka-bg);
+  border: 1px solid var(--amarka-surface);
+  color: var(--amarka-text-secondary);
+  border-radius: 2px;
+  padding: 0.35rem 0.85rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+}
+
+.vertical-substrates__meta {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--amarka-text-muted);
+}
+
+.vertical-cta {
+  background: var(--amarka-bg);
+  padding: clamp(2.5rem, 6vw, 4rem) 0 clamp(3rem, 7vw, 5rem);
+  border-top: 1px solid var(--amarka-surface);
+}
+
+.vertical-cta__inner {
+  display: grid;
+  gap: 1rem;
+  text-align: left;
+  max-width: 52rem;
+}
+
+.vertical-cta h2 {
+  font-family: var(--font-display, 'Playfair Display', serif);
+  font-size: clamp(1.6rem, 2.6vw, 2.25rem);
+  line-height: 1.2;
+  margin: 0;
+  color: var(--amarka-text);
+}
+
+.vertical-cta p {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--amarka-text-secondary);
+  margin: 0;
+  max-width: 48ch;
+}
+
+.vertical-cta__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.vertical-cta__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0.85rem 1.4rem;
+  font-family: var(--font-sans, 'Source Sans 3', sans-serif);
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: 2px;
+  transition:
+    background var(--amarka-duration-base, 250ms) var(--amarka-ease-out, ease),
+    transform var(--amarka-duration-base, 250ms) var(--amarka-ease-out, ease),
+    color var(--amarka-duration-base, 250ms) var(--amarka-ease-out, ease);
+}
+
+.vertical-cta__btn:focus-visible {
+  outline: 2px solid var(--amarka-gold);
+  outline-offset: 2px;
+}
+
+.vertical-cta__btn--primary {
+  background: var(--amarka-gold);
+  color: var(--amarka-text);
+  border: 1px solid var(--amarka-gold);
+}
+
+.vertical-cta__btn--primary:hover,
+.vertical-cta__btn--primary:focus-visible {
+  transform: translateY(-1px);
+}
+
+.vertical-cta__btn--ghost {
+  background: transparent;
+  color: var(--amarka-text);
+  border: 2px solid var(--amarka-gold);
+}
+
+.vertical-cta__btn--ghost:hover,
+.vertical-cta__btn--ghost:focus-visible {
+  background: var(--amarka-gold);
+  color: var(--amarka-text);
+  transform: translateY(-1px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vertical-section,
+  .vertical-product-card,
+  .vertical-cta__btn,
+  .vertical-cta__btn--primary,
+  .vertical-cta__btn--ghost,
+  .vertical-breadcrumbs a {
+    transition: none !important;
+    transform: none !important;
+  }
+}

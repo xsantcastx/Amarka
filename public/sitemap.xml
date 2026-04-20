@@ -23,9 +23,35 @@
   <!-- Services -->
   <url>
     <loc>https://amarka.co/services</loc>
-    <lastmod>2026-03-15</lastmod>
+    <lastmod>2026-04-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
+  </url>
+
+  <!-- AMK-58: Service verticals (vertical-specific SEO landing pages) -->
+  <url>
+    <loc>https://amarka.co/services/hospitality</loc>
+    <lastmod>2026-04-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://amarka.co/services/bar-restaurant</loc>
+    <lastmod>2026-04-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://amarka.co/services/corporate</loc>
+    <lastmod>2026-04-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://amarka.co/services/golf-clubs</loc>
+    <lastmod>2026-04-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
 
   <!-- Trade & Commercial -->

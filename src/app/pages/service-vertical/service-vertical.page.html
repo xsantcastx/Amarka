@@ -1,0 +1,77 @@
+@if (vertical(); as v) {
+<section class="page-hero">
+  <div class="page-container">
+    <div class="page-hero__inner">
+      <p class="badge">{{ v.badge }}</p>
+      <h1 class="heading-display">{{ v.heroHeading }}</h1>
+      <p class="page-hero__subtitle">{{ v.heroSubheading }}</p>
+    </div>
+  </div>
+</section>
+
+<nav class="vertical-breadcrumbs" aria-label="Breadcrumb">
+  <div class="page-container">
+    <ol>
+      <li><a routerLink="/">Amarka</a></li>
+      <li><a routerLink="/services">Services</a></li>
+      <li aria-current="page">{{ v.badge }}</li>
+    </ol>
+  </div>
+</nav>
+
+<section class="vertical-sections">
+  <div class="page-container vertical-sections__grid">
+    @for (section of v.sections; track section.heading) {
+    <article class="vertical-section">
+      <h2>{{ section.heading }}</h2>
+      <p>{{ section.body }}</p>
+    </article>
+    }
+  </div>
+</section>
+
+<section class="vertical-products">
+  <div class="page-container">
+    <h2 class="vertical-products__heading">Capabilities in this category</h2>
+    <ul class="vertical-products__grid" role="list">
+      @for (product of v.products; track product.name) {
+      <li class="vertical-product-card">
+        <p class="vertical-product-card__name">{{ product.name }}</p>
+        <p class="vertical-product-card__substrate">{{ product.substrate }}</p>
+      </li>
+      }
+    </ul>
+  </div>
+</section>
+
+<section class="vertical-substrates">
+  <div class="page-container">
+    <p class="vertical-substrates__label">Substrates we engrave in-house</p>
+    <ul class="vertical-substrates__chips" role="list">
+      @for (substrate of substrateChips(); track substrate) {
+      <li>{{ substrate }}</li>
+      }
+    </ul>
+    <p class="vertical-substrates__meta">
+      Standard turnaround: five to ten business days · Rush: seventy-two hours · Produced in Stamford, CT
+    </p>
+  </div>
+</section>
+
+<section class="vertical-cta">
+  <div class="page-container vertical-cta__inner">
+    <h2>{{ v.ctaHeading }}</h2>
+    <p>{{ v.ctaSubheading }}</p>
+    <div class="vertical-cta__actions">
+      @for (cta of v.ctas; track cta.label) {
+      <a
+        [routerLink]="cta.href"
+        class="vertical-cta__btn"
+        [class.vertical-cta__btn--primary]="cta.variant === 'primary'"
+        [class.vertical-cta__btn--ghost]="cta.variant === 'ghost'"
+      >{{ cta.label }}</a>
+      }
+    </div>
+  </div>
+</section>
+}
