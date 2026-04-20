@@ -11,11 +11,13 @@ import { RevealDirective, RevealStaggerDirective } from '../../shared/reveal';
 import { TradeTrustBarComponent } from '../../features/home/trade-trust-bar';
 // AMK-46: Interactive Substrate Explorer — hover-reveal material tiles
 import { SubstrateExplorerComponent } from '../../features/home/substrate-explorer';
+// AMK-44: By the Numbers — compact metrics strip between archetypes and substrates
+import { ByTheNumbersComponent } from '../../features/home/by-the-numbers';
 
 @Component({
   selector: 'app-home-page',
   standalone: true,
-  imports: [CommonModule, RouterModule, RevealDirective, RevealStaggerDirective, TradeTrustBarComponent, SubstrateExplorerComponent],
+  imports: [CommonModule, RouterModule, RevealDirective, RevealStaggerDirective, TradeTrustBarComponent, SubstrateExplorerComponent, ByTheNumbersComponent],
   templateUrl: './home.page.html',
   styleUrl: './home.page.scss'
 })
