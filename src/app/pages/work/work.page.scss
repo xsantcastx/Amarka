@@ -98,14 +98,33 @@
   overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease, background 0.3s ease;
   color: #f7f1e7;
+  cursor: pointer;
 
-  &:hover {
+  &:hover,
+  &:focus-visible {
     transform: translateY(-4px);
     background: rgba(255, 253, 249, 0.06);
     border-color: rgba(159, 107, 61, 0.24);
     box-shadow: 0 24px 48px -28px rgba(0, 0, 0, 0.45);
 
     .work-card__media { opacity: 1; }
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--ts-accent);
+    outline-offset: 3px;
+  }
+}
+
+/* AMK-47 — reduced-motion guard for the clickable card hover lift */
+@media (prefers-reduced-motion: reduce) {
+  .work-card {
+    transition-duration: 0.01ms;
+
+    &:hover,
+    &:focus-visible {
+      transform: none;
+    }
   }
 }
 
@@ -173,6 +192,14 @@
 
     &:hover { opacity: 0.8; text-decoration: none; }
   }
+}
+
+.work-card__action {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ts-accent);
 }
 
 .work-card__meta {

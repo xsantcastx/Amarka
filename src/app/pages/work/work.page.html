@@ -35,7 +35,14 @@
 
     <div class="work-grid">
       @for (caseStudy of filteredCaseStudies(); track caseStudy.id) {
-      <article class="work-card">
+      <article
+        class="work-card"
+        role="button"
+        tabindex="0"
+        [attr.aria-label]="'View project detail for ' + caseStudy.projectName"
+        (click)="openLightbox(caseStudy)"
+        (keydown)="onCardKeydown($event, caseStudy)"
+      >
         <div class="work-card__media" aria-hidden="true">
           <span class="work-card__material-label">{{ caseStudy.materials.at(0) ?? 'Engraving' }}</span>
         </div>
@@ -45,7 +52,7 @@
           <p>{{ caseStudy.description }}</p>
           <div class="work-card__footer">
             <span class="work-card__meta">{{ caseStudy.location }}</span>
-            <a [routerLink]="caseStudy.ctaHref">{{ caseStudy.ctaLabel }}</a>
+            <span class="work-card__action" aria-hidden="true">View project →</span>
           </div>
         </div>
       </article>
@@ -53,3 +60,9 @@
     </div>
   </div>
 </section>
+
+<amarka-portfolio-lightbox
+  [project]="selectedCaseStudy()"
+  [isOpen]="lightboxOpen()"
+  (closed)="onLightboxClosed()"
+></amarka-portfolio-lightbox>
