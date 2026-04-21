@@ -1,47 +1,47 @@
+<!--
+  Cookie Consent Banner — AMK-49
+  Brand Bible compliant: 6-token palette only via CSS variables in cookie-banner.component.scss.
+  Inline style= attributes removed. All colors from --amarka-bg, --amarka-surface, --amarka-gold,
+  --amarka-text, --amarka-text-secondary, --amarka-text-muted.
+-->
+
 <!-- Cookie Consent Banner -->
 @if (showBanner && !showSettings) {
-  <div class="fixed bottom-4 right-4 z-[60] pb-4 px-4 sm:px-6 lg:px-8 animate-slide-up w-full max-w-md">
-    <div class="cookie-banner-surface rounded-2xl shadow-2xl overflow-hidden"
-         style="background: rgba(20, 25, 32, 0.94); color: #f7f1e7; border: 1px solid rgba(247,241,231,0.08); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);">
-      <div class="p-6 sm:p-8">
-        <div class="flex items-start gap-4">
-          <div class="flex-shrink-0">
-            <svg class="w-10 h-10" fill="none" stroke="#9f6b3d" viewBox="0 0 24 24">
+  <div class="cookie-banner" role="dialog" aria-live="polite" aria-labelledby="cookie-banner-title">
+    <div class="cookie-banner__surface">
+      <div class="cookie-banner__body">
+        <div class="cookie-banner__row">
+          <div class="cookie-banner__icon" aria-hidden="true">
+            <svg class="cookie-banner__icon-svg" fill="none" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"></path>
             </svg>
           </div>
 
-          <div class="flex-1 min-w-0">
-            <h3 class="text-lg font-semibold mb-2" style="color: #f7f1e7;">
+          <div class="cookie-banner__content">
+            <h3 id="cookie-banner-title" class="cookie-banner__title">
               {{ 'cookie.banner.title' | translate }}
             </h3>
-            <p class="text-sm mb-4" style="color: rgba(247, 241, 231, 0.65);">
+            <p class="cookie-banner__text">
               {{ 'cookie.banner.body' | translate }}
             </p>
-            <p class="text-xs" style="color: rgba(247, 241, 231, 0.45);">
+            <p class="cookie-banner__meta">
               {{ 'cookie.banner.read' | translate }}
-              <a href="/privacy-policy" class="cookie-link" style="color: #c59a68; font-weight: 600; text-decoration: none; border-bottom: 1px solid rgba(197,154,104,0.3);">{{ 'cookie.banner.privacy' | translate }}</a>
+              <a href="/privacy-policy" class="cookie-banner__link">{{ 'cookie.banner.privacy' | translate }}</a>
               {{ 'cookie.banner.and' | translate }}
-              <a href="/cookie-policy" class="cookie-link" style="color: #c59a68; font-weight: 600; text-decoration: none; border-bottom: 1px solid rgba(197,154,104,0.3);">{{ 'cookie.banner.cookie' | translate }}</a>
+              <a href="/cookie-policy" class="cookie-banner__link">{{ 'cookie.banner.cookie' | translate }}</a>
               {{ 'cookie.banner.more' | translate }}
             </p>
           </div>
         </div>
 
-        <div class="mt-6 flex flex-col sm:flex-row gap-3 cookie-banner-actions">
-          <button (click)="acceptAll()"
-                  class="ts-btn w-full sm:w-auto justify-center"
-                  style="background: #9f6b3d; color: #fffdf9; border: none; font-weight: 600; min-height: 2.75rem; border-radius: 0.625rem; font-size: 0.875rem;">
+        <div class="cookie-banner__actions">
+          <button type="button" (click)="acceptAll()" class="cookie-btn cookie-btn--primary">
             {{ 'cookie.actions.accept_all' | translate }}
           </button>
-          <button (click)="rejectAll()"
-                  class="ts-btn w-full sm:w-auto justify-center"
-                  style="background: rgba(247,241,231,0.08); color: #f7f1e7; border: 1px solid rgba(247,241,231,0.15); font-weight: 600; min-height: 2.75rem; border-radius: 0.625rem; font-size: 0.875rem;">
+          <button type="button" (click)="rejectAll()" class="cookie-btn cookie-btn--ghost">
             {{ 'cookie.actions.essential' | translate }}
           </button>
-          <button (click)="openSettings()"
-                  class="ts-btn w-full sm:w-auto justify-center"
-                  style="background: transparent; color: rgba(247,241,231,0.6); border: 1px solid rgba(247,241,231,0.1); font-weight: 600; min-height: 2.75rem; border-radius: 0.625rem; font-size: 0.875rem;">
+          <button type="button" (click)="openSettings()" class="cookie-btn cookie-btn--tertiary">
             {{ 'cookie.actions.customize' | translate }}
           </button>
         </div>
@@ -52,131 +52,117 @@
 
 <!-- Cookie Settings Modal -->
 @if (showSettings) {
-  <div class="fixed inset-0 z-[60] overflow-y-auto" (click)="closeSettings()">
-    <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
-      <div class="fixed inset-0 transition-opacity"
-           style="background-color: rgba(0,0,0,0.6); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);"></div>
+  <div class="cookie-modal" role="dialog" aria-modal="true" aria-labelledby="cookie-modal-title" (click)="closeSettings()">
+    <div class="cookie-modal__scrim" aria-hidden="true"></div>
 
-      <div class="relative inline-block rounded-2xl shadow-xl transform transition-all sm:max-w-2xl sm:w-full text-left overflow-hidden"
-           style="background: rgba(20, 25, 32, 0.96); color: #f7f1e7; border: 1px solid rgba(247,241,231,0.08); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);"
-           (click)="$event.stopPropagation()">
-        <div class="px-6 pt-6 pb-4">
-          <div class="flex items-start justify-between mb-4">
-            <h3 class="text-2xl font-semibold" style="color: #f7f1e7;">
-              {{ 'cookie.settings.title' | translate }}
-            </h3>
-            <button (click)="closeSettings()" class="p-2 rounded-lg transition-colors cookie-icon-btn"
-                    style="color: rgba(247,241,231,0.4); background: transparent;">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-              </svg>
-            </button>
+    <div class="cookie-modal__panel" (click)="$event.stopPropagation()">
+      <div class="cookie-modal__head">
+        <div class="cookie-modal__head-row">
+          <h3 id="cookie-modal-title" class="cookie-modal__title">
+            {{ 'cookie.settings.title' | translate }}
+          </h3>
+          <button type="button" (click)="closeSettings()" class="cookie-close" [attr.aria-label]="'cookie.settings.close' | translate">
+            <svg class="cookie-close__icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+
+        <p class="cookie-modal__intro">
+          {{ 'cookie.settings.body' | translate }}
+        </p>
+
+        <div class="cookie-modal__sections">
+          <div class="cookie-section">
+            <div class="cookie-section__row">
+              <div class="cookie-section__content">
+                <h4 class="cookie-section__title">
+                  {{ 'cookie.settings.essential.title' | translate }}
+                </h4>
+                <p class="cookie-section__text">
+                  {{ 'cookie.settings.essential.body' | translate }}
+                </p>
+              </div>
+              <div class="cookie-section__aside">
+                <span class="cookie-chip">
+                  {{ 'cookie.settings.essential.always' | translate }}
+                </span>
+              </div>
+            </div>
           </div>
 
-          <p class="text-sm mb-6" style="color: rgba(247, 241, 231, 0.65);">
-            {{ 'cookie.settings.body' | translate }}
-          </p>
-
-          <div class="space-y-4">
-            <div class="cookie-section" style="padding: 1rem; border-radius: 0.75rem; border: 1px solid rgba(247,241,231,0.06); background: rgba(247,241,231,0.03);">
-              <div class="flex items-start justify-between">
-                <div class="flex-1">
-                  <h4 class="font-semibold mb-1" style="color: #f7f1e7;">
-                    {{ 'cookie.settings.essential.title' | translate }}
-                  </h4>
-                  <p class="text-sm" style="color: rgba(247, 241, 231, 0.65);">
-                    {{ 'cookie.settings.essential.body' | translate }}
-                  </p>
-                </div>
-                <div class="ml-4">
-                  <span class="cookie-chip" style="display: inline-flex; align-items: center; padding: 0.2rem 0.65rem; border-radius: 9999px; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.03em; text-transform: uppercase; color: rgba(247,241,231,0.45); background: rgba(247,241,231,0.06);">
-                    {{ 'cookie.settings.essential.always' | translate }}
-                  </span>
-                </div>
+          <div class="cookie-section cookie-section--accent">
+            <div class="cookie-section__row">
+              <div class="cookie-section__content">
+                <h4 class="cookie-section__title">
+                  {{ 'cookie.settings.analytics.title' | translate }}
+                </h4>
+                <p class="cookie-section__text">
+                  {{ 'cookie.settings.analytics.body' | translate }}
+                </p>
+                <label class="cookie-toggle">
+                  <input
+                    type="checkbox"
+                    [(ngModel)]="analyticsConsent"
+                    [ngModelOptions]="{standalone: true}"
+                    class="cookie-toggle__input">
+                  <span class="cookie-toggle__label">{{ 'cookie.settings.analytics.allow' | translate }}</span>
+                </label>
               </div>
             </div>
+          </div>
 
-            <div class="cookie-section" style="padding: 1rem; border-radius: 0.75rem; border: 1px solid rgba(247,241,231,0.06); background: rgba(247,241,231,0.03); border-left: 3px solid rgba(159,107,61,0.5);">
-              <div class="flex items-start justify-between">
-                <div class="flex-1">
-                  <h4 class="font-semibold mb-1" style="color: #f7f1e7;">
-                    {{ 'cookie.settings.analytics.title' | translate }}
-                  </h4>
-                  <p class="text-sm mb-3" style="color: rgba(247, 241, 231, 0.65);">
-                    {{ 'cookie.settings.analytics.body' | translate }}
-                  </p>
-                  <label class="flex items-center gap-2 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      [(ngModel)]="analyticsConsent"
-                      [ngModelOptions]="{standalone: true}"
-                      class="cookie-checkbox"
-                      style="accent-color: #9f6b3d;">
-                    <span class="text-sm font-medium" style="color: #f7f1e7;">{{ 'cookie.settings.analytics.allow' | translate }}</span>
-                  </label>
-                </div>
+          <div class="cookie-section cookie-section--accent">
+            <div class="cookie-section__row">
+              <div class="cookie-section__content">
+                <h4 class="cookie-section__title">
+                  {{ 'cookie.settings.marketing.title' | translate }}
+                </h4>
+                <p class="cookie-section__text">
+                  {{ 'cookie.settings.marketing.body' | translate }}
+                </p>
+                <label class="cookie-toggle">
+                  <input
+                    type="checkbox"
+                    [(ngModel)]="marketingConsent"
+                    [ngModelOptions]="{standalone: true}"
+                    class="cookie-toggle__input">
+                  <span class="cookie-toggle__label">{{ 'cookie.settings.marketing.allow' | translate }}</span>
+                </label>
               </div>
             </div>
+          </div>
 
-            <div class="cookie-section" style="padding: 1rem; border-radius: 0.75rem; border: 1px solid rgba(247,241,231,0.06); background: rgba(247,241,231,0.03); border-left: 3px solid rgba(197,154,104,0.4);">
-              <div class="flex items-start justify-between">
-                <div class="flex-1">
-                  <h4 class="font-semibold mb-1" style="color: #f7f1e7;">
-                    {{ 'cookie.settings.marketing.title' | translate }}
-                  </h4>
-                  <p class="text-sm mb-3" style="color: rgba(247, 241, 231, 0.65);">
-                    {{ 'cookie.settings.marketing.body' | translate }}
-                  </p>
-                  <label class="flex items-center gap-2 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      [(ngModel)]="marketingConsent"
-                      [ngModelOptions]="{standalone: true}"
-                      class="cookie-checkbox"
-                      style="accent-color: #9f6b3d;">
-                    <span class="text-sm font-medium" style="color: #f7f1e7;">{{ 'cookie.settings.marketing.allow' | translate }}</span>
-                  </label>
-                </div>
-              </div>
-            </div>
-
-            <div class="cookie-section" style="padding: 1rem; border-radius: 0.75rem; border: 1px solid rgba(247,241,231,0.06); background: rgba(247,241,231,0.03); border-left: 3px solid rgba(247,241,231,0.2);">
-              <div class="flex items-start justify-between">
-                <div class="flex-1">
-                  <h4 class="font-semibold mb-1" style="color: #f7f1e7;">
-                    {{ 'cookie.settings.preferences.title' | translate }}
-                  </h4>
-                  <p class="text-sm mb-3" style="color: rgba(247, 241, 231, 0.65);">
-                    {{ 'cookie.settings.preferences.body' | translate }}
-                  </p>
-                  <label class="flex items-center gap-2 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      [(ngModel)]="preferencesConsent"
-                      [ngModelOptions]="{standalone: true}"
-                      class="cookie-checkbox"
-                      style="accent-color: #9f6b3d;">
-                    <span class="text-sm font-medium" style="color: #f7f1e7;">{{ 'cookie.settings.preferences.allow' | translate }}</span>
-                  </label>
-                </div>
+          <div class="cookie-section cookie-section--accent">
+            <div class="cookie-section__row">
+              <div class="cookie-section__content">
+                <h4 class="cookie-section__title">
+                  {{ 'cookie.settings.preferences.title' | translate }}
+                </h4>
+                <p class="cookie-section__text">
+                  {{ 'cookie.settings.preferences.body' | translate }}
+                </p>
+                <label class="cookie-toggle">
+                  <input
+                    type="checkbox"
+                    [(ngModel)]="preferencesConsent"
+                    [ngModelOptions]="{standalone: true}"
+                    class="cookie-toggle__input">
+                  <span class="cookie-toggle__label">{{ 'cookie.settings.preferences.allow' | translate }}</span>
+                </label>
               </div>
             </div>
           </div>
         </div>
+      </div>
 
-        <div class="px-6 py-4 flex flex-col sm:flex-row gap-3"
-             style="background: rgba(14,17,22,0.6); border-top: 1px solid rgba(247,241,231,0.06);">
-          <button (click)="saveCustomPreferences()"
-                  class="ts-btn flex-1 justify-center"
-                  style="background: #9f6b3d; color: #fffdf9; border: none; border-radius: 0.625rem; font-weight: 600;">
-            {{ 'cookie.settings.save' | translate }}
-          </button>
-          <button (click)="acceptAll()"
-                  class="ts-btn flex-1 justify-center"
-                  style="background: rgba(247,241,231,0.08); color: #f7f1e7; border: 1px solid rgba(247,241,231,0.15); border-radius: 0.625rem; font-weight: 600;">
-            {{ 'cookie.actions.accept_all' | translate }}
-          </button>
-        </div>
+      <div class="cookie-modal__foot">
+        <button type="button" (click)="saveCustomPreferences()" class="cookie-btn cookie-btn--primary cookie-btn--full">
+          {{ 'cookie.settings.save' | translate }}
+        </button>
+        <button type="button" (click)="acceptAll()" class="cookie-btn cookie-btn--ghost cookie-btn--full">
+          {{ 'cookie.actions.accept_all' | translate }}
+        </button>
       </div>
     </div>
   </div>

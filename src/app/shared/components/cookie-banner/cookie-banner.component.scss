@@ -1,6 +1,22 @@
-@keyframes slide-up {
+/**
+ * Cookie Banner — AMK-49 (Brand Bible compliance migration)
+ *
+ * Uses ONLY the 6 approved Amarka palette tokens via CSS variables:
+ *   --amarka-bg              #181818
+ *   --amarka-surface         #484848
+ *   --amarka-gold            #906030  (canonical Zone 3 — AMK-54: Primary CTA fill)
+ *   --amarka-text            #f0f0f0
+ *   --amarka-text-secondary  #c0c0c0
+ *   --amarka-text-muted      #909090
+ *
+ * Primary CTA follows Zone 3 canonical (AMK-54): #906030 bg + #f0f0f0 text (4.92:1 AA).
+ * Secondary ghost buttons use --amarka-text-muted borders on --amarka-surface (never gold-on-surface text).
+ * Motion respects AMK-62 tokens (--amarka-duration-base, --amarka-ease-out).
+ */
+
+@keyframes cookie-banner-slide-up {
   from {
-    transform: translateY(100%);
+    transform: translateY(16px);
     opacity: 0;
   }
   to {
@@ -9,81 +25,403 @@
   }
 }
 
-.animate-slide-up {
-  animation: slide-up 0.3s ease-out;
+@keyframes cookie-modal-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
-/* ── Dark glass surface — forced dark to override any global light-theme rules ── */
-.cookie-banner-surface {
-  background: rgba(20, 25, 32, 0.94) !important;
-  backdrop-filter: blur(20px) !important;
-  -webkit-backdrop-filter: blur(20px) !important;
-  color: #f7f1e7 !important;
-  border: 1px solid rgba(247, 241, 231, 0.08) !important;
-  background-color: rgba(20, 25, 32, 0.94) !important;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
-}
+/* ─── Banner container ─────────────────────────────────────────────── */
+.cookie-banner {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 60;
+  width: calc(100% - 2rem);
+  max-width: 28rem;
+  padding: 0 0.5rem 1rem;
+  animation: cookie-banner-slide-up var(--amarka-duration-base, 300ms) var(--amarka-ease-out, ease-out);
 
-/* ── Banner buttons ── */
-.cookie-banner-actions .ts-btn {
-  min-height: 2.75rem !important;
-  font-size: 0.875rem !important;
-  font-weight: 600 !important;
-  letter-spacing: 0.01em;
-  border-radius: 0.625rem !important;
-  transition: all 0.2s ease;
-  box-shadow: none !important;
-  transform: none !important;
-}
-
-.cookie-banner-actions .ts-btn:hover {
-  transform: none !important;
-  box-shadow: none !important;
-}
-
-/* ── Cookie links ── */
-.cookie-link {
-  color: #c59a68 !important;
-  font-weight: 600;
-  text-decoration: none !important;
-  border-bottom: 1px solid rgba(197, 154, 104, 0.3);
-  transition: border-color 0.2s ease;
-
-  &:hover {
-    border-color: #c59a68;
-    color: #c59a68 !important;
-    text-decoration: none !important;
+  @media (min-width: 640px) {
+    padding: 0 1rem 1rem;
   }
 }
 
-/* ── Settings modal overlay ── */
-.cookie-overlay {
-  background-color: rgba(0, 0, 0, 0.6) !important;
+.cookie-banner__surface {
+  background: var(--amarka-surface);
+  color: var(--amarka-text);
+  border: 1px solid var(--amarka-border, rgba(144, 96, 48, 0.3));
+  border-radius: 2px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+
+.cookie-banner__body {
+  padding: 1.5rem;
+
+  @media (min-width: 640px) {
+    padding: 2rem;
+  }
+}
+
+.cookie-banner__row {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.cookie-banner__icon {
+  flex-shrink: 0;
+}
+
+.cookie-banner__icon-svg {
+  width: 2.5rem;
+  height: 2.5rem;
+  color: var(--amarka-gold);
+  stroke: var(--amarka-gold);
+}
+
+.cookie-banner__content {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.cookie-banner__title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+  color: var(--amarka-text);
+}
+
+.cookie-banner__text {
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 0.875rem;
+  margin: 0 0 1rem;
+  color: var(--amarka-text-secondary);
+  line-height: 1.45;
+}
+
+.cookie-banner__meta {
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 0.75rem;
+  margin: 0;
+  color: var(--amarka-text-muted);
+  line-height: 1.45;
+}
+
+.cookie-banner__link {
+  color: var(--amarka-gold);
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px solid var(--amarka-border, rgba(144, 96, 48, 0.3));
+  transition: border-color var(--amarka-duration-fast, 150ms) var(--amarka-ease-out, ease-out);
+
+  &:hover,
+  &:focus-visible {
+    border-color: var(--amarka-gold);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--amarka-gold);
+    outline-offset: 2px;
+  }
+}
+
+.cookie-banner__actions {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+
+  @media (min-width: 640px) {
+    flex-direction: row;
+  }
+}
+
+/* ─── Shared button styles ─────────────────────────────────────────── */
+.cookie-btn {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  padding: 0.625rem 1.25rem;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  cursor: pointer;
+  transition:
+    background-color var(--amarka-duration-fast, 150ms) var(--amarka-ease-out, ease-out),
+    color var(--amarka-duration-fast, 150ms) var(--amarka-ease-out, ease-out),
+    border-color var(--amarka-duration-fast, 150ms) var(--amarka-ease-out, ease-out),
+    transform var(--amarka-duration-fast, 150ms) var(--amarka-ease-out, ease-out);
+
+  @media (min-width: 640px) {
+    width: auto;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--amarka-gold);
+    outline-offset: 2px;
+  }
+}
+
+.cookie-btn--full {
+  width: 100%;
+  flex: 1 1 auto;
+}
+
+/* Zone 3 canonical (AMK-54) — primary filled gold */
+.cookie-btn--primary {
+  background: var(--amarka-gold);
+  color: var(--amarka-text);
+  border-color: var(--amarka-gold);
+
+  &:hover {
+    background: color-mix(in srgb, var(--amarka-gold) 90%, #000 10%);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+/* Ghost — outlined on surface, no gold text */
+.cookie-btn--ghost {
+  background: transparent;
+  color: var(--amarka-text);
+  border-color: var(--amarka-text-muted);
+
+  &:hover {
+    background: var(--amarka-bg);
+    border-color: var(--amarka-text-secondary);
+  }
+}
+
+/* Tertiary — low-emphasis text button */
+.cookie-btn--tertiary {
+  background: transparent;
+  color: var(--amarka-text-secondary);
+  border-color: transparent;
+
+  &:hover {
+    color: var(--amarka-text);
+    background: var(--amarka-bg);
+  }
+}
+
+/* ─── Settings modal ───────────────────────────────────────────────── */
+.cookie-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  overflow-y: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  animation: cookie-modal-fade-in var(--amarka-duration-fast, 150ms) var(--amarka-ease-out, ease-out);
+}
+
+.cookie-modal__scrim {
+  position: fixed;
+  inset: 0;
+  background: rgba(24, 24, 24, 0.85); /* --amarka-overlay token equivalent */
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
 }
 
-/* ── Close button ── */
-.cookie-icon-btn {
-  color: rgba(247, 241, 231, 0.4) !important;
-  background: transparent !important;
-  border-radius: 0.5rem;
-  transition: all 0.2s ease;
+.cookie-modal__panel {
+  position: relative;
+  width: 100%;
+  max-width: 40rem;
+  background: var(--amarka-surface);
+  color: var(--amarka-text);
+  border: 1px solid var(--amarka-border, rgba(144, 96, 48, 0.3));
+  border-radius: 2px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  text-align: left;
 }
 
-.cookie-icon-btn:hover {
-  color: #f7f1e7 !important;
-  background: rgba(247, 241, 231, 0.06) !important;
+.cookie-modal__head {
+  padding: 1.5rem 1.5rem 1rem;
 }
 
-/* ── Checkbox accent ── */
-.cookie-checkbox {
+.cookie-modal__head-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.cookie-modal__title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--amarka-text);
+}
+
+.cookie-close {
+  padding: 0.5rem;
+  background: transparent;
+  border: none;
+  border-radius: 2px;
+  color: var(--amarka-text-muted);
+  cursor: pointer;
+  transition:
+    color var(--amarka-duration-fast, 150ms) var(--amarka-ease-out, ease-out),
+    background-color var(--amarka-duration-fast, 150ms) var(--amarka-ease-out, ease-out);
+
+  &:hover {
+    color: var(--amarka-text);
+    background: var(--amarka-bg);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--amarka-gold);
+    outline-offset: 2px;
+  }
+}
+
+.cookie-close__icon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.cookie-modal__intro {
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 0.875rem;
+  margin: 0 0 1.5rem;
+  color: var(--amarka-text-secondary);
+  line-height: 1.5;
+}
+
+.cookie-modal__sections {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* ─── Section cards (inside modal) ─────────────────────────────────── */
+.cookie-section {
+  padding: 1rem;
+  border-radius: 2px;
+  border: 1px solid var(--amarka-text-muted);
+  background: var(--amarka-bg);
+}
+
+.cookie-section--accent {
+  border-left: 3px solid var(--amarka-gold);
+}
+
+.cookie-section__row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.cookie-section__content {
+  flex: 1 1 auto;
+}
+
+.cookie-section__aside {
+  flex-shrink: 0;
+}
+
+.cookie-section__title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 0.25rem;
+  color: var(--amarka-text);
+}
+
+.cookie-section__text {
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 0.875rem;
+  margin: 0 0 0.75rem;
+  color: var(--amarka-text-secondary);
+  line-height: 1.45;
+}
+
+.cookie-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.65rem;
+  border-radius: 9999px;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--amarka-text-muted);
+  background: var(--amarka-surface);
+  border: 1px solid var(--amarka-text-muted);
+}
+
+/* ─── Toggle (checkbox) ────────────────────────────────────────────── */
+.cookie-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.cookie-toggle__input {
   width: 1.125rem;
   height: 1.125rem;
-  accent-color: #9f6b3d !important;
+  accent-color: var(--amarka-gold);
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid var(--amarka-gold);
+    outline-offset: 2px;
+  }
 }
 
-/* ── Icon tint ── */
-.text-ts-accent {
-  color: #9f6b3d !important;
+.cookie-toggle__label {
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--amarka-text);
+}
+
+/* ─── Modal foot ───────────────────────────────────────────────────── */
+.cookie-modal__foot {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  background: var(--amarka-bg);
+  border-top: 1px solid var(--amarka-text-muted);
+
+  @media (min-width: 640px) {
+    flex-direction: row;
+  }
+}
+
+/* ─── Reduced motion ───────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .cookie-banner {
+    animation: none;
+  }
+  .cookie-modal {
+    animation: none;
+  }
+  .cookie-btn,
+  .cookie-banner__link,
+  .cookie-close {
+    transition: none;
+  }
+  .cookie-btn--primary:hover {
+    transform: none;
+  }
 }
