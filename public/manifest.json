@@ -1,12 +1,15 @@
 {
-  "name": "Amarka - Personalised Gifts",
+  "name": "Amarka — Bespoke Laser Engraving Studio (Stamford, CT)",
   "short_name": "Amarka",
-  "description": "Enterprise-grade Bitcoin mining hardware and ASIC miners",
+  "description": "Bespoke laser engraving studio in Stamford, CT supplying custom signage, wayfinding, hospitality fitout elements, awards, and architectural accents for interior designers, contractors, and commercial operators across Connecticut and the tri-state region.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0a0b0d",
-  "theme_color": "#f7931a",
+  "background_color": "#181818",
+  "theme_color": "#181818",
   "orientation": "portrait-primary",
+  "lang": "en-US",
+  "dir": "ltr",
+  "categories": ["business", "productivity", "design"],
   "icons": [
     {
       "src": "/Logo Clear.png",

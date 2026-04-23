@@ -35,8 +35,9 @@
   <meta name="twitter:image" content="https://amarka.co/Logo%20Clear2.png">
 
   <!-- Additional SEO -->
-  <meta name="theme-color" content="#0e1116">
-  <meta name="msapplication-TileColor" content="#0e1116">
+  <!-- Theme color matches Brand Bible --amarka-bg token (#181818) -->
+  <meta name="theme-color" content="#181818">
+  <meta name="msapplication-TileColor" content="#181818">
   <meta name="color-scheme" content="dark">
   <meta name="geo.region" content="US-CT">
   <meta name="geo.placename" content="Stamford, Connecticut">
@@ -52,7 +53,8 @@
     #app-initial-loader {
       position: fixed;
       inset: 0;
-      background: #0e1116;
+      /* Brand Bible --amarka-bg token */
+      background: #181818;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -70,7 +72,8 @@
       width: clamp(72px, 12vw, 128px);
       height: clamp(72px, 12vw, 128px);
       object-fit: contain;
-      filter: drop-shadow(0 12px 32px rgba(159, 107, 61, 0.35));
+      /* Shadow uses Brand Bible --amarka-gold (#906030 = rgb(144, 96, 48)) */
+      filter: drop-shadow(0 12px 32px rgba(144, 96, 48, 0.35));
       animation: subtlePulse 2.4s ease-in-out infinite;
     }
 
@@ -96,20 +99,28 @@
     "logo": "https://amarka.co/Logo Clear2.png",
     "image": "https://amarka.co/Logo Clear2.png",
     "description": "Bespoke laser engraving studio supplying custom signage, wayfinding, hospitality fitout elements, awards, and architectural accents for interior designers, contractors, and commercial operators across Connecticut and the tri-state region.",
-    "email": "studio@amarka.co",
-    "telephone": "+1-203-555-0148",
+    "email": "diego@amarka.co",
     "priceRange": "$$",
     "sameAs": [
       "https://instagram.com/amarka.co",
       "https://www.linkedin.com/company/amarka-co/"
     ],
-    "contactPoint": {
-      "@type": "ContactPoint",
-      "telephone": "+1-203-555-0148",
-      "contactType": "Sales",
-      "email": "studio@amarka.co",
-      "availableLanguage": ["en"]
-    },
+    "contactPoint": [
+      {
+        "@type": "ContactPoint",
+        "contactType": "Sales",
+        "email": "diego@amarka.co",
+        "availableLanguage": ["en"],
+        "areaServed": "US-CT"
+      },
+      {
+        "@type": "ContactPoint",
+        "contactType": "Customer Service",
+        "email": "jessica@amarka.co",
+        "availableLanguage": ["en"],
+        "areaServed": "US-CT"
+      }
+    ],
     "address": {
       "@type": "PostalAddress",
       "addressLocality": "Stamford",
