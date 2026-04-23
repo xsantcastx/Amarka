@@ -5,10 +5,10 @@ User-agent: *
 Allow: /
 
 # Disallow admin and private areas
-Disallow: /admin/
-Disallow: /client/
-Disallow: /cart/
-Disallow: /checkout/
+Disallow: /admin
+Disallow: /client
+Disallow: /cart
+Disallow: /checkout
 
 # Allow crawling of public pages
 Allow: /work/
