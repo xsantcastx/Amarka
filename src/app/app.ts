@@ -14,6 +14,7 @@ import { AnalyticsService } from './services/analytics.service';
 import { SettingsService, AppSettings } from './services/settings.service';
 import { AuthService } from './services/auth.service';
 import { ThemeService } from './services/theme.service';
+import { SeoService } from './core/services/seo.service';
 
 @Component({
   selector: 'app-root',
@@ -31,6 +32,8 @@ export class AppComponent implements OnInit {
   private themeService = inject(ThemeService);
   private cdr = inject(ChangeDetectorRef);
   private router = inject(Router);
+  // AMK-9 — per-route SEO tag/JSON-LD updates on NavigationEnd.
+  private seoService = inject(SeoService);
 
   isMaintenanceMode = false;
   maintenanceMessage = '';
@@ -77,11 +80,22 @@ export class AppComponent implements OnInit {
       .subscribe((event) => {
         this.currentUrl = (event as NavigationEnd).url;
         this.isAdminRoute = this.currentUrl.startsWith('/admin');
+        // AMK-9 — push SEO tag updates on every successful navigation.
+        // Admin routes are intentionally excluded from public SEO rewrites;
+        // they stay on the last public page's tags.
+        if (!this.isAdminRoute) {
+          this.seoService.updateForRoute(this.currentUrl);
+        }
         this.cdr.markForCheck();
       });
 
     this.currentUrl = this.router.url;
     this.isAdminRoute = this.currentUrl.startsWith('/admin');
+    // AMK-9 — prime SEO tags for the initial URL (before the first
+    // NavigationEnd fires, e.g. on hard refresh of a deep link).
+    if (!this.isAdminRoute) {
+      this.seoService.updateForRoute(this.currentUrl);
+    }
   }
 
   ngOnInit() {
