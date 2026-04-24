@@ -60,3 +60,30 @@ src/environments/environment.generated.ts
 # src/environments/environment.ts
 # src/environments/environment.prod.ts
 .trash/
+
+# AMK-26 Phase 2: orphaned legacy storefront files.
+# These paths were removed from git tracking in commit e8c2a38 but their
+# working-tree copies persist (the scheduled sandbox lacks delete permission
+# on the workspace mount, so prior runs could only untrack, not purge).
+# They are excluded from tsconfig.app.json + tsconfig.spec.json compilation
+# and ignored here so `git status` and Angular builds stay clean.
+# If you clone fresh, these directories will not be recreated.
+src/app/features/contacto/
+src/app/features/datos-tecnicos/
+src/app/features/galeria/
+src/app/features/productos/
+src/app/features/home/colecciones-destacadas/
+src/app/pages/contacto/
+src/app/pages/galeria/
+src/app/pages/productos/
+src/app/pages/servicios/
+src/app/pages/solo-miners/
+src/app/pages/home/home.page.scss.bak
+src/app/services/gallery.service.ts
+src/app/shared/components/cart-button/
+src/app/shared/components/product-reviews/
+src/app/shared/models/
+src/app/shared/services/
+
+# Sandbox write-probe artifacts (harmless, sandbox can't delete)
+.amk-write-probe.txt
