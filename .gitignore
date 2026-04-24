@@ -59,3 +59,4 @@ src/environments/environment.generated.ts
 # Uncomment these if you want to use environment variables in CI/CD instead:
 # src/environments/environment.ts
 # src/environments/environment.prod.ts
+.trash/

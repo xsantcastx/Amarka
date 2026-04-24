@@ -26,7 +26,7 @@
     &:hover {
       background: rgba(159, 107, 61, 0.1);
       border-color: rgba(159, 107, 61, 0.32);
-      color: #f7f1e7;
+      color: var(--ts-ink, #f0f0f0);
     }
 
     &.is-active {
@@ -97,7 +97,7 @@
   border: 1px solid rgba(247, 241, 231, 0.08);
   overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease, background 0.3s ease;
-  color: #f7f1e7;
+  color: var(--ts-ink, #f0f0f0);
   cursor: pointer;
 
   &:hover,
