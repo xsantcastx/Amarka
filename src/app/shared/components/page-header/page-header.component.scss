@@ -271,39 +271,12 @@
   }
 }
 
-// Seasonal theme overrides
-:root[data-season='valentine'] {
-  .page-hero__decor--1 {
-    background: var(--season-rose, #e16888);
-  }
-
-  .page-hero__decor--2 {
-    background: var(--season-berry, #782440);
-  }
-
-  .page-hero__badge-text {
-    color: var(--season-rose, #e16888);
-    background: color-mix(in srgb, var(--season-rose, #e16888) 10%, transparent);
-    border-color: color-mix(in srgb, var(--season-rose, #e16888) 25%, transparent);
-  }
-
-  .page-hero__title-highlight {
-    background: linear-gradient(
-      135deg,
-      var(--season-rose, #e16888) 0%,
-      var(--season-berry, #782440) 50%,
-      var(--season-rose, #e16888) 100%
-    );
-    background-size: 200% 200%;
-    -webkit-background-clip: text;
-    background-clip: text;
-  }
-
-  // Hero variant heading box with seasonal accent
-  .page-hero--hero .page-hero__heading {
-    border-color: color-mix(in srgb, var(--season-rose, #e16888) 15%, var(--ts-line));
-  }
-}
+// Seasonal theme overrides removed (AMK Brand Bible audit 2026-04-25):
+// CreaDevents-era Valentine season override injected pink/berry hexes
+// (#e16888, #782440) that violate the Amarka 6-token palette. No active
+// Amarka seasonal theme registers 'valentine', and a Valentine palette
+// is brand-incompatible for B2B trade laser engraving. Page-header now
+// stays on the Brand Bible 6-token palette under every theme state.
 
 // Responsive adjustments
 @media (max-width: 768px) {
