@@ -9,11 +9,11 @@
   margin: 0 auto;
   padding: 2.25rem 2.5rem;
   border-radius: 1.6rem;
-  background: rgba(255, 253, 249, 0.035);
-  border: 1px solid rgba(247, 241, 231, 0.08);
+  background: rgba(240, 240, 240, 0.035);
+  border: 1px solid rgba(240, 240, 240, 0.08);
   box-shadow:
     0 40px 80px -40px rgba(0, 0, 0, 0.4),
-    inset 0 1px 0 rgba(255, 253, 249, 0.04);
+    inset 0 1px 0 rgba(240, 240, 240, 0.04);
 
   @media (max-width: 600px) {
     padding: 1.5rem 1.25rem;
@@ -27,8 +27,8 @@
   gap: 0.35rem;
   padding: 0.25rem;
   border-radius: 999px;
-  background: rgba(14, 17, 22, 0.5);
-  border: 1px solid rgba(247, 241, 231, 0.1);
+  background: rgba(24, 24, 24, 0.5);
+  border: 1px solid rgba(240, 240, 240, 0.1);
   margin-bottom: 1.75rem;
 
   button {
@@ -36,21 +36,21 @@
     border-radius: 999px;
     border: none;
     background: transparent;
-    color: rgba(247, 241, 231, 0.5);
+    color: rgba(240, 240, 240, 0.5);
     font-size: 0.875rem;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.18s ease;
 
     &:hover {
-      color: rgba(247, 241, 231, 0.78);
+      color: rgba(240, 240, 240, 0.78);
     }
 
     &.is-active {
       background: var(--ts-accent);
-      color: #fff;
+      color: #f0f0f0;
       font-weight: 700;
-      box-shadow: 0 4px 12px -4px rgba(159, 107, 61, 0.35);
+      box-shadow: 0 4px 12px -4px rgba(144, 96, 48, 0.35);
     }
   }
 }
@@ -74,8 +74,8 @@
   width: 100%;
   padding: 0.85rem 1rem;
   border-radius: 0.85rem;
-  border: 1px solid rgba(247, 241, 231, 0.12);
-  background: rgba(255, 253, 249, 0.06);
+  border: 1px solid rgba(240, 240, 240, 0.12);
+  background: rgba(240, 240, 240, 0.06);
   color: var(--ts-ink, #f0f0f0);
   font-size: 0.95rem;
   font-family: inherit;
@@ -83,19 +83,19 @@
 
   &:focus {
     outline: none;
-    border-color: rgba(159, 107, 61, 0.5);
-    box-shadow: 0 0 0 3px rgba(159, 107, 61, 0.1);
+    border-color: rgba(144, 96, 48, 0.5);
+    box-shadow: 0 0 0 3px rgba(144, 96, 48, 0.1);
   }
 
   &::placeholder {
-    color: rgba(247, 241, 231, 0.35);
+    color: rgba(240, 240, 240, 0.35);
     opacity: 1;
   }
 }
 
 .enquire-form__trust {
   font-size: 0.85rem;
-  color: rgba(247, 241, 231, 0.4);
+  color: rgba(240, 240, 240, 0.4);
   margin: 0;
 }
 
@@ -114,11 +114,11 @@
   padding: 1rem 0;
 
   h2 { font-size: 1.25rem; }
-  p { color: rgba(247, 241, 231, 0.65); }
+  p { color: rgba(240, 240, 240, 0.65); }
 }
 
 .form-error {
   margin: 0;
-  color: #e74c3c;
+  color: var(--ts-accent, #C7683B);
   font-size: 0.9rem;
 }
