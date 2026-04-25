@@ -1,21 +1,21 @@
 {
   "notifications": {
     "newUser": {
-      "subject": "🎉 New Inquiry - Creation Design & Events",
-      "preheader": "A new contact request was submitted on the website."
+      "subject": "New Commission Enquiry — Amarka",
+      "preheader": "A new commission enquiry was submitted on amarka.co."
     },
     "cartShare": {
-      "subject": "Creation Design & Events · Service Inquiry"
+      "subject": "Amarka · Project Spec Enquiry"
     },
     "contact": {
-      "subject": "Creation Design & Events · Contact Message"
+      "subject": "Amarka · Studio Enquiry"
     },
     "inventoryAlert": {
-      "subject": "Booking Alert - Creation Design & Events"
+      "subject": "Production Alert — Amarka Studio"
     },
     "eventInquiry": {
-      "subject": "New Event Consultation Request",
-      "preheader": "Someone is interested in your event design services."
+      "subject": "New Commission Enquiry — Amarka",
+      "preheader": "Someone is requesting a quote for laser engraving work."
     }
   }
 }
