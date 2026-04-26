@@ -409,38 +409,9 @@
   margin: 0;
 }
 
-// Seasonal Valentine overrides
-:root[data-season='valentine'] {
-  .collection-summary__stat svg {
-    color: var(--season-rose, #e16888);
-  }
-
-  .collection-tag--active {
-    background: color-mix(in srgb, var(--season-rose, #e16888) 12%, transparent);
-    border-color: color-mix(in srgb, var(--season-rose, #e16888) 40%, transparent);
-    color: var(--season-rose, #e16888);
-  }
-
-  .collection-tag:hover {
-    border-color: var(--season-rose, #e16888);
-    color: var(--season-rose, #e16888);
-  }
-
-  .collection-controls__search-input:focus {
-    border-color: var(--season-rose, #e16888);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--season-rose, #e16888) 15%, transparent);
-  }
-
-  .collection-empty__icon {
-    background: color-mix(in srgb, var(--season-rose, #e16888) 10%, transparent);
-    color: var(--season-rose, #e16888);
-  }
-
-  .collection-related {
-    background: linear-gradient(
-      135deg,
-      color-mix(in srgb, var(--season-rose, #e16888) 8%, var(--ts-paper)) 0%,
-      var(--ts-paper) 100%
-    );
-  }
-}
+// Seasonal Valentine overrides removed (AMK Brand Bible audit 2026-04-26):
+// CreaDevents-era Valentine season override injected pink/berry hexes
+// (#e16888) that violate the Amarka 6-token palette. No active Amarka
+// seasonal theme registers 'valentine', and a Valentine palette is
+// brand-incompatible for B2B trade laser engraving. File now stays on
+// the Brand Bible 6-token palette under every theme state.
