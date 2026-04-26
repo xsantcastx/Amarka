@@ -15,18 +15,22 @@
   }
 }
 
+// Brand Bible 6-token migration (AMK proactive audit 2026-04-26):
+// rgba(255,253,249,X) (#fffdf9 CreaDevents paper) → rgba(240,240,240,X) (#f0f0f0 amarka-text)
+// rgba(247,241,231,X) (#f7f1e7 CreaDevents paper) → rgba(240,240,240,X) (#f0f0f0 amarka-text)
+// rgba(159,107,61,X) (#9f6b3d CreaDevents bronze) → rgba(144,96,48,X) (#906030 amarka-gold)
 .material-card {
   padding: 1.75rem 2rem;
   border-radius: 1.4rem;
-  background: rgba(255, 253, 249, 0.035);
-  border: 1px solid rgba(247, 241, 231, 0.08);
+  background: rgba(240, 240, 240, 0.035);
+  border: 1px solid rgba(240, 240, 240, 0.08);
   color: var(--ts-ink, #f0f0f0);
   transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease, background 0.3s ease;
 
   &:hover {
     transform: translateY(-4px);
-    background: rgba(255, 253, 249, 0.06);
-    border-color: rgba(159, 107, 61, 0.24);
+    background: rgba(240, 240, 240, 0.06);
+    border-color: rgba(144, 96, 48, 0.24);
     box-shadow: 0 24px 48px -28px rgba(0, 0, 0, 0.45);
   }
 
@@ -39,7 +43,7 @@
   p {
     font-size: 0.9rem;
     line-height: 1.65;
-    color: rgba(247, 241, 231, 0.55);
+    color: rgba(240, 240, 240, 0.55);
     margin: 0 0 0.85rem;
   }
 }
@@ -83,11 +87,11 @@
   display: grid;
   gap: 0.3rem;
   padding-top: 0.7rem;
-  border-top: 1px solid rgba(247, 241, 231, 0.08);
+  border-top: 1px solid rgba(240, 240, 240, 0.08);
 
   li {
     font-size: 0.82rem;
-    color: rgba(247, 241, 231, 0.55);
+    color: rgba(240, 240, 240, 0.55);
     display: flex;
     gap: 0.4rem;
     align-items: baseline;
@@ -109,12 +113,19 @@
   gap: 1.25rem;
   padding: 1.75rem 2.25rem;
   border-radius: 1.4rem;
-  background: linear-gradient(135deg, rgba(159, 107, 61, 0.12) 0%, rgba(255, 253, 249, 0.04) 100%);
-  border: 1px solid rgba(159, 107, 61, 0.24);
+  background: linear-gradient(135deg, rgba(144, 96, 48, 0.12) 0%, rgba(240, 240, 240, 0.04) 100%);
+  border: 1px solid rgba(144, 96, 48, 0.24);
 
   p {
     font-size: 1rem;
-    color: rgba(247, 241, 231, 0.75);
+    color: rgba(240, 240, 240, 0.75);
     margin: 0;
   }
 }
+
+// NOTE: .material-card__swatch gradients (brass/aluminium/stainless/wood
+// hex literals on lines below) are intentional domain-color
+// representations of the actual substrates Amarka engraves. They visualize
+// material identity, not brand identity. The same pragmatic precedent is
+// already in this file for acrylic + glass swatches (rgba neutrals).
+// Brand Bible 6-token palette governs UI chrome, not material illustration.
