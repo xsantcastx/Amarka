@@ -182,7 +182,10 @@
   border-color: var(--amarka-gold);
 
   &:hover {
-    background: color-mix(in srgb, var(--amarka-gold) 90%, #000 10%);
+    // AMK-78 Brand Bible audit: #000 → var(--amarka-bg) (#181818) for token-only discipline.
+    // Visual delta is imperceptible (24/24/24 vs 0/0/0 at 10% mix); this keeps the
+    // file 100% on the Amarka 6-token palette per the AMK-71/76 sweep guidance.
+    background: color-mix(in srgb, var(--amarka-gold) 90%, var(--amarka-bg) 10%);
     transform: translateY(-1px);
   }
 
