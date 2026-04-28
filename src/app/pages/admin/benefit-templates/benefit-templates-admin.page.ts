@@ -49,7 +49,7 @@ export class BenefitTemplatesAdminComponent extends LoadingComponentBase impleme
       name: ['', [Validators.required, Validators.minLength(3)]],
       category: ['', Validators.required],
       icon: ['performance', Validators.required],
-      iconColor: ['bitcoin-orange', Validators.required],
+      iconColor: ['amarka-gold', Validators.required],  // AMK-80: was 'bitcoin-orange' (template residue)
       title: ['', [Validators.required, Validators.minLength(3)]],
       description: ['', [Validators.required, Validators.minLength(10)]],
       isActive: [true],
@@ -131,11 +131,15 @@ export class BenefitTemplatesAdminComponent extends LoadingComponentBase impleme
   openCreateModal() {
     this.isEditing = false;
     this.editingTemplateId = null;
+    // AMK-80: defaults migrated off Bitcoin/cryptocurrency template residue —
+    // category 'mining' is leftover from prior starter (no Amarka catalog match);
+    // iconColor 'bitcoin-orange' replaced with brand-canonical 'amarka-gold'.
+    // First active category is patched in below if available (see ngOnInit loader).
     this.templateForm.reset({
       name: '',
-      category: 'mining',
+      category: this.categories[0]?.slug || '',
       icon: 'performance',
-      iconColor: 'bitcoin-orange',
+      iconColor: 'amarka-gold',
       title: '',
       description: '',
       isActive: true,

@@ -134,7 +134,8 @@ export interface ProductSpecs {
 
 export interface ProductBenefit {
   icon: string;           // Icon type: 'performance', 'efficiency', 'reliability', 'support', 'quality', 'security', etc.
-  iconColor: string;      // Tailwind color: 'bitcoin-orange', 'bitcoin-gold', 'green-500', 'blue-500', etc.
-  title: string;          // e.g., "Proven Performance"
-  description: string;    // e.g., "Industry-leading hash rates..."
+  iconColor: string;      // Tailwind color: prefer Brand Bible 'amarka-gold' / 'amarka-text' / 'amarka-text-secondary'.
+                          // Legacy 'bitcoin-orange'/'bitcoin-gold' still accepted (remapped via tailwind.config.js per AMK-80).
+  title: string;          // e.g., "Precision Engraving"
+  description: string;    // e.g., "Sub-millimeter accuracy on every substrate."
 }
