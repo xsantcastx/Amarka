@@ -63,14 +63,14 @@
     position: relative;
     width: 1.75rem;
     height: 1.75rem;
-    color: #ffffff;
+    color: var(--amarka-text);
   }
 
   &__title {
     font-size: 1.35rem;
     font-weight: 700;
     letter-spacing: 0.02em;
-    color: #f8fafc;
+    color: var(--amarka-text);
   }
 
   &__subtitle {
@@ -112,7 +112,7 @@
 
   &__status-value {
     font-weight: 600;
-    color: #f8fafc;
+    color: var(--amarka-text);
   }
 
   &__toggle {
@@ -204,7 +204,7 @@
   &__group-title {
     font-size: 1.05rem;
     font-weight: 600;
-    color: #f8fafc;
+    color: var(--amarka-text);
   }
 
   &__group-copy {
