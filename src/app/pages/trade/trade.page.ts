@@ -6,13 +6,20 @@ import { StudioContentService } from '../../services/studio-content.service';
 import { AnalyticsService } from '../../services/analytics.service';
 import { LeadSubmissionService } from '../../services/lead-submission.service';
 import { SeoSchemaService } from '../../services/seo-schema.service';
-import { TradeApplication, TradeStep } from '../../models/studio';
+import { TradeApplication, TradeSpec, TradeStep } from '../../models/studio';
 import { FileDropzoneComponent } from '../../shared/components/file-dropzone/file-dropzone.component';
+import { TradeSpecCardComponent } from '../../shared/trade-spec-card/trade-spec-card.component';
 
 @Component({
   selector: 'app-trade-page',
   standalone: true,
-  imports: [CommonModule, RouterModule, ReactiveFormsModule, FileDropzoneComponent],
+  imports: [
+    CommonModule,
+    RouterModule,
+    ReactiveFormsModule,
+    FileDropzoneComponent,
+    TradeSpecCardComponent
+  ],
   templateUrl: './trade.page.html',
   styleUrl: './trade.page.scss'
 })
@@ -24,6 +31,8 @@ export class TradePageComponent {
   private seo = inject(SeoSchemaService);
 
   protected tradeSteps = signal<TradeStep[]>([]);
+  /** AMK-85: At-a-Glance Trade Spec card data (substrates · lead time · process). */
+  protected tradeSpec = signal<TradeSpec | null>(null);
   protected files: File[] = [];
   protected uploadProgress = 0;
   protected success = false;
@@ -100,6 +109,11 @@ export class TradePageComponent {
   }
 
   private async load() {
-    this.tradeSteps.set(await this.content.getTradeSteps());
+    const [steps, spec] = await Promise.all([
+      this.content.getTradeSteps(),
+      this.content.getTradeSpec()
+    ]);
+    this.tradeSteps.set(steps);
+    this.tradeSpec.set(spec);
   }
 }

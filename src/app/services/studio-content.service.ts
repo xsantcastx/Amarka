@@ -7,6 +7,7 @@ import {
   HOME_CONTENT,
   SERVICES,
   STUDIO_SETTINGS,
+  TRADE_SPEC,
   TRADE_STEPS,
 } from '../data/studio.seed';
 import {
@@ -16,6 +17,7 @@ import {
   HomeContent,
   ServiceCommission,
   StudioSettings,
+  TradeSpec,
   TradeStep,
 } from '../models/studio';
 
@@ -80,6 +82,15 @@ export class StudioContentService {
 
   async getTradeSteps(): Promise<TradeStep[]> {
     return TRADE_STEPS;
+  }
+
+  /**
+   * AMK-85: At-a-Glance Trade Spec card.
+   * Returns the canonical 3-column operational summary surfaced above
+   * the long-form /trade body copy. Source of truth: studio.seed.ts.
+   */
+  async getTradeSpec(): Promise<TradeSpec> {
+    return TRADE_SPEC;
   }
 
   async getDownload(slug: string): Promise<DownloadAsset | null> {

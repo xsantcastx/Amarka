@@ -5,6 +5,7 @@ import {
   HomeContent,
   ServiceCommission,
   StudioSettings,
+  TradeSpec,
   TradeStep,
 } from '../models/studio';
 
@@ -240,6 +241,35 @@ export const AUDIENCE_SECTIONS: AudienceSection[] = [
     ]
   }
 ];
+
+/**
+ * AMK-85: At-a-Glance Trade Spec card data.
+ * Three-column operational summary surfaced above the long-form /trade copy.
+ * All copy lifted directly from Brand Bible canon — six substrates, lead time,
+ * process — to keep designers/GCs from having to read three sections to
+ * assemble the mental model. Single source of truth — never inline strings
+ * in templates.
+ */
+export const TRADE_SPEC: TradeSpec = {
+  columns: [
+    {
+      heading: 'Substrates',
+      body: 'Brass · aluminium · stainless steel · acrylic · hardwood · glass'
+    },
+    {
+      heading: 'Lead Time',
+      body: 'Standard 5–10 business days · 72-hour rush available'
+    },
+    {
+      heading: 'Process',
+      body: 'Formal quote · material samples on request · delivery or Stamford collection · trade pricing'
+    }
+  ],
+  cta: {
+    label: 'Start a commission',
+    href: '/enquire'
+  }
+};
 
 export const TRADE_STEPS: TradeStep[] = [
   {

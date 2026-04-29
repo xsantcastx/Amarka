@@ -86,6 +86,31 @@ export interface TradeStep {
   description: string;
 }
 
+/**
+ * AMK-85: At-a-Glance Trade Spec Card
+ * Three operational columns surfaced above the fold on /trade.
+ * All copy lifted directly from Brand Bible canon (substrates, lead time, process).
+ * Single source of truth in studio.seed.ts — never inline strings in templates.
+ */
+export interface TradeSpecColumn {
+  /** Column heading (Source Sans 3 600, all-caps via CSS, tracking-widest) */
+  heading: string;
+  /** Body copy, single line, separator-delimited per Brand Bible style */
+  body: string;
+}
+
+export interface TradeSpecCta {
+  label: string;
+  href: string;
+}
+
+export interface TradeSpec {
+  /** Exactly 3 columns: substrates · lead time · process. */
+  columns: TradeSpecColumn[];
+  /** Outlined ghost CTA at the card foot (Zone 3b, --ts-accent). */
+  cta: TradeSpecCta;
+}
+
 export interface AudienceSection {
   id: AudienceType;
   title: string;

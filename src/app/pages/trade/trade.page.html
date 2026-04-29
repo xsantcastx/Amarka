@@ -10,6 +10,13 @@
 
 <section class="trade-page">
   <div class="page-container">
+    <!-- AMK-85: At-a-Glance Trade Spec card — sticky compact spec panel
+         above the long-form body copy. Substrates · lead time · process,
+         one outlined ghost CTA. -->
+    @if (tradeSpec(); as spec) {
+    <app-trade-spec-card [spec]="spec"></app-trade-spec-card>
+    }
+
     <div class="trade-page__steps">
       @for (step of tradeSteps(); track step.step) {
       <article class="trade-step">
