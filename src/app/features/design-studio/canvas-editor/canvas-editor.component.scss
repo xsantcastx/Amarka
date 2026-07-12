@@ -1,0 +1,489 @@
+@use '../../../../styles/amk-system' as amk;
+
+/* View encapsulation scopes shared classes per component, so the button and
+   type helpers must be included here — the page-level include can't reach in. */
+@include amk.buttons;
+@include amk.type-helpers;
+
+:host {
+  display: block;
+  font-family: var(--amk-font-sans);
+  color: var(--amk-text);
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+/* ─── Top bar ──────────────────────────────────────────────── */
+
+.amk-editor__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.25rem;
+}
+
+.amk-editor__name {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.amk-editor__name-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: none;
+  border: none;
+  font-family: var(--amk-font-display);
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--amk-text);
+  padding: 0;
+
+  &:hover {
+    color: var(--amk-gold-bright);
+  }
+}
+
+.amk-editor__name-edit {
+  font-size: 0.8rem;
+  opacity: 0.6;
+}
+
+.amk-editor__name input {
+  font-family: var(--amk-font-display);
+  font-size: 1.3rem;
+  font-weight: 600;
+  background: var(--amk-bg-soft);
+  border: 1px solid var(--amk-gold);
+  border-radius: 0.5rem;
+  padding: 0.2rem 0.6rem;
+  color: var(--amk-text);
+}
+
+.amk-editor__product-label {
+  font-size: 0.8rem;
+  color: var(--amk-text-faint);
+}
+
+.amk-editor__history {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.amk-editor__history button {
+  padding: 0.5rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid var(--amk-line);
+  background: var(--amk-surface);
+  color: var(--amk-text-soft);
+  font-size: 0.78rem;
+  font-weight: 600;
+
+  &:hover:not(:disabled) {
+    color: var(--amk-text);
+    border-color: var(--amk-gold);
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}
+
+/* ─── View tabs ────────────────────────────────────────────── */
+
+.amk-editor__view-tabs {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+
+.amk-editor__view-tabs button {
+  padding: 0.55rem 1.1rem;
+  border-radius: 999px;
+  border: 1px solid var(--amk-line);
+  background: var(--amk-surface);
+  color: var(--amk-text-soft);
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+
+  &:hover {
+    color: var(--amk-text);
+  }
+
+  &.is-active {
+    background: linear-gradient(135deg, var(--amk-gold-bright), var(--amk-gold));
+    color: var(--amk-on-gold);
+    border-color: transparent;
+  }
+}
+
+/* ─── Layout ───────────────────────────────────────────────── */
+
+.amk-editor__layout {
+  display: grid;
+  gap: 1.75rem;
+  grid-template-columns: 1fr;
+
+  @media (min-width: 900px) {
+    grid-template-columns: minmax(0, 1fr) 16rem;
+    align-items: start;
+  }
+}
+
+/* ─── Canvas ───────────────────────────────────────────────── */
+
+.amk-editor__canvas-wrap {
+  min-width: 0;
+}
+
+.amk-editor__canvas-shell {
+  position: relative;
+  max-width: 32rem;
+  margin: 0 auto;
+}
+
+// Scrollable window around the canvas. Zoom works by widening the canvas
+// (width > 100%), which makes this viewport scroll — Konva re-renders at the
+// larger pixel size via its ResizeObserver, so hit-testing stays exact.
+.amk-editor__viewport {
+  aspect-ratio: 4/5;
+  border-radius: 1.25rem;
+  overflow: auto;
+  background: var(--amk-bg-soft);
+  border: 1px solid var(--amk-line);
+  scrollbar-width: thin;
+}
+
+.amk-editor__canvas {
+  position: relative;
+  aspect-ratio: 4/5;
+  width: 100%;
+}
+
+.amk-editor__zoom {
+  position: absolute;
+  bottom: 0.75rem;
+  right: 0.75rem;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.15rem;
+  padding: 0.25rem;
+  border-radius: 999px;
+  background: var(--amk-surface);
+  border: 1px solid var(--amk-line);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.14);
+
+  button {
+    min-width: 1.9rem;
+    height: 1.9rem;
+    border: none;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--amk-text);
+    font-size: 1.05rem;
+    line-height: 1;
+    cursor: pointer;
+
+    &:hover:not(:disabled) {
+      background: var(--amk-bg-soft);
+    }
+
+    &:disabled {
+      opacity: 0.35;
+      cursor: default;
+    }
+  }
+
+  .amk-editor__zoom-value {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    padding: 0 0.4rem;
+    color: var(--amk-text-soft);
+  }
+}
+
+.amk-editor__silhouette {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  padding: 1rem;
+}
+
+.amk-editor__stage {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+
+.amk-editor__area-guide {
+  position: absolute;
+  z-index: 1;
+  border: 1.5px dashed color-mix(in srgb, var(--amk-gold) 55%, transparent);
+  border-radius: 0.4rem;
+  pointer-events: none;
+
+  span {
+    position: absolute;
+    top: -1.4rem;
+    left: 0;
+    font-size: 0.6rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--amk-gold-bright);
+    white-space: nowrap;
+  }
+}
+
+/* ─── Toolbar under canvas ─────────────────────────────────── */
+
+.amk-editor__toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 1.25rem;
+}
+
+.amk-editor__selected-toolbar {
+  display: flex;
+  gap: 0.3rem;
+  padding: 0.3rem;
+  border-radius: 999px;
+  background: var(--amk-surface);
+  border: 1px solid var(--amk-line);
+}
+
+.amk-editor__selected-toolbar button {
+  width: 2.1rem;
+  height: 2.1rem;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: var(--amk-text-soft);
+  font-size: 0.95rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background: var(--amk-bg-soft);
+    color: var(--amk-text);
+  }
+
+  &.is-danger:hover {
+    background: color-mix(in srgb, var(--amk-ember) 16%, transparent);
+    color: var(--amk-ember);
+  }
+}
+
+.amk-editor__error {
+  text-align: center;
+  color: var(--amk-ember);
+  font-size: 0.85rem;
+  margin-top: 0.75rem;
+}
+
+/* ─── Layers panel ─────────────────────────────────────────── */
+
+.amk-editor__layers {
+  padding: 1.25rem;
+  border-radius: 1.1rem;
+  background: var(--amk-surface);
+  border: 1px solid var(--amk-line);
+}
+
+/* ─── Product options panel ────────────────────────────────── */
+
+.amk-editor__options {
+  display: grid;
+  gap: 1rem;
+  padding-bottom: 1.25rem;
+  margin-bottom: 1.25rem;
+  border-bottom: 1px solid var(--amk-line);
+}
+
+.amk-editor__options-field {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.amk-editor__options-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--amk-text-faint);
+}
+
+.amk-editor__options-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+
+  button {
+    padding: 0.35rem 0.75rem;
+    border-radius: 999px;
+    border: 1px solid var(--amk-line);
+    background: var(--amk-bg-soft);
+    color: var(--amk-text-soft);
+    font-family: var(--amk-font-sans);
+    font-size: 0.74rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+
+    &:hover {
+      color: var(--amk-text);
+    }
+
+    &.is-active {
+      border-color: var(--amk-gold);
+      color: var(--amk-gold-bright);
+      background: color-mix(in srgb, var(--amk-gold) 12%, transparent);
+    }
+  }
+}
+
+.amk-editor__options-colors {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+
+  button {
+    width: 1.7rem;
+    height: 1.7rem;
+    border-radius: 50%;
+    border: 2px solid var(--amk-line);
+    cursor: pointer;
+    padding: 0;
+    transition: transform 0.15s ease, border-color 0.15s ease;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+
+    &.is-active {
+      border-color: var(--amk-gold);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--amk-gold) 25%, transparent);
+    }
+  }
+}
+
+.amk-editor__options-qty {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.25rem 0.4rem;
+  border-radius: 999px;
+  border: 1px solid var(--amk-line);
+  background: var(--amk-bg-soft);
+  width: fit-content;
+
+  button {
+    width: 1.6rem;
+    height: 1.6rem;
+    border-radius: 50%;
+    border: 1px solid var(--amk-line);
+    background: var(--amk-surface);
+    color: var(--amk-text);
+    font-size: 0.95rem;
+    line-height: 1;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+      border-color: var(--amk-gold);
+    }
+  }
+
+  span {
+    min-width: 2ch;
+    text-align: center;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--amk-text);
+  }
+}
+
+.amk-editor__layers-empty {
+  font-size: 0.82rem;
+  color: var(--amk-text-faint);
+  line-height: 1.5;
+}
+
+.amk-editor__layers-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.4rem;
+}
+
+.amk-editor__layers-list li button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem;
+  border-radius: 0.6rem;
+  border: 1px solid transparent;
+  background: transparent;
+  text-align: left;
+
+  &:hover {
+    background: var(--amk-bg-soft);
+  }
+
+  img {
+    width: 2rem;
+    height: 2rem;
+    object-fit: contain;
+    border-radius: 0.35rem;
+    background: var(--amk-bg-soft);
+    flex-shrink: 0;
+  }
+
+  span {
+    font-size: 0.78rem;
+    color: var(--amk-text-soft);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    // Flex items default to min-width auto and refuse to shrink below their
+    // content, which lets long filenames spill out of the panel.
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+}
+
+.amk-editor__layers-list li.is-active button {
+  border-color: var(--amk-gold);
+  background: color-mix(in srgb, var(--amk-gold) 10%, transparent);
+}
+
+/* ─── Footer nav ───────────────────────────────────────────── */
+
+.amk-editor__footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--amk-line);
+}

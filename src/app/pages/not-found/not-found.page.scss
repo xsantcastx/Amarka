@@ -1,29 +1,30 @@
-/* ============================================================
-   AMK-51 — Branded Error State Page
-   Paired with not-found.page.ts (404 / 500 / offline states).
-
-   Locked to the 6-token Amarka Brand Bible palette — all colors
-   flow through the tokens declared in src/styles.scss:
-     --amarka-bg / --amarka-surface / --amarka-gold /
-     --amarka-text / --amarka-text-secondary / --amarka-text-muted
-
-   Typography:
-     - Playfair Display for the state code + heading
-       (Zone 1 — large text, gold on #181818 passes WCAG ≥18px)
-     - Source Sans 3 for eyebrow, body, and card copy
-
-   Motion tokens reuse AMK-62 (scroll-reveal system) shared
-   --amarka-duration-{fast,base,slow} and --amarka-ease-out with safe fallbacks.
-   ============================================================ */
+@use '../../../styles/amk-system' as amk;
 
 :host {
   display: block;
 }
 
+.amk-error-page {
+  @include amk.tokens;
+  background: var(--amk-bg);
+  color: var(--amk-text);
+  font-family: var(--amk-font-sans);
+  transition: background 0.4s ease, color 0.4s ease;
+}
+
+.amk-error-page[data-theme='light'] {
+  @include amk.tokens-light;
+}
+
+.page-container {
+  width: min(1180px, 100% - 3rem);
+  margin-inline: auto;
+}
+
+@include amk.buttons;
+
 .amk-error {
-  // Full-viewport centered state card on the pure brand background.
   padding: calc(var(--nav-height, 72px) + 5rem) 0 5rem;
-  background: var(--amarka-bg);
   text-align: center;
 }
 
@@ -37,47 +38,49 @@
 
 .amk-error__eyebrow {
   margin: 0;
-  font-family: var(--font-sans);
+  font-family: var(--amk-font-sans);
   font-size: 0.75rem;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--amarka-text-muted); // #909090 on #181818 = 5.73:1 AA ✅
+  color: var(--amk-ember);
 }
 
 .amk-error__code {
-  font-family: var(--font-display);
+  font-family: var(--amk-font-display);
   font-size: clamp(5rem, 14vw, 9rem);
   font-weight: 700;
   line-height: 0.9;
   letter-spacing: -0.02em;
-  color: var(--amarka-gold); // large gold text on #181818 ≥18px → Zone 1 safe
-  filter: drop-shadow(0 2px 12px rgba(144, 96, 48, 0.18));
+  color: transparent;
+  background: linear-gradient(160deg, var(--amk-gold-bright), var(--amk-gold) 70%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  filter: drop-shadow(0 12px 32px color-mix(in srgb, var(--amk-gold) 25%, transparent));
 }
 
 .amk-error__heading {
   margin: 0;
-  font-family: var(--font-display);
-  font-size: clamp(2rem, 4vw, 3rem);
+  font-family: var(--amk-font-display);
   font-weight: 600;
+  font-size: clamp(2rem, 4vw, 3rem);
   line-height: 1.15;
-  color: var(--amarka-text); // #f0f0f0 on #181818 = 16.16:1 AAA ✅
+  color: var(--amk-text);
   max-width: 32ch;
 }
 
 .amk-error__sub {
   margin: 0;
-  font-family: var(--font-sans);
   font-size: 1rem;
   line-height: 1.65;
-  color: var(--amarka-text-secondary); // #c0c0c0 on #181818 = 10.08:1 AAA ✅
+  color: var(--amk-text-soft);
   max-width: 44ch;
 }
 
 .amk-error__rule {
   width: 3.5rem;
   height: 1px;
-  background: var(--amarka-gold); // 1px gold divider — decorative, Zone 1 ✅
+  background: var(--amk-gold);
   margin: 0.5rem 0 0.25rem;
 }
 
@@ -91,29 +94,26 @@
 
 .amk-error__contact {
   margin: 1.25rem 0 0;
-  font-family: var(--font-sans);
   font-size: 0.875rem;
-  color: var(--amarka-text-muted); // #909090 on #181818 = 5.73:1 AA ✅
+  color: var(--amk-text-faint);
 }
 
 .amk-error__contact-link {
-  color: var(--amarka-text-secondary); // #c0c0c0 on #181818 = 10.08:1 AAA ✅
+  color: var(--amk-text-soft);
   text-decoration: underline;
-  text-decoration-color: var(--amarka-gold);
+  text-decoration-color: var(--amk-gold);
   text-underline-offset: 3px;
   text-decoration-thickness: 1px;
-  transition:
-    color var(--amarka-duration-fast, 150ms) var(--amarka-ease-out, ease),
-    text-decoration-color var(--amarka-duration-fast, 150ms) var(--amarka-ease-out, ease);
+  transition: color 0.15s ease, text-decoration-color 0.15s ease;
 
   &:hover,
   &:focus-visible {
-    color: var(--amarka-text);
-    text-decoration-color: var(--amarka-text);
+    color: var(--amk-text);
+    text-decoration-color: var(--amk-text);
   }
 
   &:focus-visible {
-    outline: 2px solid var(--amarka-gold);
+    outline: 2px solid var(--amk-gold);
     outline-offset: 3px;
     border-radius: 2px;
   }
@@ -123,23 +123,23 @@
 
 .amk-error__continue {
   padding: 0 0 5rem;
-  background: var(--amarka-bg);
 }
 
 .amk-error__continue-label {
   margin: 0 0 1.25rem;
-  font-family: var(--font-sans);
   font-size: 0.75rem;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--amarka-text-muted); // #909090 on #181818 = 5.73:1 AA ✅
+  color: var(--amk-text-faint);
   text-align: center;
 }
 
 .amk-error__continue-grid {
   display: grid;
   gap: 1rem;
+  max-width: 44rem;
+  margin: 0 auto;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
 }
 
@@ -147,44 +147,39 @@
   display: grid;
   gap: 0.45rem;
   padding: 1.5rem 1.75rem;
-  border-radius: 2px; // Brand Bible 2px radius ✅
-  background: var(--amarka-surface); // #484848 — Zone 2 card surface ✅
-  border: 1px solid transparent;
-  border-left: 2px solid var(--amarka-gold); // gold as decorative border ✅
+  border-radius: 1rem;
+  background: var(--amk-surface);
+  border: 1px solid var(--amk-line);
+  border-left: 2px solid var(--amk-gold);
   text-decoration: none;
-  color: var(--amarka-text); // #f0f0f0 on #484848 = 8.56:1 AAA ✅
-  transition:
-    transform var(--amarka-duration-base, 400ms) var(--amarka-ease-out, ease),
-    border-color var(--amarka-duration-base, 400ms) var(--amarka-ease-out, ease);
+  color: var(--amk-text);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
 
   &:hover,
   &:focus-visible {
     transform: translateY(-2px);
-    border-color: var(--amarka-gold);
+    border-color: var(--amk-gold);
     text-decoration: none;
   }
 
   &:focus-visible {
-    outline: 2px solid var(--amarka-gold);
+    outline: 2px solid var(--amk-gold);
     outline-offset: 2px;
   }
 }
 
 .amk-error__card-title {
-  font-family: var(--font-display);
+  font-family: var(--amk-font-display);
   font-size: 1.125rem;
   font-weight: 600;
-  color: var(--amarka-text); // #f0f0f0 on #484848 = 8.56:1 AAA ✅
+  color: var(--amk-text);
 }
 
 .amk-error__card-desc {
-  font-family: var(--font-sans);
   font-size: 0.875rem;
   line-height: 1.55;
-  color: var(--amarka-text-secondary); // #c0c0c0 on #484848 = 5.10:1 AA ✅
+  color: var(--amk-text-soft);
 }
-
-/* ---------- Responsive tightening ---------- */
 
 @media (max-width: 640px) {
   .amk-error {
@@ -197,8 +192,7 @@
     max-width: 18rem;
   }
 
-  .amk-error__actions .btn-primary,
-  .amk-error__actions .btn-outline {
+  .amk-error__actions .amk-btn {
     width: 100%;
   }
 
@@ -206,8 +200,6 @@
     padding-bottom: 3.5rem;
   }
 }
-
-/* ---------- Reduced motion — honor user preference ---------- */
 
 @media (prefers-reduced-motion: reduce) {
   .amk-error__card,

@@ -3,6 +3,7 @@ import { CommonModule, isPlatformServer } from '@angular/common';
 import { Meta, Title } from '@angular/platform-browser';
 import { RESPONSE } from './maintenance.tokens';
 import { BrandConfigService } from '../../core/services/brand-config.service';
+import { AmkThemeService } from '../../shared/amk-theme/amk-theme.service';
 
 @Component({
   selector: 'app-maintenance',
@@ -16,13 +17,15 @@ export class MaintenancePage implements OnInit {
   private title = inject(Title);
   private platformId = inject(PLATFORM_ID);
   private brandConfig = inject(BrandConfigService);
+  private themeService = inject(AmkThemeService);
   private socialLinks = this.brandConfig.nav.social as Array<{ platform: string; href: string }>;
-  
+
   // Expected return time (in hours from now)
   expectedReturnTime = new Date(Date.now() + 2 * 60 * 60 * 1000); // 2 hours
   retryAfterSeconds = 7200; // 2 hours in seconds
   readonly brandName = this.brandConfig.siteName;
-  readonly brandLogo = this.brandConfig.site.brand.logo;
+  readonly theme = this.themeService.theme;
+  readonly brandLogo = this.themeService.logoSrc;
   readonly maintenanceDescription =
     this.brandConfig.site.maintenance?.description ||
     `${this.brandName} is currently undergoing scheduled maintenance. We will be back soon.`;

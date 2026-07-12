@@ -41,6 +41,7 @@ export interface SiteConfig {
   };
   contact: {
     email: string;
+    email2?: string;
     phone?: string;
     phone2?: string;
     whatsapp?: string;

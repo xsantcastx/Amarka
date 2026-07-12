@@ -10,7 +10,9 @@
   "permissions": {
     "allow": [
       "Skill(optimize-memory-usage)",
-      "Skill(optimize-memory-usage:*)"
+      "Skill(optimize-memory-usage:*)",
+      "Bash(sed -E 's/=.*/=<set>/' .env)",
+      "Bash(sed -E 's/=.*/=<set>/' functions/.env)"
     ]
   },
   "hooks": {

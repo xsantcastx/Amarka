@@ -1,41 +1,209 @@
-// Maintenance Page Styles
+@use '../../../styles/amk-system' as amk;
 
 :host {
   display: block;
   min-height: 100vh;
 }
 
-// Animation for the maintenance icon
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
+.amk-maint {
+  @include amk.tokens;
+  position: relative;
+  overflow: hidden;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.5rem;
+  background: var(--amk-bg);
+  color: var(--amk-text);
+  font-family: var(--amk-font-sans);
+  animation: amkMaintFadeIn 0.5s ease-in;
+  transition: background 0.4s ease, color 0.4s ease;
+}
+
+.amk-maint[data-theme='light'] {
+  @include amk.tokens-light;
+}
+
+.amk-maint em {
+  font-style: italic;
+  color: var(--amk-gold-bright);
+}
+
+@include amk.buttons;
+
+@keyframes amkMaintFadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.amk-maint__glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  opacity: 0.35;
+  animation: amkMaintPulse 4s ease-in-out infinite;
+}
+
+.amk-maint__glow--1 {
+  width: 24rem;
+  height: 24rem;
+  top: -6rem;
+  left: -6rem;
+  background: color-mix(in srgb, var(--amk-gold) 40%, transparent);
+}
+
+.amk-maint__glow--2 {
+  width: 20rem;
+  height: 20rem;
+  bottom: -6rem;
+  right: -6rem;
+  background: color-mix(in srgb, var(--amk-ember) 30%, transparent);
+  animation-delay: 2s;
+}
+
+@keyframes amkMaintPulse {
+  0%, 100% { opacity: 0.25; }
+  50% { opacity: 0.45; }
+}
+
+.amk-maint__inner {
+  position: relative;
+  z-index: 1;
+  max-width: 34rem;
+  margin: 0 auto;
+  text-align: center;
+  display: grid;
+  justify-items: center;
+  gap: 1rem;
+}
+
+.amk-maint__logo {
+  height: 3rem;
+  width: auto;
+  object-fit: contain;
+  margin-bottom: 0.5rem;
+}
+
+.amk-maint__icon {
+  color: var(--amk-gold-bright);
+  animation: amkMaintPulse 2.4s ease-in-out infinite;
+}
+
+.amk-maint__title {
+  font-family: var(--amk-font-display);
+  font-weight: 600;
+  font-size: clamp(2rem, 4.5vw, 2.9rem);
+  line-height: 1.1;
+  margin: 0;
+  color: var(--amk-text);
+}
+
+.amk-maint__desc {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--amk-text-soft);
+  margin: 0 0 0.5rem;
+}
+
+.amk-maint__status {
+  width: 100%;
+  padding: 1.75rem;
+  border-radius: 1.25rem;
+  background: var(--amk-surface);
+  border: 1px solid var(--amk-line);
+  display: grid;
+  gap: 0.6rem;
+  margin: 0.5rem 0;
+}
+
+.amk-maint__status-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+}
+
+.amk-maint__pulse-dot {
+  position: relative;
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+  background: var(--amk-gold-bright);
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: var(--amk-gold-bright);
+    animation: amkMaintPing 1.6s cubic-bezier(0, 0, 0.2, 1) infinite;
   }
 }
 
-// Add smooth fade-in animation
-:host ::ng-deep {
-  animation: fadeIn 0.5s ease-in;
+@keyframes amkMaintPing {
+  0% { transform: scale(1); opacity: 0.7; }
+  100% { transform: scale(2.4); opacity: 0; }
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+.amk-maint__status-label {
+  font-weight: 700;
+  color: var(--amk-gold-bright);
+  font-size: 0.9rem;
+}
+
+.amk-maint__status-detail {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--amk-text-soft);
+  line-height: 1.6;
+
+  strong {
+    color: var(--amk-text);
   }
 }
 
-// Ensure links are accessible
-a {
-  &:focus-visible {
-    outline: 2px solid var(--amarka-gold);
-    outline-offset: 4px;
-    border-radius: 2px;
+.amk-maint__status-note {
+  margin: 0.5rem 0 0;
+  font-size: 0.78rem;
+  color: var(--amk-text-faint);
+}
+
+.amk-maint__cta-label {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--amk-text-soft);
+}
+
+.amk-maint__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+  justify-content: center;
+
+  a {
+    text-decoration: none;
+  }
+}
+
+.amk-maint__copyright {
+  margin: 1rem 0 0;
+  font-size: 0.75rem;
+  color: var(--amk-text-faint);
+}
+
+a:focus-visible {
+  outline: 2px solid var(--amk-gold);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .amk-maint,
+  .amk-maint__glow,
+  .amk-maint__icon,
+  .amk-maint__pulse-dot::before {
+    animation: none;
   }
 }

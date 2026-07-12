@@ -3,6 +3,7 @@
 @use 'tailwindcss/utilities';
 @use './styles/theme' as theme;
 @use './styles/buttons';
+@use './styles/material-swatches';
 @use './styles/admin-mobile';
 @use './styles/admin-theme';
 @use './styles/print';
@@ -114,7 +115,7 @@
   --shadow-soft: 0 28px 60px -38px rgba(0, 0, 0, 0.12);
   --shadow-hover: 0 22px 46px -34px rgba(0, 0, 0, 0.16);
   --shadow-focus: 0 0 0 3px color-mix(in srgb, var(--ts-accent) 30%, transparent), 0 18px 42px -30px rgba(0, 0, 0, 0.18);
-  --nav-height: 6.5rem;
+  --nav-height: 4.5rem; // matches app-navbar's actual rendered height (see navbar.component.scss .site-nav__inner)
   --content-offset: clamp(2.5rem, 6vw, 3.75rem);
   --section-spacing: clamp(3rem, 8vw, 5rem);
   --container-inline-padding: clamp(1.25rem, 5vw, 2.5rem);
@@ -146,9 +147,14 @@
   --btn-primary-hover-shadow: none;
 }
 
+// Below 768px, SmartStickyNavDirective forces the navbar into its compact
+// "scrolled" state unconditionally (see smart-sticky-nav.directive.ts
+// checkScrollState / DEFAULT_STICKY_NAV_CONFIG.mobileBreakpoint), which
+// shrinks .site-nav__inner to 3.5rem regardless of scroll position — so
+// --nav-height must match that compact height here, not the full 4.5rem.
 @media (max-width: 768px) {
   :root {
-    --nav-height: 6rem;
+    --nav-height: 3.5rem;
     --content-offset: clamp(2rem, 7vw, 3rem);
     --section-spacing: clamp(2.75rem, 10vw, 4.25rem);
     --container-inline-padding: clamp(1.1rem, 6vw, 1.9rem);
@@ -157,7 +163,7 @@
 
 @media (max-width: 480px) {
   :root {
-    --nav-height: 5.5rem;
+    --nav-height: 3.5rem;
     --content-offset: clamp(1.75rem, 9vw, 2.6rem);
     --section-spacing: clamp(2.25rem, 12vw, 3.75rem);
   }

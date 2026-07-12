@@ -1,42 +1,49 @@
-<section class="bg-ts-bg min-h-screen">
-  <app-page-header
-    title="privacy.title"
-    subtitle="privacy.subtitle"
-    [breadcrumbs]="breadcrumbs"
-    icon="contact">
-  </app-page-header>
+<div class="amk-legal" [attr.data-theme]="theme()">
 
-  <div class="page-container py-12 space-y-8 max-w-4xl">
-    <div class="rounded-2xl bg-ts-paper border border-ts-line shadow-sm p-6 space-y-3">
-      <p class="text-sm text-ts-ink-soft">{{ 'privacy.last_updated' | translate }}</p>
-      <p class="text-ts-ink-soft">{{ 'privacy.intro' | translate }}</p>
+  <section class="amk-legal-hero">
+    <div class="page-container amk-legal-hero__inner">
+      <span class="amk-kicker">Legal</span>
+      <h1 class="amk-legal-hero__title">{{ 'privacy.title' | translate }}</h1>
+      <p class="amk-legal-hero__subtitle">{{ 'privacy.subtitle' | translate }}</p>
     </div>
+  </section>
 
-    <div class="rounded-2xl bg-ts-paper border border-ts-line shadow-sm p-6 space-y-4">
-      <h2 class="text-xl font-semibold text-ts-ink">{{ 'privacy.data.heading' | translate }}</h2>
-      <p class="text-ts-ink-soft">{{ 'privacy.data.copy' | translate }}</p>
-      <ul class="list-disc pl-5 space-y-2 text-ts-ink-soft">
-        <li>{{ 'privacy.data.items.account' | translate }}</li>
-        <li>{{ 'privacy.data.items.orders' | translate }}</li>
-        <li>{{ 'privacy.data.items.analytics' | translate }}</li>
-      </ul>
-    </div>
+  <section class="amk-legal-body">
+    <div class="page-container amk-legal-stack">
 
-    <div class="rounded-2xl bg-ts-paper border border-ts-line shadow-sm p-6 space-y-4">
-      <h2 class="text-xl font-semibold text-ts-ink">{{ 'privacy.cookies.heading' | translate }}</h2>
-      <p class="text-ts-ink-soft">{{ 'privacy.cookies.copy' | translate }}</p>
-      <a routerLink="/cookie-policy" class="text-ts-accent underline">{{ 'privacy.cookies.link' | translate }}</a>
-    </div>
+      <div class="amk-legal-card">
+        <p class="amk-legal-card__meta">{{ 'privacy.last_updated' | translate }}</p>
+        <p>{{ 'privacy.intro' | translate }}</p>
+      </div>
 
-    <div class="rounded-2xl bg-ts-paper border border-ts-line shadow-sm p-6 space-y-4">
-      <h2 class="text-xl font-semibold text-ts-ink">{{ 'privacy.security.heading' | translate }}</h2>
-      <p class="text-ts-ink-soft">{{ 'privacy.security.copy' | translate }}</p>
-    </div>
+      <div class="amk-legal-card">
+        <h2>{{ 'privacy.data.heading' | translate }}</h2>
+        <p>{{ 'privacy.data.copy' | translate }}</p>
+        <ul>
+          <li>{{ 'privacy.data.items.account' | translate }}</li>
+          <li>{{ 'privacy.data.items.orders' | translate }}</li>
+          <li>{{ 'privacy.data.items.analytics' | translate }}</li>
+        </ul>
+      </div>
 
-    <div class="rounded-2xl bg-ts-paper border border-ts-line shadow-sm p-6 space-y-4">
-      <h2 class="text-xl font-semibold text-ts-ink">{{ 'privacy.contact.heading' | translate }}</h2>
-      <p class="text-ts-ink-soft">{{ 'privacy.contact.copy' | translate }}</p>
-      <a href="mailto:{{ 'privacy.contact.email' | translate }}" class="text-ts-accent underline">{{ 'privacy.contact.email' | translate }}</a>
+      <div class="amk-legal-card">
+        <h2>{{ 'privacy.cookies.heading' | translate }}</h2>
+        <p>{{ 'privacy.cookies.copy' | translate }}</p>
+        <a routerLink="/cookie-policy">{{ 'privacy.cookies.link' | translate }}</a>
+      </div>
+
+      <div class="amk-legal-card">
+        <h2>{{ 'privacy.security.heading' | translate }}</h2>
+        <p>{{ 'privacy.security.copy' | translate }}</p>
+      </div>
+
+      <div class="amk-legal-card">
+        <h2>{{ 'privacy.contact.heading' | translate }}</h2>
+        <p>{{ 'privacy.contact.copy' | translate }}</p>
+        <a href="mailto:{{ 'privacy.contact.email' | translate }}">{{ 'privacy.contact.email' | translate }}</a>
+      </div>
+
     </div>
-  </div>
-</section>
+  </section>
+
+</div>

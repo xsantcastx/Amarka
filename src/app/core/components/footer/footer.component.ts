@@ -2,6 +2,7 @@ import { Component, inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { BrandConfigService } from '../../services/brand-config.service';
+import { AmkThemeService } from '../../../shared/amk-theme/amk-theme.service';
 
 @Component({
   selector: 'app-footer',
@@ -13,8 +14,11 @@ import { BrandConfigService } from '../../services/brand-config.service';
 export class FooterComponent {
   protected brand = inject(BrandConfigService);
   private platformId = inject(PLATFORM_ID);
+  private themeService = inject(AmkThemeService);
   protected currentYear = new Date().getFullYear();
   protected socialLinks = this.brand.nav.social;
+  protected theme = this.themeService.theme;
+  protected logoSrc = this.themeService.logoSrc;
 
   protected scrollToTop(): void {
     if (isPlatformBrowser(this.platformId)) {

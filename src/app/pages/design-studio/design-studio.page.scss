@@ -1,0 +1,156 @@
+@use '../../../styles/amk-system' as amk;
+
+:host {
+  display: block;
+}
+
+.amk-studio {
+  @include amk.tokens;
+  font-family: var(--amk-font-sans);
+  background: var(--amk-bg);
+  color: var(--amk-text);
+  min-height: 100vh;
+  transition: background 0.4s ease, color 0.4s ease;
+}
+
+.amk-studio[data-theme='light'] {
+  @include amk.tokens-light;
+}
+
+.amk-studio em {
+  font-style: italic;
+}
+
+.page-container {
+  width: min(1180px, 100% - 3rem);
+  margin-inline: auto;
+}
+
+@include amk.hero-fade-keyframes;
+@include amk.theme-toggle;
+@include amk.buttons;
+@include amk.type-helpers;
+
+/* ─── HERO ─────────────────────────────────────────────────── */
+
+.amk-studio-hero {
+  position: relative;
+  overflow: hidden;
+  padding: calc(var(--nav-height, 4.5rem) + 3rem) 0 3rem;
+  text-align: center;
+  background:
+    radial-gradient(ellipse 70% 55% at 50% 0%, color-mix(in srgb, var(--amk-gold) 14%, transparent), transparent 60%);
+}
+
+.amk-studio-hero__grain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 200px;
+}
+
+.amk-studio-hero__inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: center;
+  gap: 0.85rem;
+  max-width: 42rem;
+  margin-inline: auto;
+}
+
+.amk-studio-hero__logo {
+  height: clamp(2rem, 4vw, 2.75rem);
+  width: auto;
+  object-fit: contain;
+  margin-bottom: 0.25rem;
+}
+
+.amk-studio-hero__title {
+  font-family: var(--amk-font-display);
+  font-weight: 600;
+  font-size: clamp(1.9rem, 4vw, 2.9rem);
+  line-height: 1.12;
+  margin: 0;
+  color: var(--amk-text);
+}
+
+.amk-studio-hero__subtitle {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--amk-text-soft);
+  max-width: 40ch;
+  margin: 0 0 0.5rem;
+}
+
+/* ─── STEP INDICATOR ───────────────────────────────────────── */
+
+.amk-studio-steps {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.amk-studio-step {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.9rem 0.5rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid var(--amk-line);
+  background: var(--amk-surface);
+  opacity: 0.55;
+  transition: opacity 0.25s ease, border-color 0.25s ease;
+
+  &.is-active,
+  &.is-done {
+    opacity: 1;
+  }
+
+  &.is-active {
+    border-color: var(--amk-gold);
+  }
+}
+
+.amk-studio-step__num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  background: var(--amk-bg-soft);
+  color: var(--amk-text-soft);
+  font-size: 0.75rem;
+  font-weight: 700;
+
+  .is-active & {
+    background: linear-gradient(135deg, var(--amk-gold-bright), var(--amk-gold));
+    color: var(--amk-on-gold);
+  }
+
+  .is-done & {
+    background: var(--amk-gold);
+    color: var(--amk-on-gold);
+  }
+}
+
+.amk-studio-step__label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: var(--amk-text);
+
+  @media (max-width: 560px) {
+    display: none;
+  }
+}
+
+/* ─── BODY ─────────────────────────────────────────────────── */
+
+.amk-studio-body {
+  padding: 0 0 5rem;
+}

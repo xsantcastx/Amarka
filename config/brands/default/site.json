@@ -11,7 +11,8 @@
     "favicon": "/Logo Clear.png"
   },
   "contact": {
-    "email": "studio@amarka.co",
+    "email": "diego@amarka.co",
+    "email2": "jessica@amarka.co",
     "phone": "+1 (203) 555-0148",
     "phone2": "",
     "address": "Stamford, CT",
@@ -69,8 +70,7 @@
       { "label": "Enquire", "href": "/enquire" }
     ],
     "social": [
-      { "platform": "instagram", "href": "https://instagram.com/amarka.co" },
-      { "platform": "linkedin", "href": "https://www.linkedin.com/company/amarka-co/" }
+      { "platform": "instagram", "href": "https://instagram.com/amarka.co" }
     ]
   },
   "seo": {
@@ -91,17 +91,17 @@
   "legal": {
     "businessName": "Amarka",
     "taxId": "",
-    "supportEmail": "studio@amarka.co",
+    "supportEmail": "diego@amarka.co",
     "returnPolicyUrl": "/privacy-policy",
     "privacyPolicyUrl": "/privacy-policy",
     "termsUrl": "/terms"
   },
   "maintenance": {
     "title": "Studio maintenance",
-    "description": "The Amarka site is temporarily offline for updates. Email studio@amarka.co for urgent project enquiries."
+    "description": "The Amarka site is temporarily offline for updates. Email diego@amarka.co or jessica@amarka.co for urgent project enquiries."
   },
   "notifications": {
     "emailFromName": "Amarka",
-    "emailFrom": "studio@amarka.co"
+    "emailFrom": "diego@amarka.co"
   }
 }

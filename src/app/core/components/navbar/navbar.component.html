@@ -1,15 +1,13 @@
-<header class="site-nav" [class.site-nav--scrolled]="scrolled()" amarkaSmartStickyNav>
+<header class="site-nav" [class.site-nav--scrolled]="scrolled()" [attr.data-theme]="theme()" amarkaSmartStickyNav>
   <div class="site-nav__inner">
     <!-- Brand -->
-    <a routerLink="/" class="site-nav__brand navbar-logo" aria-label="Amarka home" (click)="closeMobile()">
-      <img [src]="logoSrc" [alt]="logoAlt" class="site-nav__logo" />
-      <div class="site-nav__copy">
-        <span class="site-nav__name">{{ brandName }}</span>
-        <span class="site-nav__tag">Precision Laser Engraving</span>
-      </div>
+    <a routerLink="/" class="site-nav__brand navbar-logo" aria-label="Amarka home">
+      <img [src]="logoSrc()" [alt]="logoAlt" class="site-nav__logo" />
+      <span class="site-nav__tag">{{ tagline }}</span>
     </a>
 
-    <!-- Desktop links -->
+    <!-- Desktop links (only rendered once pages exist to link to) -->
+    @if (navLinks.length) {
     <nav class="site-nav__links" aria-label="Primary navigation">
       @for (link of navLinks; track link.href) {
       <a [routerLink]="link.href"
@@ -18,26 +16,14 @@
         {{ link.label }}
       </a>
       }
-      <a routerLink="/enquire" class="site-nav__cta navbar-cta">
-        <span class="site-nav__cta-text">Get a Quote</span>
-        <svg class="site-nav__cta-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M5 12h14M12 5l7 7-7 7"/>
-        </svg>
-      </a>
     </nav>
+    }
 
-    <!-- Mobile toggle -->
-    <button class="site-nav__menu"
-            type="button"
-            (click)="toggleMobile()"
-            [attr.aria-expanded]="mobileOpen"
-            aria-label="Toggle navigation">
-      <span [class.open]="mobileOpen"></span>
-      <span [class.open]="mobileOpen"></span>
-      <span [class.open]="mobileOpen"></span>
-    </button>
+    <a routerLink="/enquire" class="amk-btn amk-btn--primary site-nav__cta navbar-cta">
+      <span>Get a Free Quote</span>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M5 12h14M12 5l7 7-7 7"/>
+      </svg>
+    </a>
   </div>
-
-  <!-- AMK-65: Mobile trade-optimized nav drawer (full-screen overlay) -->
-  <app-mobile-nav-drawer (drawerClose)="onDrawerClosed()"></app-mobile-nav-drawer>
 </header>

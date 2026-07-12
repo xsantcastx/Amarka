@@ -1100,21 +1100,21 @@
   },
   "privacy": {
     "title": "Privacy Policy",
-    "subtitle": "How we protect your data while crafting your engraved gifts",
-    "last_updated": "Last updated: January 2025",
-    "intro": "Your trust matters. We collect only what we need to personalize and fulfill your engraved orders, and we keep it secure.",
+    "subtitle": "How we protect your information while bringing your brand to life",
+    "last_updated": "Last updated: July 2026",
+    "intro": "Your trust matters. We collect only what we need to quote, produce, and deliver your branded merchandise, and we keep it secure.",
     "data": {
       "heading": "Data we collect",
-      "copy": "We collect contact details, shipping information, and order history to fulfill and support your engraving purchases.",
+      "copy": "We collect contact details, project briefs, and brand assets you share with us to quote and fulfill your order.",
       "items": {
-        "account": "Account details (name, email, phone) to manage your profile and support requests.",
-        "orders": "Order and shipping details for engraving, personalization, and delivery.",
-        "analytics": "Anonymous analytics to improve our catalog and site experience."
+        "account": "Contact details (name, email, phone, company) to respond to your enquiry and manage the relationship.",
+        "orders": "Project details, logo/brand files, and production specs needed to quote and produce your merchandise.",
+        "analytics": "Anonymous analytics to improve our site experience."
       }
     },
     "cookies": {
       "heading": "Cookies",
-      "copy": "We use essential cookies for security and checkout, plus optional analytics/marketing. You can manage them in the cookie banner.",
+      "copy": "We use essential cookies for security, plus optional analytics/marketing. You can manage them in the cookie banner.",
       "link": "Read the full cookie policy"
     },
     "security": {
@@ -1129,23 +1129,23 @@
   },
   "cookiePolicy": {
     "title": "Cookie Policy",
-    "subtitle": "Our approach to cookies for a smooth engraving experience",
-    "last_updated": "Last updated: January 2025",
-    "intro": "We use cookies to keep your cart, remember preferences, and improve our engraving storefront.",
+    "subtitle": "Our approach to cookies for a smooth site experience",
+    "last_updated": "Last updated: July 2026",
+    "intro": "We use cookies to keep the site secure, remember your preferences, and understand how our site is used.",
     "what": {
       "heading": "What are cookies?",
       "copy": "Small text files stored on your device that help the site function, stay secure, and remember your preferences."
     },
     "types": {
       "heading": "Types of cookies we use",
-      "essential": "Essential: security, authentication, cart, and checkout.",
-      "analytics": "Analytics: anonymous usage to improve products and navigation.",
+      "essential": "Essential: security and core site functionality.",
+      "analytics": "Analytics: anonymous usage to improve our site and content.",
       "marketing": "Marketing: personalize offers and measure campaigns.",
       "preferences": "Preferences: remember language, region, and display settings."
     },
     "control": {
       "heading": "How to control cookies",
-      "copy": "Use the banner controls on our site, your browser settings, or clear cookies. Essential cookies are required for checkout."
+      "copy": "Use the banner controls on our site, your browser settings, or clear cookies at any time. Essential cookies are required for the site to function."
     },
     "contact": {
       "heading": "Contact",
@@ -1155,24 +1155,24 @@
   },
   "terms": {
     "title": "Terms of Service",
-    "subtitle": "The rules for shopping engraved gifts with us",
-    "last_updated": "Last updated: January 2025",
-    "intro": "By using this site or placing an order, you agree to these terms. They ensure we can craft, personalize, and deliver your engraved items reliably.",
+    "subtitle": "The rules for working with Amarka on branded merchandise",
+    "last_updated": "Last updated: July 2026",
+    "intro": "By using this site or submitting a project enquiry, you agree to these terms. They ensure we can quote, produce, and deliver your branded merchandise reliably.",
     "use": {
       "heading": "Use of the site",
-      "copy": "You agree to provide accurate information, respect intellectual property, and not misuse the site. Accounts are for your personal use; keep your login secure."
+      "copy": "You agree to provide accurate information, respect intellectual property, and not misuse the site. You are responsible for the accuracy of any brand assets, logos, or artwork you submit."
     },
     "orders": {
-      "heading": "Orders, engraving, and payment",
-      "copy": "Personalized orders begin production after payment. Proofs are produced only when stated. Prices and availability may change. Taxes and shipping are shown at checkout. You authorize us to engrave text or artwork you provide."
+      "heading": "Quotes, production, and payment",
+      "copy": "Production begins after you approve a quote and proof, and payment terms are confirmed directly with our team. Prices and turnaround are quoted per project. You authorize us to reproduce the logo, text, or artwork you provide on the agreed products."
     },
     "returns": {
-      "heading": "Returns and cancellations",
-      "copy": "Engraved or personalized items are final sale except for defects or errors on our part. Report issues within 7 days of delivery with photos so we can remake or refund when appropriate."
+      "heading": "Returns and corrections",
+      "copy": "Custom branded and personalized items are final sale except for defects or production errors on our part. Report issues within 7 days of delivery with photos so we can remake or credit when appropriate."
     },
     "contact": {
       "heading": "Need help?",
-      "copy": "For questions about these terms or your order, contact our support team.",
+      "copy": "For questions about these terms or your project, contact our support team.",
       "email": "support@amarka.co"
     }
   },

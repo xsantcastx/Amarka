@@ -3,18 +3,19 @@
     "key": "amarka",
     "name": "Amarka",
     "shortName": "Amarka",
-    "tagline": "Precision laser engraving for the Connecticut trade",
-    "description": "Bespoke engraved signage, wayfinding, architectural accents, and hospitality elements \u2014 fabricated to spec for interior designers, general contractors, and commercial operators across Connecticut and the tri-state region.",
+    "tagline": "Corporate Merchandise, Engraving & Brand Solutions",
+    "description": "Amarka helps businesses bring their brand into the real world through custom merchandise, engraving, apparel, promotional products, and branded corporate items — premium physical products that increase brand visibility and leave a lasting impression.",
     "domain": "amarka.co",
-    "logo": "/Logo Nav.png",
-    "logoAlt": "Amarka — Bespoke Laser Engraving",
-    "favicon": "/Logo Clear.png"
+    "logo": "/amarka-logo-transparent.png",
+    "logoAlt": "Amarka — Corporate Merchandise, Engraving & Brand Solutions",
+    "favicon": "/amarka-favicon.png"
   },
   "contact": {
-    "email": "studio@amarka.co",
+    "email": "diego@amarka.co",
+    "email2": "jessica@amarka.co",
     "phone": "+1 (203) 554-6224",
     "phone2": "",
-    "address": "Stamford, CT\nUnited States",
+    "address": "Miami, FL\nUnited States",
     "supportHours": "Mon–Fri 8 AM – 6 PM EST",
     "whatsapp": "+12035546224"
   },
@@ -49,119 +50,87 @@
   },
   "seasonalThemes": [],
   "hero": {
-    "eyebrow": "Precision engraving for the Connecticut trade",
-    "title": "Bespoke laser engraving — your name, permanently etched in brass, steel, glass, and hardwood",
-    "subtitle": "Amarka is the Stamford studio that interior designers, GCs, and hospitality teams rely on when a project demands engraving done right \u2014 on time, on spec, on material.",
+    "eyebrow": "Corporate Merchandise & Brand Solutions",
+    "title": "Your brand, made unforgettable.",
+    "subtitle": "Amarka helps businesses bring their identity into the real world — engraved gifts, branded apparel, and premium merchandise that make your company feel as good as it looks.",
     "primaryCta": {
-      "label": "Start a Commission",
+      "label": "Get a Free Quote",
       "href": "/enquire"
     },
     "secondaryCta": {
-      "label": "Apply for Trade Access",
-      "href": "/trade"
+      "label": "See Our Work",
+      "href": "/work"
     },
-    "badge": "Stamford, CT studio"
+    "badge": "Now relocating to Miami, FL"
   },
   "navigation": {
     "header": [
       {
-        "label": "Work",
-        "href": "/work"
-      },
-      {
-        "label": "Services",
-        "href": "/services"
-      },
-      {
-        "label": "Trade",
-        "href": "/trade"
-      },
-      {
-        "label": "About",
-        "href": "/about"
-      },
-      {
-        "label": "Tools",
-        "href": "/tools"
+        "label": "Design Studio",
+        "href": "/design"
       }
     ],
     "footer": [
       {
-        "label": "Work",
-        "href": "/work"
-      },
-      {
-        "label": "Services",
-        "href": "/services"
-      },
-      {
-        "label": "Trade",
-        "href": "/trade"
-      },
-      {
-        "label": "Who We Work With",
-        "href": "/clients"
-      },
-      {
-        "label": "Materials",
-        "href": "/materials"
+        "label": "Design Studio",
+        "href": "/design"
       },
       {
         "label": "Enquire",
         "href": "/enquire"
       },
       {
-        "label": "Tools",
-        "href": "/tools"
+        "label": "Privacy",
+        "href": "/privacy-policy"
+      },
+      {
+        "label": "Terms",
+        "href": "/terms"
       }
     ],
     "social": [
       {
         "platform": "instagram",
         "href": "https://instagram.com/amarka.co"
-      },
-      {
-        "platform": "linkedin",
-        "href": "https://www.linkedin.com/company/amarka-co/"
       }
     ]
   },
   "seo": {
     "siteName": "Amarka",
     "titleTemplate": "%s | Amarka",
-    "defaultTitle": "Amarka | Bespoke Laser Engraving Studio — Stamford, CT for the Trade",
-    "defaultDescription": "AMARKA is the Stamford, CT laser engraving studio for interior designers, general contractors, hospitality groups, and corporate operators across Connecticut and the tri-state region. 5–10 business day turnaround.",
+    "defaultTitle": "Amarka | Corporate Merchandise, Engraving & Brand Solutions — Miami, FL",
+    "defaultDescription": "Amarka helps businesses bring their brand into the real world through custom merchandise, engraving, branded apparel, and promotional products — premium corporate gifts and brand solutions from Miami, FL.",
     "defaultKeywords": [
-      "laser engraving Stamford CT",
-      "custom signage Connecticut trade",
-      "bespoke engraved signage Connecticut",
-      "FF&E laser engraving supplier Connecticut",
-      "laser engraving for interior designers Connecticut",
-      "custom bar signage Connecticut",
-      "architectural engraving Stamford CT",
-      "luxury engraved plaques Connecticut"
+      "corporate merchandise Miami",
+      "custom engraving Miami FL",
+      "branded apparel for businesses",
+      "corporate gifts Miami",
+      "promotional products Miami",
+      "custom embroidery uniforms",
+      "laser engraving corporate gifts",
+      "branded drinkware and tumblers"
     ],
-    "socialImage": "/Logo Clear2.png"
+    "socialImage": "/amarka-logo-transparent.png"
   },
   "legal": {
     "businessName": "Amarka",
     "taxId": "",
-    "supportEmail": "studio@amarka.co",
+    "supportEmail": "diego@amarka.co",
     "returnPolicyUrl": "",
     "privacyPolicyUrl": "/privacy",
     "termsUrl": "/terms"
   },
   "maintenance": {
-    "title": "Studio maintenance",
-    "description": "We are updating amarka.co and will return shortly. Reach us at studio@amarka.co for urgent enquiries."
+    "title": "Site maintenance",
+    "description": "We are updating amarka.co and will return shortly. Reach us at diego@amarka.co or jessica@amarka.co for urgent enquiries."
   },
   "notifications": {
     "emailFromName": "Amarka",
-    "emailFrom": "studio@amarka.co"
+    "emailFrom": "diego@amarka.co"
   },
   "studio": {
-    "location": "Stamford, CT",
-    "serviceArea": "Stamford, CT",
+    "location": "Miami, FL",
+    "serviceArea": "Miami, FL & South Florida",
     "turnaround": "5–10 business days"
   }
 }

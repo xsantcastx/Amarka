@@ -321,7 +321,7 @@ export class SeoSchemaService {
   }
 
   private getAbsoluteLogoUrl(): string {
-    const logo = this.brandConfig.site.brand.logo || '/Logo Clear.png';
+    const logo = this.brandConfig.site.brand.logo || '/amarka-logo-transparent.png';
     const siteUrl = this.brandConfig.siteUrl.replace(/\/$/, '');
     const path = logo.startsWith('/') ? logo : `/${logo}`;
     return `${siteUrl}${path}`;

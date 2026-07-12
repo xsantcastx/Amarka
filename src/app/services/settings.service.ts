@@ -369,8 +369,8 @@ export class SettingsService {
 
     return {
       // Brand & Logo
-      brandLogo: '/Logo Clear.png',
-      brandLogoLight: '',
+      brandLogo: '/amarka-logo-transparent.png',
+      brandLogoLight: '/amarka-logo-transparent-light.png',
       
       // General
       siteName: brandName,
@@ -437,7 +437,7 @@ export class SettingsService {
       lowStockThreshold: 10,
       newUserNotifications: false,
       dailyReportEnabled: false,
-      notificationEmail: '',
+      notificationEmail: 'diego@amarka.co',
 
       // Business Info
       businessName: site.legal?.businessName || brandName,

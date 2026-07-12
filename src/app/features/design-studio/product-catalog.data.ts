@@ -1,0 +1,258 @@
+import { ProductColorOption, ProductTemplate } from './product-catalog.types';
+
+const APPAREL_COLORS: ProductColorOption[] = [
+  { id: 'black', label: 'Black', hex: '#1a1a1a' },
+  { id: 'white', label: 'White', hex: '#f5f5f0' },
+  { id: 'navy', label: 'Navy', hex: '#1c2b45' },
+  { id: 'gray', label: 'Heather Gray', hex: '#8a8a8a' },
+  { id: 'red', label: 'Red', hex: '#a1281f' },
+  { id: 'forest', label: 'Forest Green', hex: '#2f4a3c' },
+];
+
+const DRINKWARE_COLORS: ProductColorOption[] = [
+  { id: 'steel', label: 'Stainless Steel', hex: '#b8bcc0' },
+  { id: 'black', label: 'Matte Black', hex: '#1a1a1a' },
+  { id: 'white', label: 'White', hex: '#f5f5f0' },
+  { id: 'navy', label: 'Navy', hex: '#1c2b45' },
+];
+
+const PROMO_COLORS: ProductColorOption[] = [
+  { id: 'black', label: 'Black', hex: '#1a1a1a' },
+  { id: 'natural', label: 'Natural Canvas', hex: '#d9cdb0' },
+  { id: 'navy', label: 'Navy', hex: '#1c2b45' },
+  { id: 'gray', label: 'Gray', hex: '#8a8a8a' },
+];
+
+export const PRODUCT_CATALOG: ProductTemplate[] = [
+  {
+    id: 'tshirt',
+    slug: 't-shirt',
+    name: 'T-Shirt',
+    category: 'apparel',
+    description: 'Everyday cotton tee for team apparel and giveaways.',
+    viewerType: '2d',
+    sortOrder: 1,
+    colors: APPAREL_COLORS,
+    variants: [
+      { id: 'crew', label: 'Crew Neck' },
+      { id: 'v-neck', label: 'V-Neck' },
+      { id: 'oversized', label: 'Oversized' },
+      { id: 'performance', label: 'Performance' },
+      { id: 'premium', label: 'Premium Cotton' },
+    ],
+    views: [
+      { id: 'front', label: 'Front', silhouette: 'shirt-front' },
+      { id: 'back', label: 'Back', silhouette: 'shirt-back' },
+    ],
+    designAreas: [
+      { id: 'front-center', label: 'Front Center', viewId: 'front', boundary: { xPct: 30, yPct: 28, widthPct: 40, heightPct: 40 } },
+      { id: 'left-chest', label: 'Left Chest', viewId: 'front', boundary: { xPct: 58, yPct: 20, widthPct: 16, heightPct: 16 } },
+      { id: 'right-chest', label: 'Right Chest', viewId: 'front', boundary: { xPct: 26, yPct: 20, widthPct: 16, heightPct: 16 } },
+      { id: 'upper-back', label: 'Upper Back', viewId: 'back', boundary: { xPct: 34, yPct: 16, widthPct: 32, heightPct: 20 } },
+      { id: 'full-back', label: 'Full Back', viewId: 'back', boundary: { xPct: 26, yPct: 20, widthPct: 48, heightPct: 48 } },
+    ],
+  },
+  {
+    id: 'polo',
+    slug: 'polo-shirt',
+    name: 'Polo Shirt',
+    category: 'apparel',
+    description: 'Collared polo for a polished, professional look.',
+    viewerType: '2d',
+    sortOrder: 2,
+    colors: APPAREL_COLORS,
+    variants: [
+      { id: 'classic', label: 'Classic Fit' },
+      { id: 'slim', label: 'Slim Fit' },
+      { id: 'performance', label: 'Performance' },
+    ],
+    views: [
+      { id: 'front', label: 'Front', silhouette: 'polo-front' },
+      { id: 'back', label: 'Back', silhouette: 'polo-back' },
+    ],
+    designAreas: [
+      { id: 'left-chest', label: 'Left Chest', viewId: 'front', boundary: { xPct: 58, yPct: 22, widthPct: 16, heightPct: 16 } },
+      { id: 'right-chest', label: 'Right Chest', viewId: 'front', boundary: { xPct: 26, yPct: 22, widthPct: 16, heightPct: 16 } },
+      { id: 'upper-back', label: 'Upper Back', viewId: 'back', boundary: { xPct: 34, yPct: 16, widthPct: 32, heightPct: 20 } },
+    ],
+  },
+  {
+    id: 'hoodie',
+    slug: 'hoodie',
+    name: 'Hoodie',
+    category: 'apparel',
+    description: 'Heavyweight hooded pullover for cold-weather brand presence.',
+    viewerType: '2d',
+    sortOrder: 3,
+    colors: APPAREL_COLORS,
+    variants: [
+      { id: 'pullover', label: 'Pullover' },
+      { id: 'zip', label: 'Zip-Up' },
+      { id: 'heavyweight', label: 'Heavyweight' },
+    ],
+    views: [
+      { id: 'front', label: 'Front', silhouette: 'hoodie-front' },
+      { id: 'back', label: 'Back', silhouette: 'hoodie-back' },
+      { id: 'left-sleeve', label: 'Left Sleeve', silhouette: 'sleeve-left' },
+      { id: 'right-sleeve', label: 'Right Sleeve', silhouette: 'sleeve-right' },
+    ],
+    designAreas: [
+      { id: 'front-center', label: 'Front Center', viewId: 'front', boundary: { xPct: 32, yPct: 36, widthPct: 36, heightPct: 22 } },
+      { id: 'left-chest', label: 'Left Chest', viewId: 'front', boundary: { xPct: 58, yPct: 22, widthPct: 16, heightPct: 16 } },
+      { id: 'full-back', label: 'Full Back', viewId: 'back', boundary: { xPct: 26, yPct: 22, widthPct: 48, heightPct: 46 } },
+      { id: 'left-sleeve', label: 'Left Sleeve', viewId: 'left-sleeve', boundary: { xPct: 30, yPct: 35, widthPct: 40, heightPct: 30 } },
+      { id: 'right-sleeve', label: 'Right Sleeve', viewId: 'right-sleeve', boundary: { xPct: 30, yPct: 35, widthPct: 40, heightPct: 30 } },
+    ],
+  },
+  {
+    id: 'long-sleeve',
+    slug: 'long-sleeve-shirt',
+    name: 'Long Sleeve Shirt',
+    category: 'apparel',
+    description: 'Full-length sleeve tee for layering and cooler climates.',
+    viewerType: '2d',
+    sortOrder: 4,
+    colors: APPAREL_COLORS,
+    variants: [
+      { id: 'crew', label: 'Crew Neck' },
+      { id: 'henley', label: 'Henley' },
+    ],
+    views: [
+      { id: 'front', label: 'Front', silhouette: 'longsleeve-front' },
+      { id: 'back', label: 'Back', silhouette: 'longsleeve-back' },
+      { id: 'left-sleeve', label: 'Left Sleeve', silhouette: 'sleeve-left' },
+      { id: 'right-sleeve', label: 'Right Sleeve', silhouette: 'sleeve-right' },
+    ],
+    designAreas: [
+      { id: 'front-center', label: 'Front Center', viewId: 'front', boundary: { xPct: 32, yPct: 28, widthPct: 36, heightPct: 36 } },
+      { id: 'left-chest', label: 'Left Chest', viewId: 'front', boundary: { xPct: 58, yPct: 20, widthPct: 16, heightPct: 16 } },
+      { id: 'full-back', label: 'Full Back', viewId: 'back', boundary: { xPct: 26, yPct: 20, widthPct: 48, heightPct: 48 } },
+      { id: 'left-sleeve', label: 'Left Sleeve', viewId: 'left-sleeve', boundary: { xPct: 30, yPct: 35, widthPct: 40, heightPct: 30 } },
+      { id: 'right-sleeve', label: 'Right Sleeve', viewId: 'right-sleeve', boundary: { xPct: 30, yPct: 35, widthPct: 40, heightPct: 30 } },
+    ],
+  },
+  {
+    id: 'sweatshirt',
+    slug: 'sweatshirt',
+    name: 'Sweatshirt',
+    category: 'apparel',
+    description: 'Classic crewneck sweatshirt for everyday team wear.',
+    viewerType: '2d',
+    sortOrder: 5,
+    colors: APPAREL_COLORS,
+    variants: [
+      { id: 'crew', label: 'Crew' },
+      { id: 'quarter-zip', label: 'Quarter-Zip' },
+    ],
+    views: [
+      { id: 'front', label: 'Front', silhouette: 'sweatshirt-front' },
+      { id: 'back', label: 'Back', silhouette: 'sweatshirt-back' },
+    ],
+    designAreas: [
+      { id: 'front-center', label: 'Front Center', viewId: 'front', boundary: { xPct: 32, yPct: 30, widthPct: 36, heightPct: 34 } },
+      { id: 'left-chest', label: 'Left Chest', viewId: 'front', boundary: { xPct: 58, yPct: 22, widthPct: 16, heightPct: 16 } },
+      { id: 'full-back', label: 'Full Back', viewId: 'back', boundary: { xPct: 26, yPct: 22, widthPct: 48, heightPct: 46 } },
+    ],
+  },
+  {
+    id: 'tumbler',
+    slug: 'tumbler',
+    name: 'Tumbler',
+    category: 'drinkware',
+    description: 'Insulated tumbler with a full wraparound print area.',
+    viewerType: '2d',
+    sortOrder: 6,
+    colors: DRINKWARE_COLORS,
+    variants: [
+      { id: '20oz', label: '20oz' },
+      { id: '30oz', label: '30oz' },
+      { id: 'travel', label: 'Travel Mug' },
+    ],
+    views: [{ id: 'wrap', label: 'Full Wrap', silhouette: 'tumbler-wrap' }],
+    designAreas: [
+      { id: 'full-wrap', label: 'Full Wrap', viewId: 'wrap', boundary: { xPct: 12, yPct: 15, widthPct: 76, heightPct: 65 } },
+    ],
+  },
+  {
+    id: 'mug',
+    slug: 'mug',
+    name: 'Mug',
+    category: 'drinkware',
+    description: 'Ceramic or travel mug for gifts and welcome kits.',
+    viewerType: '2d',
+    sortOrder: 7,
+    colors: DRINKWARE_COLORS,
+    variants: [
+      { id: 'ceramic', label: 'Ceramic' },
+      { id: 'travel', label: 'Travel Mug' },
+      { id: 'glass', label: 'Glass Mug' },
+    ],
+    views: [
+      { id: 'front', label: 'Front', silhouette: 'mug-front' },
+      { id: 'handle-side', label: 'Handle Side', silhouette: 'mug-handle' },
+    ],
+    designAreas: [
+      { id: 'front', label: 'Front', viewId: 'front', boundary: { xPct: 25, yPct: 25, widthPct: 50, heightPct: 45 } },
+      { id: 'back', label: 'Back', viewId: 'handle-side', boundary: { xPct: 25, yPct: 25, widthPct: 50, heightPct: 45 } },
+    ],
+  },
+  {
+    id: 'water-bottle',
+    slug: 'water-bottle',
+    name: 'Water Bottle',
+    category: 'drinkware',
+    description: 'Stainless or glass bottle with a full wraparound area.',
+    viewerType: '2d',
+    sortOrder: 8,
+    colors: DRINKWARE_COLORS,
+    variants: [
+      { id: 'stainless', label: 'Stainless Steel' },
+      { id: 'glass', label: 'Glass' },
+    ],
+    views: [{ id: 'wrap', label: 'Full Wrap', silhouette: 'bottle-wrap' }],
+    designAreas: [
+      { id: 'full-wrap', label: 'Full Wrap', viewId: 'wrap', boundary: { xPct: 15, yPct: 20, widthPct: 70, heightPct: 55 } },
+    ],
+  },
+  {
+    id: 'hat',
+    slug: 'hat',
+    name: 'Hat',
+    category: 'promo',
+    description: 'Structured cap for embroidered front logos.',
+    viewerType: '2d',
+    sortOrder: 9,
+    colors: PROMO_COLORS,
+    variants: [
+      { id: 'snapback', label: 'Snapback' },
+      { id: 'trucker', label: 'Trucker' },
+      { id: 'beanie', label: 'Beanie' },
+    ],
+    views: [{ id: 'front', label: 'Front', silhouette: 'hat-front' }],
+    designAreas: [
+      { id: 'front-center', label: 'Front Center', viewId: 'front', boundary: { xPct: 30, yPct: 30, widthPct: 40, heightPct: 30 } },
+    ],
+  },
+  {
+    id: 'tote-bag',
+    slug: 'tote-bag',
+    name: 'Tote Bag',
+    category: 'promo',
+    description: 'Canvas tote for event merch and client gifting.',
+    viewerType: '2d',
+    sortOrder: 10,
+    colors: PROMO_COLORS,
+    variants: [
+      { id: 'canvas', label: 'Canvas' },
+      { id: 'premium', label: 'Premium' },
+    ],
+    views: [
+      { id: 'front', label: 'Front', silhouette: 'tote-front' },
+      { id: 'back', label: 'Back', silhouette: 'tote-back' },
+    ],
+    designAreas: [
+      { id: 'front-center', label: 'Front Center', viewId: 'front', boundary: { xPct: 25, yPct: 30, widthPct: 50, heightPct: 45 } },
+      { id: 'back-center', label: 'Back Center', viewId: 'back', boundary: { xPct: 25, yPct: 30, widthPct: 50, heightPct: 45 } },
+    ],
+  },
+];

@@ -1,149 +1,37 @@
-export type AudienceType =
-  | 'interior_designers'
-  | 'general_contractors'
-  | 'bars_restaurants'
-  | 'corporate_offices';
-
-export type CaseStudyType = 'hospitality' | 'trade' | 'corporate' | 'architectural';
-
-export type CaseStudyStatus = 'in_progress' | 'complete';
-
-export interface VerticalCard {
-  id: AudienceType;
-  icon: string;
-  title: string;
-  description: string;
-  href: string;
-  fragment?: string;
-}
-
-export interface TrustedByLabel {
-  label: string;
-}
-
-export interface CaseStudyImage {
-  url: string;
-  alt: string;
-  width?: number;
-  height?: number;
-}
-
-export interface CaseStudy {
-  id: string;
-  projectName: string;
-  slug: string;
-  clientType: CaseStudyType;
-  audienceTags: AudienceType[];
-  location: string;
-  brief: string;
-  description: string;
-  materials: string[];
-  technique: string[];
-  images: CaseStudyImage[];
-  status: CaseStudyStatus;
-  featured: boolean;
-  featuredOnHome: boolean;
-  published: boolean;
-  ctaLabel: string;
-  ctaHref: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface ServiceCommission {
-  id: string;
-  slug: string;
-  title: string;
-  description: string;
-  materials: string[];
-  typicalLeadTime: string;
-  ctaLabel: string;
-  ctaHref: string;
-  featured?: boolean;
-  published: boolean;
-}
-
-export interface DownloadAsset {
-  id: string;
-  slug: string;
-  title: string;
-  description: string;
-  fileUrl: string;
-  storagePath: string;
-  category: 'spec_sheet' | 'lookbook' | 'material_guide';
-  gated: boolean;
-  published: boolean;
-}
-
-export interface TradeBenefit {
-  title: string;
-  description: string;
-}
-
-export interface TradeStep {
-  step: string;
-  title: string;
-  description: string;
-}
-
-/**
- * AMK-85: At-a-Glance Trade Spec Card
- * Three operational columns surfaced above the fold on /trade.
- * All copy lifted directly from Brand Bible canon (substrates, lead time, process).
- * Single source of truth in studio.seed.ts — never inline strings in templates.
- */
-export interface TradeSpecColumn {
-  /** Column heading (Source Sans 3 600, all-caps via CSS, tracking-widest) */
-  heading: string;
-  /** Body copy, single line, separator-delimited per Brand Bible style */
-  body: string;
-}
-
-export interface TradeSpecCta {
-  label: string;
-  href: string;
-}
-
-export interface TradeSpec {
-  /** Exactly 3 columns: substrates · lead time · process. */
-  columns: TradeSpecColumn[];
-  /** Outlined ghost CTA at the card foot (Zone 3b, --ts-accent). */
-  cta: TradeSpecCta;
-}
-
-export interface AudienceSection {
-  id: AudienceType;
-  title: string;
-  intro: string;
-  bullets: string[];
-  icon?: string;
-}
-
-export interface HomeContent {
-  trustedBy: TrustedByLabel[];
-  verticals: VerticalCard[];
-  tradeBenefits: TradeBenefit[];
-  featuredProjectSlug: string;
-}
-
-export interface StudioSettings {
-  brandStatement: string;
-  heroEyebrow: string;
-  heroTitle: string;
-  heroSubtitle: string;
-  tradeHeadline: string;
-  tradeSubheadline: string;
-  responseWindow: string;
-  turnaround: string;
-  location: string;
-  serviceArea: string;
-}
-
 export interface UploadRef {
+  /** Client-generated id so other records (e.g. a logo placement) can reference this specific upload. */
+  id?: string;
   storagePath: string;
   originalName: string;
   mimeType: string;
   size: number;
+}
+
+export interface DesignLogoPlacement {
+  /** References an UploadRef.id from the design project's uploaded artwork. */
+  uploadId: string;
+  /** Which product view (front/back/left-sleeve/wrap/...) this logo sits on. */
+  viewId: string;
+  xPct: number;
+  yPct: number;
+  widthPct: number;
+  heightPct: number;
+  rotation: number;
+  flipH: boolean;
+  flipV: boolean;
+  zIndex: number;
+}
+
+export interface DesignProjectSummary {
+  productSlug: string;
+  productName: string;
+  variantLabel: string;
+  colorLabel: string;
+  colorHex: string;
+  quantity: number;
+  logos: DesignLogoPlacement[];
+  /** Generated composite preview images, one per product view, uploaded like any other artwork. */
+  mockupUploads: UploadRef[];
 }
 
 export interface EnquirySubmission {
@@ -152,16 +40,21 @@ export interface EnquirySubmission {
   fullName: string;
   company?: string;
   email: string;
-  role: 'designer' | 'gc' | 'hospitality' | 'corporate' | 'other';
+  role: string;
   projectType: string;
   preferredMaterial?: string;
   estimatedQuantity?: string;
   targetTimeline?: string;
+  businessType?: string;
+  orderVolume?: string;
+  honeypot?: string;
   projectDescription: string;
   fileUploads: UploadRef[];
   sourcePage: string;
   leadTags: string[];
   createdAt?: string;
+  /** Present when this enquiry originated from the Product Customization Studio. */
+  designProject?: DesignProjectSummary;
 }
 
 export interface TradeApplication {
@@ -169,7 +62,7 @@ export interface TradeApplication {
   companyName: string;
   contactName: string;
   email: string;
-  role: 'designer' | 'gc' | 'other';
+  role: string;
   projectType: string;
   estimatedQuantity: string;
   materialPreference?: string;

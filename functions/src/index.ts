@@ -59,6 +59,13 @@ interface EmailConfig {
   notificationEmail: string;
 }
 
+// This deployment sends only as Amarka. The shared settings/app doc can carry
+// addresses from other brands (e.g. *@theluxvending.com), so any non-amarka.co
+// address is ignored and falls back to this verified Amarka sender/recipient.
+const DEFAULT_LEAD_NOTIFICATION_EMAIL = "diego@amarka.co";
+const onlyAmarka = (value: string): string =>
+  /@amarka\.co$/i.test(value.trim()) ? value.trim() : "";
+
 async function getEmailConfig(): Promise<EmailConfig> {
   try {
     const settingsDoc = await db.collection("settings").doc("app").get();
@@ -72,10 +79,10 @@ async function getEmailConfig(): Promise<EmailConfig> {
     ).trim();
     const apiKey = apiKeyFromSecret || null;
 
-    const contactEmail = String(settings.contactEmail || "").trim();
-    const notificationEmail = String(settings.notificationEmail || "").trim();
-    const fromEmail = String(settings.emailFrom || contactEmail || notificationEmail || "").trim();
-    const fromName = String(settings.emailFromName || settings.siteName || "Amarka").trim();
+    const contactEmail = onlyAmarka(String(settings.contactEmail || "")) || DEFAULT_LEAD_NOTIFICATION_EMAIL;
+    const notificationEmail = onlyAmarka(String(settings.notificationEmail || "")) || DEFAULT_LEAD_NOTIFICATION_EMAIL;
+    const fromEmail = onlyAmarka(String(settings.emailFrom || "")) || DEFAULT_LEAD_NOTIFICATION_EMAIL;
+    const fromName = "Amarka";
 
     return {
       provider,
@@ -1711,12 +1718,36 @@ interface LeadUploadRef {
   size: number;
 }
 
+interface DesignLogoPlacementPayload {
+  uploadId: string;
+  viewId: string;
+  xPct: number;
+  yPct: number;
+  widthPct: number;
+  heightPct: number;
+  rotation: number;
+  flipH: boolean;
+  flipV: boolean;
+  zIndex: number;
+}
+
+interface DesignProjectPayload {
+  productSlug: string;
+  productName: string;
+  variantLabel: string;
+  colorLabel: string;
+  colorHex: string;
+  quantity: number;
+  logos: DesignLogoPlacementPayload[];
+  mockupUploads: LeadUploadRef[];
+}
+
 interface StudioEnquiryPayload {
   type: "standard" | "trade";
   fullName: string;
   company?: string;
   email: string;
-  role: "designer" | "gc" | "hospitality" | "corporate" | "other";
+  role: string;
   projectType: string;
   preferredMaterial?: string;
   estimatedQuantity?: string;
@@ -1725,6 +1756,8 @@ interface StudioEnquiryPayload {
   fileUploads?: LeadUploadRef[];
   sourcePage: string;
   leadTags?: string[];
+  honeypot?: string;
+  designProject?: DesignProjectPayload;
 }
 
 interface TradeApplicationPayload {
@@ -1739,6 +1772,7 @@ interface TradeApplicationPayload {
   notes?: string;
   specSheetUploads?: LeadUploadRef[];
   leadTags?: string[];
+  honeypot?: string;
 }
 
 function validateLeadUploads(files: LeadUploadRef[] = []) {
@@ -1760,6 +1794,81 @@ function buildLeadTags(payload: { role?: string; sourcePage?: string; type?: str
   return Array.from(tags);
 }
 
+// Builds an HTML summary block for a Product Customization Studio submission
+// (product/variant/color/quantity/logo count) plus signed links to the
+// generated mockup previews, so the team can see the design at a glance.
+async function buildDesignProjectHtml(design?: DesignProjectPayload): Promise<string> {
+  if (!design) {
+    return "";
+  }
+  const mockupsHtml = await buildAttachmentLinks(design.mockupUploads, "Generated mockups");
+  return `
+    <div style="margin-top:16px;padding:16px;border:1px solid #e5e5e5;border-radius:8px;">
+      <h3 style="margin:0 0 8px;">Product Customization Studio design</h3>
+      <p style="margin:4px 0;"><strong>Product:</strong> ${design.productName} — ${design.variantLabel}</p>
+      <p style="margin:4px 0;"><strong>Color:</strong> ${design.colorLabel}</p>
+      <p style="margin:4px 0;"><strong>Quantity:</strong> ${design.quantity}</p>
+      <p style="margin:4px 0;"><strong>Logo placements:</strong> ${design.logos.length}</p>
+      ${mockupsHtml}
+    </div>`;
+}
+
+// Builds an HTML attachments block with time-limited download links for the
+// internal lead email. Falls back to the storage path if signing isn't available.
+async function buildAttachmentLinks(files: LeadUploadRef[] = [], heading = "Attachments"): Promise<string> {
+  if (!files.length) {
+    return "";
+  }
+  const bucket = admin.storage().bucket();
+  const items = await Promise.all(
+    files.map(async (f) => {
+      const label = f.originalName || f.storagePath;
+      try {
+        const [url] = await bucket.file(f.storagePath).getSignedUrl({
+          action: "read",
+          expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
+        });
+        return `<li><a href="${url}">${label}</a></li>`;
+      } catch (err) {
+        functions.logger.warn("Could not sign attachment URL", { path: f.storagePath });
+        return `<li>${label} — in Firebase Storage at ${f.storagePath}</li>`;
+      }
+    })
+  );
+  return `<p><strong>${heading} (${files.length}):</strong></p><ul>${items.join("")}</ul>`;
+}
+
+// Extracts the caller IP from a callable request's raw HTTP request.
+function callerIp(context: any): string {
+  const req = context?.rawRequest;
+  const fwd = req?.headers?.["x-forwarded-for"];
+  const fromFwd = Array.isArray(fwd) ? fwd[0] : (typeof fwd === "string" ? fwd.split(",")[0] : "");
+  return (fromFwd || req?.ip || "unknown").trim();
+}
+
+// Per-IP rate limit for public lead forms (default: 6 submissions / hour).
+// Backed by a Firestore counter doc; admin SDK bypasses security rules.
+async function enforceLeadRateLimit(ip: string, max = 6, windowMs = 60 * 60 * 1000): Promise<void> {
+  const safeIp = ip.replace(/[^a-zA-Z0-9]/g, "_").slice(0, 60) || "unknown";
+  const ref = db.collection("rateLimits").doc(`lead_${safeIp}`);
+  await db.runTransaction(async (tx) => {
+    const snap = await tx.get(ref);
+    const now = Date.now();
+    const data = snap.data();
+    if (data && now - Number(data.windowStart || 0) < windowMs) {
+      if (Number(data.count || 0) >= max) {
+        throw new functions.https.HttpsError(
+          "resource-exhausted",
+          "Too many submissions from this connection. Please try again later or email diego@amarka.co."
+        );
+      }
+      tx.update(ref, { count: Number(data.count || 0) + 1, ip, updatedAt: now });
+    } else {
+      tx.set(ref, { count: 1, windowStart: now, ip, updatedAt: now });
+    }
+  });
+}
+
 async function sendLeadEmail(
   to: string,
   subject: string,
@@ -1768,15 +1877,21 @@ async function sendLeadEmail(
 ) {
   const config = await getEmailConfig();
   if (!config.apiKey || !config.fromEmail || !to) {
+    functions.logger.warn("sendLeadEmail skipped: missing email config", {
+      hasApiKey: !!config.apiKey,
+      fromEmail: config.fromEmail || null,
+      recipient: to || null,
+    });
     return;
   }
 
   const fetchFn = (globalThis as any).fetch as any;
   if (!fetchFn) {
+    functions.logger.error("sendLeadEmail skipped: global fetch unavailable");
     return;
   }
 
-  await fetchFn("https://api.brevo.com/v3/smtp/email", {
+  const response = await fetchFn("https://api.brevo.com/v3/smtp/email", {
     method: "POST",
     headers: {
       accept: "application/json",
@@ -1794,18 +1909,38 @@ async function sendLeadEmail(
       replyTo: replyTo?.email ? { email: replyTo.email, name: replyTo.name || replyTo.email } : undefined,
     }),
   });
+
+  if (!response?.ok) {
+    const body = await response?.text?.().catch(() => "") || "";
+    functions.logger.error("Brevo lead email send failed", {
+      status: response?.status,
+      recipient: to,
+      from: config.fromEmail,
+      body: body.slice(0, 500),
+    });
+  }
 }
 
 export const submitStudioEnquiry = withBrevoSecrets.https.onCall(
-  withFlag("emailNotifications", async (data: StudioEnquiryPayload) => {
+  withFlag("emailNotifications", async (data: StudioEnquiryPayload, context: any) => {
+    // Honeypot: bots fill the hidden field, humans don't. Pretend success, drop it.
+    if (data?.honeypot && String(data.honeypot).trim()) {
+      functions.logger.info("Honeypot triggered; dropping spam enquiry");
+      return { ok: true, id: "ignored" };
+    }
+
     if (!data?.fullName || !data?.email || !data?.projectType || !data?.projectDescription) {
       throw new functions.https.HttpsError("invalid-argument", "Missing required enquiry fields");
     }
 
+    await enforceLeadRateLimit(callerIp(context));
+
     validateLeadUploads(data.fileUploads);
+    validateLeadUploads(data.designProject?.mockupUploads);
     const leadTags = buildLeadTags(data, data.leadTags);
+    const { honeypot, ...leadData } = data;
     const docRef = await db.collection("enquiries").add({
-      ...data,
+      ...leadData,
       leadTags,
       responseSla: "24h",
       status: "new",
@@ -1814,7 +1949,9 @@ export const submitStudioEnquiry = withBrevoSecrets.https.onCall(
     });
 
     const emailConfig = await getEmailConfig();
-    const internalTarget = emailConfig.notificationEmail || emailConfig.contactEmail;
+    const internalTarget = emailConfig.notificationEmail || DEFAULT_LEAD_NOTIFICATION_EMAIL;
+    const attachmentsHtml = await buildAttachmentLinks(data.fileUploads);
+    const designProjectHtml = await buildDesignProjectHtml(data.designProject);
 
     await Promise.all([
       internalTarget
@@ -1829,6 +1966,8 @@ export const submitStudioEnquiry = withBrevoSecrets.https.onCall(
               <p><strong>Role:</strong> ${data.role}</p>
               <p><strong>Project type:</strong> ${data.projectType}</p>
               <p><strong>Description:</strong><br>${data.projectDescription}</p>
+              ${attachmentsHtml}
+              ${designProjectHtml}
             </div>`,
             { email: data.email, name: data.fullName }
           )
@@ -1840,7 +1979,7 @@ export const submitStudioEnquiry = withBrevoSecrets.https.onCall(
           <h2>Thanks for contacting Amarka</h2>
           <p>We’ve received your project brief and will respond within 24 hours.</p>
           <p><strong>Project type:</strong> ${data.projectType}</p>
-          <p>Studio based in Stamford, CT · Serving the NYC metro.</p>
+          <p>Based in Miami, FL · Serving South Florida and beyond.</p>
         </div>`
       ),
     ]);
@@ -1862,15 +2001,23 @@ export const ssr = functions.https.onRequest(async (req, res) => {
 });
 
 export const submitTradeApplication = withBrevoSecrets.https.onCall(
-  withFlag("emailNotifications", async (data: TradeApplicationPayload) => {
+  withFlag("emailNotifications", async (data: TradeApplicationPayload, context: any) => {
+    if (data?.honeypot && String(data.honeypot).trim()) {
+      functions.logger.info("Honeypot triggered; dropping spam trade application");
+      return { ok: true, id: "ignored" };
+    }
+
     if (!data?.companyName || !data?.contactName || !data?.email || !data?.projectType || !data?.estimatedQuantity) {
       throw new functions.https.HttpsError("invalid-argument", "Missing required trade application fields");
     }
 
+    await enforceLeadRateLimit(callerIp(context));
+
     validateLeadUploads(data.specSheetUploads);
     const leadTags = buildLeadTags({ role: data.role, sourcePage: "/trade", type: "trade_application" }, data.leadTags);
+    const { honeypot, ...leadData } = data;
     const docRef = await db.collection("tradeApplications").add({
-      ...data,
+      ...leadData,
       leadTags,
       status: "new",
       createdAt: admin.firestore.FieldValue.serverTimestamp(),
@@ -1878,7 +2025,8 @@ export const submitTradeApplication = withBrevoSecrets.https.onCall(
     });
 
     const emailConfig = await getEmailConfig();
-    const internalTarget = emailConfig.notificationEmail || emailConfig.contactEmail;
+    const internalTarget = emailConfig.notificationEmail || DEFAULT_LEAD_NOTIFICATION_EMAIL;
+    const attachmentsHtml = await buildAttachmentLinks(data.specSheetUploads);
 
     await Promise.all([
       internalTarget
@@ -1893,6 +2041,7 @@ export const submitTradeApplication = withBrevoSecrets.https.onCall(
               <p><strong>Role:</strong> ${data.role}</p>
               <p><strong>Project type:</strong> ${data.projectType}</p>
               <p><strong>Estimated quantity:</strong> ${data.estimatedQuantity}</p>
+              ${attachmentsHtml}
             </div>`,
             { email: data.email, name: data.contactName }
           )

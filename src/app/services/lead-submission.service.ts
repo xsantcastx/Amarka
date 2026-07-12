@@ -6,9 +6,12 @@ import { EnquirySubmission, TradeApplication, UploadRef } from '../models/studio
 
 @Injectable({ providedIn: 'root' })
 export class LeadSubmissionService {
-  private readonly allowedExtensions = new Set(['pdf', 'ai', 'dwg', 'jpg', 'jpeg', 'png']);
+  private readonly allowedExtensions = new Set(['pdf', 'ai', 'dwg', 'jpg', 'jpeg', 'png', 'svg']);
   private readonly maxFileSizeBytes = 20 * 1024 * 1024;
-  private readonly maxFileCount = 5;
+  // Design studio submissions can include several logo uploads plus one
+  // generated mockup image per product view, so this needs more headroom
+  // than a single-file enquiry attachment.
+  private readonly maxFileCount = 24;
   private functions = inject(Functions);
   private storage = inject(Storage);
   private analytics = inject(AnalyticsService);
@@ -45,6 +48,7 @@ export class LeadSubmissionService {
         });
 
         return {
+          id: `${Date.now()}-${index}-${Math.random().toString(36).slice(2, 8)}`,
           storagePath,
           originalName: file.name,
           mimeType: file.type,
@@ -95,7 +99,7 @@ export class LeadSubmissionService {
     for (const file of files) {
       const extension = file.name.split('.').pop()?.toLowerCase() ?? '';
       if (!this.allowedExtensions.has(extension)) {
-        throw new Error('Allowed file types: PDF, AI, DWG, JPG, JPEG, PNG.');
+        throw new Error('Allowed file types: PDF, AI, DWG, JPG, JPEG, PNG, SVG.');
       }
 
       if (file.size > this.maxFileSizeBytes) {

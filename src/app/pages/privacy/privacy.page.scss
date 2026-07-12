@@ -1,3 +1,30 @@
+@use '../../../styles/amk-system' as amk;
+
 :host {
   display: block;
 }
+
+.amk-legal {
+  @include amk.tokens;
+  font-family: var(--amk-font-sans);
+  background: var(--amk-bg);
+  color: var(--amk-text);
+  min-height: 100vh;
+  transition: background 0.4s ease, color 0.4s ease;
+}
+
+.amk-legal[data-theme='light'] {
+  @include amk.tokens-light;
+}
+
+.amk-legal em {
+  font-style: italic;
+}
+
+.page-container {
+  width: min(1180px, 100% - 3rem);
+  margin-inline: auto;
+}
+
+@include amk.type-helpers;
+@include amk.legal-page;

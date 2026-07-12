@@ -1,18 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
-import { PageHeaderComponent, Breadcrumb } from '../../shared/components/page-header/page-header.component';
+import { AmkThemeService } from '../../shared/amk-theme/amk-theme.service';
 
 @Component({
   standalone: true,
   selector: 'app-terms',
-  imports: [CommonModule, TranslateModule, PageHeaderComponent],
+  imports: [CommonModule, TranslateModule],
   templateUrl: './terms.page.html',
   styleUrls: ['./terms.page.scss']
 })
 export class TermsPageComponent {
-  breadcrumbs: Breadcrumb[] = [
-    { label: 'nav.home', url: '/', icon: 'home' },
-    { label: 'terms.title' }
-  ];
+  protected theme = inject(AmkThemeService).theme;
 }

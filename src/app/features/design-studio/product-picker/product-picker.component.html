@@ -1,0 +1,98 @@
+@if (savedProjects.length && !selectedProduct()) {
+<div class="amk-picker-saved">
+  <p class="amk-kicker">Continue a saved design</p>
+  <div class="amk-picker-saved__list">
+    @for (entry of savedProjects; track entry.id) {
+    <button type="button" class="amk-picker-saved__item" (click)="resume(entry.id)">
+      <span class="amk-picker-saved__swatch" [style.background]="entry.colorHex"></span>
+      <span class="amk-picker-saved__meta">
+        <strong>{{ entry.name }}</strong>
+        <span>{{ productNameFor(entry.productId) }}</span>
+      </span>
+    </button>
+    }
+  </div>
+</div>
+}
+
+@if (!selectedProduct()) {
+<div class="amk-picker">
+  <div class="amk-picker__tabs" role="tablist">
+    @for (category of categories; track category) {
+    <button type="button" role="tab" [class.is-active]="activeCategory() === category" (click)="setCategory(category)">
+      {{ categoryLabels[category] }}
+    </button>
+    }
+  </div>
+
+  <div class="amk-picker__grid">
+    @for (product of productsInCategory(); track product.id) {
+    <button type="button" class="amk-picker__card" (click)="pickProduct(product)">
+      <span class="amk-picker__card-preview">
+        <amk-product-silhouette [silhouette]="product.views[0].silhouette" [colorHex]="product.colors[0].hex" />
+      </span>
+      <span class="amk-picker__card-name">{{ product.name }}</span>
+      <span class="amk-picker__card-desc">{{ product.description }}</span>
+    </button>
+    }
+  </div>
+</div>
+} @else {
+<div class="amk-picker-detail">
+  <button type="button" class="amk-picker-detail__back" (click)="backToGrid()">← Back to products</button>
+
+  <div class="amk-picker-detail__layout">
+    <div class="amk-picker-detail__preview">
+      <amk-product-silhouette
+        [silhouette]="selectedProduct()!.views[0].silhouette"
+        [colorHex]="selectedColorHex()" />
+    </div>
+
+    <div class="amk-picker-detail__form">
+      <h2>{{ selectedProduct()!.name }}</h2>
+      <p class="amk-picker-detail__desc">{{ selectedProduct()!.description }}</p>
+
+      <div class="amk-picker-detail__field">
+        <span class="amk-picker-detail__label">Variant</span>
+        <div class="amk-picker-detail__chips">
+          @for (variant of selectedProduct()!.variants; track variant.id) {
+          <button type="button" [class.is-active]="selectedVariantId() === variant.id" (click)="setVariant(variant.id)">
+            {{ variant.label }}
+          </button>
+          }
+        </div>
+      </div>
+
+      <div class="amk-picker-detail__field">
+        <span class="amk-picker-detail__label">Color</span>
+        <div class="amk-picker-detail__colors">
+          @for (color of selectedProduct()!.colors; track color.id) {
+          <button
+            type="button"
+            class="amk-picker-detail__color-swatch"
+            [class.is-active]="selectedColorId() === color.id"
+            [style.background]="color.hex"
+            [attr.aria-label]="color.label"
+            [title]="color.label"
+            (click)="setColor(color.id)">
+          </button>
+          }
+        </div>
+      </div>
+
+      <div class="amk-picker-detail__field">
+        <span class="amk-picker-detail__label">Quantity</span>
+        <div class="amk-picker-detail__qty">
+          <button type="button" (click)="adjustQuantity(-1)" aria-label="Decrease quantity">−</button>
+          <span>{{ quantity() }}</span>
+          <button type="button" (click)="adjustQuantity(1)" aria-label="Increase quantity">+</button>
+        </div>
+      </div>
+
+      <button type="button" class="amk-btn amk-btn--primary amk-picker-detail__cta" (click)="startDesigning()">
+        Start Designing →
+      </button>
+    </div>
+  </div>
+</div>
+}

@@ -2,27 +2,15 @@ import { RenderMode, ServerRoute } from '@angular/ssr';
 
 export const serverRoutes: ServerRoute[] = [
   {
-    path: 'admin/**',
-    renderMode: RenderMode.Client
-  },
-  {
-    path: 'client/**',
-    renderMode: RenderMode.Client
-  },
-  {
     path: 'maintenance',
     renderMode: RenderMode.Client
   },
   {
-    path: 'products/:slug',
-    renderMode: RenderMode.Client
-  },
-  {
-    path: 'collections/:slug',
-    renderMode: RenderMode.Client
-  },
-  {
-    path: 'productos/:slug',
+    // The design studio is a client-only app (localStorage projects, Konva
+    // canvas, file uploads). Prerendering it causes hydration mismatches when
+    // the URL carries ?project=… and the client resumes straight into the
+    // editor step, which breaks the canvas.
+    path: 'design',
     renderMode: RenderMode.Client
   },
   {

@@ -1,79 +1,129 @@
-<section class="page-hero">
-  <div class="page-container">
-    <div class="page-hero__inner">
-      <p class="badge">New commission</p>
-      <h1 class="heading-display">Tell us what you need made.</h1>
-      <p class="page-hero__subtitle">Describe the project and we'll come back with scope, materials, and a timeline — within one business day.</p>
-    </div>
-  </div>
-</section>
+<div class="amk-enquire" [attr.data-theme]="theme()">
 
-<section class="enquire-page">
-  <div class="page-container">
-    <div class="enquire-panel">
-      <div class="enquire-toggle">
-        <button type="button" (click)="setMode('standard')" [class.is-active]="mode() === 'standard'">Project enquiry</button>
-        <button type="button" (click)="setMode('trade')" [class.is-active]="mode() === 'trade'">Trade application</button>
-      </div>
+  <section class="amk-enq-hero">
+    <div class="amk-enq-hero__grain" aria-hidden="true"></div>
 
-      @if (success) {
-      <div class="form-success">
-        <h2>Brief received</h2>
-        <p>We'll review the details and respond within one business day. Check your inbox for next steps.</p>
-      </div>
+    <button
+      type="button"
+      class="amk-theme-toggle"
+      (click)="toggleTheme()"
+      [attr.aria-label]="theme() === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'">
+      @if (theme() === 'dark') {
+        <span aria-hidden="true">☀</span> Light
       } @else {
-      <form [formGroup]="form" (ngSubmit)="submit()" class="enquire-form">
-        <div class="enquire-form__grid">
-          <input formControlName="fullName" type="text" placeholder="Your name" />
-          <input formControlName="company" type="text" placeholder="Firm or studio" />
-          <input formControlName="email" type="email" placeholder="Email address" />
-          <select formControlName="role">
-            <option value="" disabled selected>Your Role</option>
-            <option value="designer">Interior Designer</option>
-            <option value="gc">General Contractor (GC)</option>
-            <option value="hospitality">Hospitality Operator</option>
-            <option value="corporate">Corporate</option>
-            <option value="other">Other</option>
-          </select>
-          <select formControlName="projectType">
-            <option value="" disabled selected>Project Type</option>
-            <option value="signage">Signage</option>
-            <option value="bar_fitout">Bar Fitout</option>
-            <option value="trade_supply">Trade Supply</option>
-            <option value="awards">Awards</option>
-            <option value="architectural">Architectural</option>
-            <option value="other">Other</option>
-          </select>
-          <select formControlName="preferredMaterial">
-            <option value="" disabled selected>Preferred Material</option>
-            <option value="brass">Brushed Brass</option>
-            <option value="aluminium">Anodized Aluminium</option>
-            <option value="stainless">Stainless Steel</option>
-            <option value="acrylic">Frosted / Cast Acrylic</option>
-            <option value="wood">Hardwood (Oak / Walnut)</option>
-            <option value="glass">Glass</option>
-            <option value="unsure">Unsure — advise me</option>
-          </select>
-          <input formControlName="estimatedQuantity" type="text" placeholder="Estimated quantity (e.g. 12 signs)" />
-          <select formControlName="targetTimeline">
-            <option value="" disabled selected>Target Timeline</option>
-            <option value="2_weeks">Within 2 weeks</option>
-            <option value="1_month">1 month</option>
-            <option value="1_3_months">1–3 months</option>
-            <option value="flexible">Flexible</option>
-          </select>
-        </div>
-        <textarea formControlName="projectDescription" rows="6" placeholder="Describe the project — what's being made, what finish, and any reference images or drawings"></textarea>
-        <app-file-dropzone [files]="files" [progress]="uploadProgress" helper="PDF, AI, DWG, JPG up to 20MB" (filesChange)="onFilesChange($event)" />
-        @if (errorMessage) {
-        <p class="form-error">{{ errorMessage }}</p>
-        }
-        <div class="enquire-form__footer">
-          <p class="enquire-form__trust">Response within one business day, Mon–Fri.</p>
-          <button type="submit" class="btn-primary" [disabled]="submitting">Send Brief</button>
-        </div>
-      </form>
+        <span aria-hidden="true">☾</span> Dark
       }
+    </button>
+
+    <div class="page-container amk-enq-hero__inner">
+      <img [src]="logoSrc()" alt="Amarka" class="amk-enq-hero__logo" />
+      <span class="amk-badge">Get a Free Quote</span>
+      <h1 class="amk-enq-hero__title">Tell us what<br><em>your brand needs.</em></h1>
+      <p class="amk-enq-hero__subtitle">Describe the project and we'll come back with scope, pricing, and a timeline — within one business day.</p>
     </div>
-  </div>
-</section>
+  </section>
+
+  <section class="amk-enq-form-section">
+    <div class="page-container">
+      <div class="amk-enq-panel">
+        <div class="amk-enq-toggle">
+          <button type="button" (click)="setMode('standard')" [class.is-active]="mode() === 'standard'">New Project</button>
+          <button type="button" (click)="setMode('trade')" [class.is-active]="mode() === 'trade'">Bulk / Ongoing Partner</button>
+        </div>
+
+        @if (success) {
+        <div class="amk-form-success">
+          <h2>Brief received</h2>
+          <p>We'll review the details and respond within one business day. Check your inbox for next steps.</p>
+        </div>
+        } @else {
+        <form [formGroup]="form" (ngSubmit)="submit()" class="amk-enq-form">
+          <!-- Honeypot: hidden from humans; bots that fill it are silently dropped -->
+          <input class="amk-enq-form__hp" formControlName="website" type="text" tabindex="-1" autocomplete="off" aria-hidden="true" />
+          <div class="amk-enq-form__grid">
+            <input formControlName="fullName" type="text" placeholder="Your name" />
+            <input formControlName="company" type="text" placeholder="Company / business name" />
+            <input formControlName="email" type="email" placeholder="Email address" />
+            <select formControlName="role">
+              <option value="" disabled selected>Your Industry</option>
+              <option value="restaurant_cafe">Restaurant / Cafe</option>
+              <option value="real_estate">Real Estate</option>
+              <option value="construction">Construction</option>
+              <option value="medical_clinic">Medical / Clinic</option>
+              <option value="hotel">Hotel / Hospitality</option>
+              <option value="law_insurance">Law / Insurance</option>
+              <option value="gym_salon">Gym / Salon</option>
+              <option value="retail_corporate">Retail / Corporate Office</option>
+              <option value="other">Other</option>
+            </select>
+            <select formControlName="projectType">
+              <option value="" disabled selected>What Do You Need?</option>
+              <option value="apparel">Corporate Apparel</option>
+              <option value="engraving">Laser Engraving</option>
+              <option value="promo_products">Promotional Products</option>
+              <option value="corporate_gifts">Corporate Gifts</option>
+              <option value="drinkware">Drinkware &amp; Tumblers</option>
+              <option value="event_merch">Event Merchandise</option>
+              <option value="other">Other</option>
+            </select>
+            <select formControlName="preferredMaterial">
+              <option value="" disabled selected>Preferred Method</option>
+              <option value="embroidery">Embroidery</option>
+              <option value="laser_engraving">Laser Engraving</option>
+              <option value="dtf_print">DTF Printing</option>
+              <option value="screen_print">Screen Printing</option>
+              <option value="uv_print">UV Printing</option>
+              <option value="unsure">Unsure — advise me</option>
+            </select>
+            <input formControlName="estimatedQuantity" type="text" placeholder="Estimated quantity (e.g. 50 shirts)" />
+            <select formControlName="targetTimeline">
+              <option value="" disabled selected>Target Timeline</option>
+              <option value="2_weeks">Within 2 weeks</option>
+              <option value="1_month">1 month</option>
+              <option value="1_3_months">1–3 months</option>
+              <option value="flexible">Flexible</option>
+            </select>
+            @if (mode() === 'trade') {
+            <select formControlName="businessType">
+              <option value="" disabled selected>Business Type</option>
+              <option value="restaurant_cafe">Restaurant / Cafe</option>
+              <option value="real_estate">Real Estate Agency</option>
+              <option value="construction">Construction Company</option>
+              <option value="medical_clinic">Medical / Clinic</option>
+              <option value="hotel">Hotel / Hospitality Group</option>
+              <option value="law_insurance">Law / Insurance Firm</option>
+              <option value="gym_salon">Gym / Salon</option>
+              <option value="retail_corporate">Retail / Corporate Office</option>
+              <option value="other">Other</option>
+            </select>
+            <select formControlName="orderVolume">
+              <option value="" disabled selected>Expected Order Volume</option>
+              <option value="one_off">One-off project</option>
+              <option value="recurring">Recurring orders</option>
+              <option value="wholesale">High volume / wholesale</option>
+            </select>
+            }
+          </div>
+          <textarea formControlName="projectDescription" rows="6" placeholder="Describe what you need — products, quantities, your logo/brand files, and any deadline"></textarea>
+          <app-file-dropzone [files]="files" [progress]="uploadProgress" [helper]="mode() === 'trade' ? 'Logo files, brand guidelines, PDF, AI, PNG up to 20MB' : 'Logo files, reference images, PDF, PNG, JPG up to 20MB'" (filesChange)="onFilesChange($event)" />
+          @if (errorMessage) {
+          <p class="amk-form-error">{{ errorMessage }}</p>
+          }
+          <div class="amk-enq-form__footer">
+            <p class="amk-enq-form__trust">Response within one business day, Mon–Fri.</p>
+            <button type="submit" class="amk-btn amk-btn--primary" [disabled]="submitting">
+              @if (submitting) {
+              <span class="amk-btn-spinner" aria-hidden="true"></span>
+              <span>Sending…</span>
+              } @else {
+              <span>Send Brief</span>
+              }
+            </button>
+          </div>
+        </form>
+        }
+      </div>
+    </div>
+  </section>
+
+</div>

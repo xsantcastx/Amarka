@@ -1,0 +1,213 @@
+@use '../../../../styles/amk-system' as amk;
+
+/* View encapsulation scopes shared classes per component, so the button and
+   type helpers must be included here — the page-level include can't reach in. */
+@include amk.buttons;
+@include amk.type-helpers;
+
+:host {
+  display: block;
+  font-family: var(--amk-font-sans);
+  color: var(--amk-text);
+}
+
+/* ─── Success state ────────────────────────────────────────── */
+
+.amk-review-success {
+  text-align: center;
+  padding: 4rem 1rem;
+  display: grid;
+  gap: 1rem;
+  justify-items: center;
+
+  h2 {
+    font-family: var(--amk-font-display);
+    font-size: 2rem;
+    font-weight: 600;
+    margin: 0;
+    color: var(--amk-text);
+  }
+
+  p {
+    max-width: 42ch;
+    color: var(--amk-text-soft);
+    margin: 0 0 0.5rem;
+  }
+}
+
+/* ─── Layout ────────────────────────────────────────────────── */
+
+.amk-review {
+  display: grid;
+  gap: 2.5rem;
+  grid-template-columns: 1fr;
+  margin-bottom: 2.5rem;
+
+  @media (min-width: 780px) {
+    grid-template-columns: 1.3fr 1fr;
+    align-items: start;
+  }
+}
+
+/* ─── Mockups ───────────────────────────────────────────────── */
+
+.amk-review__generating {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 4/5;
+  border-radius: 1.1rem;
+  border: 1px dashed var(--amk-line);
+  color: var(--amk-text-faint);
+  font-size: 0.9rem;
+}
+
+.amk-review__mockup-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 1rem;
+
+  figure {
+    margin: 0;
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4/5;
+    object-fit: contain;
+    border-radius: 1rem;
+    border: 1px solid var(--amk-line);
+    background: var(--amk-bg-soft);
+  }
+
+  figcaption {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--amk-text-soft);
+    text-align: center;
+  }
+}
+
+/* ─── Summary ───────────────────────────────────────────────── */
+
+.amk-review__summary-list {
+  display: grid;
+  gap: 0.9rem;
+  margin: 1rem 0 1.5rem;
+
+  div {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 0.9rem;
+    border-bottom: 1px solid var(--amk-line);
+  }
+
+  dt {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--amk-text-faint);
+  }
+
+  dd {
+    margin: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    color: var(--amk-text);
+    text-align: right;
+  }
+}
+
+.amk-review__swatch {
+  width: 1.1rem;
+  height: 1.1rem;
+  border-radius: 50%;
+  border: 1px solid var(--amk-line);
+  flex-shrink: 0;
+}
+
+.amk-review__edit-link {
+  background: none;
+  border: none;
+  color: var(--amk-text-soft);
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 0;
+
+  &:hover {
+    color: var(--amk-gold-bright);
+  }
+}
+
+/* ─── Quote form ────────────────────────────────────────────── */
+
+.amk-review__form-section {
+  padding-top: 2rem;
+  border-top: 1px solid var(--amk-line);
+}
+
+.amk-review__hp {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.amk-review__form-grid {
+  display: grid;
+  gap: 0.9rem;
+  grid-template-columns: 1fr;
+  margin: 1rem 0 1.25rem;
+
+  @media (min-width: 620px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  input {
+    padding: 0.8rem 1rem;
+    border-radius: 0.75rem;
+    border: 1px solid var(--amk-line);
+    background: var(--amk-surface);
+    color: var(--amk-text);
+    font-family: var(--amk-font-sans);
+    font-size: 0.9rem;
+
+    &::placeholder {
+      color: var(--amk-text-faint);
+    }
+
+    &:focus {
+      outline: none;
+      border-color: var(--amk-gold);
+    }
+  }
+}
+
+.amk-review__error {
+  color: var(--amk-ember);
+  font-size: 0.85rem;
+  margin: 0 0 1rem;
+}
+
+.amk-review__form-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+
+  p {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--amk-text-faint);
+  }
+}

@@ -5,6 +5,7 @@ import { LeadSubmissionService } from '../../services/lead-submission.service';
 import { SeoSchemaService } from '../../services/seo-schema.service';
 import { FileDropzoneComponent } from '../../shared/components/file-dropzone/file-dropzone.component';
 import { EnquirySubmission } from '../../models/studio';
+import { AmkThemeService } from '../../shared/amk-theme/amk-theme.service';
 
 @Component({
   selector: 'app-enquire-page',
@@ -17,6 +18,10 @@ export class EnquirePageComponent {
   private fb = inject(FormBuilder);
   private leadSubmission = inject(LeadSubmissionService);
   private seo = inject(SeoSchemaService);
+  protected readonly themeService = inject(AmkThemeService);
+
+  protected readonly theme = this.themeService.theme;
+  protected readonly logoSrc = this.themeService.logoSrc;
 
   protected mode = signal<'standard' | 'trade'>('standard');
   protected files: File[] = [];
@@ -29,26 +34,45 @@ export class EnquirePageComponent {
     fullName: ['', Validators.required],
     company: [''],
     email: ['', [Validators.required, Validators.email]],
-    role: ['designer', Validators.required],
+    role: ['', Validators.required],
     projectType: ['', Validators.required],
     preferredMaterial: [''],
     estimatedQuantity: [''],
     targetTimeline: [''],
+    businessType: [''],
+    orderVolume: [''],
+    website: [''],
     projectDescription: ['', [Validators.required, Validators.minLength(20)]]
   });
 
   constructor() {
     this.seo.setupMarketingPageSEO({
-      title: 'Start Your Commission | Enquire with Amarka',
-      description: 'Send your project brief, timeline, and files to Amarka. We respond within 24 hours for Connecticut and tri-state trade and commercial engraving enquiries.',
-      keywords: ['laser engraving Connecticut enquiry', 'custom signage Connecticut quote', 'trade engraving enquiry'],
+      title: 'Get a Free Quote | Amarka',
+      description: 'Tell Amarka what your brand needs — apparel, engraving, promotional products, or corporate gifts. We respond within one business day with scope and pricing.',
+      keywords: ['corporate merchandise quote Miami', 'branded apparel quote', 'custom engraving quote', 'promotional products quote'],
       path: '/enquire'
     });
     this.seo.generateLocalBusinessSchema({ pagePath: '/enquire' });
   }
 
+  protected toggleTheme(): void {
+    this.themeService.toggle();
+  }
+
   protected setMode(mode: 'standard' | 'trade') {
     this.mode.set(mode);
+    const company = this.form.controls.company;
+    const businessType = this.form.controls.businessType;
+    if (mode === 'trade') {
+      company.setValidators([Validators.required]);
+      businessType.setValidators([Validators.required]);
+    } else {
+      company.clearValidators();
+      businessType.clearValidators();
+    }
+    company.updateValueAndValidity();
+    businessType.updateValueAndValidity();
+    this.errorMessage = '';
   }
 
   protected onFilesChange(files: File[]) {
@@ -57,8 +81,12 @@ export class EnquirePageComponent {
   }
 
   protected async submit() {
-    if (this.form.invalid || this.submitting) {
+    if (this.submitting) {
+      return;
+    }
+    if (this.form.invalid) {
       this.form.markAllAsTouched();
+      this.errorMessage = 'Please complete the required fields highlighted below before sending.';
       return;
     }
     this.submitting = true;
@@ -68,13 +96,15 @@ export class EnquirePageComponent {
       const uploads = await this.leadSubmission.uploadFiles(this.files, 'enquiries', value => {
         this.uploadProgress = value;
       });
+      const { website, ...fields } = formValue;
       const payload: EnquirySubmission = {
-        ...formValue,
+        ...fields,
         type: this.mode(),
         fileUploads: uploads,
         sourcePage: '/enquire',
         role: formValue.role as EnquirySubmission['role'],
-        leadTags: [this.mode(), formValue.role]
+        leadTags: [this.mode(), formValue.role],
+        honeypot: website
       };
       await this.leadSubmission.submitEnquiry(payload);
       this.success = true;
@@ -82,11 +112,14 @@ export class EnquirePageComponent {
         fullName: '',
         company: '',
         email: '',
-        role: 'designer',
+        role: '',
         projectType: '',
         preferredMaterial: '',
         estimatedQuantity: '',
         targetTimeline: '',
+        businessType: '',
+        orderVolume: '',
+        website: '',
         projectDescription: ''
       });
       this.files = [];

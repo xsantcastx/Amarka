@@ -1,0 +1,302 @@
+@use '../../../../styles/amk-system' as amk;
+
+/* View encapsulation scopes shared classes per component, so the button and
+   type helpers must be included here — the page-level include can't reach in. */
+@include amk.buttons;
+@include amk.type-helpers;
+
+:host {
+  display: block;
+  font-family: var(--amk-font-sans);
+  color: var(--amk-text);
+}
+
+/* ─── Saved projects ───────────────────────────────────────── */
+
+.amk-picker-saved {
+  margin-bottom: 2.5rem;
+}
+
+.amk-picker-saved__list {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.amk-picker-saved__item {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.65rem 1rem;
+  border-radius: 0.9rem;
+  border: 1px solid var(--amk-line);
+  background: var(--amk-surface);
+  cursor: pointer;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+  text-align: left;
+
+  &:hover {
+    border-color: var(--amk-gold);
+    transform: translateY(-2px);
+  }
+}
+
+.amk-picker-saved__swatch {
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  border: 1px solid var(--amk-line);
+  flex-shrink: 0;
+}
+
+.amk-picker-saved__meta {
+  display: grid;
+  gap: 0.1rem;
+
+  strong {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--amk-text);
+  }
+
+  span {
+    font-size: 0.72rem;
+    color: var(--amk-text-faint);
+  }
+}
+
+/* ─── Category tabs ────────────────────────────────────────── */
+
+.amk-picker__tabs {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.75rem;
+}
+
+.amk-picker__tabs button {
+  padding: 0.6rem 1.2rem;
+  border-radius: 999px;
+  border: 1px solid var(--amk-line);
+  background: var(--amk-surface);
+  color: var(--amk-text-soft);
+  font-family: var(--amk-font-sans);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    color: var(--amk-text);
+  }
+
+  &.is-active {
+    background: linear-gradient(135deg, var(--amk-gold-bright), var(--amk-gold));
+    color: var(--amk-on-gold);
+    border-color: transparent;
+  }
+}
+
+/* ─── Product grid ─────────────────────────────────────────── */
+
+.amk-picker__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.1rem;
+}
+
+.amk-picker__card {
+  display: grid;
+  gap: 0.6rem;
+  padding: 1.25rem;
+  border-radius: 1.1rem;
+  border: 1px solid var(--amk-line);
+  background: var(--amk-surface);
+  cursor: pointer;
+  text-align: left;
+  transition: transform 0.25s ease, border-color 0.25s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+    border-color: var(--amk-gold);
+  }
+}
+
+.amk-picker__card-preview {
+  display: block;
+  aspect-ratio: 4/5;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  background: var(--amk-bg-soft);
+}
+
+.amk-picker__card-name {
+  font-family: var(--amk-font-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--amk-text);
+}
+
+.amk-picker__card-desc {
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--amk-text-faint);
+}
+
+/* ─── Product detail / config panel ────────────────────────── */
+
+.amk-picker-detail__back {
+  background: none;
+  border: none;
+  color: var(--amk-text-soft);
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 1.5rem;
+
+  &:hover {
+    color: var(--amk-gold-bright);
+  }
+}
+
+.amk-picker-detail__layout {
+  display: grid;
+  gap: 2.5rem;
+  grid-template-columns: 1fr;
+
+  @media (min-width: 780px) {
+    grid-template-columns: minmax(0, 22rem) 1fr;
+    align-items: start;
+  }
+}
+
+.amk-picker-detail__preview {
+  aspect-ratio: 4/5;
+  border-radius: 1.25rem;
+  overflow: hidden;
+  background: var(--amk-bg-soft);
+  border: 1px solid var(--amk-line);
+}
+
+.amk-picker-detail__form h2 {
+  font-family: var(--amk-font-display);
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin: 0 0 0.4rem;
+  color: var(--amk-text);
+}
+
+.amk-picker-detail__desc {
+  font-size: 0.92rem;
+  color: var(--amk-text-soft);
+  margin: 0 0 1.75rem;
+  max-width: 42ch;
+}
+
+.amk-picker-detail__field {
+  margin-bottom: 1.5rem;
+}
+
+.amk-picker-detail__label {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--amk-ember);
+  margin-bottom: 0.6rem;
+}
+
+.amk-picker-detail__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.amk-picker-detail__chips button {
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  border: 1px solid var(--amk-line);
+  background: var(--amk-surface);
+  color: var(--amk-text-soft);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    color: var(--amk-text);
+  }
+
+  &.is-active {
+    border-color: var(--amk-gold);
+    color: var(--amk-gold-bright);
+    background: color-mix(in srgb, var(--amk-gold) 12%, transparent);
+  }
+}
+
+.amk-picker-detail__colors {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.amk-picker-detail__color-swatch {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  border: 2px solid var(--amk-line);
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+  padding: 0;
+
+  &:hover {
+    transform: scale(1.08);
+  }
+
+  &.is-active {
+    border-color: var(--amk-gold);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--amk-gold) 25%, transparent);
+  }
+}
+
+.amk-picker-detail__qty {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--amk-line);
+  background: var(--amk-surface);
+  width: fit-content;
+
+  button {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    border: 1px solid var(--amk-line);
+    background: var(--amk-bg-soft);
+    color: var(--amk-text);
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+
+    &:hover {
+      border-color: var(--amk-gold);
+    }
+  }
+
+  span {
+    min-width: 2ch;
+    text-align: center;
+    font-weight: 700;
+    font-size: 0.95rem;
+  }
+}
+
+.amk-picker-detail__cta {
+  margin-top: 0.5rem;
+}

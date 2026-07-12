@@ -1,63 +1,79 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { BrandConfigService } from '../../core/services/brand-config.service';
-import { StudioContentService } from '../../services/studio-content.service';
 import { SeoSchemaService } from '../../services/seo-schema.service';
-import { CaseStudy, HomeContent, ServiceCommission, StudioSettings } from '../../models/studio';
-// AMK-62: Scroll-triggered section reveal directives
 import { RevealDirective, RevealStaggerDirective } from '../../shared/reveal';
-// AMK-45: Trade Client Trust Bar — social proof strip below hero
-import { TradeTrustBarComponent } from '../../features/home/trade-trust-bar';
-// AMK-46: Interactive Substrate Explorer — hover-reveal material tiles
-import { SubstrateExplorerComponent } from '../../features/home/substrate-explorer';
-// AMK-44: By the Numbers — compact metrics strip between archetypes and substrates
-import { ByTheNumbersComponent } from '../../features/home/by-the-numbers';
+import { AmkThemeService } from '../../shared/amk-theme/amk-theme.service';
+
+interface HomeService {
+  num: string;
+  title: string;
+  description: string;
+}
+
+interface HomeIndustry {
+  title: string;
+  note: string;
+}
+
+const SERVICES: HomeService[] = [
+  { num: '01', title: 'Corporate Apparel', description: 'Embroidered uniforms and workwear that make every team member look like part of something bigger.' },
+  { num: '02', title: 'Laser Engraving', description: 'Precision-etched drinkware, plaques, and signage — permanent, premium, unmistakably yours.' },
+  { num: '03', title: 'Promotional Products', description: 'DTF, screen print & UV printing on the items your clients actually use and remember.' },
+  { num: '04', title: 'Corporate Gifts & Welcome Kits', description: 'Client appreciation gifts and employee welcome kits that open the door to a lasting relationship.' },
+  { num: '05', title: 'Drinkware & Tumblers', description: 'The gift your clients carry everywhere — engraved, branded, built to last.' },
+  { num: '06', title: 'Event Merchandise', description: 'Branded kits and swag that turn a one-time event into an ongoing impression.' }
+];
+
+const INDUSTRIES: HomeIndustry[] = [
+  { title: 'Restaurants & Cafes', note: 'Branded uniforms & guest gifts' },
+  { title: 'Real Estate', note: 'Premium client tumblers & gifts' },
+  { title: 'Construction', note: 'Embroidered workwear' },
+  { title: 'Medical & Clinics', note: 'Scrubs & branded apparel' },
+  { title: 'Hotels', note: 'Guest amenities & staff kits' },
+  { title: 'Law & Insurance', note: 'Executive corporate gifts' },
+  { title: 'Gyms & Salons', note: 'Team apparel & merch' },
+  { title: 'Retail & Corporate', note: 'Employee welcome kits' }
+];
 
 @Component({
   selector: 'app-home-page',
   standalone: true,
-  imports: [CommonModule, RouterModule, RevealDirective, RevealStaggerDirective, TradeTrustBarComponent, SubstrateExplorerComponent, ByTheNumbersComponent],
+  imports: [CommonModule, RouterModule, RevealDirective, RevealStaggerDirective],
   templateUrl: './home.page.html',
   styleUrl: './home.page.scss'
 })
 export class HomePageComponent {
   private brand = inject(BrandConfigService);
-  private content = inject(StudioContentService);
   private seo = inject(SeoSchemaService);
+  protected readonly themeService = inject(AmkThemeService);
 
-  protected studio = signal<StudioSettings | null>(null);
-  protected homeContent = signal<HomeContent | null>(null);
-  protected featuredCaseStudies = signal<CaseStudy[]>([]);
-  protected featuredProject = signal<CaseStudy | null>(null);
-  protected services = signal<ServiceCommission[]>([]);
+  protected readonly services = SERVICES;
+  protected readonly industries = INDUSTRIES;
+
+  protected readonly theme = this.themeService.theme;
+  protected readonly logoSrc = this.themeService.logoSrc;
 
   constructor() {
     this.seo.setupMarketingPageSEO({
-      title: 'Amarka | Bespoke Laser Engraving Studio — Stamford, CT for the Trade',
-      description: 'Bespoke laser engraving studio serving interior designers, general contractors, hospitality groups, and corporate operators across Connecticut and the tri-state region from Stamford, CT.',
-      keywords: ['laser engraving Stamford CT', 'bespoke engraved signage Connecticut', 'laser engraving for interior designers Connecticut'],
+      title: 'Amarka | Corporate Merchandise, Engraving & Brand Solutions — Miami, FL',
+      description: 'Amarka helps businesses bring their brand into the real world through custom merchandise, engraving, branded apparel, and promotional products — premium corporate gifts from Miami, FL.',
+      keywords: ['corporate merchandise Miami', 'custom engraving Miami FL', 'branded apparel for businesses', 'corporate gifts Miami'],
       path: '/'
     });
     this.seo.generateLocalBusinessSchema({ pagePath: '/' });
-    void this.load();
   }
 
   protected get hero() {
     return this.brand.site.hero;
   }
 
-  private async load() {
-    const [studio, homeContent, caseStudies, services] = await Promise.all([
-      this.content.getStudioSettings(),
-      this.content.getHomeContent(),
-      this.content.getCaseStudies(),
-      this.content.getServices()
-    ]);
-    this.studio.set(studio);
-    this.homeContent.set(homeContent);
-    this.featuredProject.set(caseStudies.find(item => item.slug === homeContent.featuredProjectSlug) ?? null);
-    this.featuredCaseStudies.set(caseStudies.slice(0, 3));
-    this.services.set(services.slice(0, 3));
+  protected get brandInfo() {
+    return this.brand.site.brand;
+  }
+
+  protected toggleTheme(): void {
+    this.themeService.toggle();
   }
 }

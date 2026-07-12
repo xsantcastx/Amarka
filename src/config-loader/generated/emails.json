@@ -1,21 +1,21 @@
 {
   "notifications": {
     "newUser": {
-      "subject": "New trade inquiry · Amarka",
-      "preheader": "A new contact request was submitted on amarka.co."
+      "subject": "New Commission Enquiry — Amarka",
+      "preheader": "A new commission enquiry was submitted on amarka.co."
     },
     "cartShare": {
-      "subject": "Amarka · Trade engraving inquiry"
+      "subject": "Amarka · Project Spec Enquiry"
     },
     "contact": {
-      "subject": "Amarka · Contact message"
+      "subject": "Amarka · Studio Enquiry"
     },
     "inventoryAlert": {
-      "subject": "Production alert · Amarka"
+      "subject": "Production Alert — Amarka Studio"
     },
-    "projectInquiry": {
-      "subject": "Amarka · New project consultation",
-      "preheader": "A Connecticut or tri-state trade client is requesting a laser engraving consultation."
+    "eventInquiry": {
+      "subject": "New Commission Enquiry — Amarka",
+      "preheader": "Someone is requesting a quote for laser engraving work."
     }
   }
 }

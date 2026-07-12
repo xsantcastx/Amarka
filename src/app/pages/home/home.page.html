@@ -1,177 +1,119 @@
-<section class="home-hero" aria-label="Hero">
-  <!-- Animated background accents -->
-  <div class="home-hero__orb home-hero__orb--1" aria-hidden="true"></div>
-  <div class="home-hero__orb home-hero__orb--2" aria-hidden="true"></div>
-  <div class="home-hero__grain" aria-hidden="true"></div>
+<div class="amk-home" [attr.data-theme]="theme()">
 
-  <div class="page-container home-hero__layout">
-    <div class="home-hero__copy">
-      @if (hero?.badge) {
-        <span class="home-hero__badge">{{ hero?.badge }}</span>
+  <section class="amk-hero" aria-label="Hero">
+    <div class="amk-hero__grain" aria-hidden="true"></div>
+
+    <button
+      type="button"
+      class="amk-theme-toggle"
+      (click)="toggleTheme()"
+      [attr.aria-label]="theme() === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'">
+      @if (theme() === 'dark') {
+        <span aria-hidden="true">☀</span> Light
+      } @else {
+        <span aria-hidden="true">☾</span> Dark
       }
-      <p class="badge animate-hero-fade" style="animation-delay:0.15s">{{ hero?.eyebrow }}</p>
-      <h1 class="heading-display animate-hero-fade" style="animation-delay:0.3s">{{ hero?.title }}</h1>
-      <p class="home-hero__subtitle animate-hero-fade" style="animation-delay:0.45s">{{ hero?.subtitle }}</p>
-      <div class="home-hero__actions animate-hero-fade" style="animation-delay:0.6s">
-        <a [routerLink]="hero?.primaryCta?.href || '/enquire'" class="btn-primary">{{ hero?.primaryCta?.label }}</a>
-        <a [routerLink]="hero?.secondaryCta?.href || '/trade'" class="btn-outline">{{ hero?.secondaryCta?.label }}</a>
+    </button>
+
+    <div class="page-container amk-hero__layout">
+      <div class="amk-hero__copy">
+        <img [src]="logoSrc()" [alt]="brandInfo?.name || 'Amarka'" class="amk-hero__logo animate-hero-fade" style="animation-delay:0.05s" />
+
+        @if (hero?.badge) {
+          <span class="amk-badge animate-hero-fade" style="animation-delay:0.15s">{{ hero?.badge }}</span>
+        }
+        <p class="amk-eyebrow animate-hero-fade" style="animation-delay:0.25s">{{ hero?.eyebrow }}</p>
+        <h1 class="amk-hero__title animate-hero-fade" style="animation-delay:0.35s">{{ hero?.title }}</h1>
+        <p class="amk-hero__subtitle animate-hero-fade" style="animation-delay:0.45s">{{ hero?.subtitle }}</p>
+
+        <div class="amk-hero__actions animate-hero-fade" style="animation-delay:0.55s">
+          <a [routerLink]="hero?.primaryCta?.href || '/enquire'" class="amk-btn amk-btn--primary">{{ hero?.primaryCta?.label || 'Get a Free Quote' }}</a>
+          <a [routerLink]="hero?.secondaryCta?.href || '/work'" class="amk-btn amk-btn--outline">{{ hero?.secondaryCta?.label || 'See Our Work' }}</a>
+        </div>
+      </div>
+
+      <div class="amk-hero__media">
+        <div class="amk-hero__swatch">
+          <div class="amk-hero__heart" aria-hidden="true">♥</div>
+          <div class="amk-hero__swatch-caption">
+            <strong>Embroidered Workwear</strong>
+            Construction Group — Doral, FL
+          </div>
+        </div>
+        <div class="amk-hero__tags">
+          <span class="amk-chip amk-chip--gold">✦ Embroidery</span>
+          <span class="amk-chip amk-chip--ember">✦ Laser Etch</span>
+          <span class="amk-chip amk-chip--gold">✦ Corp. Gifts</span>
+        </div>
       </div>
     </div>
+  </section>
 
-    <div class="home-hero__media">
-      <!-- Material showcase cards -->
-      <div class="home-hero__material-card animate-hero-fade" style="animation-delay:0.5s">
-        <span class="home-hero__material-label">Six substrates, one studio</span>
-        <p>Brass, aluminium, stainless steel, acrylic, hardwood, and glass — engraved and finished in-house.</p>
-      </div>
-      <div class="home-hero__material-card animate-hero-fade" style="animation-delay:0.65s">
-        <span class="home-hero__material-label">Stamford, CT · Connecticut trade</span>
-        <p>{{ studio()?.turnaround || '5–10 business day turnaround' }}</p>
-      </div>
-      <!-- Decorative accent line -->
-      <div class="home-hero__accent-line" aria-hidden="true"></div>
-    </div>
-  </div>
-
-  <!-- Scroll cue -->
-  <div class="home-hero__scroll-cue" aria-hidden="true">
-    <span></span>
-  </div>
-</section>
-
-<!-- AMK-45 — Trade Client Trust Bar: social proof for trade visitors -->
-<amarka-trade-trust-bar amarkaReveal></amarka-trade-trust-bar>
-
-<!-- AMK-44 — By the Numbers: compact metrics strip between archetypes and substrates -->
-<amarka-by-the-numbers amarkaReveal></amarka-by-the-numbers>
-
-<!-- AMK-46 — Interactive Substrate Explorer: hover-reveal material detail tiles -->
-<amarka-substrate-explorer amarkaReveal></amarka-substrate-explorer>
-
-<section class="home-section" amarkaReveal>
-  <div class="page-container">
-    <div class="home-verticals" amarkaRevealStagger>
-      @for (vertical of homeContent()?.verticals || []; track vertical.id) {
-      <article class="home-vertical" amarkaReveal>
-        <h2>{{ vertical.title }}</h2>
-        <p>{{ vertical.description }}</p>
-        <a [routerLink]="vertical.href" [fragment]="vertical.fragment">See details</a>
-      </article>
+  <div class="amk-marquee" aria-hidden="true">
+    <div class="amk-marquee__track">
+      @for (i of [0,1]; track i) {
+        <span>Restaurants</span><span>Real Estate</span><span>Construction</span><span>Medical Clinics</span>
+        <span>Hotels</span><span>Law Firms</span><span>Gyms</span><span>Beauty Salons</span>
       }
     </div>
   </div>
-</section>
 
-<section class="home-section" amarkaReveal>
-  <div class="page-container">
-    <div class="home-section__head">
-      <div>
-        <p class="badge">Recent commissions</p>
-        <h2 class="heading-display">Work that speaks for itself — hospitality, corporate, and architectural.</h2>
+  <section class="amk-section" amarkaReveal>
+    <div class="page-container">
+      <div class="amk-section__head">
+        <p class="amk-kicker">The Spec Sheet</p>
+        <h2 class="amk-section__title">Not a mug.<br><em>A brand experience.</em></h2>
       </div>
-      <a routerLink="/work" class="btn-outline">View all work</a>
-    </div>
 
-    <div class="home-work-grid" amarkaRevealStagger>
-      @for (item of featuredCaseStudies(); track item.id) {
-      <article class="home-work-card" amarkaReveal>
-        <p class="home-work-card__eyebrow">{{ item.clientType | titlecase }}</p>
-        <h3>{{ item.projectName }}</h3>
-        <p>{{ item.brief }}</p>
-        <a [routerLink]="item.ctaHref">{{ item.ctaLabel }}</a>
-      </article>
-      }
-    </div>
-  </div>
-</section>
-
-
-<section class="home-section">
-  <div class="page-container">
-    <div class="home-section__head">
-      <div>
-        <p class="badge">What we do</p>
-        <h2 class="heading-display">Every commission is scoped to your project — not pulled from a catalogue.</h2>
-      </div>
-      <a routerLink="/services" class="btn-outline">View all services</a>
-    </div>
-
-    <div class="home-work-grid">
-      @for (service of services(); track service.id) {
-      <article class="home-work-card">
-        <h3>{{ service.title }}</h3>
-        <p>{{ service.description }}</p>
-        <a [routerLink]="service.ctaHref">{{ service.ctaLabel }}</a>
-      </article>
-      }
-    </div>
-  </div>
-</section>
-
-<!-- AMK-40 — Vertical Industry Cards (premium 5-card grid) -->
-<section class="home-section" aria-labelledby="home-industries-heading">
-  <div class="page-container">
-    <div class="home-section__head">
-      <div>
-        <p class="badge">Who we work with</p>
-        <h2 class="heading-display" id="home-industries-heading">Who We Work With</h2>
-        <p class="home-section__lede">Trade accounts available with preferred pricing and dedicated lead time slots.</p>
-      </div>
-      <a routerLink="/clients" class="btn-outline">See all client types</a>
-    </div>
-
-    <ul class="home-industries" role="list">
-      <li class="home-industry-card" role="listitem">
-        <h3 class="home-industry-card__title">Hospitality</h3>
-        <p class="home-industry-card__products">Room &amp; Door Signs · Do Not Disturb Plaques · Leather Welcome Amenity Cards</p>
-        <a class="home-industry-card__link" routerLink="/clients" fragment="hospitality" aria-label="See details for Hospitality trade accounts">See details</a>
-      </li>
-      <li class="home-industry-card" role="listitem">
-        <h3 class="home-industry-card__title">Food &amp; Beverage</h3>
-        <p class="home-industry-card__products">Bar Name Plaque · Cocktail Menu Plates · Engraved Cocktail Tumblers</p>
-        <a class="home-industry-card__link" routerLink="/clients" fragment="food-beverage" aria-label="See details for Food and Beverage trade accounts">See details</a>
-      </li>
-      <li class="home-industry-card" role="listitem">
-        <h3 class="home-industry-card__title">Golf &amp; Country Clubs</h3>
-        <p class="home-industry-card__products">Golf Bag Tags · Locker Nameplates · Acrylic Hole Markers</p>
-        <a class="home-industry-card__link" routerLink="/clients" fragment="golf-clubs" aria-label="See details for Golf and Country Clubs trade accounts">See details</a>
-      </li>
-      <li class="home-industry-card" role="listitem">
-        <h3 class="home-industry-card__title">Corporate &amp; Office</h3>
-        <p class="home-industry-card__products">Office Door Nameplates · Conference Room Signs · Award &amp; Recognition Plaques</p>
-        <a class="home-industry-card__link" routerLink="/clients" fragment="corporate" aria-label="See details for Corporate and Office trade accounts">See details</a>
-      </li>
-      <li class="home-industry-card" role="listitem">
-        <h3 class="home-industry-card__title">Retail &amp; Events</h3>
-        <p class="home-industry-card__products">Branded Keychains · Event Commemorative Plates · Gift Tumblers</p>
-        <a class="home-industry-card__link" routerLink="/clients" fragment="retail-events" aria-label="See details for Retail and Events trade accounts">See details</a>
-      </li>
-    </ul>
-  </div>
-</section>
-
-<section class="home-section">
-  <div class="page-container">
-    <div class="home-trade-band luxury-overlay">
-      <div>
-        <p class="badge">Trade accounts</p>
-        <h2 class="heading-display">Preferred pricing. Priority turnaround. One point of contact.</h2>
-        <p>Amarka trade accounts give interior designers and GCs working on Connecticut and tri-state projects dedicated scheduling, monthly invoicing, and a direct line to our fabrication team.</p>
-      </div>
-      <a routerLink="/trade" class="btn-primary">Apply for Trade Access</a>
-    </div>
-  </div>
-</section>
-
-<section class="home-section home-section--last">
-  <div class="page-container">
-    <div class="home-trusted">
-      <p class="home-trusted__label">Trusted by</p>
-      <div class="home-trusted__items">
-        @for (item of homeContent()?.trustedBy || []; track item.label) {
-        <span>{{ item.label }}</span>
+      <div class="amk-spec-list" amarkaRevealStagger>
+        @for (service of services; track service.num) {
+          <article class="amk-spec-row" amarkaReveal>
+            <span class="amk-spec-row__num">{{ service.num }}</span>
+            <div class="amk-spec-row__body">
+              <h3>{{ service.title }}</h3>
+              <p>{{ service.description }}</p>
+            </div>
+          </article>
         }
       </div>
     </div>
-  </div>
-</section>
+  </section>
+
+  <section class="amk-miami" amarkaReveal>
+    <div class="amk-miami__stamp" aria-hidden="true">Relocating<br>To<br>Miami, FL</div>
+    <div class="page-container amk-miami__inner">
+      <h2>New city, <em>same craftsmanship.</em></h2>
+      <p>Amarka is bringing premium branded merchandise and engraving to Miami's restaurants, hotels, real estate teams, and growing businesses — with the same care in every product we make.</p>
+    </div>
+  </section>
+
+  <section class="amk-section" amarkaReveal aria-labelledby="amk-industries-heading">
+    <div class="page-container">
+      <div class="amk-section__head amk-section__head--center">
+        <p class="amk-kicker">Who We Outfit</p>
+        <h2 class="amk-section__title" id="amk-industries-heading">Built for businesses that<br>want to <em>look the part.</em></h2>
+      </div>
+
+      <ul class="amk-tagcloud" role="list" amarkaRevealStagger>
+        @for (industry of industries; track industry.title) {
+          <li class="amk-tagcloud__chip" amarkaReveal>
+            <strong>{{ industry.title }}</strong>
+            <span>{{ industry.note }}</span>
+          </li>
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="amk-section amk-section--last" amarkaReveal>
+    <div class="page-container">
+      <div class="amk-ticket">
+        <p class="amk-kicker amk-kicker--center">Admit One Brand</p>
+        <h2>Let's put your brand<br>into <em>the real world.</em></h2>
+        <p class="amk-ticket__copy">Tell us about your business — we'll show you what your brand could look like on the products your clients actually use.</p>
+        <a [routerLink]="hero?.primaryCta?.href || '/enquire'" class="amk-btn amk-btn--primary">Start a Project →</a>
+      </div>
+    </div>
+  </section>
+
+</div>

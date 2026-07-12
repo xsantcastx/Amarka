@@ -87,3 +87,7 @@ src/app/shared/services/
 
 # Sandbox write-probe artifacts (harmless, sandbox can't delete)
 .amk-write-probe.txt
+
+# Local agent/session state and scratch notes
+.omc/
+outputs/

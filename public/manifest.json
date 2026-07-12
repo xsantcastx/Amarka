@@ -1,18 +1,18 @@
 {
-  "name": "Amarka — Bespoke Laser Engraving Studio (Stamford, CT)",
+  "name": "Amarka — Corporate Merchandise, Engraving & Brand Solutions (Miami, FL)",
   "short_name": "Amarka",
-  "description": "Bespoke laser engraving studio in Stamford, CT supplying custom signage, wayfinding, hospitality fitout elements, awards, and architectural accents for interior designers, contractors, and commercial operators across Connecticut and the tri-state region.",
+  "description": "Amarka helps businesses bring their brand into the real world through custom merchandise, engraving, branded apparel, and promotional products — premium corporate gifts and brand solutions from Miami, FL.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#181818",
-  "theme_color": "#181818",
+  "background_color": "#14110D",
+  "theme_color": "#14110D",
   "orientation": "portrait-primary",
   "lang": "en-US",
   "dir": "ltr",
   "categories": ["business", "productivity", "design"],
   "icons": [
     {
-      "src": "/Logo Clear.png",
+      "src": "/amarka-favicon.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"

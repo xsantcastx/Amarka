@@ -1,0 +1,67 @@
+<div class="amk-studio" [attr.data-theme]="theme()">
+
+  <section class="amk-studio-hero">
+    <div class="amk-studio-hero__grain" aria-hidden="true"></div>
+
+    <button
+      type="button"
+      class="amk-theme-toggle"
+      (click)="toggleTheme()"
+      [attr.aria-label]="theme() === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'">
+      @if (theme() === 'dark') {
+        <span aria-hidden="true">☀</span> Light
+      } @else {
+        <span aria-hidden="true">☾</span> Dark
+      }
+    </button>
+
+    <div class="page-container amk-studio-hero__inner">
+      <img [src]="logoSrc()" alt="Amarka" class="amk-studio-hero__logo" />
+      <span class="amk-badge">Product Customization Studio</span>
+      <h1 class="amk-studio-hero__title">Design it. <em>See it. Send it.</em></h1>
+      <p class="amk-studio-hero__subtitle">Upload your logo, place it exactly where you want on real product views, and request a quote — no design software required.</p>
+
+      <div class="amk-studio-steps" role="list">
+        <div class="amk-studio-step" role="listitem" [class.is-active]="step() === 'pick'" [class.is-done]="step() !== 'pick'">
+          <span class="amk-studio-step__num">1</span>
+          <span class="amk-studio-step__label">Choose Product</span>
+        </div>
+        <div class="amk-studio-step" role="listitem" [class.is-active]="step() === 'editor'" [class.is-done]="step() === 'review'">
+          <span class="amk-studio-step__num">2</span>
+          <span class="amk-studio-step__label">Customize</span>
+        </div>
+        <div class="amk-studio-step" role="listitem" [class.is-active]="step() === 'review'">
+          <span class="amk-studio-step__num">3</span>
+          <span class="amk-studio-step__label">Review &amp; Quote</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="amk-studio-body">
+    <div class="page-container">
+      @switch (step()) {
+        @case ('pick') {
+          <amk-product-picker
+            (productSelected)="onProductSelected($event)"
+            (projectResumed)="onResumeProject($event)" />
+        }
+        @case ('editor') {
+          @if (project()) {
+            <amk-canvas-editor (continueToReview)="onEditorContinue()" (startOver)="onStartOver()" />
+          }
+        }
+        @case ('review') {
+          @if (project()) {
+            <amk-design-review
+              [submitted]="submitted()"
+              (backToEditor)="onBackToEditor()"
+              (submitted$)="onSubmitted()"
+              (startOver)="onStartOver()" />
+          }
+        }
+      }
+    </div>
+  </section>
+
+</div>
