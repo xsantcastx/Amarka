@@ -91,3 +91,6 @@ src/app/shared/services/
 # Local agent/session state and scratch notes
 .omc/
 outputs/
+
+# SSR bundle copied into functions at deploy time (firebase.json predeploy)
+functions/ssr/
