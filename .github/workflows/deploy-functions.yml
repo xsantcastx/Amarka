@@ -40,25 +40,21 @@ jobs:
         working-directory: ./functions
         run: npm run build
       
-      - name: Configure Stripe secret key
-        run: |
-          echo "Setting Stripe configuration..."
-          # Firebase CLI doesn't log secret values in output
-          firebase functions:config:set stripe.secret_key="${STRIPE_SECRET_KEY}" --token "$FIREBASE_TOKEN"
-        env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
-      
+      # The ssr function serves the app shell, so this deploy needs the built
+      # server bundle (firebase.json predeploy copies dist/... into functions/ssr).
+      - name: Install app dependencies
+        run: npm ci
+
+      - name: Build app (SSR server bundle)
+        run: npm run build
+
       - name: Deploy to Firebase
         run: firebase deploy --only functions --token "$FIREBASE_TOKEN"
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-      
+
       - name: Deployment summary
         if: success()
         run: |
           echo "✅ Cloud Functions deployed successfully!"
-          echo "Functions deployed:"
-          echo "  - cartReprice"
-          echo "  - createPaymentIntent"
-          echo "  - handleStripeWebhook"
+          echo "Key functions: ssr, submitStudioEnquiry, submitTradeApplication, sendBrevoEmail"
