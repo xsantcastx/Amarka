@@ -12,7 +12,7 @@
   },
   "contact": {
     "email": "diego@amarka.co",
-    "email2": "jessica@amarka.co",
+    "email2": "",
     "phone": "+1 (203) 554-6224",
     "phone2": "",
     "address": "Miami, FL\nUnited States",
@@ -122,7 +122,7 @@
   },
   "maintenance": {
     "title": "Site maintenance",
-    "description": "We are updating amarka.co and will return shortly. Reach us at diego@amarka.co or jessica@amarka.co for urgent enquiries."
+    "description": "We are updating amarka.co and will return shortly. Reach us at diego@amarka.co for urgent enquiries."
   },
   "notifications": {
     "emailFromName": "Amarka",

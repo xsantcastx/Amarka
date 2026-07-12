@@ -12,7 +12,7 @@
   },
   "contact": {
     "email": "diego@amarka.co",
-    "email2": "jessica@amarka.co",
+    "email2": "",
     "phone": "+1 (203) 555-0148",
     "phone2": "",
     "address": "Stamford, CT",
@@ -98,7 +98,7 @@
   },
   "maintenance": {
     "title": "Studio maintenance",
-    "description": "The Amarka site is temporarily offline for updates. Email diego@amarka.co or jessica@amarka.co for urgent project enquiries."
+    "description": "The Amarka site is temporarily offline for updates. Email diego@amarka.co for urgent project enquiries."
   },
   "notifications": {
     "emailFromName": "Amarka",

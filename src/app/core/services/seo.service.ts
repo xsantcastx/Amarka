@@ -31,9 +31,9 @@ import {
  *   - Meta tag updates go through Angular's Meta service which is SSR-safe.
  *
  * Brand Bible compliance:
- *   - Stamford, CT only — zero NYC / Miami positioning in descriptions.
- *   - Contacts: diego@amarka.co, jessica@amarka.co (no email in tag text
- *     to avoid bot scraping, but LocalBusiness schema carries diego@).
+ *   - Miami, FL positioning.
+ *   - Contact: diego@amarka.co (no email in tag text to avoid bot
+ *     scraping, but LocalBusiness schema carries diego@).
  */
 @Injectable({ providedIn: 'root' })
 export class SeoService {
