@@ -2,7 +2,7 @@
   "functions": {
     "source": "functions",
     "predeploy": [
-      "cp -r dist/commerce-template/server functions/ssr",
+      "rm -rf functions/ssr && cp -r dist/commerce-template/server functions/ssr",
       "npm --prefix \"$RESOURCE_DIR\" run build"
     ]
   },
