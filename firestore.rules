@@ -294,8 +294,12 @@ service cloud.firestore {
         && request.resource.data.to.size() <= 3
         && request.resource.data.message.keys().hasAll(['subject', 'html'])
         && (
-          // Allow hardcoded safe emails
-          request.resource.data.to[0] in ['support@amarka.com', 'hello@amarka.com', 'xsantcastx@xsantcastx.com']
+          // Allow Amarka's canonical contact address. This list is the only
+          // unauthenticated write target, so it stays limited to amarka.co —
+          // it previously also permitted support@/hello@amarka.com (wrong TLD;
+          // the brand is amarka.co) and xsantcastx@xsantcastx.com, an unrelated
+          // external domain. None of the three appear anywhere in the codebase.
+          request.resource.data.to[0] in ['diego@amarka.co']
           // OR allow email from settings (admins can configure it)
           || request.resource.data.to[0] == get(/databases/$(database)/documents/settings/app).data.contactEmail
           || request.resource.data.to[0] == get(/databases/$(database)/documents/settings/public).data.contactEmail
