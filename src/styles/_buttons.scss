@@ -46,13 +46,13 @@
   @extend .btn-primary;
   background: color-mix(in srgb, var(--ts-accent) 9%, var(--ts-paper));
   color: var(--ts-ink) !important;
-  box-shadow: 0 12px 24px -20px rgba(23, 22, 26, 0.12);
+  box-shadow: 0 12px 24px -20px rgba(24, 24, 24, 0.12);
   border: 1px solid color-mix(in srgb, var(--ts-line) 85%, transparent);
 
   &:hover {
     background: color-mix(in srgb, var(--ts-accent) 14%, var(--ts-paper));
     border-color: color-mix(in srgb, var(--ts-accent) 32%, transparent);
-    box-shadow: 0 16px 28px -22px rgba(23, 22, 26, 0.16);
+    box-shadow: 0 16px 28px -22px rgba(24, 24, 24, 0.16);
   }
 }
 

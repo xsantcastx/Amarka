@@ -64,6 +64,13 @@ module.exports = {
         lvl4: 'var(--shadow-4)',
         soft: '0 10px 30px -12px rgba(0,0,0,.35)',
       },
+      // Tailwind Preflight applies `border-color: #e5e7eb` (gray-200) to *every*
+      // element, so any `border` utility without an explicit colour painted an
+      // off-palette grey. On the home page alone that was the most-painted
+      // colour in the document. Default to the Brand Bible surface instead.
+      borderColor: {
+        DEFAULT: '#484848',
+      },
       borderRadius: {
         xs: 'var(--radius-xs)',
         sm: 'var(--radius-sm)',

@@ -8,13 +8,13 @@
   gap: 0.3rem;
   padding: 1.1rem;
   border-radius: 0.85rem;
-  border: 1px dashed var(--amk-gold, rgba(159, 107, 61, 0.5));
+  border: 1px dashed var(--amk-gold, rgba(144, 96, 48, 0.5));
   background: var(--amk-bg-soft, rgba(240, 240, 240, 0.06));
   cursor: pointer;
   transition: border-color 0.18s ease, background-color 0.18s ease;
 
   &:hover {
-    border-color: var(--amk-gold-bright, rgba(159, 107, 61, 0.8));
+    border-color: var(--amk-gold-bright, rgba(144, 96, 48, 0.8));
     background: color-mix(in srgb, var(--amk-bg-soft, #484848) 85%, var(--amk-gold, transparent) 15%);
   }
 }
