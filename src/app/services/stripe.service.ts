@@ -77,9 +77,9 @@ export class StripeService {
       appearance: {
         theme: 'stripe', // Light theme to match Amarka aesthetic
         variables: {
-          colorPrimary: '#C7683B', // Amarka terracotta
-          colorBackground: '#FEFCF8',
-          colorText: '#17130F', // ts-ink
+          colorPrimary: '#906030', // --amarka-gold (was #C7683B terracotta, off-palette)
+          colorBackground: '#f0f0f0', // --amarka-text as paper (was #FEFCF8)
+          colorText: '#181818', // --amarka-bg as ink (was #17130F)
           colorDanger: '#ef4444',
           fontFamily: 'system-ui, sans-serif',
           spacingUnit: '4px',
@@ -87,16 +87,16 @@ export class StripeService {
         },
         rules: {
           '.Input': {
-            backgroundColor: '#FEFCF8',
-            border: '1px solid rgba(199, 104, 59, 0.2)',
+            backgroundColor: '#f0f0f0',
+            border: '1px solid rgba(144, 96, 48, 0.2)',
             padding: '12px',
           },
           '.Input:focus': {
-            border: '2px solid rgba(199, 104, 59, 0.5)',
-            boxShadow: '0 0 0 3px rgba(199, 104, 59, 0.1)',
+            border: '2px solid rgba(144, 96, 48, 0.5)',
+            boxShadow: '0 0 0 3px rgba(144, 96, 48, 0.1)',
           },
           '.Label': {
-            color: '#4B3B2F', // ts-ink-soft
+            color: '#484848', // --amarka-surface as secondary ink (was #4B3B2F)
             fontSize: '14px',
             fontWeight: '600',
           },
@@ -110,14 +110,14 @@ export class StripeService {
     const cardElement = elements.create('card', {
       style: {
         base: {
-          iconColor: '#C7683B', // Amarka terracotta
-          color: '#17130F', // ts-ink
+          iconColor: '#906030', // --amarka-gold (was #C7683B)
+          color: '#181818', // --amarka-bg as ink (was #17130F)
           fontWeight: '500',
           fontFamily: 'system-ui, sans-serif',
           fontSize: '16px',
           fontSmoothing: 'antialiased',
           '::placeholder': {
-            color: '#9ca3af',
+            color: '#909090', // --amarka-text-muted (was #9ca3af)
           },
         },
         invalid: {

@@ -1,7 +1,6 @@
 /**
  * AMK-9 — Per-route SEO configuration.
  *
- * Owner: xsantcastx (Amarka — Stamford, CT laser engraving studio)
  * Shipped: 2026-04-24 by amarka-backlog-executor-v2 scheduled agent.
  *
  * Brand Bible compliance:

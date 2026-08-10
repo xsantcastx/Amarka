@@ -146,7 +146,7 @@
         @for (logo of logosForActiveView(); track logo.id) {
         <li [class.is-active]="selectedLogoId() === logo.id">
           <button type="button" (click)="selectLogoFromList(logo.id)">
-            <img [src]="logo.previewUrl" [alt]="logo.originalName" />
+            <img [src]="logo.previewUrl" [alt]="logo.originalName" width="32" height="32" loading="lazy" decoding="async" />
             <span>{{ logo.originalName }}</span>
             @if (logo.locked) { <span aria-hidden="true">🔒</span> }
           </button>

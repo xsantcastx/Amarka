@@ -79,10 +79,10 @@ export class EmailService {
     void 0;
     
     const rows = items.map((i, idx) =>
-      `<tr><td style="padding:6px;border:1px solid #eee">${idx+1}</td>
-        <td style="padding:6px;border:1px solid #eee">${i.name || 'Sin nombre'}</td>
-        <td style="padding:6px;border:1px solid #eee">${i.thickness||''}</td>
-        <td style="padding:6px;border:1px solid #eee;text-align:right">${i.qty || 1}</td></tr>`
+      `<tr><td style="padding:6px;border:1px solid #c0c0c0">${idx+1}</td>
+        <td style="padding:6px;border:1px solid #c0c0c0">${i.name || 'Sin nombre'}</td>
+        <td style="padding:6px;border:1px solid #c0c0c0">${i.thickness||''}</td>
+        <td style="padding:6px;border:1px solid #c0c0c0;text-align:right">${i.qty || 1}</td></tr>`
     ).join('');
 
     const html = `
@@ -94,17 +94,17 @@ export class EmailService {
         ${contact.message ? `<p><b>Mensaje:</b><br>${String(contact.message).replace(/</g, '&lt;').replace(/\n/g,'<br>')}</p>` : ''}
         <table style="border-collapse:collapse;margin-top:10px;width:100%">
           <thead>
-            <tr style="background-color:#f9fafb">
-              <th style="padding:8px;border:1px solid #eee;text-align:left">#</th>
-              <th style="padding:8px;border:1px solid #eee;text-align:left">Producto</th>
-              <th style="padding:8px;border:1px solid #eee;text-align:left">Espesor</th>
-              <th style="padding:8px;border:1px solid #eee;text-align:right">Cantidad</th>
+            <tr style="background-color:#f0f0f0">
+              <th style="padding:8px;border:1px solid #c0c0c0;text-align:left">#</th>
+              <th style="padding:8px;border:1px solid #c0c0c0;text-align:left">Producto</th>
+              <th style="padding:8px;border:1px solid #c0c0c0;text-align:left">Espesor</th>
+              <th style="padding:8px;border:1px solid #c0c0c0;text-align:right">Cantidad</th>
             </tr>
           </thead>
           <tbody>${rows}</tbody>
         </table>
-        <hr style="margin:24px 0;border:none;border-top:1px solid #e5e7eb">
-        <p style="font-size:12px;color:#6b7280">
+        <hr style="margin:24px 0;border:none;border-top:1px solid #c0c0c0">
+        <p style="font-size:12px;color:#909090">
           Enviado desde el carrito de ${this.brandName} - ${new Date().toLocaleString('es-ES')}
         </p>
       </div>`;
@@ -153,9 +153,9 @@ export class EmailService {
     void 0;
 
     const html = `
-      <div style="font-family:Inter,Segoe UI,Arial,sans-serif;color:#111827;line-height:1.6">
+      <div style="font-family:Inter,Segoe UI,Arial,sans-serif;color:#181818;line-height:1.6">
         <h2 style="margin:0 0 12px;font-size:20px">New contact request - ${this.brandName}</h2>
-        <div style="background-color:#f9fafb;padding:16px;border-radius:8px;margin-bottom:16px">
+        <div style="background-color:#f0f0f0;padding:16px;border-radius:8px;margin-bottom:16px">
           <p style="margin:0 0 8px"><b>Name:</b> ${String(formData.nombre).replace(/</g, '&lt;')}</p>
           <p style="margin:0 0 8px"><b>Email:</b> ${String(formData.email).replace(/</g, '&lt;')}</p>
           <p style="margin:0 0 8px"><b>Phone:</b> ${String(formData.telefono || 'Not provided').replace(/</g, '&lt;')}</p>
@@ -167,14 +167,14 @@ export class EmailService {
         </div>
         
         <div style="margin:16px 0">
-          <h3 style="margin:0 0 8px;color:#374151">Message</h3>
-          <div style="background-color:white;padding:16px;border:1px solid #e5e7eb;border-radius:8px">
+          <h3 style="margin:0 0 8px;color:#484848">Message</h3>
+          <div style="background-color:white;padding:16px;border:1px solid #c0c0c0;border-radius:8px">
             ${String(formData.mensaje).replace(/</g, '&lt;').replace(/\n/g,'<br>')}
           </div>
         </div>
         
-        <hr style="margin:24px 0;border:none;border-top:1px solid #e5e7eb">
-        <p style="font-size:12px;color:#6b7280">
+        <hr style="margin:24px 0;border:none;border-top:1px solid #c0c0c0">
+        <p style="font-size:12px;color:#909090">
           Sent from the contact form on ${this.brandName} - ${new Date().toLocaleString()}
         </p>
       </div>`;
