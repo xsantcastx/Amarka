@@ -319,7 +319,7 @@ export class ProductsService {
                 <p style="margin: 5px 0;"><strong>Low Stock Threshold:</strong> ${settings.lowStockThreshold} units</p>
               </div>
               <p>Please consider restocking this product to avoid running out of inventory.</p>
-              <p style="color: #6b7280; font-size: 12px; margin-top: 30px;">
+              <p style="color: #909090; font-size: 12px; margin-top: 30px;">
                 This is an automated notification from the inventory system.
               </p>
             </div>

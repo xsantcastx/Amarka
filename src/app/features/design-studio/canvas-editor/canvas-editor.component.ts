@@ -21,8 +21,13 @@ import { ProductSilhouetteComponent } from '../product-silhouette/product-silhou
 import { ProductDesignArea, ProductTemplate } from '../product-catalog.types';
 import { StudioLogo } from '../studio-project.types';
 
-const GOLD = '#C9A24C';
-const EMBER = '#FF7A52';
+// Konva paints to a canvas, so these cannot read the --amk-* CSS custom
+// properties and have to be literals. Both are Brand Bible tokens.
+const GOLD = '#906030';   // selection border + transformer anchors (was #C9A24C)
+// Centre guides use the silver token rather than the accent so they stay
+// visually distinct from the gold selection chrome — collapsing both onto
+// #906030 would make the alignment guides indistinguishable from the handles.
+const GUIDE = '#c0c0c0';  // was #FF7A52 (off-palette ember)
 
 @Component({
   selector: 'amk-canvas-editor',
@@ -358,10 +363,10 @@ export class CanvasEditorComponent implements AfterViewInit, AfterViewChecked, O
       snappedY = true;
     }
     if (snappedX) {
-      this.guideLayer.add(new Konva.Line({ points: [centerX, 0, centerX, h], stroke: EMBER, strokeWidth: 1, dash: [4, 4] }));
+      this.guideLayer.add(new Konva.Line({ points: [centerX, 0, centerX, h], stroke: GUIDE, strokeWidth: 1, dash: [4, 4] }));
     }
     if (snappedY) {
-      this.guideLayer.add(new Konva.Line({ points: [0, centerY, w, centerY], stroke: EMBER, strokeWidth: 1, dash: [4, 4] }));
+      this.guideLayer.add(new Konva.Line({ points: [0, centerY, w, centerY], stroke: GUIDE, strokeWidth: 1, dash: [4, 4] }));
     }
     this.guideLayer.batchDraw();
   }

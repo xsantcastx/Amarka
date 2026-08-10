@@ -51,7 +51,7 @@
               <!-- Image Preview -->
               <div class="flex-shrink-0">
                 @if (image.url) {
-                  <img [src]="image.url" [alt]="image.alt" class="w-32 h-32 object-cover rounded-lg border border-white/20">
+                  <img [src]="image.url" [alt]="image.alt" width="128" height="128" loading="lazy" decoding="async" class="w-32 h-32 object-cover rounded-lg border border-white/20">
                 } @else {
                   <div class="w-32 h-32 bg-gray-700 rounded-lg border border-white/20 flex items-center justify-center">
                     <svg class="w-8 h-8 text-white/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -168,7 +168,7 @@
             </div>
 
             <!-- Image Preview -->
-            <img [src]="image.url" [alt]="image.alt" class="w-20 h-20 object-cover rounded-lg border border-white/20">
+            <img [src]="image.url" [alt]="image.alt" width="80" height="80" loading="lazy" decoding="async" class="w-20 h-20 object-cover rounded-lg border border-white/20">
 
             <!-- Info -->
             <div class="flex-1 min-w-0">

@@ -16,31 +16,39 @@
   --amk-font-display: 'Fraunces', serif;
   --amk-font-sans: 'Hanken Grotesk', sans-serif;
 
-  --amk-bg: #14110D;
-  --amk-bg-soft: #1E1912;
-  --amk-text: #F5EEDD;
-  --amk-text-soft: rgba(245, 238, 221, 0.68);
-  --amk-text-faint: rgba(245, 238, 221, 0.45);
-  --amk-gold: #C9A24C;
-  --amk-gold-bright: #E8C877;
-  --amk-ember: #FF7A52;
-  --amk-line: rgba(245, 238, 221, 0.1);
-  --amk-surface: rgba(245, 238, 221, 0.04);
-  --amk-on-gold: #14110D;
+  // Brand Bible 6-token palette. Every value below is one of
+  // #181818 / #484848 / #906030 / #f0f0f0 / #c0c0c0 / #909090, or an alpha
+  // ramp of one of them. Previous (off-palette) values are noted per line.
+  --amk-bg: #181818;                          // was #14110D
+  --amk-bg-soft: #484848;                     // was #1E1912
+  --amk-text: #f0f0f0;                        // was #F5EEDD
+  --amk-text-soft: #c0c0c0;                   // was rgba(245, 238, 221, 0.68)
+  --amk-text-faint: #909090;                  // was rgba(245, 238, 221, 0.45)
+  --amk-gold: #906030;                        // was #C9A24C
+  // The palette has a single accent, so the former second gold and the ember
+  // accent both collapse onto it — same precedent as the AMK-80 Tailwind
+  // bitcoin-gradient flattening.
+  --amk-gold-bright: #906030;                 // was #E8C877
+  --amk-ember: #906030;                       // was #FF7A52
+  --amk-line: rgba(240, 240, 240, 0.1);       // was rgba(245, 238, 221, 0.1)
+  --amk-surface: rgba(240, 240, 240, 0.04);   // was rgba(245, 238, 221, 0.04)
+  --amk-on-gold: #181818;                     // was #14110D
 }
 
 @mixin tokens-light {
-  --amk-bg: #FBF5E7;
-  --amk-bg-soft: #F1E6CC;
-  --amk-text: #1A1712;
-  --amk-text-soft: rgba(26, 23, 18, 0.66);
-  --amk-text-faint: rgba(26, 23, 18, 0.45);
-  --amk-gold: #9C7530;
-  --amk-gold-bright: #8C6A2E;
-  --amk-ember: #D14A26;
-  --amk-line: rgba(26, 23, 18, 0.1);
-  --amk-surface: #ffffff;
-  --amk-on-gold: #FBF5E7;
+  // Light theme = the same six tokens with the background/text roles swapped.
+  // #f0f0f0 becomes the page, #c0c0c0 the raised surface, #181818 the ink.
+  --amk-bg: #f0f0f0;                          // was #FBF5E7
+  --amk-bg-soft: #c0c0c0;                     // was #F1E6CC
+  --amk-text: #181818;                        // was #1A1712
+  --amk-text-soft: #484848;                   // was rgba(26, 23, 18, 0.66)
+  --amk-text-faint: #909090;                  // was rgba(26, 23, 18, 0.45)
+  --amk-gold: #906030;                        // was #9C7530
+  --amk-gold-bright: #906030;                 // was #8C6A2E
+  --amk-ember: #906030;                       // was #D14A26
+  --amk-line: rgba(24, 24, 24, 0.1);          // was rgba(26, 23, 18, 0.1)
+  --amk-surface: #f0f0f0;                     // was #ffffff
+  --amk-on-gold: #f0f0f0;                     // was #FBF5E7
 }
 
 @mixin hero-fade-keyframes {
