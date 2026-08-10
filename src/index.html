@@ -45,8 +45,18 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-  <!-- Google Fonts - Inter + Playfair Display + Source Sans 3 (legacy pages) + Fraunces + Hanken Grotesk (new homepage) -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=Source+Sans+3:wght@300;400;500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Preload the LCP hero logo so it is not discovered only after the app bundle boots -->
+  <link rel="preload" as="image" href="/amarka-logo-transparent.png" fetchpriority="high">
+
+  <!-- Google Fonts - Inter + Playfair Display + Source Sans 3 (legacy pages) + Fraunces + Hanken Grotesk (new homepage).
+       Loaded asynchronously: `media="print"` keeps it off the critical path, and the
+       onload handler promotes it to `all` once it has arrived. `display=swap` already
+       guarantees text paints in the fallback face meanwhile, so nothing is invisible. -->
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=Source+Sans+3:wght@300;400;500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=Source+Sans+3:wght@300;400;500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all';this.onload=null">
+  <noscript>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=Source+Sans+3:wght@300;400;500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  </noscript>
 
   <style>
     #app-initial-loader {
@@ -158,7 +168,8 @@
   <!-- Skip link for accessibility -->
   <a href="#main-content" class="skip-link">Skip to main content</a>
   <div id="app-initial-loader">
-    <img src="/amarka-favicon.png" alt="Amarka" width="120" height="120">
+    <!-- First paint of the app shell — must not be deferred. -->
+    <img src="/amarka-favicon.png" alt="Amarka" width="120" height="120" loading="eager" fetchpriority="high" decoding="async">
   </div>
   <app-root></app-root>
 </body>

@@ -15,7 +15,7 @@
       <div class="amk-review__mockup-grid">
         @for (mockup of mockups(); track mockup.viewId) {
         <figure>
-          <img [src]="mockup.dataUrl" [alt]="mockup.viewLabel + ' mockup'" />
+          <img [src]="mockup.dataUrl" [alt]="mockup.viewLabel + ' mockup'" width="160" height="200" loading="lazy" decoding="async" />
           <figcaption>{{ mockup.viewLabel }}</figcaption>
         </figure>
         }
