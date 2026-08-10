@@ -26,23 +26,23 @@ module.exports = {
         },
         // Legacy `bitcoin.*` namespace — REMAPPED to Brand Bible 6-token palette
         // (AMK-80 alias migration). Was Bitcoin-template residue (#f7931a, #ffb81c,
-        // #0a0b0d, #13151a) inherited from the prior cryptocurrency starter. Existing
-        // class consumers (`bg-bitcoin-orange`, `text-bitcoin-gold`, etc.) continue to
-        // compile and now render Amarka palette colors. Future tasks should migrate
-        // class names to `amarka-*` and remove this namespace entirely.
+        // #0a0b0d, #13151a) inherited from the prior cryptocurrency starter.
+        //
+        // This namespace CANNOT simply be deleted, for two independent reasons:
+        //  1. `bitcoin-orange` / `bitcoin-gold` are persisted *data* values — they are
+        //     stored on benefit templates and product benefits in Firestore and are
+        //     surfaced as picker options in BENEFIT_ICON_COLORS
+        //     (src/app/models/benefit-template.ts). Dropping them would break existing
+        //     records, which a build-time config change cannot migrate.
+        //  2. src/styles/_admin-theme.scss re-declares every `*-bitcoin-*` utility
+        //     against the admin `--ts-*` theme tokens, so admin surfaces depend on
+        //     these class names existing.
+        // Renaming the class names is therefore a data migration, not a config edit.
         bitcoin: {
           orange: '#906030',  // → --amarka-gold
           gold: '#906030',    // → --amarka-gold
           'dark': '#181818',  // → --amarka-bg
           'gray': '#484848',  // → --amarka-surface
-        },
-        // Legacy `luxury.*` namespace — REMAPPED to Brand Bible tokens (AMK-80).
-        // Not actively used as Tailwind classes (only via CSS custom properties),
-        // kept here for completeness so any stray reference resolves on-brand.
-        luxury: {
-          gold: '#906030',    // → --amarka-gold (was #d4af37)
-          silver: '#c0c0c0',  // = --amarka-text-secondary (already on-palette)
-          bronze: '#906030',  // → --amarka-gold (was #cd7f32)
         },
         // Amarka Brand Palette v1
         'amarka-bg': '#181818',          // Primary background
@@ -63,9 +63,6 @@ module.exports = {
         lvl3: 'var(--shadow-3)',
         lvl4: 'var(--shadow-4)',
         soft: '0 10px 30px -12px rgba(0,0,0,.35)',
-        // AMK-80: rgba(247,147,26) (Bitcoin orange) → rgba(144,96,48) (--amarka-gold)
-        bitcoin: '0 0 20px rgba(144, 96, 48, 0.3), 0 0 40px rgba(144, 96, 48, 0.2)',
-        'bitcoin-lg': '0 0 30px rgba(144, 96, 48, 0.4), 0 0 60px rgba(144, 96, 48, 0.3)',
       },
       borderRadius: {
         xs: 'var(--radius-xs)',
@@ -74,14 +71,6 @@ module.exports = {
         lg: 'var(--radius-lg)',
         full: 'var(--radius-full)',
         pill: 'var(--radius-full)'
-      },
-      backgroundImage: {
-        // AMK-80: Bitcoin/cryptocurrency gradient (#f7931a → #ffb81c → #d4af37) and
-        // dark gradient (#0a0b0d → #13151a → #1a1d24) collapsed to Brand Bible palette.
-        // Kept as legacy aliases so consumers (`bg-bitcoin-gradient`, `bg-dark-gradient`)
-        // continue rendering, now in approved Amarka tokens.
-        'bitcoin-gradient': 'linear-gradient(135deg, #906030 0%, #906030 50%, #906030 100%)',
-        'dark-gradient': 'linear-gradient(135deg, #181818 0%, #181818 50%, #181818 100%)',
       },
       fontSize: {
         base: 'var(--font-size-base)',
