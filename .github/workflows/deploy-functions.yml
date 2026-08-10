@@ -48,10 +48,31 @@ jobs:
       - name: Build app (SSR server bundle)
         run: npm run build
 
+      # Authenticate with the same service account the hosting workflow uses.
+      # This previously used `--token "$FIREBASE_TOKEN"`, but that secret is
+      # empty, so every run since 2026-07-12 failed at this step with
+      # "Failed to authenticate, have you run firebase login?" — after having
+      # already spent the full build. `firebase login:ci` tokens are also
+      # deprecated and removed in firebase-tools v14+, so restoring the token
+      # would only have bought time. FIREBASE_SERVICE_ACCOUNT_AMARKA_D237B is
+      # known-good: firebase-hosting-merge.yml deploys with it successfully.
       - name: Deploy to Firebase
-        run: firebase deploy --only functions --token "$FIREBASE_TOKEN"
         env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_AMARKA_D237B }}
+        run: |
+          set -euo pipefail
+          if [ -z "${FIREBASE_SERVICE_ACCOUNT:-}" ]; then
+            echo "::error::Secret FIREBASE_SERVICE_ACCOUNT_AMARKA_D237B is empty or unset."
+            echo "Add the service account JSON under Settings > Secrets and variables > Actions."
+            exit 1
+          fi
+          printf '%s' "$FIREBASE_SERVICE_ACCOUNT" > "$RUNNER_TEMP/firebase-sa.json"
+          export GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/firebase-sa.json"
+          firebase deploy --only functions --project amarka-d237b --non-interactive
+
+      - name: Remove service account credentials
+        if: always()
+        run: rm -f "$RUNNER_TEMP/firebase-sa.json"
 
       - name: Deployment summary
         if: success()
