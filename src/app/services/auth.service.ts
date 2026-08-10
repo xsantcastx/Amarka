@@ -365,7 +365,7 @@ export class AuthService {
               <p style="margin: 5px 0;"><strong>Registration Date:</strong> ${new Date().toLocaleString('es-ES')}</p>
             </div>
             <p>You can manage this user from the admin panel.</p>
-            <p style="color: #6b7280; font-size: 12px; margin-top: 30px;">
+            <p style="color: #909090; font-size: 12px; margin-top: 30px;">
               This is an automated notification from the ${this.brandConfig.siteName} user management system.
             </p>
           </div>

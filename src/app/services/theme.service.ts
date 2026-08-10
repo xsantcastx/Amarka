@@ -738,9 +738,11 @@ export class ThemeService {
 
   private pickReadableTextColor(value: string): string {
     const rgb = this.parseColor(value);
-    if (!rgb) return '#ffffff';
+    if (!rgb) return '#f0f0f0';
     const [r, g, b] = rgb;
     const luminance = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
-    return luminance > 0.6 ? '#1d2a39' : '#ffffff';
+    // Brand Bible ink/paper pair (was #1d2a39 / #ffffff). Contrast against the
+    // luminance threshold is unchanged — both remain at the extremes of the palette.
+    return luminance > 0.6 ? '#181818' : '#f0f0f0';
   }
 }

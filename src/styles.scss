@@ -583,6 +583,15 @@ a:hover {
   background-color: var(--overlay);
 }
 
+/* ── Semantic state colours ───────────────────────────────────────────────
+ * The literals below (#facc15/#fef08a warning, #dc2626/#ef4444/#b91c1c error,
+ * #16a34a/#15803d success, #2563eb/#1d4ed8 info) are deliberately NOT Brand
+ * Bible tokens. They carry functional meaning — "this will delete something",
+ * "this succeeded" — that a single-accent palette cannot express, and the
+ * palette has no red or green. Same rule BENEFIT_ICON_COLORS already states in
+ * src/app/models/benefit-template.ts: semantics beat brand consistency for
+ * state feedback. Brand chrome in this file is on-palette.
+ * ──────────────────────────────────────────────────────────────────────── */
 .warning-panel {
   padding: 1rem;
   border-radius: 1rem;
@@ -604,7 +613,7 @@ a:hover {
   button,
   input[type="button"],
   input[type="submit"] {
-    color: #f5f5f7;
+    color: #f0f0f0;
     /* Light text for buttons on dark theme */
   }
 
@@ -617,7 +626,7 @@ a:hover {
   button[data-variant="inverse"],
   input[type="button"][data-variant="inverse"],
   input[type="submit"][data-variant="inverse"] {
-    color: #f9fafb;
+    color: #f0f0f0;
   }
 
   button[class*="bg-white"]:not([class*="text-"]),
@@ -626,7 +635,7 @@ a:hover {
   a[class*="bg-white"]:not([class*="text-"]),
   a[class*="bg-neutral-100"]:not([class*="text-"]),
   a[class*="bg-gray-100"]:not([class*="text-"]) {
-    color: #111827;
+    color: #181818;
   }
 }
 
@@ -661,9 +670,9 @@ a:hover {
     @apply focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ts-accent;
     letter-spacing: 0.01em;
     border: 1px solid transparent;
-    background-color: #111827;
+    background-color: #181818;
     background-image: none;
-    color: #f9fafb;
+    color: #f0f0f0;
     box-shadow: 0 12px 26px -20px rgba(10, 14, 22, 0.45);
     cursor: pointer;
   }
@@ -934,14 +943,14 @@ header {
 
 .pill-dark {
   background-color: color-mix(in srgb, var(--overlay) 80%, #000000 20%);
-  color: #f8fafc;
-  border: 1px solid color-mix(in srgb, #f8fafc 24%, var(--overlay));
+  color: #f0f0f0;
+  border: 1px solid color-mix(in srgb, #f0f0f0 24%, var(--overlay));
   font-weight: 500;
 }
 
 .pill-dark:hover {
   background-color: color-mix(in srgb, var(--overlay) 92%, #000000 8%);
-  border-color: color-mix(in srgb, #f8fafc 32%, var(--overlay));
+  border-color: color-mix(in srgb, #f0f0f0 32%, var(--overlay));
 }
 
 .pill-active {
@@ -1236,7 +1245,7 @@ td {
 
 /* Specific utility for light text */
 .text-light {
-  color: #f5f5f7 !important;
+  color: #f0f0f0 !important;
 }
 
 /* ========================================
