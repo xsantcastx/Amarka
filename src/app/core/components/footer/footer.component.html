@@ -25,10 +25,14 @@
       <div class="site-footer__grid">
         <!-- Studio info -->
         <div class="site-footer__col">
-          <p class="site-footer__eyebrow">Studio</p>
+          <p class="site-footer__eyebrow">Service area</p>
+          @if (brand.site.contact.address) {
           <p class="site-footer__text">{{ brand.site.contact.address }}</p>
+          }
+          @if (brand.site.contact.supportHours) {
           <p class="site-footer__text">{{ brand.site.contact.supportHours }}</p>
-          <p class="site-footer__text site-footer__text--muted">Serving {{ brand.site.studio?.serviceArea || 'Miami, FL' }}</p>
+          }
+          <p class="site-footer__text site-footer__text--muted">Serving {{ brand.site.studio?.serviceArea || 'Miami & South Florida' }}</p>
         </div>
 
         <!-- Navigation -->

@@ -58,7 +58,7 @@ export class HomePageComponent {
   constructor() {
     this.seo.setupMarketingPageSEO({
       title: 'Amarka | Corporate Merchandise, Engraving & Brand Solutions — Miami, FL',
-      description: 'Amarka helps businesses bring their brand into the real world through custom merchandise, engraving, branded apparel, and promotional products — premium corporate gifts from Miami, FL.',
+      description: 'Amarka helps businesses bring their brand into the real world through custom merchandise, engraving, branded apparel, and promotional products — premium corporate gifts for businesses in Miami & South Florida.',
       keywords: ['corporate merchandise Miami', 'custom engraving Miami FL', 'branded apparel for businesses', 'corporate gifts Miami'],
       path: '/'
     });

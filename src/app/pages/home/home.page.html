@@ -29,7 +29,7 @@
 
         <div class="amk-hero__actions animate-hero-fade" style="animation-delay:0.55s">
           <a [routerLink]="hero?.primaryCta?.href || '/enquire'" class="amk-btn amk-btn--primary">{{ hero?.primaryCta?.label || 'Get a Free Quote' }}</a>
-          <a [routerLink]="hero?.secondaryCta?.href || '/work'" class="amk-btn amk-btn--outline">{{ hero?.secondaryCta?.label || 'See Our Work' }}</a>
+          <a [href]="hero?.secondaryCta?.href || '/#services'" class="amk-btn amk-btn--outline">{{ hero?.secondaryCta?.label || 'Explore our services' }}</a>
         </div>
       </div>
 
@@ -38,7 +38,7 @@
           <div class="amk-hero__heart" aria-hidden="true">♥</div>
           <div class="amk-hero__swatch-caption">
             <strong>Embroidered Workwear</strong>
-            Construction Group — Doral, FL
+            Illustrative product concept
           </div>
         </div>
         <div class="amk-hero__tags">
@@ -59,7 +59,7 @@
     </div>
   </div>
 
-  <section class="amk-section" amarkaReveal>
+  <section id="services" class="amk-section" amarkaReveal>
     <div class="page-container">
       <div class="amk-section__head">
         <p class="amk-kicker">The Spec Sheet</p>
@@ -80,15 +80,15 @@
     </div>
   </section>
 
-  <section class="amk-miami" amarkaReveal>
-    <div class="amk-miami__stamp" aria-hidden="true">Relocating<br>To<br>Miami, FL</div>
+  <section id="about" class="amk-miami" amarkaReveal>
+    <div class="amk-miami__stamp" aria-hidden="true">Serving<br>Miami &amp;<br>South Florida</div>
     <div class="page-container amk-miami__inner">
-      <h2>New city, <em>same craftsmanship.</em></h2>
-      <p>Amarka is bringing premium branded merchandise and engraving to Miami's restaurants, hotels, real estate teams, and growing businesses — with the same care in every product we make.</p>
+      <h2>Your brand, <em>made tangible.</em></h2>
+      <p>Amarka helps businesses across Miami &amp; South Florida bring their identity to branded merchandise, apparel, and engraved gifts. Share your project, quantity, and deadline so we can discuss suitable options and confirm timing with your quote.</p>
     </div>
   </section>
 
-  <section class="amk-section" amarkaReveal aria-labelledby="amk-industries-heading">
+  <section id="industries" class="amk-section" amarkaReveal aria-labelledby="amk-industries-heading">
     <div class="page-container">
       <div class="amk-section__head amk-section__head--center">
         <p class="amk-kicker">Who We Outfit</p>
