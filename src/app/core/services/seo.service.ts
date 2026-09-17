@@ -1,44 +1,21 @@
-import { DOCUMENT, isPlatformBrowser } from '@angular/common';
-import { Injectable, PLATFORM_ID, inject } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { Injectable, inject } from '@angular/core';
 import { Meta } from '@angular/platform-browser';
 import {
   BASE_OG_IMAGE,
   BASE_URL,
-  LOCAL_BUSINESS_JSONLD,
   ROUTE_SEO,
   RouteSeoConfig,
-  SERVICE_VERTICAL_SEO
+  normalizeSeoPath
 } from '../data/seo-routes';
+import { BrandConfigService } from './brand-config.service';
 
-/**
- * AMK-9 — SEO service.
- *
- * Shipped: 2026-04-24 by amarka-backlog-executor-v2 scheduled agent.
- *
- * Responsibility:
- *   - Update meta description, keywords, OG tags, Twitter tags, and canonical
- *     URL on every route change.
- *   - Inject per-route JSON-LD structured data alongside a persistent
- *     LocalBusiness block.
- *
- * Non-responsibilities:
- *   - Does NOT set the document title — that is owned by PageTitleStrategy
- *     (see page-title.strategy.ts). Title strings here are informational only.
- *
- * SSR safety:
- *   - Canonical link + JSON-LD are only mutated in the browser.
- *   - Meta tag updates go through Angular's Meta service which is SSR-safe.
- *
- * Brand Bible compliance:
- *   - Miami, FL positioning.
- *   - Contact: diego@amarka.co (no email in tag text to avoid bot
- *     scraping, but LocalBusiness schema carries diego@).
- */
+/** Updates the server-rendered document and hydrated pages from one route map. */
 @Injectable({ providedIn: 'root' })
 export class SeoService {
   private readonly meta = inject(Meta);
   private readonly doc = inject(DOCUMENT);
-  private readonly platformId = inject(PLATFORM_ID);
+  private readonly brand = inject(BrandConfigService);
 
   private static readonly JSONLD_ROUTE_ID = 'seo-jsonld-route';
   private static readonly JSONLD_LOCAL_ID = 'seo-jsonld-localbusiness';
@@ -48,13 +25,24 @@ export class SeoService {
    * Call on every NavigationEnd event.
    */
   updateForRoute(urlPath: string): void {
-    const normalized = this.normalizePath(urlPath);
-    const config = this.resolveConfig(normalized);
+    const normalized = normalizeSeoPath(urlPath);
+    const config = ROUTE_SEO[normalized];
+    this.updateMeta('robots', config ? 'index, follow' : 'noindex, follow');
+    if (!config) {
+      this.updateMeta('description', 'This page is unavailable.');
+      this.meta.removeTag("name='keywords'");
+      ['og:url', 'og:title', 'og:description', 'og:image'].forEach(property => this.meta.removeTag(`property='${property}'`));
+      ['twitter:title', 'twitter:description', 'twitter:image'].forEach(name => this.meta.removeTag(`name='${name}'`));
+      this.doc.head.querySelectorAll("link[rel='canonical'], #seo-jsonld-localbusiness, #seo-jsonld-route").forEach(node => node.remove());
+      return;
+    }
     const canonicalUrl = this.canonical(normalized);
 
     this.updateMeta('description', config.description);
     if (config.keywords) {
       this.updateMeta('keywords', config.keywords);
+    } else {
+      this.meta.removeTag("name='keywords'");
     }
 
     // Open Graph
@@ -72,49 +60,13 @@ export class SeoService {
     this.updateMeta('twitter:description', config.description);
     this.updateMeta('twitter:image', config.ogImage ?? BASE_OG_IMAGE);
 
-    // Canonical + JSON-LD (browser-only DOM writes)
-    if (isPlatformBrowser(this.platformId)) {
-      this.setCanonical(canonicalUrl);
-      this.ensureLocalBusinessJsonLd();
-      this.setRouteJsonLd(config.jsonLd);
-    }
-  }
-
-  // ---- internals ---------------------------------------------------------
-
-  private resolveConfig(normalized: string): RouteSeoConfig {
-    // Root
-    if (normalized === '') {
-      return ROUTE_SEO['']!;
-    }
-
-    // Top-level keys are matched directly.
-    const topLevel = normalized.split('/')[0] ?? '';
-    const topHit = ROUTE_SEO[topLevel];
-
-    // /services/:slug handling
-    if (topLevel === 'services') {
-      const slug = normalized.split('/')[1];
-      if (slug) {
-        const verticalHit = SERVICE_VERTICAL_SEO[slug];
-        if (verticalHit) {
-          return verticalHit;
-        }
-      }
-    }
-
-    return topHit ?? ROUTE_SEO['']!;
-  }
-
-  private normalizePath(url: string): string {
-    // Strip query/fragment, leading slash, trailing slash.
-    const noHash = url.split('#')[0] ?? '';
-    const noQuery = noHash.split('?')[0] ?? '';
-    return noQuery.replace(/^\/+/, '').replace(/\/+$/, '');
+    this.setCanonical(canonicalUrl);
+    this.ensureLocalBusinessJsonLd();
+    this.setRouteJsonLd(config.jsonLd);
   }
 
   private canonical(normalized: string): string {
-    return normalized === '' ? BASE_URL : `${BASE_URL}/${normalized}`;
+    return normalized === '' ? `${BASE_URL}/` : `${BASE_URL}/${normalized}`;
   }
 
   private updateMeta(name: string, content: string): void {
@@ -137,7 +89,7 @@ export class SeoService {
     link.setAttribute('href', url);
   }
 
-  private ensureLocalBusinessJsonLd(): void {
+  ensureLocalBusinessJsonLd(): void {
     const head = this.doc.head;
     if (!head) return;
     let node = head.querySelector<HTMLScriptElement>(
@@ -147,9 +99,23 @@ export class SeoService {
       node = this.doc.createElement('script');
       node.id = SeoService.JSONLD_LOCAL_ID;
       node.setAttribute('type', 'application/ld+json');
-      node.textContent = JSON.stringify(LOCAL_BUSINESS_JSONLD);
       head.appendChild(node);
     }
+    const contact = this.brand.site.contact;
+    node.textContent = JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'ProfessionalService',
+      '@id': `${BASE_URL}/#business`,
+      name: this.brand.siteName,
+      url: `${BASE_URL}/`,
+      description: ROUTE_SEO[''].description,
+      image: BASE_OG_IMAGE,
+      logo: BASE_OG_IMAGE,
+      email: contact.email,
+      ...(contact.phone ? { telephone: contact.phone } : {}),
+      areaServed: { '@type': 'AdministrativeArea', name: 'South Florida' },
+      sameAs: this.brand.nav.social.map(item => item.href)
+    }).replace(/</g, '\\u003c');
   }
 
   private setRouteJsonLd(

@@ -25,6 +25,175 @@
         "source": "**",
         "function": "ssr"
       }
-    ]
+    ],
+    "redirects": [
+      {
+        "source": "/privacy",
+        "destination": "/privacy-policy",
+        "type": 301
+      },
+      {
+        "source": "/privacy/",
+        "destination": "/privacy-policy",
+        "type": 301
+      },
+      {
+        "source": "/services",
+        "destination": "/#services",
+        "type": 301
+      },
+      {
+        "source": "/services/",
+        "destination": "/#services",
+        "type": 301
+      },
+      {
+        "source": "/work",
+        "destination": "/#services",
+        "type": 301
+      },
+      {
+        "source": "/work/",
+        "destination": "/#services",
+        "type": 301
+      },
+      {
+        "source": "/materials",
+        "destination": "/#services",
+        "type": 301
+      },
+      {
+        "source": "/materials/",
+        "destination": "/#services",
+        "type": 301
+      },
+      {
+        "source": "/tools",
+        "destination": "/enquire",
+        "type": 301
+      },
+      {
+        "source": "/tools/",
+        "destination": "/enquire",
+        "type": 301
+      },
+      {
+        "source": "/trade",
+        "destination": "/enquire",
+        "type": 301
+      },
+      {
+        "source": "/trade/",
+        "destination": "/enquire",
+        "type": 301
+      },
+      {
+        "source": "/clients",
+        "destination": "/#industries",
+        "type": 301
+      },
+      {
+        "source": "/clients/",
+        "destination": "/#industries",
+        "type": 301
+      },
+      {
+        "source": "/about",
+        "destination": "/#about",
+        "type": 301
+      },
+      {
+        "source": "/about/",
+        "destination": "/#about",
+        "type": 301
+      },
+      {
+        "source": "/services/interior-designers",
+        "destination": "/#services",
+        "type": 301
+      },
+      {
+        "source": "/services/interior-designers/",
+        "destination": "/#services",
+        "type": 301
+      },
+      {
+        "source": "/services/general-contractors",
+        "destination": "/#services",
+        "type": 301
+      },
+      {
+        "source": "/services/general-contractors/",
+        "destination": "/#services",
+        "type": 301
+      },
+      {
+        "source": "/services/hospitality",
+        "destination": "/#services",
+        "type": 301
+      },
+      {
+        "source": "/services/hospitality/",
+        "destination": "/#services",
+        "type": 301
+      },
+      {
+        "source": "/services/corporate",
+        "destination": "/#services",
+        "type": 301
+      },
+      {
+        "source": "/services/corporate/",
+        "destination": "/#services",
+        "type": 301
+      },
+      {
+        "source": "/services/bar-restaurant",
+        "destination": "/#services",
+        "type": 301
+      },
+      {
+        "source": "/services/bar-restaurant/",
+        "destination": "/#services",
+        "type": 301
+      },
+      {
+        "source": "/services/golf-clubs",
+        "destination": "/#services",
+        "type": 301
+      },
+      {
+        "source": "/services/golf-clubs/",
+        "destination": "/#services",
+        "type": 301
+      },
+      {
+        "source": "/enquire/",
+        "destination": "/enquire",
+        "type": 301
+      },
+      {
+        "source": "/design/",
+        "destination": "/design",
+        "type": 301
+      },
+      {
+        "source": "/privacy-policy/",
+        "destination": "/privacy-policy",
+        "type": 301
+      },
+      {
+        "source": "/cookie-policy/",
+        "destination": "/cookie-policy",
+        "type": 301
+      },
+      {
+        "source": "/terms/",
+        "destination": "/terms",
+        "type": 301
+      }
+    ],
+    "trailingSlash": false,
+    "cleanUrls": true
   }
 }

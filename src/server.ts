@@ -12,6 +12,38 @@ const browserDistFolder = join(import.meta.dirname, '../browser');
 const app = express();
 const angularApp = new AngularNodeAppEngine();
 
+// Keep exact legacy destinations aligned with firebase.json hosting redirects.
+const legacyRedirects: Readonly<Record<string, string>> = {
+  "/privacy": "/privacy-policy",
+  "/services": "/#services",
+  "/work": "/#services",
+  "/materials": "/#services",
+  "/tools": "/enquire",
+  "/trade": "/enquire",
+  "/clients": "/#industries",
+  "/about": "/#about",
+  "/services/interior-designers": "/#services",
+  "/services/general-contractors": "/#services",
+  "/services/hospitality": "/#services",
+  "/services/corporate": "/#services",
+  "/services/bar-restaurant": "/#services",
+  "/services/golf-clubs": "/#services"
+};
+const livePaths = new Set(['/enquire', '/design', '/privacy-policy', '/cookie-policy', '/terms']);
+app.use((req, res, next) => {
+  const normalized = req.path.replace(/\/+$/, '') || '/';
+  const destination = legacyRedirects[normalized];
+  if (destination) {
+    res.redirect(301, destination);
+    return;
+  }
+  if (req.path !== normalized && livePaths.has(normalized)) {
+    res.redirect(301, normalized + req.url.slice(req.path.length));
+    return;
+  }
+  next();
+});
+
 /**
  * Example Express Rest API endpoints can be defined here.
  * Uncomment and define endpoints as necessary.
