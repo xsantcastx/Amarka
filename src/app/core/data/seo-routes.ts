@@ -12,12 +12,12 @@ export const BASE_OG_IMAGE = `${BASE_URL}/amarka-logo-transparent.png`;
 
 export const ROUTE_SEO: Readonly<Record<string, RouteSeoConfig>> = {
   '': {
-    title: 'Corporate Merchandise, Engraving & Brand Solutions | Amarka',
+    title: 'Custom Engraving & Branded Merch in South Florida | Amarka',
     description: 'Custom merchandise, engraving, branded apparel and corporate gifts for businesses in Miami and South Florida.',
     keywords: 'corporate merchandise Miami, custom engraving South Florida, branded apparel, corporate gifts'
   },
   enquire: {
-    title: 'Get a Quote | Amarka',
+    title: 'Get a Quote | Amarka South Florida',
     description: 'Tell Amarka about your merchandise, engraving or corporate gift project. Share quantities, artwork and delivery needs to request a quote.'
   },
   design: {
