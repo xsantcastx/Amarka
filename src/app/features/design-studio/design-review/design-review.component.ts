@@ -113,8 +113,13 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
     this.submitError.set('');
 
     try {
-      const mockupFiles = this.mockups().map(m => m.file);
-      const mockupUploads = await this.leadSubmission.uploadFiles(mockupFiles, 'enquiries');
+      const mockups = this.mockups();
+      const pendingMockups = mockups.filter(mockup => !mockup.uploadRef);
+      if (pendingMockups.length) {
+        const uploads = await this.leadSubmission.uploadFiles(pendingMockups.map(mockup => mockup.file), 'enquiries');
+        pendingMockups.forEach((mockup, index) => { mockup.uploadRef = uploads[index]; });
+      }
+      const mockupUploads = mockups.map(mockup => mockup.uploadRef!);
 
       const designProject: DesignProjectSummary = {
         productSlug: product.slug,

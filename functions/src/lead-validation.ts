@@ -22,3 +22,20 @@ export function validEnquiry(data: any): boolean {
     && (data.type !== 'trade' || (typeof data.company === 'string' && !!data.company.trim() && typeof data.businessType === 'string' && !!data.businessType.trim()))
     && validSubmissionId(data.submissionId);
 }
+
+/** Compare only submitted content, excluding server-managed delivery/status fields. */
+export function sameEnquiryContent(saved: Record<string, unknown>, incoming: Record<string, unknown>): boolean {
+  const fields = ['type', 'fullName', 'company', 'email', 'role', 'projectType',
+    'preferredMaterial', 'estimatedQuantity', 'targetTimeline', 'businessType',
+    'orderVolume', 'projectDescription', 'fileUploads', 'sourcePage', 'leadTags', 'designProject'];
+  const stable = (value: any): any => {
+    if (Array.isArray(value)) return value.map(stable);
+    if (value && typeof value === 'object') {
+      return Object.fromEntries(Object.keys(value).sort().filter(key => value[key] !== undefined)
+        .map(key => [key, stable(value[key])]));
+    }
+    return value;
+  };
+  const content = (value: Record<string, unknown>) => Object.fromEntries(fields.map(key => [key, value[key]]));
+  return JSON.stringify(stable(content(saved))) === JSON.stringify(stable(content(incoming)));
+}
