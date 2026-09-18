@@ -1,23 +1,8 @@
-# robots.txt for Amarka
-# Allow all crawlers by default
-
 User-agent: *
 Allow: /
-
-# Disallow admin and private areas
 Disallow: /admin
 Disallow: /client
 Disallow: /cart
 Disallow: /checkout
 
-# Allow crawling of public pages
-Allow: /work/
-Allow: /services/
-Allow: /trade/
-Allow: /clients/
-Allow: /materials/
-Allow: /enquire/
-Allow: /about/
-
-# Sitemap location
 Sitemap: https://amarka.co/sitemap.xml

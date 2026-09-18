@@ -97,19 +97,19 @@ service firebase.storage {
     // Public lead-form uploads (enquiry & trade briefs).
     // Anonymous submitters may write (size-capped, image/pdf/vector types);
     // only admins can read or delete. Referenced from Firestore lead docs.
-    function isLeadUpload() {
-      return request.resource.size < 20 * 1024 * 1024 &&
-        (request.resource.contentType.matches('image/.*') ||
-         request.resource.contentType.matches('application/.*'));
+    function isLeadUpload(fileName) {
+      return request.resource.size > 0 && request.resource.size <= 20 * 1024 * 1024 &&
+        fileName.matches('(?i)^[a-zA-Z0-9._-]+[.](pdf|ai|dwg|jpg|jpeg|png|svg)$') &&
+        request.resource.contentType.matches('^(image/(jpeg|png|svg[+]xml|vnd[.]dwg|x-dwg)|application/(pdf|postscript|illustrator|acad|x-acad|dwg|x-dwg|octet-stream))$');
     }
 
     match /private/enquiries/{fileName} {
-      allow write: if isLeadUpload();
+      allow create: if isLeadUpload(fileName);
       allow read, delete: if isAdmin();
     }
 
     match /private/trade-applications/{fileName} {
-      allow write: if isLeadUpload();
+      allow create: if isLeadUpload(fileName);
       allow read, delete: if isAdmin();
     }
 

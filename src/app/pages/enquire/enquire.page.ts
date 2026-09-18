@@ -28,6 +28,7 @@ export class EnquirePageComponent {
   protected uploadProgress = 0;
   protected submitting = false;
   protected success = false;
+  private submissionId?: string;
   protected errorMessage = '';
 
   protected form = this.fb.nonNullable.group({
@@ -48,7 +49,7 @@ export class EnquirePageComponent {
   constructor() {
     this.seo.setupMarketingPageSEO({
       title: 'Get a Free Quote | Amarka',
-      description: 'Tell Amarka what your brand needs — apparel, engraving, promotional products, or corporate gifts. We respond within one business day with scope and pricing.',
+      description: 'Tell Amarka what your brand needs — apparel, engraving, promotional products, or corporate gifts. Request scope and pricing for your project.',
       keywords: ['corporate merchandise quote Miami', 'branded apparel quote', 'custom engraving quote', 'promotional products quote'],
       path: '/enquire'
     });
@@ -89,6 +90,7 @@ export class EnquirePageComponent {
       this.errorMessage = 'Please complete the required fields highlighted below before sending.';
       return;
     }
+    this.submissionId ??= crypto.randomUUID();
     this.submitting = true;
     this.errorMessage = '';
     try {
@@ -99,6 +101,7 @@ export class EnquirePageComponent {
       const { website, ...fields } = formValue;
       const payload: EnquirySubmission = {
         ...fields,
+        submissionId: this.submissionId,
         type: this.mode(),
         fileUploads: uploads,
         sourcePage: '/enquire',
@@ -108,6 +111,7 @@ export class EnquirePageComponent {
       };
       await this.leadSubmission.submitEnquiry(payload);
       this.success = true;
+      this.submissionId = undefined;
       this.form.reset({
         fullName: '',
         company: '',

@@ -1,7 +1,7 @@
 @if (submitted) {
 <div class="amk-review-success">
   <h2>Brief received</h2>
-  <p>We'll review your design and respond within one business day with pricing and next steps.</p>
+  <p>Your design brief has been saved. We'll review it and contact you about pricing and next steps.</p>
   <button type="button" class="amk-btn amk-btn--primary" (click)="startOver.emit()">Start a New Design</button>
 </div>
 } @else {
@@ -23,6 +23,9 @@
     }
   </div>
 
+  @if (mockupError()) {
+    <div role="alert"><p>{{ mockupError() }}</p><button type="button" (click)="generateAllMockups()">Retry previews</button></div>
+  }
   <div class="amk-review__summary">
     <p class="amk-kicker">Production Summary</p>
     <dl class="amk-review__summary-list">
@@ -32,7 +35,7 @@
       <div><dt>Logos</dt><dd>{{ logoCountLabel() }}</dd></div>
     </dl>
 
-    <button type="button" class="amk-review__edit-link" (click)="editAgain()">← Edit design</button>
+    <button type="button" class="amk-review__edit-link" (click)="editAgain()" [disabled]="submitting()">← Edit design</button>
   </div>
 </div>
 
@@ -41,18 +44,18 @@
   <form [formGroup]="form" (ngSubmit)="submitQuote()" class="amk-review__form">
     <input class="amk-review__hp" formControlName="website" type="text" tabindex="-1" autocomplete="off" aria-hidden="true" />
     <div class="amk-review__form-grid">
-      <input formControlName="fullName" type="text" placeholder="Your name" />
-      <input formControlName="email" type="email" placeholder="Email address" />
-      <input formControlName="company" type="text" placeholder="Company (optional)" />
+      <input formControlName="fullName" type="text" placeholder="Your name" aria-label="Your name" autocomplete="name" />
+      <input formControlName="email" type="email" placeholder="Email address" aria-label="Email address" autocomplete="email" />
+      <input formControlName="company" type="text" placeholder="Company (optional)" aria-label="Company (optional)" autocomplete="organization" />
     </div>
 
     @if (submitError()) {
-      <p class="amk-review__error">{{ submitError() }}</p>
+      <p class="amk-review__error" role="alert">{{ submitError() }}</p>
     }
 
     <div class="amk-review__form-footer">
-      <p>Response within one business day, Mon–Fri.</p>
-      <button type="submit" class="amk-btn amk-btn--primary" [disabled]="submitting() || generatingMockups()">
+      <p>Send your design brief to request pricing.</p>
+      <button type="submit" class="amk-btn amk-btn--primary" [disabled]="submitting() || generatingMockups() || !!mockupError()">
         @if (submitting()) { Sending… } @else { Request Quote → }
       </button>
     </div>

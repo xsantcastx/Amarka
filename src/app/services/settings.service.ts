@@ -398,7 +398,7 @@ export class SettingsService {
       shippingEnabled: true,
       freeShippingThreshold: 100,
       defaultShippingCost: 8,
-      shippingEstimate: '3-5 business days',
+      shippingEstimate: 'Shipping timing confirmed with your quote',
       shippingTestMode: false,
       
       // Analytics
@@ -437,7 +437,7 @@ export class SettingsService {
       lowStockThreshold: 10,
       newUserNotifications: false,
       dailyReportEnabled: false,
-      notificationEmail: 'diego@amarka.co',
+      notificationEmail: site.contact.email,
 
       // Business Info
       businessName: site.legal?.businessName || brandName,
@@ -472,10 +472,10 @@ export class SettingsService {
       serviciosHeroSubtitle: 'Precision engraving on brass, aluminium, stainless steel, acrylic, hardwood, and glass — built to spec for interior designers, general contractors, and hospitality groups.',
       galeriaHeroImage: '/assets/gallery/hero-gallery.jpg',
       galeriaHeroTitle: 'Recent commissions and trade projects',
-      galeriaHeroSubtitle: 'Architectural signage, donor walls, hospitality details, and custom awards — delivered to spec from our Stamford, CT studio.',
+      galeriaHeroSubtitle: 'Architectural signage, donor walls, hospitality details, and custom awards — for businesses in Miami & South Florida.',
       contactoHeroImage: '/assets/contact/hero-contact.jpg',
       contactoHeroTitle: 'Request a quote',
-      contactoHeroSubtitle: 'Share your project scope, substrate, and timeline. We respond within one business day with a detailed proposal.',
+      contactoHeroSubtitle: 'Share your project scope, substrate, and timeline. We will review your requirements and confirm options and timing with your quote.',
 
     };
   }

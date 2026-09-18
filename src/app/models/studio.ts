@@ -35,6 +35,7 @@ export interface DesignProjectSummary {
 }
 
 export interface EnquirySubmission {
+  submissionId?: string;
   id?: string;
   type: 'standard' | 'trade';
   fullName: string;

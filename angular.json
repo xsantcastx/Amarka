@@ -38,6 +38,16 @@
             "outputMode": "server",
             "ssr": {
               "entry": "src/server.ts"
+            },
+            "security": {
+              "allowedHosts": [
+                "amarka.co",
+                "www.amarka.co",
+                "localhost",
+                "127.0.0.1",
+                "amarka-d237b.web.app",
+                "amarka-d237b.firebaseapp.com"
+              ]
             }
           },
           "configurations": {

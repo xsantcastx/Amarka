@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, inject, signal, computed } from '@angular/core';
+import { Component, afterNextRender, EventEmitter, Output, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProductCatalogService } from '../product-catalog.service';
 import { DesignProjectService } from '../design-project.service';
@@ -51,7 +51,11 @@ export class ProductPickerComponent {
     return product.colors.find(c => c.id === this.selectedColorId())?.hex ?? product.colors[0]?.hex ?? '#8a8a8a';
   });
 
-  protected readonly savedProjects: StudioProjectIndexEntry[] = this.projectService.listSavedProjects();
+  protected readonly savedProjects = signal<StudioProjectIndexEntry[]>([]);
+
+  constructor() {
+    afterNextRender(() => this.savedProjects.set(this.projectService.listSavedProjects()));
+  }
 
   protected setCategory(category: ProductCategory): void {
     this.activeCategory.set(category);

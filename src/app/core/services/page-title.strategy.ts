@@ -1,3 +1,4 @@
+import { ROUTE_SEO, normalizeSeoPath } from '../data/seo-routes';
 import { Injectable, inject } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { RouterStateSnapshot, TitleStrategy } from '@angular/router';
@@ -9,7 +10,7 @@ export class PageTitleStrategy extends TitleStrategy {
   private readonly translate = inject(TranslateService);
 
   override updateTitle(snapshot: RouterStateSnapshot): void {
-    const title = this.buildTitle(snapshot);
+    const title = ROUTE_SEO[normalizeSeoPath(snapshot.url)]?.title ?? this.buildTitle(snapshot);
     if (title) {
       // Check if title contains a pipe separator (translation key format)
       if (title.includes(' | ')) {
