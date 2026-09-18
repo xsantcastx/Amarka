@@ -1,3 +1,4 @@
+import { escapeLeadHtml, validEnquiry, validLeadUploadPath } from "./lead-validation";
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 import Stripe from "stripe";
@@ -1743,6 +1744,9 @@ interface DesignProjectPayload {
 }
 
 interface StudioEnquiryPayload {
+  submissionId?: string;
+  businessType?: string;
+  orderVolume?: string;
   type: "standard" | "trade";
   fullName: string;
   company?: string;
@@ -1775,14 +1779,21 @@ interface TradeApplicationPayload {
   honeypot?: string;
 }
 
-function validateLeadUploads(files: LeadUploadRef[] = []) {
+async function validateLeadUploads(files: LeadUploadRef[] = [], category = "enquiries") {
+  if (!Array.isArray(files) || files.length > 24) {
+    throw new functions.https.HttpsError("invalid-argument", "Upload up to 24 files per submission");
+  }
   for (const file of files) {
-    if (!file.storagePath || !file.storagePath.startsWith("private/")) {
+    if (!file || !validLeadUploadPath(file.storagePath, category)) {
       throw new functions.https.HttpsError("invalid-argument", "Invalid upload path");
     }
-    if (Number(file.size || 0) > 20 * 1024 * 1024) {
-      throw new functions.https.HttpsError("invalid-argument", "Upload exceeds 20MB limit");
+    // Verify actual stored bytes rather than trusting client-supplied size.
+    const [metadata] = await admin.storage().bucket().file(file.storagePath).getMetadata();
+    if (Number(metadata.size || 0) <= 0 || Number(metadata.size) > 20 * 1024 * 1024) {
+      throw new functions.https.HttpsError("invalid-argument", "Upload must be between 1 byte and 20MB");
     }
+    file.size = Number(metadata.size);
+    file.mimeType = metadata.contentType || "application/octet-stream";
   }
 }
 
@@ -1805,9 +1816,9 @@ async function buildDesignProjectHtml(design?: DesignProjectPayload): Promise<st
   return `
     <div style="margin-top:16px;padding:16px;border:1px solid #e5e5e5;border-radius:8px;">
       <h3 style="margin:0 0 8px;">Product Customization Studio design</h3>
-      <p style="margin:4px 0;"><strong>Product:</strong> ${design.productName} — ${design.variantLabel}</p>
-      <p style="margin:4px 0;"><strong>Color:</strong> ${design.colorLabel}</p>
-      <p style="margin:4px 0;"><strong>Quantity:</strong> ${design.quantity}</p>
+      <p style="margin:4px 0;"><strong>Product:</strong> ${escapeLeadHtml(design.productName)} — ${escapeLeadHtml(design.variantLabel)}</p>
+      <p style="margin:4px 0;"><strong>Color:</strong> ${escapeLeadHtml(design.colorLabel)}</p>
+      <p style="margin:4px 0;"><strong>Quantity:</strong> ${escapeLeadHtml(design.quantity)}</p>
       <p style="margin:4px 0;"><strong>Logo placements:</strong> ${design.logos.length}</p>
       ${mockupsHtml}
     </div>`;
@@ -1828,10 +1839,10 @@ async function buildAttachmentLinks(files: LeadUploadRef[] = [], heading = "Atta
           action: "read",
           expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
         });
-        return `<li><a href="${url}">${label}</a></li>`;
+        return `<li><a href="${url}">${escapeLeadHtml(label)}</a></li>`;
       } catch (err) {
         functions.logger.warn("Could not sign attachment URL", { path: f.storagePath });
-        return `<li>${label} — in Firebase Storage at ${f.storagePath}</li>`;
+        return `<li>${escapeLeadHtml(label)} — in Firebase Storage at ${escapeLeadHtml(f.storagePath)}</li>`;
       }
     })
   );
@@ -1882,13 +1893,13 @@ async function sendLeadEmail(
       fromEmail: config.fromEmail || null,
       recipient: to || null,
     });
-    return;
+    return "unconfigured";
   }
 
   const fetchFn = (globalThis as any).fetch as any;
   if (!fetchFn) {
     functions.logger.error("sendLeadEmail skipped: global fetch unavailable");
-    return;
+    return "failed";
   }
 
   const response = await fetchFn("https://api.brevo.com/v3/smtp/email", {
@@ -1918,7 +1929,9 @@ async function sendLeadEmail(
       from: config.fromEmail,
       body: body.slice(0, 500),
     });
+    return "failed";
   }
+  return "accepted";
 }
 
 export const submitStudioEnquiry = withBrevoSecrets.https.onCall(
@@ -1929,61 +1942,91 @@ export const submitStudioEnquiry = withBrevoSecrets.https.onCall(
       return { ok: true, id: "ignored" };
     }
 
-    if (!data?.fullName || !data?.email || !data?.projectType || !data?.projectDescription) {
+    if (!validEnquiry(data)) {
       throw new functions.https.HttpsError("invalid-argument", "Missing required enquiry fields");
     }
 
     await enforceLeadRateLimit(callerIp(context));
 
-    validateLeadUploads(data.fileUploads);
-    validateLeadUploads(data.designProject?.mockupUploads);
+    await validateLeadUploads(data.fileUploads);
+    await validateLeadUploads(data.designProject?.mockupUploads);
     const leadTags = buildLeadTags(data, data.leadTags);
     const { honeypot, ...leadData } = data;
-    const docRef = await db.collection("enquiries").add({
-      ...leadData,
-      leadTags,
-      responseSla: "24h",
-      status: "new",
-      createdAt: admin.firestore.FieldValue.serverTimestamp(),
-      updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+    const docRef = data.submissionId
+      ? db.collection("enquiries").doc(data.submissionId)
+      : db.collection("enquiries").doc();
+    const created = await db.runTransaction(async tx => {
+      const existing = await tx.get(docRef);
+      if (existing.exists) {
+        if (existing.data()?.email !== data.email) {
+          throw new functions.https.HttpsError("already-exists", "This submission reference is already in use");
+        }
+        return false;
+      }
+      tx.create(docRef, {
+        ...leadData,
+        leadTags,
+        status: "new",
+        emailDelivery: { notification: "pending", acknowledgement: "pending" },
+        createdAt: admin.firestore.FieldValue.serverTimestamp(),
+        updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+      });
+      return true;
     });
+    if (!created) return { ok: true, id: docRef.id };
 
-    const emailConfig = await getEmailConfig();
-    const internalTarget = emailConfig.notificationEmail || DEFAULT_LEAD_NOTIFICATION_EMAIL;
-    const attachmentsHtml = await buildAttachmentLinks(data.fileUploads);
-    const designProjectHtml = await buildDesignProjectHtml(data.designProject);
+    // Saving the lead is the success boundary. Delivery failures must neither
+    // discard a saved request nor invite duplicate submissions.
+    try {
+      const emailConfig = await getEmailConfig();
+      const internalTarget = emailConfig.notificationEmail || DEFAULT_LEAD_NOTIFICATION_EMAIL;
+      const attachmentsHtml = await buildAttachmentLinks(data.fileUploads);
+      const designProjectHtml = await buildDesignProjectHtml(data.designProject);
 
-    await Promise.all([
-      internalTarget
-        ? sendLeadEmail(
-            internalTarget,
-            `New enquiry: ${data.projectType}`,
-            `<div style="font-family:Arial,sans-serif">
-              <h2>New Amarka enquiry</h2>
-              <p><strong>Name:</strong> ${data.fullName}</p>
-              <p><strong>Company:</strong> ${data.company || "—"}</p>
-              <p><strong>Email:</strong> ${data.email}</p>
-              <p><strong>Role:</strong> ${data.role}</p>
-              <p><strong>Project type:</strong> ${data.projectType}</p>
-              <p><strong>Description:</strong><br>${data.projectDescription}</p>
-              ${attachmentsHtml}
-              ${designProjectHtml}
-            </div>`,
-            { email: data.email, name: data.fullName }
-          )
-        : Promise.resolve(),
-      sendLeadEmail(
-        data.email,
-        "Amarka received your enquiry",
-        `<div style="font-family:Arial,sans-serif">
-          <h2>Thanks for contacting Amarka</h2>
-          <p>We’ve received your project brief and will respond within 24 hours.</p>
-          <p><strong>Project type:</strong> ${data.projectType}</p>
-          <p>Based in Miami, FL · Serving South Florida and beyond.</p>
-        </div>`
-      ),
-    ]);
+      const delivery = await Promise.allSettled([
+        internalTarget
+          ? sendLeadEmail(
+              internalTarget,
+              `New enquiry: ${escapeLeadHtml(data.projectType)}`,
+              `<div style="font-family:Arial,sans-serif">
+                <h2>New Amarka enquiry</h2>
+                <p><strong>Name:</strong> ${escapeLeadHtml(data.fullName)}</p>
+                <p><strong>Company:</strong> ${escapeLeadHtml(data.company || "—")}</p>
+                <p><strong>Email:</strong> ${escapeLeadHtml(data.email)}</p>
+                <p><strong>Role:</strong> ${escapeLeadHtml(data.role)}</p>
+                <p><strong>Project type:</strong> ${escapeLeadHtml(data.projectType)}</p>
+                <p><strong>Material:</strong> ${escapeLeadHtml(data.preferredMaterial || "—")}</p>
+                <p><strong>Quantity:</strong> ${escapeLeadHtml(data.estimatedQuantity || "—")}</p>
+                <p><strong>Timeline:</strong> ${escapeLeadHtml(data.targetTimeline || "—")}</p>
+                <p><strong>Business type:</strong> ${escapeLeadHtml(data.businessType || "—")}</p>
+                <p><strong>Order volume:</strong> ${escapeLeadHtml(data.orderVolume || "—")}</p>
+                <p><strong>Description:</strong><br>${escapeLeadHtml(data.projectDescription)}</p>
+                ${attachmentsHtml}
+                ${designProjectHtml}
+              </div>`,
+              { email: data.email, name: data.fullName }
+            )
+          : Promise.resolve("unconfigured"),
+        sendLeadEmail(
+          data.email,
+          "Amarka received your enquiry",
+          `<div style="font-family:Arial,sans-serif">
+            <h2>Thanks for contacting Amarka</h2>
+            <p>We’ve received your project brief and will review the details and contact you with next steps.</p>
+            <p><strong>Project type:</strong> ${escapeLeadHtml(data.projectType)}</p>
+            <p>Based in Miami, FL · Serving South Florida and beyond.</p>
+          </div>`
+        ),
+      ]);
 
+      await docRef.update({ emailDelivery: {
+        notification: delivery[0].status === "fulfilled" ? delivery[0].value : "failed",
+        acknowledgement: delivery[1].status === "fulfilled" ? delivery[1].value : "failed",
+      }});
+    } catch (error) {
+      functions.logger.error("Saved enquiry notification failed", { enquiryId: docRef.id, error });
+      await docRef.update({ emailDelivery: { notification: "failed", acknowledgement: "failed" } }).catch(() => undefined);
+    }
     return { ok: true, id: docRef.id };
   })
 );
@@ -2013,7 +2056,7 @@ export const submitTradeApplication = withBrevoSecrets.https.onCall(
 
     await enforceLeadRateLimit(callerIp(context));
 
-    validateLeadUploads(data.specSheetUploads);
+    await validateLeadUploads(data.specSheetUploads, "trade-applications");
     const leadTags = buildLeadTags({ role: data.role, sourcePage: "/trade", type: "trade_application" }, data.leadTags);
     const { honeypot, ...leadData } = data;
     const docRef = await db.collection("tradeApplications").add({
@@ -2032,15 +2075,15 @@ export const submitTradeApplication = withBrevoSecrets.https.onCall(
       internalTarget
         ? sendLeadEmail(
             internalTarget,
-            `New trade application: ${data.companyName}`,
+            `New trade application: ${escapeLeadHtml(data.companyName)}`,
             `<div style="font-family:Arial,sans-serif">
               <h2>New trade application</h2>
-              <p><strong>Company:</strong> ${data.companyName}</p>
-              <p><strong>Contact:</strong> ${data.contactName}</p>
-              <p><strong>Email:</strong> ${data.email}</p>
-              <p><strong>Role:</strong> ${data.role}</p>
-              <p><strong>Project type:</strong> ${data.projectType}</p>
-              <p><strong>Estimated quantity:</strong> ${data.estimatedQuantity}</p>
+              <p><strong>Company:</strong> ${escapeLeadHtml(data.companyName)}</p>
+              <p><strong>Contact:</strong> ${escapeLeadHtml(data.contactName)}</p>
+              <p><strong>Email:</strong> ${escapeLeadHtml(data.email)}</p>
+              <p><strong>Role:</strong> ${escapeLeadHtml(data.role)}</p>
+              <p><strong>Project type:</strong> ${escapeLeadHtml(data.projectType)}</p>
+              <p><strong>Estimated quantity:</strong> ${escapeLeadHtml(data.estimatedQuantity)}</p>
               ${attachmentsHtml}
             </div>`,
             { email: data.email, name: data.contactName }
@@ -2051,7 +2094,7 @@ export const submitTradeApplication = withBrevoSecrets.https.onCall(
         "Amarka received your trade application",
         `<div style="font-family:Arial,sans-serif">
           <h2>Trade application received</h2>
-          <p>Thanks for applying to the Amarka trade programme. We’ll review the details and respond within 24 hours.</p>
+          <p>Thanks for applying to the Amarka trade programme. We’ll review the details and contact you with next steps.</p>
         </div>`
       ),
     ]);

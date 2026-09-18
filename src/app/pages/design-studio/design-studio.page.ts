@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, afterNextRender, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SeoSchemaService } from '../../services/seo-schema.service';
@@ -38,13 +38,12 @@ export class DesignStudioPageComponent {
       path: '/design'
     });
 
-    const projectId = this.route.snapshot.queryParamMap.get('project');
-    if (projectId) {
-      const loaded = this.projectService.loadProject(projectId);
-      if (loaded) {
-        this.step.set(loaded.logos.length ? 'editor' : 'editor');
+    afterNextRender(() => {
+      const projectId = this.route.snapshot.queryParamMap.get('project');
+      if (projectId && this.projectService.loadProject(projectId)) {
+        this.step.set('editor');
       }
-    }
+    });
   }
 
   protected toggleTheme(): void {

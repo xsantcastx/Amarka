@@ -45,7 +45,7 @@ export async function generateMockupFile(
   const viewLogos = logos.filter(l => l.viewId === view.id).sort((a, b) => a.zIndex - b.zIndex);
 
   for (const logo of viewLogos) {
-    try {
+    {
       const logoImg = await loadImage(logo.previewUrl);
       const w = (logo.widthPct / 100) * CANVAS_WIDTH;
       const h = (logo.heightPct / 100) * CANVAS_HEIGHT;
@@ -58,8 +58,6 @@ export async function generateMockupFile(
       ctx.scale(logo.flipH ? -1 : 1, logo.flipV ? -1 : 1);
       ctx.drawImage(logoImg, -w / 2, -h / 2, w, h);
       ctx.restore();
-    } catch {
-      // A single broken/expired logo URL shouldn't block the whole mockup.
     }
   }
 

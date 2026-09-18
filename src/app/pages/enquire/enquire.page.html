@@ -20,7 +20,7 @@
            width="1376" height="528" loading="eager" fetchpriority="high" decoding="async" />
       <span class="amk-badge">Get a Free Quote</span>
       <h1 class="amk-enq-hero__title">Tell us what<br><em>your brand needs.</em></h1>
-      <p class="amk-enq-hero__subtitle">Describe the project and we'll come back with scope, pricing, and a timeline — within one business day.</p>
+      <p class="amk-enq-hero__subtitle">Describe the project and we'll come back with scope, pricing, and a timeline.</p>
     </div>
   </section>
 
@@ -33,9 +33,9 @@
         </div>
 
         @if (success) {
-        <div class="amk-form-success">
+        <div class="amk-form-success" role="status">
           <h2>Brief received</h2>
-          <p>We'll review the details and respond within one business day. Check your inbox for next steps.</p>
+          <p>Your enquiry has been saved. We'll review the details and contact you with next steps.</p>
         </div>
         } @else {
         <form [formGroup]="form" (ngSubmit)="submit()" class="amk-enq-form">
@@ -111,7 +111,7 @@
           <p class="amk-form-error">{{ errorMessage }}</p>
           }
           <div class="amk-enq-form__footer">
-            <p class="amk-enq-form__trust">Response within one business day, Mon–Fri.</p>
+            <p class="amk-enq-form__trust">Share your project details to request a quote.</p>
             <button type="submit" class="amk-btn amk-btn--primary" [disabled]="submitting">
               @if (submitting) {
               <span class="amk-btn-spinner" aria-hidden="true"></span>
