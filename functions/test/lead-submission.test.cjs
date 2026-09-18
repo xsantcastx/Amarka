@@ -83,6 +83,23 @@ test('submission preserves fields, verifies bytes, escapes HTML and does not dup
   assert.equal([...docs.keys()].filter(key => key.startsWith('enquiries/')).length, 1);
 });
 
+test('rejects changed content when a submission id has already been saved', async () => {
+  reset();
+  const first = payload();
+  await submitStudioEnquiry(first, {});
+  const savedPath = `enquiries/${first.submissionId}`;
+  const savedDescription = docs.get(savedPath).projectDescription;
+
+  await assert.rejects(
+    submitStudioEnquiry({ ...first, projectDescription: 'This changed request must not overwrite the saved enquiry.' }, {}),
+    /already-exists/
+  );
+
+  assert.equal(docs.get(savedPath).projectDescription, savedDescription);
+  assert.equal(messages.length, 2);
+  assert.equal([...docs.keys()].filter(key => key.startsWith('enquiries/')).length, 1);
+});
+
 test('provider rejection and network failure preserve the saved lead with failed delivery status', async () => {
   for (const failure of ['rejected', 'network-error']) {
     reset(); emailResult = failure;

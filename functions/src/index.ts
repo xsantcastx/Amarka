@@ -1,4 +1,4 @@
-import { escapeLeadHtml, validEnquiry, validLeadUploadPath } from "./lead-validation";
+import { escapeLeadHtml, validEnquiry, validLeadUploadPath, sameEnquiryContent } from "./lead-validation";
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 import Stripe from "stripe";
@@ -1958,8 +1958,8 @@ export const submitStudioEnquiry = withBrevoSecrets.https.onCall(
     const created = await db.runTransaction(async tx => {
       const existing = await tx.get(docRef);
       if (existing.exists) {
-        if (existing.data()?.email !== data.email) {
-          throw new functions.https.HttpsError("already-exists", "This submission reference is already in use");
+        if (!sameEnquiryContent(existing.data() || {}, { ...leadData, leadTags })) {
+          throw new functions.https.HttpsError("already-exists", "Your earlier enquiry was saved, but these changed details have not been saved. Please email diego@amarka.co with your updates and reference " + docRef.id + ".");
         }
         return false;
       }

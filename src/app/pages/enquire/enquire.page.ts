@@ -4,7 +4,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LeadSubmissionService } from '../../services/lead-submission.service';
 import { SeoSchemaService } from '../../services/seo-schema.service';
 import { FileDropzoneComponent } from '../../shared/components/file-dropzone/file-dropzone.component';
-import { EnquirySubmission } from '../../models/studio';
+import { EnquirySubmission, UploadRef } from '../../models/studio';
 import { AmkThemeService } from '../../shared/amk-theme/amk-theme.service';
 
 @Component({
@@ -29,6 +29,7 @@ export class EnquirePageComponent {
   protected submitting = false;
   protected success = false;
   private submissionId?: string;
+  private uploadedFiles?: { files: File[]; uploads: UploadRef[] };
   protected errorMessage = '';
 
   protected form = this.fb.nonNullable.group({
@@ -95,9 +96,15 @@ export class EnquirePageComponent {
     this.errorMessage = '';
     try {
       const formValue = this.form.getRawValue();
-      const uploads = await this.leadSubmission.uploadFiles(this.files, 'enquiries', value => {
-        this.uploadProgress = value;
-      });
+      const files = [...this.files];
+      if (!this.uploadedFiles || files.length !== this.uploadedFiles.files.length ||
+          files.some((file, index) => file !== this.uploadedFiles!.files[index])) {
+        const uploads = await this.leadSubmission.uploadFiles(files, 'enquiries', value => {
+          this.uploadProgress = value;
+        });
+        this.uploadedFiles = { files, uploads };
+      }
+      const uploads = this.uploadedFiles.uploads;
       const { website, ...fields } = formValue;
       const payload: EnquirySubmission = {
         ...fields,
@@ -112,6 +119,7 @@ export class EnquirePageComponent {
       await this.leadSubmission.submitEnquiry(payload);
       this.success = true;
       this.submissionId = undefined;
+      this.uploadedFiles = undefined;
       this.form.reset({
         fullName: '',
         company: '',
