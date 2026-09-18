@@ -35,7 +35,7 @@ const ERROR_STATE_COPY: Record<ErrorState, ErrorStateCopy> = {
     eyebrow: 'Something broke',
     heading: 'Something went wrong on our end.',
     subheading:
-      'We hit a snag loading this page. Try again in a moment, or reach us directly — we respond within one business day.',
+      'We hit a snag loading this page. Try again in a moment, or reach us directly.',
   },
   offline: {
     code: 'Offline',
@@ -92,7 +92,7 @@ const ERROR_STATE_COPY: Record<ErrorState, ErrorStateCopy> = {
             </a>
             <a routerLink="/enquire" class="amk-error__card">
               <span class="amk-error__card-title">Get a Free Quote</span>
-              <span class="amk-error__card-desc">Tell us what your brand needs — we respond within one business day.</span>
+              <span class="amk-error__card-desc">Tell us what your brand needs and request a project quote.</span>
             </a>
           </div>
         </div>
