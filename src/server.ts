@@ -17,7 +17,7 @@ const angularApp = new AngularNodeAppEngine({
 // Angular otherwise falls back to CSR for an unrecognized host. Reject it
 // before static files, redirects or rendering. Keep this list aligned with
 // angular.json security.allowedHosts (covered by verify-seo-hosts.mjs).
-const allowedRequestHosts = new Set(["amarka.co", "www.amarka.co", "localhost", "127.0.0.1", "amarka-d237b.web.app", "amarka-d237b.firebaseapp.com"]);
+const allowedRequestHosts = new Set(["amarka.co", "www.amarka.co", "localhost", "127.0.0.1", "amarka-d237b.web.app", "amarka-d237b.firebaseapp.com", "us-central1-amarka-d237b.cloudfunctions.net"]);
 app.use((req, res, next) => {
   const authorities = [req.headers.host, req.headers['x-forwarded-host']];
   if (!req.headers.host || authorities.some(authority => {
