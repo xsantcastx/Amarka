@@ -416,6 +416,8 @@ export class CanvasEditorComponent implements AfterViewInit, AfterViewChecked, O
         id: `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`,
         storagePath: uploadRef.storagePath,
         originalName: uploadRef.originalName,
+        mimeType: uploadRef.mimeType,
+        size: uploadRef.size,
         previewUrl,
         viewId: this.activeViewId(),
         xPct: area ? area.boundary.xPct + area.boundary.widthPct / 2 : 50,

@@ -48,46 +48,34 @@ export class SitemapService {
         priority: 1.0
       },
       {
-        loc: `${this.baseUrl}/work`,
-        lastmod: today,
-        changefreq: 'weekly',
-        priority: 0.9
-      },
-      {
-        loc: `${this.baseUrl}/services`,
-        lastmod: today,
-        changefreq: 'monthly',
-        priority: 0.9
-      },
-      {
-        loc: `${this.baseUrl}/trade`,
-        lastmod: today,
-        changefreq: 'monthly',
-        priority: 0.9
-      },
-      {
-        loc: `${this.baseUrl}/clients`,
-        lastmod: today,
-        changefreq: 'monthly',
-        priority: 0.8
-      },
-      {
-        loc: `${this.baseUrl}/materials`,
-        lastmod: today,
-        changefreq: 'monthly',
-        priority: 0.7
-      },
-      {
         loc: `${this.baseUrl}/enquire`,
         lastmod: today,
         changefreq: 'monthly',
         priority: 0.8
       },
       {
-        loc: `${this.baseUrl}/about`,
+        loc: `${this.baseUrl}/design`,
         lastmod: today,
         changefreq: 'monthly',
-        priority: 0.6
+        priority: 0.8
+      },
+      {
+        loc: `${this.baseUrl}/privacy-policy`,
+        lastmod: today,
+        changefreq: 'yearly',
+        priority: 0.2
+      },
+      {
+        loc: `${this.baseUrl}/cookie-policy`,
+        lastmod: today,
+        changefreq: 'yearly',
+        priority: 0.2
+      },
+      {
+        loc: `${this.baseUrl}/terms`,
+        lastmod: today,
+        changefreq: 'yearly',
+        priority: 0.2
       }
     ];
   }

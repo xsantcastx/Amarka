@@ -5,6 +5,8 @@ export interface StudioLogo {
   /** Firebase Storage path once uploaded (set as soon as the file is added, so it survives a reload). */
   storagePath: string;
   originalName: string;
+  mimeType?: string;
+  size?: number;
   /** Download URL used to render the image in the canvas. */
   previewUrl: string;
   viewId: string;

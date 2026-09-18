@@ -1,3 +1,5 @@
+import { SeoService } from '../core/services/seo.service';
+import { ROUTE_SEO, normalizeSeoPath } from '../core/data/seo-routes';
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { Meta, Title } from '@angular/platform-browser';
@@ -43,7 +45,8 @@ export class SeoSchemaService {
     @Inject(PLATFORM_ID) platformId: Object,
     private meta: Meta,
     private titleService: Title,
-    private brandConfig: BrandConfigService
+    private brandConfig: BrandConfigService,
+    private routeSeo: SeoService
   ) {
     this.isBrowser = isPlatformBrowser(platformId);
   }
@@ -336,6 +339,10 @@ export class SeoSchemaService {
   }
 
   setupMarketingPageSEO(input: MarketingSeoInput): void {
+    if (input.path !== undefined && ROUTE_SEO[normalizeSeoPath(input.path)]) {
+      this.routeSeo.updateForRoute(input.path);
+      return;
+    }
     this.removeAllSchemas();
     this.setTitle(input.title);
     this.setMetaDescription(input.description);
@@ -357,30 +364,7 @@ export class SeoSchemaService {
     pagePath?: string;
     description?: string;
   }): void {
-    if (!this.isBrowser) return;
-
-    const contact = this.brandConfig.site.contact;
-    const schema = {
-      '@context': 'https://schema.org',
-      '@type': 'ProfessionalService',
-      '@id': this.getAbsoluteUrl(data?.pagePath),
-      name: this.brandConfig.siteName,
-      url: this.getAbsoluteUrl(data?.pagePath),
-      description: data?.description || this.brandConfig.site.brand.description,
-      image: this.getAbsoluteLogoUrl(),
-      email: contact.email,
-      telephone: contact.phone,
-      areaServed: ['Stamford, Connecticut', 'Fairfield County', 'Connecticut', 'Tri-State Region'],
-      address: {
-        '@type': 'PostalAddress',
-        addressLocality: 'Stamford',
-        addressRegion: 'CT',
-        addressCountry: 'US'
-      },
-      sameAs: (this.brandConfig.nav.social || []).map(item => item.href)
-    };
-
-    this.injectSchema('local-business-schema', schema);
+    this.routeSeo.ensureLocalBusinessJsonLd();
   }
 
   /**

@@ -7,9 +7,10 @@
  *
  * Content:
  *   Header — "AMARKA" + amarka.co
- *   Footer — "Amarka · Stamford, CT · diego@amarka.co · amarka.co"
+ *   Footer — Brand, service area, contact email, and domain from shared config
  */
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
+import { BrandConfigService } from '../../core/services/brand-config.service';
 
 @Component({
   selector: 'amarka-print-chrome',
@@ -22,12 +23,15 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
   `],
   template: `
     <div class="amarka-print-header">
-      <p class="amarka-print-header__brand">Amarka</p>
-      <p class="amarka-print-header__url">amarka.co</p>
+      <p class="amarka-print-header__brand">{{ brand.siteName }}</p>
+      <p class="amarka-print-header__url">{{ brand.site.brand.domain }}</p>
     </div>
     <div class="amarka-print-footer">
-      Amarka &middot; Stamford, CT &middot; diego&#64;amarka.co &middot; amarka.co
+      {{ brand.siteName }} &middot; Serving {{ brand.site.studio?.serviceArea }} &middot;
+      {{ brand.site.contact.email }} &middot; {{ brand.site.brand.domain }}
     </div>
   `
 })
-export class PrintChromeComponent {}
+export class PrintChromeComponent {
+  protected readonly brand = inject(BrandConfigService);
+}

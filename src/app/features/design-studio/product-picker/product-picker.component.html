@@ -1,8 +1,8 @@
-@if (savedProjects.length && !selectedProduct()) {
+@if (savedProjects().length && !selectedProduct()) {
 <div class="amk-picker-saved">
   <p class="amk-kicker">Continue a saved design</p>
   <div class="amk-picker-saved__list">
-    @for (entry of savedProjects; track entry.id) {
+    @for (entry of savedProjects(); track entry.id) {
     <button type="button" class="amk-picker-saved__item" (click)="resume(entry.id)">
       <span class="amk-picker-saved__swatch" [style.background]="entry.colorHex"></span>
       <span class="amk-picker-saved__meta">

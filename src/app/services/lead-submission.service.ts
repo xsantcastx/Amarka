@@ -29,10 +29,10 @@ export class LeadSubmissionService {
 
     const uploads = await Promise.all(
       files.map(async (file, index) => {
-        const safeName = `${Date.now()}-${index}-${file.name.replace(/\s+/g, '-')}`;
+        const safeName = `${crypto.randomUUID()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, '-')}`;
         const storagePath = `private/${category}/${safeName}`;
         const storageRef = ref(this.storage, storagePath);
-        const task = uploadBytesResumable(storageRef, file);
+        const task = uploadBytesResumable(storageRef, file, { contentType: file.type || 'application/octet-stream' });
 
         await new Promise<void>((resolve, reject) => {
           task.on(
@@ -66,6 +66,9 @@ export class LeadSubmissionService {
       'submitStudioEnquiry'
     );
     const result = await callable(payload);
+    if (!result.data?.ok || !result.data.id) {
+      throw new Error('Your enquiry could not be saved. Please try again.');
+    }
     this.analytics.trackLeadEvent('enquiry_submit', {
       enquiry_type: payload.type,
       role: payload.role,
@@ -102,7 +105,7 @@ export class LeadSubmissionService {
         throw new Error('Allowed file types: PDF, AI, DWG, JPG, JPEG, PNG, SVG.');
       }
 
-      if (file.size > this.maxFileSizeBytes) {
+      if (file.size <= 0 || file.size > this.maxFileSizeBytes) {
         throw new Error('Each file must be 20MB or smaller.');
       }
     }

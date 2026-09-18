@@ -78,14 +78,10 @@ export class AppComponent implements OnInit {
         takeUntilDestroyed()
       )
       .subscribe((event) => {
-        this.currentUrl = (event as NavigationEnd).url;
+        this.currentUrl = (event as NavigationEnd).urlAfterRedirects;
         this.isAdminRoute = this.currentUrl.startsWith('/admin');
         // AMK-9 — push SEO tag updates on every successful navigation.
-        // Admin routes are intentionally excluded from public SEO rewrites;
-        // they stay on the last public page's tags.
-        if (!this.isAdminRoute) {
-          this.seoService.updateForRoute(this.currentUrl);
-        }
+        this.seoService.updateForRoute(this.currentUrl);
         this.cdr.markForCheck();
       });
 
@@ -93,9 +89,7 @@ export class AppComponent implements OnInit {
     this.isAdminRoute = this.currentUrl.startsWith('/admin');
     // AMK-9 — prime SEO tags for the initial URL (before the first
     // NavigationEnd fires, e.g. on hard refresh of a deep link).
-    if (!this.isAdminRoute) {
-      this.seoService.updateForRoute(this.currentUrl);
-    }
+    this.seoService.updateForRoute(this.currentUrl);
   }
 
   ngOnInit() {

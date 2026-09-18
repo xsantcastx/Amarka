@@ -13,11 +13,11 @@
   "contact": {
     "email": "diego@amarka.co",
     "email2": "",
-    "phone": "+1 (203) 554-6224",
+    "phone": "+1 (305) 904-4385",
     "phone2": "",
-    "address": "Miami, FL\nUnited States",
-    "supportHours": "Mon–Fri 8 AM – 6 PM EST",
-    "whatsapp": "+12035546224"
+    "address": "",
+    "supportHours": "",
+    "whatsapp": "+13059044385"
   },
   "theme": {
     "tokens": {
@@ -58,10 +58,10 @@
       "href": "/enquire"
     },
     "secondaryCta": {
-      "label": "See Our Work",
-      "href": "/work"
+      "label": "Explore our services",
+      "href": "/#services"
     },
-    "badge": "Now relocating to Miami, FL"
+    "badge": "Serving Miami & South Florida"
   },
   "navigation": {
     "header": [
@@ -99,7 +99,7 @@
     "siteName": "Amarka",
     "titleTemplate": "%s | Amarka",
     "defaultTitle": "Amarka | Corporate Merchandise, Engraving & Brand Solutions — Miami, FL",
-    "defaultDescription": "Amarka helps businesses bring their brand into the real world through custom merchandise, engraving, branded apparel, and promotional products — premium corporate gifts and brand solutions from Miami, FL.",
+    "defaultDescription": "Amarka helps businesses bring their brand into the real world through custom merchandise, engraving, branded apparel, and promotional products — premium corporate gifts and brand solutions for businesses in Miami & South Florida.",
     "defaultKeywords": [
       "corporate merchandise Miami",
       "custom engraving Miami FL",
@@ -117,7 +117,7 @@
     "taxId": "",
     "supportEmail": "diego@amarka.co",
     "returnPolicyUrl": "",
-    "privacyPolicyUrl": "/privacy",
+    "privacyPolicyUrl": "/privacy-policy",
     "termsUrl": "/terms"
   },
   "maintenance": {
@@ -130,7 +130,7 @@
   },
   "studio": {
     "location": "Miami, FL",
-    "serviceArea": "Miami, FL & South Florida",
-    "turnaround": "5–10 business days"
+    "serviceArea": "Miami & South Florida",
+    "turnaround": "Timing confirmed with your project quote"
   }
 }
