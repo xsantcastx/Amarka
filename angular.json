@@ -46,7 +46,8 @@
                 "localhost",
                 "127.0.0.1",
                 "amarka-d237b.web.app",
-                "amarka-d237b.firebaseapp.com"
+                "amarka-d237b.firebaseapp.com",
+                "us-central1-amarka-d237b.cloudfunctions.net"
               ]
             }
           },
