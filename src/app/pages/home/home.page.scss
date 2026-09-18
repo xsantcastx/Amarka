@@ -120,7 +120,8 @@
   display: block;
   width: 100%;
   aspect-ratio: 9 / 16;
-  object-fit: cover;
+  object-fit: contain;
+  background: #070706;
 }
 
 .amk-hero__video-caption {
