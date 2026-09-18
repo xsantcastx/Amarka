@@ -468,11 +468,11 @@ export class SettingsService {
 
       // Page Hero Settings
       serviciosHeroImage: '/assets/services/hero-services.jpg',
-      serviciosHeroTitle: 'Trade-grade laser engraving services',
-      serviciosHeroSubtitle: 'Precision engraving on brass, aluminium, stainless steel, acrylic, hardwood, and glass — built to spec for interior designers, general contractors, and hospitality groups.',
+      serviciosHeroTitle: 'Custom merchandise and engraving services',
+      serviciosHeroSubtitle: 'CO2 laser engraving on wood, acrylic, leather, glass, and slate, alongside branded apparel, promotional products, corporate gifts, and welcome kits.',
       galeriaHeroImage: '/assets/gallery/hero-gallery.jpg',
-      galeriaHeroTitle: 'Recent commissions and trade projects',
-      galeriaHeroSubtitle: 'Architectural signage, donor walls, hospitality details, and custom awards — for businesses in Miami & South Florida.',
+      galeriaHeroTitle: 'Recent merchandise and brand projects',
+      galeriaHeroSubtitle: 'Branded apparel, engraved drinkware, corporate gifts, and event merchandise for businesses in Miami & South Florida.',
       contactoHeroImage: '/assets/contact/hero-contact.jpg',
       contactoHeroTitle: 'Request a quote',
       contactoHeroSubtitle: 'Share your project scope, substrate, and timeline. We will review your requirements and confirm options and timing with your quote.',
