@@ -1,11 +1,10 @@
-import * as functions from "firebase-functions";
 import { getFirestore } from "firebase-admin/firestore";
 import { BackendFlags } from "./backend.flags";
 
 let cachedFlags = BackendFlags;
 
 const getBrandKey = (): string => {
-  return process.env.APP_BRAND_KEY || functions.config().app?.brand_key || "default";
+  return process.env.APP_BRAND_KEY || "amarka";
 };
 
 export async function getBackendFlags() {

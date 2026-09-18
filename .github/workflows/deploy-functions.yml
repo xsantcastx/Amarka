@@ -60,7 +60,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'npm'
           cache-dependency-path: 'functions/package-lock.json'
       
@@ -82,6 +82,10 @@ jobs:
 
       - name: Build app (SSR server bundle)
         run: npm run build
+
+      - name: Configure Functions environment
+        run: |
+          printf 'APP_BRAND_KEY=%s\nAPP_URL=%s\n' "$APP_BRAND_KEY" "$APP_URL" > functions/.env
 
       # Authenticate with the same service account the hosting workflow uses.
       # This previously used `--token "$FIREBASE_TOKEN"`, but that secret is
@@ -107,7 +111,7 @@ jobs:
 
       - name: Remove service account credentials
         if: always()
-        run: rm -f "$RUNNER_TEMP/firebase-sa.json"
+        run: rm -f "$RUNNER_TEMP/firebase-sa.json" functions/.env
 
       - name: Deployment summary
         if: success()

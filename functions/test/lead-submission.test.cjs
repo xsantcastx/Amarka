@@ -38,8 +38,9 @@ const functionsMock = {
   config: () => ({ brevo: { api_key: 'test-only' } }),
 };
 const originalLoad = Module._load;
+process.env.BREVO_API_KEY = 'test-only';
 Module._load = function (request, ...args) {
-  if (request === 'firebase-functions') return functionsMock;
+  if (request === 'firebase-functions' || request === 'firebase-functions/v1') return functionsMock;
   if (request === 'firebase-admin') return {
     initializeApp() {}, firestore,
     storage: () => ({ bucket: () => ({ file: () => ({

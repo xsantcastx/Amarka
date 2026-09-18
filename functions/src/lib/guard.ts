@@ -1,4 +1,4 @@
-import * as functions from "firebase-functions";
+import * as functions from "firebase-functions/v1";
 import { getBackendFlags } from "../config/flags.runtime";
 import { BackendFlags } from "../config/backend.flags";
 

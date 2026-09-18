@@ -1,5 +1,5 @@
 import { escapeLeadHtml, validEnquiry, validLeadUploadPath, sameEnquiryContent } from "./lead-validation";
-import * as functions from "firebase-functions";
+import * as functions from "firebase-functions/v1";
 import * as admin from "firebase-admin";
 import Stripe from "stripe";
 import * as dotenv from "dotenv";
@@ -21,11 +21,9 @@ const withStripeSecrets = functions.runWith({
  * Get Stripe configuration from function secrets
  */
 async function getStripeConfig(): Promise<{ secretKey: string; webhookSecret: string | null }> {
-  const envKey = process.env.STRIPE_SECRET_KEY || functions.config().stripe?.secret_key;
+  const envKey = process.env.STRIPE_SECRET_KEY;
   const envWebhook =
-    process.env.STRIPE_WEBHOOK_SECRET ||
-    functions.config().stripe?.webhook_secret ||
-    null;
+    process.env.STRIPE_WEBHOOK_SECRET || null;
 
   if (!envKey) {
     throw new Error("Stripe secret key not configured. Set STRIPE_SECRET_KEY secret.");
@@ -74,9 +72,7 @@ async function getEmailConfig(): Promise<EmailConfig> {
 
     const provider = String(settings.emailProvider || "").toLowerCase();
     const apiKeyFromSecret = (
-      process.env.BREVO_API_KEY ||
-      functions.config().brevo?.api_key ||
-      ""
+      process.env.BREVO_API_KEY || ""
     ).trim();
     const apiKey = apiKeyFromSecret || null;
 
@@ -99,7 +95,7 @@ async function getEmailConfig(): Promise<EmailConfig> {
 
   return {
     provider: "",
-    apiKey: (process.env.BREVO_API_KEY || functions.config().brevo?.api_key || "").trim() || null,
+    apiKey: (process.env.BREVO_API_KEY || "").trim() || null,
     fromEmail: "",
     fromName: "Amarka",
     contactEmail: "",
@@ -1258,7 +1254,7 @@ export const createCustomOrderPaymentLink = withStripeSecrets.https.onCall(
       after_completion: {
         type: "redirect",
         redirect: {
-          url: `${functions.config().app?.url || "https://amarka.co"}/checkout/confirmation?custom_order=${customOrderId}`,
+          url: `${process.env.APP_URL || "https://amarka.co"}/checkout/confirmation?custom_order=${customOrderId}`,
         },
       },
       // Allow promotion codes
