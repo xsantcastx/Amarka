@@ -107,6 +107,30 @@
   justify-items: center;
 }
 
+.amk-hero__video-frame {
+  width: min(100%, 30rem);
+  overflow: hidden;
+  border: 1px solid var(--amk-line);
+  border-radius: 1.5rem;
+  background: var(--amk-bg-soft);
+  box-shadow: 0 40px 80px -40px rgba(0, 0, 0, 0.5);
+}
+
+.amk-hero__video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 9 / 16;
+  object-fit: cover;
+}
+
+.amk-hero__video-caption {
+  max-width: 30rem;
+  margin: 0;
+  color: var(--amk-text-soft);
+  font-size: 0.85rem;
+  text-align: center;
+}
+
 .amk-hero__swatch {
   position: relative;
   width: min(100%, 22rem);
