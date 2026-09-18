@@ -10,7 +10,6 @@ const APPAREL_COLORS: ProductColorOption[] = [
 ];
 
 const DRINKWARE_COLORS: ProductColorOption[] = [
-  { id: 'steel', label: 'Stainless Steel', hex: '#b8bcc0' },
   { id: 'black', label: 'Matte Black', hex: '#1a1a1a' },
   { id: 'white', label: 'White', hex: '#f5f5f0' },
   { id: 'navy', label: 'Navy', hex: '#1c2b45' },
@@ -206,7 +205,6 @@ export const PRODUCT_CATALOG: ProductTemplate[] = [
     sortOrder: 8,
     colors: DRINKWARE_COLORS,
     variants: [
-      { id: 'stainless', label: 'Stainless Steel' },
       { id: 'glass', label: 'Glass' },
     ],
     views: [{ id: 'wrap', label: 'Full Wrap', silhouette: 'bottle-wrap' }],
