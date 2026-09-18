@@ -1,12 +1,26 @@
 name: Deploy Firebase Cloud Functions
 
 on:
-  # Trigger on push to main branch when functions directory changes
+  # The SSR function also depends on the app, generated brand config and rules.
   push:
     branches:
       - main
     paths:
       - 'functions/**'
+      - 'src/**'
+      - 'public/**'
+      - 'config/**'
+      - 'scripts/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'angular.json'
+      - 'tsconfig*.json'
+      - 'tailwind.config.js'
+      - 'postcss.config.js'
+      - 'firebase.json'
+      - 'storage.rules'
+      - '.env.example'
+      - '.github/workflows/deploy-functions.yml'
   
   # Allow manual workflow dispatch from GitHub UI
   workflow_dispatch:
@@ -17,6 +31,27 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read  # Required to checkout repository code
+    # Match Hosting's build environment so dynamic SSR pages use the same brand.
+    env:
+      FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
+      FIREBASE_AUTH_DOMAIN: amarka-d237b.firebaseapp.com
+      FIREBASE_PROJECT_ID: amarka-d237b
+      FIREBASE_STORAGE_BUCKET: amarka-d237b.firebasestorage.app
+      FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}
+      FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
+      FIREBASE_MEASUREMENT_ID: G-XQHZR0DS09
+      GA_MEASUREMENT_ID: G-XQHZR0DS09
+      GTM_CONTAINER_ID: ""
+      STRIPE_PUBLIC_KEY: ${{ secrets.STRIPE_PUBLIC_KEY }}
+      RECAPTCHA_SITE_KEY: ${{ secrets.RECAPTCHA_SITE_KEY }}
+      RECAPTCHA_ENABLED: "true"
+      APPCHECK_PROVIDER: recaptcha
+      APPCHECK_SITE_KEY: ${{ secrets.RECAPTCHA_SITE_KEY }}
+      USE_FIREBASE_EMULATORS: "false"
+      APP_NAME: Amarka
+      APP_URL: https://amarka.co
+      APP_BRAND_KEY: amarka
+      FUNCTIONS_NAMESPACE: amarka
     
     steps:
       - name: Checkout repository
@@ -68,7 +103,7 @@ jobs:
           fi
           printf '%s' "$FIREBASE_SERVICE_ACCOUNT" > "$RUNNER_TEMP/firebase-sa.json"
           export GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/firebase-sa.json"
-          firebase deploy --only functions --project amarka-d237b --non-interactive
+          firebase deploy --only functions,storage --project amarka-d237b --non-interactive
 
       - name: Remove service account credentials
         if: always()
@@ -77,5 +112,5 @@ jobs:
       - name: Deployment summary
         if: success()
         run: |
-          echo "✅ Cloud Functions deployed successfully!"
+          echo "✅ Cloud Functions and Storage rules deployed successfully!"
           echo "Key functions: ssr, submitStudioEnquiry, submitTradeApplication, sendBrevoEmail"
