@@ -315,6 +315,181 @@
   }
 }
 
+/* ─── SELECTED WORK — EDITORIAL PORTFOLIO ─────────────────── */
+
+.amk-work {
+  padding: clamp(4rem, 8vw, 7rem) 0;
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--amk-bg-soft) 52%, transparent), transparent 24%),
+    var(--amk-bg);
+  border-top: 1px solid var(--amk-line);
+}
+
+.amk-work__intro {
+  display: grid;
+  gap: 1.5rem;
+  align-items: end;
+  margin-bottom: clamp(2rem, 5vw, 3.5rem);
+
+  @media (min-width: 760px) {
+    grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.72fr);
+  }
+
+  .amk-kicker {
+    margin-bottom: 0.7rem;
+  }
+
+  .amk-section__title {
+    margin: 0;
+  }
+
+  > p {
+    max-width: 40ch;
+    margin: 0 0 0.3rem auto;
+    color: var(--amk-text-soft);
+    font-size: clamp(0.95rem, 1.5vw, 1.08rem);
+    line-height: 1.7;
+  }
+}
+
+.amk-work__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: clamp(12rem, 42vw, 18rem);
+  gap: clamp(0.75rem, 1.6vw, 1.15rem);
+
+  @media (min-width: 820px) {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    grid-auto-rows: 10.5rem;
+  }
+}
+
+.amk-work-card {
+  position: relative;
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--amk-line);
+  border-radius: clamp(1rem, 2vw, 1.5rem);
+  background: var(--amk-surface);
+  isolation: isolate;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 42% 0 0;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(180deg, transparent, rgba(5, 5, 4, 0.78));
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    transition: transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1), filter 0.35s ease;
+  }
+
+  figcaption {
+    position: absolute;
+    z-index: 2;
+    left: clamp(1rem, 2vw, 1.4rem);
+    right: clamp(1rem, 2vw, 1.4rem);
+    bottom: clamp(0.9rem, 2vw, 1.25rem);
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    color: #fff;
+    font-family: var(--amk-font-display);
+    font-size: clamp(0.9rem, 1.5vw, 1.08rem);
+    font-weight: 600;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.5);
+
+    span {
+      color: var(--amk-gold-bright);
+      font-family: var(--amk-font-sans);
+      font-size: 0.66rem;
+      letter-spacing: 0.12em;
+    }
+  }
+
+  &:hover img {
+    transform: scale(1.035);
+    filter: saturate(1.05) contrast(1.02);
+  }
+}
+
+.amk-work-card--feature,
+.amk-work-card--bottles,
+.amk-work-card--apparel {
+  grid-column: 1 / -1;
+}
+
+.amk-work-card--tall {
+  grid-row: span 2;
+}
+
+@media (min-width: 820px) {
+  .amk-work-card--feature {
+    grid-column: span 8;
+    grid-row: span 2;
+  }
+
+  .amk-work-card--tall {
+    grid-column: span 4;
+    grid-row: span 4;
+  }
+
+  .amk-work-card--pink,
+  .amk-work-card--event {
+    grid-column: span 4;
+    grid-row: span 2;
+  }
+
+  .amk-work-card--bottles,
+  .amk-work-card--apparel {
+    grid-column: span 6;
+    grid-row: span 2;
+  }
+}
+
+.amk-work__footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-top: 1.5rem;
+  border-bottom: 1px solid var(--amk-line);
+
+  p {
+    margin: 0;
+    color: var(--amk-text-faint);
+    font-size: 0.85rem;
+  }
+
+  a {
+    display: inline-flex;
+    gap: 0.65rem;
+    align-items: center;
+    padding: 1rem 0;
+    color: var(--amk-text);
+    font-family: var(--amk-font-display);
+    font-weight: 600;
+    text-decoration: none;
+
+    span {
+      color: var(--amk-gold-bright);
+      transition: transform 0.2s ease;
+    }
+
+    &:hover span {
+      transform: translateX(0.3rem);
+    }
+  }
+}
+
 /* ─── MIAMI RELOCATION MOMENT ──────────────────────────────── */
 
 .amk-miami {
@@ -459,5 +634,18 @@
   .amk-theme-toggle {
     top: 1rem;
     right: 1rem;
+  }
+
+  .amk-work-card--pink figcaption,
+  .amk-work-card--event figcaption {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .amk-work-card img {
+    transition: none;
   }
 }
