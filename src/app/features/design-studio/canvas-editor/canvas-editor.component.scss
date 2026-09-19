@@ -247,63 +247,11 @@ button {
   }
 }
 
-/* ─── Toolbar under canvas ─────────────────────────────────── */
-
-.amk-editor__toolbar {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-top: 1.25rem;
-}
-
-.amk-editor__selected-toolbar {
-  display: flex;
-  gap: 0.3rem;
-  padding: 0.3rem;
-  border-radius: 999px;
-  background: var(--amk-surface);
-  border: 1px solid var(--amk-line);
-}
-
-.amk-editor__selected-toolbar button {
-  width: 2.1rem;
-  height: 2.1rem;
-  border-radius: 50%;
-  border: none;
-  background: transparent;
-  color: var(--amk-text-soft);
-  font-size: 0.95rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  &:hover {
-    background: var(--amk-bg-soft);
-    color: var(--amk-text);
-  }
-
-  &.is-danger:hover {
-    background: color-mix(in srgb, var(--amk-ember) 16%, transparent);
-    color: var(--amk-ember);
-  }
-}
-
 .amk-editor__error {
   text-align: center;
   color: var(--amk-ember);
   font-size: 0.85rem;
   margin-top: 0.75rem;
-}
-
-/* ─── Layers panel ─────────────────────────────────────────── */
-
-.amk-editor__layers {
-  padding: 1.25rem;
-  border-radius: 1.1rem;
-  background: var(--amk-surface);
-  border: 1px solid var(--amk-line);
 }
 
 /* ─── Product options panel ────────────────────────────────── */
@@ -421,12 +369,6 @@ button {
   }
 }
 
-.amk-editor__layers-empty {
-  font-size: 0.82rem;
-  color: var(--amk-text-faint);
-  line-height: 1.5;
-}
-
 .amk-editor__layers-list {
   list-style: none;
   margin: 0;
@@ -486,4 +428,359 @@ button {
   margin-top: 2.5rem;
   padding-top: 1.5rem;
   border-top: 1px solid var(--amk-line);
+}
+
+/* ─── Professional workspace refinement ───────────────────── */
+
+.amk-editor {
+  --editor-panel: color-mix(in srgb, var(--amk-surface) 94%, var(--amk-gold) 6%);
+}
+
+.amk-editor__top {
+  align-items: flex-end;
+  margin-bottom: 1.1rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--amk-line);
+}
+
+.amk-editor__title-group {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.amk-editor__step-label,
+.amk-editor__view-label {
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--amk-gold-bright);
+}
+
+.amk-editor__name-btn {
+  font-size: clamp(1.45rem, 3vw, 2rem);
+  gap: 0.65rem;
+}
+
+.amk-editor__name-edit {
+  padding: 0.25rem 0.55rem;
+  border: 1px solid var(--amk-line);
+  border-radius: 999px;
+  font-family: var(--amk-font-sans);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--amk-text-faint);
+}
+
+.amk-editor__history button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 2.5rem;
+}
+
+.amk-editor__view-bar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.amk-editor__view-tabs {
+  margin: 0;
+  flex-wrap: nowrap;
+}
+
+.amk-editor__view-tabs button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  white-space: nowrap;
+
+  small {
+    min-width: 1.15rem;
+    height: 1.15rem;
+    display: inline-grid;
+    place-items: center;
+    border-radius: 50%;
+    background: color-mix(in srgb, currentColor 14%, transparent);
+    font-size: 0.6rem;
+  }
+}
+
+.amk-editor__layout {
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+
+  @media (min-width: 980px) {
+    grid-template-columns: minmax(0, 1fr) minmax(18rem, 21rem);
+  }
+}
+
+.amk-editor__canvas-status {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  max-width: 36rem;
+  margin: 0 auto 0.7rem;
+  color: var(--amk-text-soft);
+  font-size: 0.75rem;
+  line-height: 1.45;
+
+  strong { color: var(--amk-text); }
+}
+
+.amk-editor__status-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: var(--amk-gold-bright);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--amk-gold) 15%, transparent);
+}
+
+.amk-editor__canvas-shell {
+  max-width: 36rem;
+}
+
+.amk-editor__viewport {
+  border-radius: 1.5rem;
+  border-color: color-mix(in srgb, var(--amk-line) 70%, var(--amk-gold) 30%);
+  background:
+    radial-gradient(circle at 50% 38%, color-mix(in srgb, var(--amk-surface) 82%, transparent), transparent 52%),
+    var(--amk-bg-soft);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, white 26%, transparent), 0 20px 48px rgba(40, 30, 19, 0.08);
+}
+
+.amk-editor__area-guide {
+  border-color: color-mix(in srgb, var(--amk-text-faint) 42%, transparent);
+  transition: border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+
+  span {
+    padding: 0.18rem 0.38rem;
+    border-radius: 0.25rem;
+    background: color-mix(in srgb, var(--amk-surface) 88%, transparent);
+  }
+
+  &.is-target {
+    border-color: var(--amk-gold-bright);
+    background: color-mix(in srgb, var(--amk-gold) 7%, transparent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--amk-gold) 10%, transparent);
+  }
+}
+
+.amk-editor__object-bar {
+  max-width: 44rem;
+  margin: 0.85rem auto 0;
+  padding: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  border: 1px solid var(--amk-line);
+  border-radius: 0.9rem;
+  background: var(--amk-surface);
+  box-shadow: 0 10px 30px rgba(40, 30, 19, 0.08);
+}
+
+.amk-editor__object-meta {
+  min-width: 0;
+  display: grid;
+  gap: 0.08rem;
+
+  span, small { font-size: 0.62rem; color: var(--amk-text-faint); }
+  span { text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700; }
+  strong { max-width: 15rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 0.78rem; }
+}
+
+.amk-editor__object-actions {
+  display: flex;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+
+  button {
+    min-height: 2rem;
+    padding: 0 0.65rem;
+    border: 1px solid var(--amk-line);
+    border-radius: 0.5rem;
+    background: var(--amk-bg-soft);
+    color: var(--amk-text-soft);
+    font-size: 0.67rem;
+    font-weight: 700;
+  }
+
+  button:hover { border-color: var(--amk-gold); color: var(--amk-text); }
+  .is-danger:hover { border-color: var(--amk-ember); color: var(--amk-ember); }
+}
+
+.amk-editor__inspector {
+  display: grid;
+  gap: 1rem;
+
+  @media (min-width: 980px) {
+    position: sticky;
+    top: 7.5rem;
+    max-height: calc(100vh - 9rem);
+    overflow-y: auto;
+    padding-right: 0.15rem;
+    scrollbar-width: thin;
+  }
+}
+
+.amk-editor__artwork-panel,
+.amk-editor__options {
+  padding: 1.15rem;
+  margin: 0;
+  border: 1px solid var(--amk-line);
+  border-radius: 1.15rem;
+  background: var(--editor-panel);
+}
+
+.amk-editor__options {
+  padding-bottom: 1.15rem;
+}
+
+.amk-editor__panel-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+
+  > div { display: flex; align-items: center; gap: 0.7rem; }
+  p { margin: 0 0 0.1rem; }
+  h3 { margin: 0; font-family: var(--amk-font-display); font-size: 1.05rem; }
+}
+
+.amk-editor__panel-number,
+.amk-editor__file-count {
+  width: 2rem;
+  height: 2rem;
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  font-size: 0.65rem;
+  font-weight: 800;
+}
+
+.amk-editor__panel-number { background: var(--amk-text); color: var(--amk-bg); }
+.amk-editor__file-count { border: 1px solid var(--amk-line); color: var(--amk-text-soft); }
+
+.amk-editor__placement { display: grid; gap: 0.55rem; margin-bottom: 0.8rem; }
+.amk-editor__placement-list { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+
+.amk-editor__placement-list button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.42rem 0.6rem;
+  border: 1px solid var(--amk-line);
+  border-radius: 0.55rem;
+  background: var(--amk-surface);
+  color: var(--amk-text-soft);
+  font-size: 0.68rem;
+  font-weight: 650;
+
+  &.is-active { border-color: var(--amk-gold); color: var(--amk-text); background: color-mix(in srgb, var(--amk-gold) 10%, var(--amk-surface)); }
+}
+
+.amk-editor__placement-mark {
+  width: 0.55rem;
+  height: 0.55rem;
+  border: 1px solid currentColor;
+  border-radius: 0.12rem;
+}
+
+.amk-editor__dropzone {
+  width: 100%;
+  min-height: 9.2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  padding: 1rem;
+  border: 1.5px dashed color-mix(in srgb, var(--amk-gold) 55%, var(--amk-line));
+  border-radius: 0.9rem;
+  background: color-mix(in srgb, var(--amk-gold) 5%, var(--amk-surface));
+  color: var(--amk-text);
+  transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+
+  &:hover:not(:disabled) { transform: translateY(-2px); border-color: var(--amk-gold-bright); background: color-mix(in srgb, var(--amk-gold) 9%, var(--amk-surface)); }
+  strong { font-size: 0.82rem; }
+  span { font-size: 0.72rem; color: var(--amk-text-soft); }
+  small { font-size: 0.6rem; color: var(--amk-text-faint); margin-top: 0.2rem; }
+}
+
+.amk-editor__upload-icon {
+  width: 2.15rem;
+  height: 2.15rem;
+  display: grid;
+  place-items: center;
+  margin-bottom: 0.2rem;
+  border-radius: 50%;
+  background: var(--amk-gold);
+  color: var(--amk-on-gold) !important;
+  font-size: 1.15rem !important;
+}
+
+.amk-editor__layers-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 1rem 0 0.5rem;
+  small { font-size: 0.6rem; color: var(--amk-text-faint); }
+}
+
+.amk-editor__layers-list { gap: 0.35rem; }
+
+.amk-editor__layers-list li button {
+  display: grid;
+  grid-template-columns: 1.25rem 2.5rem minmax(0, 1fr) auto;
+  gap: 0.55rem;
+  padding: 0.55rem;
+  border-color: var(--amk-line);
+  background: var(--amk-surface);
+
+  img { width: 2.5rem; height: 2.5rem; }
+}
+
+.amk-editor__layer-index { font-size: 0.6rem !important; color: var(--amk-text-faint) !important; text-align: center; }
+.amk-editor__layer-copy { display: grid; gap: 0.12rem; min-width: 0; }
+.amk-editor__layer-copy strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 0.72rem; }
+.amk-editor__layer-copy small { font-size: 0.58rem; color: var(--amk-text-faint); }
+.amk-editor__layer-state { flex: 0 0 auto !important; letter-spacing: 0.06em; }
+
+.amk-editor__footer {
+  align-items: center;
+  padding: 1.5rem;
+  border: 1px solid var(--amk-line);
+  border-radius: 1.1rem;
+  background: var(--amk-surface);
+
+  > div:first-child { display: grid; gap: 0.18rem; }
+  > div:first-child span { font-size: 0.6rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--amk-gold-bright); }
+  > div:first-child strong { max-width: 34rem; font-size: 0.78rem; color: var(--amk-text-soft); }
+}
+
+.amk-editor__footer-actions { display: flex; gap: 0.65rem; flex-wrap: wrap; justify-content: flex-end; }
+
+@media (max-width: 720px) {
+  .amk-editor__top { align-items: flex-start; }
+  .amk-editor__history button span { display: none; }
+  .amk-editor__view-bar { align-items: flex-start; flex-direction: column; gap: 0.55rem; }
+  .amk-editor__object-bar { align-items: stretch; flex-direction: column; }
+  .amk-editor__object-actions { justify-content: flex-start; }
+  .amk-editor__object-actions button { flex: 1 1 auto; }
+  .amk-editor__footer { align-items: stretch; flex-direction: column; }
+  .amk-editor__footer-actions { display: grid; grid-template-columns: 1fr; }
+  .amk-editor__footer-actions button { width: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .amk-editor__dropzone { transition: none; }
 }
