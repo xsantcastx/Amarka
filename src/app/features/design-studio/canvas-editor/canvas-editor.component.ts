@@ -66,6 +66,10 @@ export class CanvasEditorComponent implements AfterViewInit, AfterViewChecked, O
   protected areasForActiveView = computed<ProductDesignArea[]>(() =>
     this.product().designAreas.filter(a => a.viewId === this.activeViewId())
   );
+  protected selectedAreaId = signal<string>('');
+  protected selectedArea = computed(() =>
+    this.areasForActiveView().find(area => area.id === this.selectedAreaId()) ?? this.areasForActiveView()[0]
+  );
   protected logosForActiveView = computed<StudioLogo[]>(() => {
     const p = this.project();
     if (!p) return [];
@@ -81,6 +85,10 @@ export class CanvasEditorComponent implements AfterViewInit, AfterViewChecked, O
 
   protected selectedLogoId = signal<string | null>(null);
   protected selectedLogo = computed(() => this.logosForActiveView().find(l => l.id === this.selectedLogoId()) ?? null);
+  protected selectedLogoSize = computed(() => {
+    const logo = this.selectedLogo();
+    return logo ? `${Math.round(logo.widthPct)} × ${Math.round(logo.heightPct)}%` : '';
+  });
   protected uploading = signal(false);
   protected uploadError = signal('');
   protected renamingName = signal(false);
@@ -112,6 +120,7 @@ export class CanvasEditorComponent implements AfterViewInit, AfterViewChecked, O
   ngAfterViewInit(): void {
     const product = this.product();
     this.activeViewId.set(product.views[0]?.id ?? '');
+    this.selectedAreaId.set(product.designAreas.find(area => area.viewId === product.views[0]?.id)?.id ?? '');
     this.attachStage();
   }
 
@@ -375,7 +384,16 @@ export class CanvasEditorComponent implements AfterViewInit, AfterViewChecked, O
 
   protected setActiveView(viewId: string): void {
     this.activeViewId.set(viewId);
+    this.selectedAreaId.set(this.product().designAreas.find(area => area.viewId === viewId)?.id ?? '');
     this.deselect();
+  }
+
+  protected logoCountForView(viewId: string): number {
+    return this.project()?.logos.filter(logo => logo.viewId === viewId).length ?? 0;
+  }
+
+  protected chooseArea(areaId: string): void {
+    this.selectedAreaId.set(areaId);
   }
 
   // ─── Logo upload ──────────────────────────────────────────────────────
@@ -390,6 +408,31 @@ export class CanvasEditorComponent implements AfterViewInit, AfterViewChecked, O
     input.value = '';
     if (!file) return;
 
+    await this.addLogoFile(file);
+  }
+
+  protected onDragOver(event: DragEvent): void {
+    event.preventDefault();
+    if (event.dataTransfer) event.dataTransfer.dropEffect = 'copy';
+  }
+
+  protected async onDrop(event: DragEvent): Promise<void> {
+    event.preventDefault();
+    const file = event.dataTransfer?.files?.[0];
+    if (file) await this.addLogoFile(file);
+  }
+
+  private async addLogoFile(file: File): Promise<void> {
+    const allowedTypes = ['image/png', 'image/jpeg', 'image/svg+xml'];
+    if (!allowedTypes.includes(file.type)) {
+      this.uploadError.set('Use a PNG, JPG, or SVG file.');
+      return;
+    }
+    if (file.size > 10 * 1024 * 1024) {
+      this.uploadError.set('Artwork must be 10 MB or smaller.');
+      return;
+    }
+
     this.uploadError.set('');
     this.uploading.set(true);
     try {
@@ -398,7 +441,7 @@ export class CanvasEditorComponent implements AfterViewInit, AfterViewChecked, O
       // also keeps the mockup canvas untainted by CORS.
       const previewUrl = await this.readFileAsDataUrl(file);
       const [uploadRef] = await this.leadSubmission.uploadFiles([file], 'enquiries');
-      const area = this.areasForActiveView()[0];
+      const area = this.selectedArea();
 
       // Fit the logo into the default drop box at its natural aspect ratio.
       // Percentages are relative to the (non-square) stage, so the ratio has
@@ -497,6 +540,30 @@ export class CanvasEditorComponent implements AfterViewInit, AfterViewChecked, O
     const id = this.selectedLogoId();
     if (!id) return;
     this.projectService.reorderLogo(id, direction);
+  }
+
+  protected centerSelectedInArea(): void {
+    const logo = this.selectedLogo();
+    const area = this.selectedArea();
+    if (!logo || !area) return;
+    this.projectService.updateLogo(logo.id, {
+      xPct: area.boundary.xPct + area.boundary.widthPct / 2,
+      yPct: area.boundary.yPct + area.boundary.heightPct / 2,
+    });
+  }
+
+  protected fitSelectedToArea(): void {
+    const logo = this.selectedLogo();
+    const area = this.selectedArea();
+    if (!logo || !area) return;
+    const scale = Math.min(area.boundary.widthPct / logo.widthPct, area.boundary.heightPct / logo.heightPct) * 0.88;
+    this.projectService.updateLogo(logo.id, {
+      xPct: area.boundary.xPct + area.boundary.widthPct / 2,
+      yPct: area.boundary.yPct + area.boundary.heightPct / 2,
+      widthPct: logo.widthPct * scale,
+      heightPct: logo.heightPct * scale,
+      rotation: 0,
+    });
   }
 
   protected selectLogoFromList(id: string): void {

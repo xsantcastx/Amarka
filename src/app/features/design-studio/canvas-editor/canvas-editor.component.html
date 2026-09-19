@@ -1,165 +1,146 @@
 <div class="amk-editor">
+  <header class="amk-editor__top">
+    <div class="amk-editor__title-group">
+      <span class="amk-editor__step-label">Design workspace</span>
+      <div class="amk-editor__name">
+        @if (renamingName()) {
+          <input type="text" [value]="nameDraft()" (input)="nameDraft.set($any($event.target).value)" (blur)="commitRename()" (keydown.enter)="commitRename()" autofocus />
+        } @else {
+          <button type="button" class="amk-editor__name-btn" (click)="startRename()">
+            {{ project()?.name }} <span class="amk-editor__name-edit">Edit name</span>
+          </button>
+        }
+      </div>
+      <span class="amk-editor__product-label">{{ product().name }} · {{ project()?.quantity }} units · Saved automatically</span>
+    </div>
+    <div class="amk-editor__history" aria-label="Design history">
+      <button type="button" (click)="undo()" [disabled]="!canUndo()" aria-label="Undo last change">↶ <span>Undo</span></button>
+      <button type="button" (click)="redo()" [disabled]="!canRedo()" aria-label="Redo last change">↷ <span>Redo</span></button>
+    </div>
+  </header>
 
-  <div class="amk-editor__top">
-    <div class="amk-editor__name">
-      @if (renamingName()) {
-        <input
-          type="text"
-          [value]="nameDraft()"
-          (input)="nameDraft.set($any($event.target).value)"
-          (blur)="commitRename()"
-          (keydown.enter)="commitRename()"
-          autofocus />
-      } @else {
-        <button type="button" class="amk-editor__name-btn" (click)="startRename()">
-          {{ project()?.name }}
-          <span class="amk-editor__name-edit" aria-hidden="true">✎</span>
-        </button>
+  <div class="amk-editor__view-bar">
+    <span class="amk-editor__view-label">Product view</span>
+    <div class="amk-editor__view-tabs" role="group" aria-label="Product views">
+      @for (view of product().views; track view.id) {
+      <button type="button" [class.is-active]="activeViewId() === view.id" [attr.aria-pressed]="activeViewId() === view.id" (click)="setActiveView(view.id)">
+        <span>{{ view.label }}</span>
+        @if (logoCountForView(view.id)) { <small>{{ logoCountForView(view.id) }}</small> }
+      </button>
       }
-      <span class="amk-editor__product-label">{{ product().name }} · {{ project()?.quantity }} units</span>
     </div>
-
-    <div class="amk-editor__history">
-      <button type="button" (click)="undo()" [disabled]="!canUndo()" aria-label="Undo">↺ Undo</button>
-      <button type="button" (click)="redo()" [disabled]="!canRedo()" aria-label="Redo">↻ Redo</button>
-    </div>
-  </div>
-
-  <div class="amk-editor__view-tabs" role="tablist">
-    @for (view of product().views; track view.id) {
-    <button type="button" role="tab" [class.is-active]="activeViewId() === view.id" (click)="setActiveView(view.id)">
-      {{ view.label }}
-    </button>
-    }
   </div>
 
   <div class="amk-editor__layout">
+    <section class="amk-editor__canvas-wrap" aria-label="Product design canvas">
+      <div class="amk-editor__canvas-status">
+        <span class="amk-editor__status-dot"></span>
+        @if (selectedLogo()) {
+          <span><strong>{{ selectedLogo()!.originalName }}</strong> selected — drag to move, use the handles to resize or rotate.</span>
+        } @else if (logosForActiveView().length) {
+          <span>Select artwork on the product or from the Artwork panel to edit it.</span>
+        } @else {
+          <span>Choose a placement and add your first logo from the Artwork panel.</span>
+        }
+      </div>
 
-    <div class="amk-editor__canvas-wrap">
       <div class="amk-editor__canvas-shell">
         <div class="amk-editor__viewport" [class.is-zoomed]="zoom() > 1">
           <div class="amk-editor__canvas" [style.width.%]="zoom() * 100">
             <div class="amk-editor__silhouette">
-              <amk-product-silhouette [silhouette]="activeView()?.silhouette ?? 'shirt-front'" [colorHex]="colorHex()" />
+              <amk-product-silhouette [silhouette]="activeView().silhouette" [colorHex]="colorHex()" />
             </div>
-
             @for (area of areasForActiveView(); track area.id) {
-            <div
-              class="amk-editor__area-guide"
-              [style.left.%]="area.boundary.xPct"
-              [style.top.%]="area.boundary.yPct"
-              [style.width.%]="area.boundary.widthPct"
-              [style.height.%]="area.boundary.heightPct">
+            <div class="amk-editor__area-guide" [class.is-target]="selectedAreaId() === area.id" [style.left.%]="area.boundary.xPct" [style.top.%]="area.boundary.yPct" [style.width.%]="area.boundary.widthPct" [style.height.%]="area.boundary.heightPct">
               <span>{{ area.label }}</span>
             </div>
             }
-
             <div class="amk-editor__stage" #stageContainer></div>
           </div>
         </div>
-
-        <div class="amk-editor__zoom" role="group" aria-label="Zoom">
+        <div class="amk-editor__zoom" role="group" aria-label="Canvas zoom">
           <button type="button" (click)="zoomOut()" [disabled]="zoom() <= minZoom" aria-label="Zoom out">−</button>
           <button type="button" class="amk-editor__zoom-value" (click)="zoomReset()" title="Reset zoom">{{ zoom() * 100 | number:'1.0-0' }}%</button>
           <button type="button" (click)="zoomIn()" [disabled]="zoom() >= maxZoom" aria-label="Zoom in">+</button>
         </div>
       </div>
 
-      <div class="amk-editor__toolbar">
-        <button type="button" class="amk-btn amk-btn--primary" (click)="triggerUpload()" [disabled]="uploading()">
-          @if (uploading()) { Uploading… } @else { + Add Logo }
-        </button>
-        <input #fileInput type="file" accept="image/png,image/jpeg,image/svg+xml" hidden (change)="onFileSelected($event)" />
-
-        @if (selectedLogo()) {
-        <div class="amk-editor__selected-toolbar">
-          <button type="button" (click)="flipSelected('h')" title="Flip horizontal">⇋</button>
-          <button type="button" (click)="flipSelected('v')" title="Flip vertical">⇅</button>
-          <button type="button" (click)="duplicateSelected()" title="Duplicate">⧉</button>
-          <button type="button" (click)="toggleLockSelected()" [title]="selectedLogo()!.locked ? 'Unlock' : 'Lock'">
-            {{ selectedLogo()!.locked ? '🔒' : '🔓' }}
-          </button>
-          <button type="button" (click)="reorderSelected('forward')" title="Bring forward">⬆</button>
-          <button type="button" (click)="reorderSelected('backward')" title="Send backward">⬇</button>
-          <button type="button" (click)="reorderSelected('front')" title="Bring to front">⤒</button>
-          <button type="button" (click)="reorderSelected('back')" title="Send to back">⤓</button>
-          <button type="button" class="is-danger" (click)="deleteSelected()" title="Delete">✕</button>
+      @if (selectedLogo()) {
+      <div class="amk-editor__object-bar" aria-label="Selected artwork controls">
+        <div class="amk-editor__object-meta">
+          <span>Selected artwork</span><strong>{{ selectedLogo()!.originalName }}</strong><small>{{ selectedLogoSize() }} of canvas</small>
         </div>
-        }
+        <div class="amk-editor__object-actions">
+          <button type="button" (click)="centerSelectedInArea()">Center</button>
+          <button type="button" (click)="fitSelectedToArea()">Fit to area</button>
+          <button type="button" (click)="duplicateSelected()">Duplicate</button>
+          <button type="button" (click)="toggleLockSelected()">{{ selectedLogo()!.locked ? 'Unlock' : 'Lock' }}</button>
+          <button type="button" class="is-danger" (click)="deleteSelected()">Delete</button>
+        </div>
       </div>
-
-      @if (uploadError()) {
-        <p class="amk-editor__error">{{ uploadError() }}</p>
       }
-    </div>
+      @if (uploadError()) { <p class="amk-editor__error" role="alert">{{ uploadError() }}</p> }
+    </section>
 
-    <aside class="amk-editor__layers">
-      <div class="amk-editor__options">
-        <p class="amk-kicker">Product Options</p>
-
-        @if (product().variants.length > 1) {
-        <div class="amk-editor__options-field">
-          <span class="amk-editor__options-label">Style</span>
-          <div class="amk-editor__options-chips">
-            @for (variant of product().variants; track variant.id) {
-            <button
-              type="button"
-              [class.is-active]="project()?.variantId === variant.id"
-              (click)="setVariant(variant.id)">
-              {{ variant.label }}
+    <aside class="amk-editor__inspector">
+      <section class="amk-editor__artwork-panel">
+        <div class="amk-editor__panel-heading">
+          <div><span class="amk-editor__panel-number">01</span><div><p class="amk-kicker">Artwork</p><h3>Add your logo</h3></div></div>
+          <span class="amk-editor__file-count">{{ logosForActiveView().length }}</span>
+        </div>
+        <div class="amk-editor__placement">
+          <span class="amk-editor__options-label">Placement on {{ activeView().label }}</span>
+          <div class="amk-editor__placement-list" role="group" aria-label="Logo placement">
+            @for (area of areasForActiveView(); track area.id) {
+            <button type="button" [class.is-active]="selectedAreaId() === area.id" [attr.aria-pressed]="selectedAreaId() === area.id" (click)="chooseArea(area.id)">
+              <span class="amk-editor__placement-mark"></span>{{ area.label }}
             </button>
             }
           </div>
         </div>
+        <button type="button" class="amk-editor__dropzone" (click)="triggerUpload()" (dragover)="onDragOver($event)" (drop)="onDrop($event)" [disabled]="uploading()">
+          <span class="amk-editor__upload-icon">＋</span>
+          @if (uploading()) { <strong>Uploading artwork…</strong><span>Please keep this page open.</span> }
+          @else { <strong>Upload logo</strong><span>Drop a file here or browse</span><small>PNG, JPG or SVG · max 10 MB</small> }
+        </button>
+        <input #fileInput type="file" accept="image/png,image/jpeg,image/svg+xml" hidden (change)="onFileSelected($event)" />
+
+        @if (logosForActiveView().length) {
+        <div class="amk-editor__layers-heading"><span class="amk-editor__options-label">Artwork on this view</span><small>Tap to select</small></div>
+        <ul class="amk-editor__layers-list">
+          @for (logo of logosForActiveView(); track logo.id; let i = $index) {
+          <li [class.is-active]="selectedLogoId() === logo.id">
+            <button type="button" (click)="selectLogoFromList(logo.id)">
+              <span class="amk-editor__layer-index">{{ i + 1 }}</span>
+              <img [src]="logo.previewUrl" alt="" width="40" height="40" loading="lazy" decoding="async" />
+              <span class="amk-editor__layer-copy"><strong>{{ logo.originalName }}</strong><small>{{ logo.locked ? 'Locked' : 'Ready to edit' }}</small></span>
+              <span class="amk-editor__layer-state">{{ logo.locked ? '⌑' : '•••' }}</span>
+            </button>
+          </li>
+          }
+        </ul>
         }
+      </section>
 
-        <div class="amk-editor__options-field">
-          <span class="amk-editor__options-label">Color</span>
-          <div class="amk-editor__options-colors">
-            @for (color of product().colors; track color.id) {
-            <button
-              type="button"
-              [style.background]="color.hex"
-              [class.is-active]="project()?.colorId === color.id"
-              [attr.aria-label]="color.label"
-              [title]="color.label"
-              (click)="setColor(color.id)"></button>
-            }
-          </div>
-        </div>
-
-        <div class="amk-editor__options-field">
-          <span class="amk-editor__options-label">Quantity</span>
-          <div class="amk-editor__options-qty">
-            <button type="button" (click)="adjustQuantity(-1)" aria-label="Decrease quantity">−</button>
-            <span>{{ project()?.quantity }}</span>
-            <button type="button" (click)="adjustQuantity(1)" aria-label="Increase quantity">+</button>
-          </div>
-        </div>
-      </div>
-
-      <p class="amk-kicker">Logos on this view</p>
-      @if (!logosForActiveView().length) {
-        <p class="amk-editor__layers-empty">No logos yet — upload one to get started.</p>
-      }
-      <ul class="amk-editor__layers-list">
-        @for (logo of logosForActiveView(); track logo.id) {
-        <li [class.is-active]="selectedLogoId() === logo.id">
-          <button type="button" (click)="selectLogoFromList(logo.id)">
-            <img [src]="logo.previewUrl" [alt]="logo.originalName" width="32" height="32" loading="lazy" decoding="async" />
-            <span>{{ logo.originalName }}</span>
-            @if (logo.locked) { <span aria-hidden="true">🔒</span> }
-          </button>
-        </li>
+      <section class="amk-editor__options">
+        <div class="amk-editor__panel-heading"><div><span class="amk-editor__panel-number">02</span><div><p class="amk-kicker">Product</p><h3>Fine-tune details</h3></div></div></div>
+        @if (product().variants.length > 1) {
+        <div class="amk-editor__options-field"><span class="amk-editor__options-label">Style</span><div class="amk-editor__options-chips">
+          @for (variant of product().variants; track variant.id) { <button type="button" [class.is-active]="project()?.variantId === variant.id" (click)="setVariant(variant.id)">{{ variant.label }}</button> }
+        </div></div>
         }
-      </ul>
+        <div class="amk-editor__options-field"><span class="amk-editor__options-label">Color</span><div class="amk-editor__options-colors">
+          @for (color of product().colors; track color.id) { <button type="button" [style.background]="color.hex" [class.is-active]="project()?.colorId === color.id" [attr.aria-label]="color.label" [title]="color.label" (click)="setColor(color.id)"></button> }
+        </div></div>
+        <div class="amk-editor__options-field"><span class="amk-editor__options-label">Quantity</span><div class="amk-editor__options-qty">
+          <button type="button" (click)="adjustQuantity(-1)" aria-label="Decrease quantity">−</button><span>{{ project()?.quantity }}</span><button type="button" (click)="adjustQuantity(1)" aria-label="Increase quantity">+</button>
+        </div></div>
+      </section>
     </aside>
-
   </div>
 
-  <div class="amk-editor__footer">
-    <button type="button" class="amk-btn amk-btn--outline" (click)="onStartOver()">Start Over</button>
-    <button type="button" class="amk-btn amk-btn--primary" (click)="onContinue()">Continue to Review →</button>
-  </div>
-
+  <footer class="amk-editor__footer">
+    <div><span>Next</span><strong>Review every product view and send your finished concept.</strong></div>
+    <div class="amk-editor__footer-actions"><button type="button" class="amk-btn amk-btn--outline" (click)="onStartOver()">Start Over</button><button type="button" class="amk-btn amk-btn--primary" (click)="onContinue()">Continue to Review →</button></div>
+  </footer>
 </div>
