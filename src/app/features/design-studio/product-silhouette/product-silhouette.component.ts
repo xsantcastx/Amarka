@@ -1,31 +1,36 @@
-import { ChangeDetectionStrategy, Component, Input, computed, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { ChangeDetectionStrategy, Component, Input, computed, signal } from '@angular/core';
 import { SilhouetteId } from '../product-catalog.types';
-import { silhouetteSvgMarkup } from '../silhouette-svg.util';
+import { colorMatrixForHex, productImageUrl } from '../product-image-assets';
+
+let nextFilterId = 0;
 
 /**
- * Renders a flat, recolorable silhouette for a product view.
- *
- * The SVG markup comes from silhouette-svg.util.ts — the same source the
- * mockup generator composites onto its offscreen canvas — so the editor
- * preview and the generated quote mockups can never drift apart.
- *
- * These are intentionally simple flat-vector placeholders (per the "use
- * placeholders for now" decision) — swap in real product photography later
- * by changing silhouette handling here; no other studio code needs to change.
+ * Renders a photorealistic product cutout and applies the selected color while
+ * preserving the source photograph's highlights, seams, texture, and shadows.
  */
 @Component({
   selector: 'amk-product-silhouette',
   standalone: true,
-  imports: [CommonModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `<div class="amk-silhouette" [innerHTML]="svg()"></div>`,
+  template: `
+    <svg class="amk-silhouette" viewBox="0 0 1024 1024" aria-hidden="true" focusable="false">
+      <defs>
+        <filter [attr.id]="filterId" color-interpolation-filters="sRGB">
+          <feColorMatrix type="matrix" [attr.values]="colorMatrix()" />
+        </filter>
+      </defs>
+      <image
+        [attr.href]="assetUrl()"
+        width="1024"
+        height="1024"
+        preserveAspectRatio="xMidYMid meet"
+        [attr.filter]="'url(#' + filterId + ')'" />
+    </svg>
+  `,
   styleUrl: './product-silhouette.component.scss'
 })
 export class ProductSilhouetteComponent {
-  private sanitizer = inject(DomSanitizer);
-
+  protected readonly filterId = `amk-product-color-${nextFilterId++}`;
   private silhouetteSig = signal<SilhouetteId>('shirt-front');
   private colorSig = signal('#8a8a8a');
 
@@ -36,8 +41,6 @@ export class ProductSilhouetteComponent {
     this.colorSig.set(value || '#8a8a8a');
   }
 
-  // Markup is our own static SVG with the color hex interpolated — safe to trust.
-  protected svg = computed<SafeHtml>(() =>
-    this.sanitizer.bypassSecurityTrustHtml(silhouetteSvgMarkup(this.silhouetteSig(), this.colorSig()))
-  );
+  protected assetUrl = computed(() => productImageUrl(this.silhouetteSig()));
+  protected colorMatrix = computed(() => colorMatrixForHex(this.colorSig()));
 }
