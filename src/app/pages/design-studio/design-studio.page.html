@@ -16,30 +16,34 @@
     </button>
 
     <div class="page-container amk-studio-hero__inner">
-      <img [src]="logoSrc()" alt="Amarka" class="amk-studio-hero__logo"
-           width="1376" height="455" loading="eager" fetchpriority="high" decoding="async" />
-      <span class="amk-badge">Product Customization Studio</span>
-      <h1 class="amk-studio-hero__title">Design it. <em>See it. Send it.</em></h1>
-      <p class="amk-studio-hero__subtitle">Upload your logo, place it exactly where you want on real product views, and request a quote — no design software required.</p>
+      <div class="amk-studio-hero__copy">
+        <span class="amk-badge">Product Customization Studio</span>
+        <h1 class="amk-studio-hero__title">Design it. <em>See it. Send it.</em></h1>
+      </div>
+      <p class="amk-studio-hero__subtitle">Choose a product, place your logo on real product views, and send the finished concept with your quote request.</p>
+    </div>
+  </section>
 
+  <div class="amk-studio-progress" aria-label="Design progress">
+    <div class="page-container">
       <div class="amk-studio-steps" role="list">
-        <div class="amk-studio-step" role="listitem" [class.is-active]="step() === 'pick'" [class.is-done]="step() !== 'pick'">
+        <div class="amk-studio-step" role="listitem" [class.is-active]="step() === 'pick'" [class.is-done]="step() !== 'pick'" [attr.aria-current]="step() === 'pick' ? 'step' : null">
           <span class="amk-studio-step__num">1</span>
           <span class="amk-studio-step__label">Choose Product</span>
         </div>
-        <div class="amk-studio-step" role="listitem" [class.is-active]="step() === 'editor'" [class.is-done]="step() === 'review'">
+        <div class="amk-studio-step" role="listitem" [class.is-active]="step() === 'editor'" [class.is-done]="step() === 'review'" [attr.aria-current]="step() === 'editor' ? 'step' : null">
           <span class="amk-studio-step__num">2</span>
           <span class="amk-studio-step__label">Customize</span>
         </div>
-        <div class="amk-studio-step" role="listitem" [class.is-active]="step() === 'review'">
+        <div class="amk-studio-step" role="listitem" [class.is-active]="step() === 'review'" [attr.aria-current]="step() === 'review' ? 'step' : null">
           <span class="amk-studio-step__num">3</span>
           <span class="amk-studio-step__label">Review &amp; Quote</span>
         </div>
       </div>
     </div>
-  </section>
+  </div>
 
-  <section class="amk-studio-body">
+  <section id="studio-workspace" class="amk-studio-body" tabindex="-1">
     <div class="page-container">
       @switch (step()) {
         @case ('pick') {

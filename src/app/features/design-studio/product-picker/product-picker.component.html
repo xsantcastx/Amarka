@@ -17,28 +17,59 @@
 
 @if (!selectedProduct()) {
 <div class="amk-picker">
-  <div class="amk-picker__tabs" role="tablist">
-    @for (category of categories; track category) {
-    <button type="button" role="tab" [class.is-active]="activeCategory() === category" (click)="setCategory(category)">
-      {{ categoryLabels[category] }}
-    </button>
-    }
+  <div class="amk-picker__heading">
+    <div>
+      <p class="amk-kicker">Step 01</p>
+      <h2>Choose your canvas.</h2>
+    </div>
+    <p>Start with the product that fits your project. You can choose the exact style, color, and quantity next.</p>
   </div>
 
-  <div class="amk-picker__grid">
-    @for (product of productsInCategory(); track product.id) {
-    <button type="button" class="amk-picker__card" (click)="pickProduct(product)">
-      <span class="amk-picker__card-preview">
-        <amk-product-silhouette [silhouette]="product.views[0].silhouette" [colorHex]="product.colors[0].hex" />
-      </span>
-      <span class="amk-picker__card-name">{{ product.name }}</span>
-      <span class="amk-picker__card-desc">{{ product.description }}</span>
-    </button>
-    }
+  <div class="amk-picker__catalog">
+    <div class="amk-picker__tabs" role="group" aria-label="Product categories">
+      @for (category of categories; track category) {
+      <button
+        type="button"
+        [class.is-active]="activeCategory() === category"
+        [attr.aria-pressed]="activeCategory() === category"
+        (click)="setCategory(category)">
+        {{ categoryLabels[category] }}
+      </button>
+      }
+    </div>
+
+    <p class="amk-picker__count">{{ productsInCategory().length }} products</p>
+
+    <div class="amk-picker__grid">
+      @for (product of productsInCategory(); track product.id; let i = $index) {
+      <button type="button" class="amk-picker__card" (click)="pickProduct(product)" [attr.aria-label]="'Customize ' + product.name">
+        <span class="amk-picker__card-topline">
+          <span>0{{ i + 1 }}</span>
+          <span>{{ categoryLabels[product.category] }}</span>
+        </span>
+        <span class="amk-picker__card-preview">
+          <amk-product-silhouette [silhouette]="product.views[0].silhouette" [colorHex]="product.colors[0].hex" />
+        </span>
+        <span class="amk-picker__card-content">
+          <span>
+            <span class="amk-picker__card-name">{{ product.name }}</span>
+            <span class="amk-picker__card-desc">{{ product.description }}</span>
+          </span>
+          <span class="amk-picker__card-action" aria-hidden="true">Customize <span>→</span></span>
+        </span>
+        <span class="amk-picker__card-colors" aria-hidden="true">
+          @for (color of product.colors.slice(0, 4); track color.id) {
+            <span [style.background]="color.hex"></span>
+          }
+          <small>{{ product.colors.length }} colors</small>
+        </span>
+      </button>
+      }
+    </div>
   </div>
 </div>
 } @else {
-<div class="amk-picker-detail">
+<div id="product-config" class="amk-picker-detail" tabindex="-1">
   <button type="button" class="amk-picker-detail__back" (click)="backToGrid()">← Back to products</button>
 
   <div class="amk-picker-detail__layout">
@@ -49,8 +80,9 @@
     </div>
 
     <div class="amk-picker-detail__form">
+      <p class="amk-kicker">Configure your product</p>
       <h2>{{ selectedProduct()!.name }}</h2>
-      <p class="amk-picker-detail__desc">{{ selectedProduct()!.description }}</p>
+      <p class="amk-picker-detail__desc">{{ selectedProduct()!.description }} Choose the combination that best fits your project.</p>
 
       <div class="amk-picker-detail__field">
         <span class="amk-picker-detail__label">Variant</span>
@@ -64,7 +96,7 @@
       </div>
 
       <div class="amk-picker-detail__field">
-        <span class="amk-picker-detail__label">Color</span>
+        <span class="amk-picker-detail__label">Color <strong>{{ selectedColorLabel() }}</strong></span>
         <div class="amk-picker-detail__colors">
           @for (color of selectedProduct()!.colors; track color.id) {
           <button
@@ -75,6 +107,9 @@
             [attr.aria-label]="color.label"
             [title]="color.label"
             (click)="setColor(color.id)">
+            @if (selectedColorId() === color.id) {
+              <span aria-hidden="true">✓</span>
+            }
           </button>
           }
         </div>
@@ -87,6 +122,7 @@
           <span>{{ quantity() }}</span>
           <button type="button" (click)="adjustQuantity(1)" aria-label="Increase quantity">+</button>
         </div>
+        <p class="amk-picker-detail__helper">Final pricing and production timing are confirmed with your quote.</p>
       </div>
 
       <button type="button" class="amk-btn amk-btn--primary amk-picker-detail__cta" (click)="startDesigning()">
