@@ -1,5 +1,5 @@
 import { Component, afterNextRender, EventEmitter, Output, inject, signal, computed } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DOCUMENT } from '@angular/common';
 import { ProductCatalogService } from '../product-catalog.service';
 import { DesignProjectService } from '../design-project.service';
 import { ProductCategory, ProductTemplate } from '../product-catalog.types';
@@ -29,6 +29,7 @@ const CATEGORY_LABELS: Record<ProductCategory, string> = {
 export class ProductPickerComponent {
   private catalog = inject(ProductCatalogService);
   private projectService = inject(DesignProjectService);
+  private document = inject(DOCUMENT);
 
   @Output() productSelected = new EventEmitter<ProductPickerSelection>();
   @Output() projectResumed = new EventEmitter<string>();
@@ -51,6 +52,12 @@ export class ProductPickerComponent {
     return product.colors.find(c => c.id === this.selectedColorId())?.hex ?? product.colors[0]?.hex ?? '#8a8a8a';
   });
 
+  protected readonly selectedColorLabel = computed(() => {
+    const product = this.selectedProduct();
+    if (!product) return '';
+    return product.colors.find(c => c.id === this.selectedColorId())?.label ?? product.colors[0]?.label ?? '';
+  });
+
   protected readonly savedProjects = signal<StudioProjectIndexEntry[]>([]);
 
   constructor() {
@@ -65,6 +72,13 @@ export class ProductPickerComponent {
     this.selectedProduct.set(product);
     this.selectedVariantId.set(product.variants[0]?.id ?? '');
     this.selectedColorId.set(product.colors[0]?.id ?? '');
+    requestAnimationFrame(() => {
+      const detail = this.document.getElementById('product-config');
+      if (!detail) return;
+      const reduceMotion = globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
+      detail.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+      detail.focus({ preventScroll: true });
+    });
   }
 
   protected backToGrid(): void {
