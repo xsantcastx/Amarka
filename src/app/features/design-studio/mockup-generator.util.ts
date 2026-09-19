@@ -1,6 +1,6 @@
 import { ProductTemplate, ProductView } from './product-catalog.types';
 import { StudioLogo } from './studio-project.types';
-import { silhouetteSvgMarkup } from './silhouette-svg.util';
+import { productImageUrl } from './product-image-assets';
 
 const CANVAS_WIDTH = 800;
 const CANVAS_HEIGHT = 1000;
@@ -13,6 +13,27 @@ function loadImage(src: string): Promise<HTMLImageElement> {
     img.onerror = reject;
     img.src = src;
   });
+}
+
+function colorizeProduct(image: HTMLImageElement, colorHex: string): HTMLCanvasElement {
+  const canvas = document.createElement('canvas');
+  canvas.width = image.naturalWidth;
+  canvas.height = image.naturalHeight;
+  const ctx = canvas.getContext('2d', { willReadFrequently: true });
+  if (!ctx) throw new Error('Canvas 2D context unavailable');
+
+  ctx.drawImage(image, 0, 0);
+  const pixels = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  const rgb = colorHex.replace('#', '').match(/.{2}/g)?.map(value => parseInt(value, 16)) ?? [138, 138, 138];
+
+  for (let i = 0; i < pixels.data.length; i += 4) {
+    if (!pixels.data[i + 3]) continue;
+    pixels.data[i] = Math.round(pixels.data[i] * rgb[0] / 255);
+    pixels.data[i + 1] = Math.round(pixels.data[i + 1] * rgb[1] / 255);
+    pixels.data[i + 2] = Math.round(pixels.data[i + 2] * rgb[2] / 255);
+  }
+  ctx.putImageData(pixels, 0, 0);
+  return canvas;
 }
 
 /**
@@ -37,10 +58,11 @@ export async function generateMockupFile(
   ctx.fillStyle = 'rgba(0,0,0,0)';
   ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
-  const svgMarkup = silhouetteSvgMarkup(view.silhouette, colorHex);
-  const svgDataUrl = `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(svgMarkup)))}`;
-  const silhouetteImg = await loadImage(svgDataUrl);
-  ctx.drawImage(silhouetteImg, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+  const productImg = await loadImage(productImageUrl(view.silhouette));
+  const coloredProduct = colorizeProduct(productImg, colorHex);
+  const productSize = CANVAS_WIDTH;
+  const productY = (CANVAS_HEIGHT - productSize) / 2;
+  ctx.drawImage(coloredProduct, 0, productY, productSize, productSize);
 
   const viewLogos = logos.filter(l => l.viewId === view.id).sort((a, b) => a.zIndex - b.zIndex);
 
