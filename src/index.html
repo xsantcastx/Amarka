@@ -75,8 +75,9 @@
     }
 
     #app-initial-loader img {
-      width: clamp(72px, 12vw, 128px);
-      height: clamp(72px, 12vw, 128px);
+      width: min(72vw, 420px);
+      height: auto;
+      max-height: 30vh;
       object-fit: contain;
       filter: drop-shadow(0 12px 32px rgba(144, 96, 48, 0.35));
       animation: subtlePulse 2.4s ease-in-out infinite;
@@ -100,7 +101,7 @@
   <a href="#main-content" class="skip-link">Skip to main content</a>
   <div id="app-initial-loader">
     <!-- First paint of the app shell — must not be deferred. -->
-    <img src="/amarka-favicon.png" alt="Amarka" width="120" height="120" loading="eager" fetchpriority="high" decoding="async">
+    <img src="/amarka-logo-transparent.png" alt="Amarka" width="1376" height="455" loading="eager" fetchpriority="high" decoding="async">
   </div>
   <app-root></app-root>
 </body>
