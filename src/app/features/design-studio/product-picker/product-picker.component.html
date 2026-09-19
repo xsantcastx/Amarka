@@ -26,14 +26,12 @@
   </div>
 
   <div class="amk-picker__catalog">
-    <div class="amk-picker__tabs" role="tablist" aria-label="Product categories">
+    <div class="amk-picker__tabs" aria-label="Product categories">
       @for (category of categories; track category) {
       <button
         type="button"
-        role="tab"
         [class.is-active]="activeCategory() === category"
-        [attr.aria-selected]="activeCategory() === category"
-        [attr.tabindex]="activeCategory() === category ? 0 : -1"
+        [attr.aria-pressed]="activeCategory() === category"
         (click)="setCategory(category)">
         {{ categoryLabels[category] }}
       </button>
@@ -42,7 +40,7 @@
 
     <p class="amk-picker__count">{{ productsInCategory().length }} products</p>
 
-    <div class="amk-picker__grid" role="tabpanel">
+    <div class="amk-picker__grid">
       @for (product of productsInCategory(); track product.id; let i = $index) {
       <button type="button" class="amk-picker__card" (click)="pickProduct(product)" [attr.aria-label]="'Customize ' + product.name">
         <span class="amk-picker__card-topline">
