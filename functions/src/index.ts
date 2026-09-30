@@ -1749,7 +1749,6 @@ interface StudioEnquiryPayload {
   email: string;
   role: string;
   projectType: string;
-  preferredMaterial?: string;
   estimatedQuantity?: string;
   targetTimeline?: string;
   projectDescription: string;
@@ -1991,7 +1990,6 @@ export const submitStudioEnquiry = withBrevoSecrets.https.onCall(
                 <p><strong>Email:</strong> ${escapeLeadHtml(data.email)}</p>
                 <p><strong>Role:</strong> ${escapeLeadHtml(data.role)}</p>
                 <p><strong>Project type:</strong> ${escapeLeadHtml(data.projectType)}</p>
-                <p><strong>Material:</strong> ${escapeLeadHtml(data.preferredMaterial || "—")}</p>
                 <p><strong>Quantity:</strong> ${escapeLeadHtml(data.estimatedQuantity || "—")}</p>
                 <p><strong>Timeline:</strong> ${escapeLeadHtml(data.targetTimeline || "—")}</p>
                 <p><strong>Business type:</strong> ${escapeLeadHtml(data.businessType || "—")}</p>
