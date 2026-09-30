@@ -26,7 +26,7 @@ export function validEnquiry(data: any): boolean {
 /** Compare only submitted content, excluding server-managed delivery/status fields. */
 export function sameEnquiryContent(saved: Record<string, unknown>, incoming: Record<string, unknown>): boolean {
   const fields = ['type', 'fullName', 'company', 'email', 'role', 'projectType',
-    'preferredMaterial', 'estimatedQuantity', 'targetTimeline', 'businessType',
+    'estimatedQuantity', 'targetTimeline', 'businessType',
     'orderVolume', 'projectDescription', 'fileUploads', 'sourcePage', 'leadTags', 'designProject'];
   const stable = (value: any): any => {
     if (Array.isArray(value)) return value.map(stable);

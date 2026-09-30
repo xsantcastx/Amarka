@@ -43,7 +43,6 @@ export interface EnquirySubmission {
   email: string;
   role: string;
   projectType: string;
-  preferredMaterial?: string;
   estimatedQuantity?: string;
   targetTimeline?: string;
   businessType?: string;

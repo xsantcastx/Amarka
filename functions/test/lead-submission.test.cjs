@@ -63,7 +63,7 @@ const payload = () => ({
   submissionId: '10000000-0000-4000-8000-000000000000',
   type: 'standard', fullName: '<b>Ada</b>', email: 'ada@example.invalid', role: 'other',
   projectType: 'Engraving', projectDescription: 'Please quote this engraved logo for our event.',
-  preferredMaterial: 'Metal', estimatedQuantity: '25', targetTimeline: 'October',
+  estimatedQuantity: '25', targetTimeline: 'October',
   fileUploads: [{ id: 'logo', storagePath: 'private/enquiries/logo.png', originalName: '<logo>.png', size: 1, mimeType: 'image/png' }],
   sourcePage: '/enquire', leadTags: ['standard'],
 });
@@ -74,7 +74,6 @@ test('submission preserves fields, verifies bytes, escapes HTML and does not dup
   const result = await submitStudioEnquiry(payload(), {});
   assert.equal(result.ok, true);
   const lead = docs.get(`enquiries/${result.id}`);
-  assert.equal(lead.preferredMaterial, 'Metal');
   assert.equal(lead.fileUploads[0].size, 123);
   assert.deepEqual(lead.emailDelivery, { notification: 'accepted', acknowledgement: 'accepted' });
   assert.match(messages[0].htmlContent, /&lt;b&gt;Ada&lt;\/b&gt;/);
